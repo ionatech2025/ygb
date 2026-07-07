@@ -1,4 +1,4 @@
-package com.ionatech.ygb.backend;
+package com.ionatech.nac.ygb;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
