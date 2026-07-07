@@ -8,10 +8,10 @@
 		<version>3.3.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ionatech.ygb</groupId>
-	<artifactId>backend</artifactId>
+	<groupId>com.ionatech.nac</groupId>
+	<artifactId>ygb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ygb-backend</name>
+	<name>nac-ygb</name>
 	<description>YGB Survey Tool Backend</description>
 	<properties>
 		<java.version>21</java.version>

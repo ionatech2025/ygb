@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: backend
+    name: ygb
 
   datasource:
     url: jdbc:postgresql://localhost:5432/ygb_db
