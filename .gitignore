@@ -1,0 +1,52 @@
+# Project specific
+.agent/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+.npm/
+
+# Java / Backend
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+.gradle/
+build/
+bin/
+out/
+.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.iml
+*.iws
