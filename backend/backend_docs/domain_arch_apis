@@ -1,0 +1,799 @@
+# YGB SURVEY TOOL
+
+Parish Development Model (PDM) Monitoring & Data Collection Platform
+
+**TECHNICAL DESIGN: DOMAIN MODEL, DATABASE SCHEMA,**
+
+**HEXAGONAL ARCHITECTURE & REST API**
+
+*Derived from SRS v1.1, PDM field forms, and the User Stories backlog*
+
+Prepared for: NAC — Youth Go Budget (YGB) Programme
+
+Stack: React + Vite PWA · Spring Boot 4.x (Java 21) · PostgreSQL 16 · Redis
+
+Date: July 2026
+
+---
+
+# 1. Domain-Driven Design — Bounded Contexts & Aggregates
+
+*The domain is decomposed into six bounded contexts. "PDM Field Data Collection" is the Core Domain (the reason the system exists); Identity & Access and Location Reference Data are Supporting/Generic subdomains; Reporting & Analytics is a read-only (CQRS) query side over the core domain's data; the two Phase 2 contexts are documented for roadmap completeness only.*
+
+## 1. Identity & Access Management (IAM)
+
+**Supporting Domain Manages** authentication and the lifecycle of User accounts (Administrators and Data Collectors). Enforces that Data Collectors are always created by an Admin (no self-registration) and that role-based capabilities (submit forms vs. manage platform) are respected.
+
+**Aggregate Root: User**
+
+**Value Objects:**
+
+- PhoneNumber — validated Uganda phone format, used as login identifier; unique across all Users
+- PasswordHash — one-way hashed credential, never exposed outside the aggregate
+- Role — enum { ADMIN, DATA_COLLECTOR }
+- AccountStatus — enum { ACTIVE, DEACTIVATED }
+
+**Invariants:**
+
+- PhoneNumber must be unique across all Users.
+- A User with role DATA_COLLECTOR can never be created without an authenticated ADMIN actor as creator (created_by_admin_id required).
+- A DEACTIVATED User cannot authenticate, online or offline.
+- Only ADMIN-role Users may create, deactivate, reactivate, or reset the password of another User.
+
+**Domain Events:**
+
+- DataCollectorAccountCreated(userId, createdByAdminId)
+- AdministratorAccountCreated(userId, createdByAdminId)
+- UserDeactivated(userId, byAdminId)
+- UserReactivated(userId, byAdminId)
+- PasswordReset(userId, byAdminId)
+- UserAuthenticated(userId, channel: ONLINE|OFFLINE)
+
+**Domain Services:**
+
+- PasswordPolicy (hash/verify via out port)
+- AuthenticationTokenIssuer (issues JWT access+refresh via out port)
+
+---
+
+## 2. PDM Field Data Collection
+
+**Core Domain** The heart of the system: capturing structured survey responses (BYP, IYP, LGO, Parish Chief) from a Respondent, recorded by an authenticated Data Collector, with strict per-financial-year uniqueness and offline-first submission semantics. This is where the business rules from FORM-*, UNIQ-* and SYNC-* live.
+
+**Aggregate Root: Submission**
+
+**Entities:**
+
+- Respondent — demographic/location details of the interviewee (name, phone, gender, ageGroup, location); child entity, 1:1 with its Submission
+- SurveyResponse (abstract) — one concrete subtype per form type, child entity, 1:1 with its Submission: BypResponse | IypResponse | LgoResponse | ParishMonitoringResponse
+
+**Value Objects:**
+
+- FormType — enum { BYP, IYP, LGO, PARISH_MONITORING }
+- SubmissionStatus — enum { PENDING, SYNCED, FLAGGED, DUPLICATE }
+- FinancialYearPeriod — value object derived from a date: {year, half: H1|H2}, H1 = Jan1--Jun30, H2 = Jul1--Dec31
+- DeviceSubmissionId — client-generated idempotency key (UUID) so the same offline record is never double-created on retry
+- GeoRef — {districtId, subCountyId, parishId, villageId}
+- AgeGroup / Gender — controlled-vocabulary enums
+- SubmissionProvenance — {collectorId, submittedAt, deviceId}
+
+**Invariants:**
+
+- A Submission always has exactly one Respondent and exactly one SurveyResponse whose subtype matches its FormType.
+- submitted_by must reference a User with role = DATA_COLLECTOR and status = ACTIVE at time of submission.
+- Age on Respondent must be >= 15 (rejected otherwise).
+- (Respondent.phoneNumber, FormType, FinancialYearPeriod) must be unique among Submissions with status in {PENDING, SYNCED} — enforced by RespondentUniquenessPolicy both client-side (pre-submit) and server-side (on sync).
+- A second submission that violates uniqueness is not rejected outright but transitions to status = FLAGGED (DUPLICATE) for Admin review, never silently merged or dropped.
+- DeviceSubmissionId is unique — replaying the same offline record on retry must not create a duplicate row.
+
+**Domain Events:**
+
+- SubmissionReceivedByServer(submissionId, formType, deviceSubmissionId)
+- SubmissionSynced(submissionId, syncedAt)
+- DuplicateSubmissionFlagged(submissionId, conflictingSubmissionId)
+- RespondentUniquenessViolationDetected(phoneNumber, formType, period)
+
+**Domain Services:**
+
+- RespondentUniquenessPolicy — encapsulates the (phone, formType, period) uniqueness rule; used identically by the client (pre-submit check against local cache) and server (authoritative check on sync)
+- ConditionalFieldValidator — encapsulates each form's Given/When/Then conditional-visibility & required-field rules (FORM-09)
+- FinancialYearPeriodCalculator — derives the current/any FinancialYearPeriod from a date
+
+---
+
+## 3. Location Reference Data
+
+**Generic Subdomain (Shared Kernel)** Uganda's administrative hierarchy (District → Sub-county → Parish → Village), pre-bundled for offline use and referenced by the Field Data Collection context. Rarely changes; managed by Admin/data-migration, not by end users.
+
+**Aggregate Root: District**
+
+**Value Objects:**
+
+- Region
+
+**Invariants:**
+
+- District name unique within Region.
+
+**Aggregate Root: SubCounty**
+
+**Invariants:**
+
+- SubCounty belongs to exactly one District.
+
+**Aggregate Root: Parish**
+
+**Invariants:**
+
+- Parish belongs to exactly one SubCounty.
+
+**Aggregate Root: Village**
+
+**Invariants:**
+
+- Village belongs to exactly one Parish.
+
+**Domain Services:**
+
+- LocationHierarchyResolver — resolves/validates a full District→Village chain for a GeoRef
+
+---
+
+## 4. Reporting & Analytics (Dashboard)
+
+**Supporting Domain — Query/Read Model (CQRS read side)** Read-only projections over synced Submission data, powering the Admin Dashboard and the anonymised Public Dashboard. Deliberately has no aggregates of its own — it is a query/reporting layer over the Field Data Collection context's data, decoupled so exports and chart queries never mutate write-side state.
+
+**Read Models (query side, no aggregates):**
+
+- SubmissionSummary — total counts by form type / district / gender / FY period
+- DistrictAggregate — per-district roll-up used for bar charts & heat map
+- DataCollectorLeaderboardEntry — collector, cumulative count, breakdown by form type/district/period (DASH-07)
+- TimeSeriesPoint — submissions-over-time series for line graphs
+- PendingSyncSnapshot — PENDING/SYNCED/FLAGGED counts per collector/device (DASH-08)
+- PublicAnonymisedRecord — a Submission projection with all PII (name, phone, collector identity) stripped, used exclusively by Public Dashboard queries and exports
+
+**Domain Services:**
+
+- ExportGenerator — produces CSV/Excel/PDF from a read-model query result
+- AnonymisationProjector — strips PII when building PublicAnonymisedRecord
+
+---
+
+## 5. Budget Priorities (Phase 2 — not MVP)
+
+**Core Domain (Phase 2)** Public-facing budget-priority input across 4 sectors, submitted directly by members of the public after phone verification.
+
+**Aggregate Root: BudgetPrioritySubmission**
+
+**Value Objects:**
+
+- Sector — enum { HEALTH, AGRICULTURE, EDUCATION, CLIMATE }
+- FinancialYearPeriod (shared)
+- VerifiedPhoneNumber
+
+**Invariants:**
+
+- (phoneNumber, sector, financialYearPeriod) unique — one submission per sector per person per FY period.
+
+**Domain Events:**
+
+- BudgetPrioritySubmitted(bpId, sector, period)
+
+**Domain Services:**
+
+- PhoneVerificationService
+
+---
+
+## 6. LGO Budget Allocation (Phase 2 — not MVP)
+
+**Core Domain (Phase 2)** Standalone form capturing a Local Government Official's account of prior-year budget allocation and recommendations, collected via a Data Collector interview (LGOs cannot self-submit).
+
+**Aggregate Root: LgoBudgetAllocation**
+
+**Value Objects:**
+
+- PriorYearAllocationBreakdown (JSON)
+- Rationale
+- Recommendation
+
+**Invariants:**
+
+- Must reference a Submission collected by a DATA_COLLECTOR-role User; LGOs cannot self-submit.
+
+**Domain Events:**
+
+- LgoBudgetAllocationRecorded(lbaId)
+
+---
+
+# 2. Database Schema (PostgreSQL DDL)
+
+*One table per aggregate/entity identified in Section 1. UUID primary keys throughout; JSONB used for multi-select and nested per-financial-year data to avoid excessive join tables while keeping the schema stable for new form questions (NFR 5.5). The partial unique index on submissions enforces UNIQ-01/02/03 at the database level as a final safety net behind the application-level checks.*
+
+**users** *[Identity & Access]*
+
+```sql
+CREATE TABLE users (
+    user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    full_name VARCHAR(150) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL
+        CHECK (role IN ('ADMIN','DATA_COLLECTOR')),
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_by_admin_id UUID NULL REFERENCES users(user_id),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX idx_users_role_active ON users(role, is_active);
+```
+
+**refresh_tokens** *[Identity & Access]*
+
+```sql
+CREATE TABLE refresh_tokens (
+    token_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    token_hash VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    revoked BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX idx_refresh_tokens_user ON refresh_tokens(user_id);
+```
+
+**districts / sub_counties / parishes / villages** *[Location Reference Data]*
+
+```sql
+CREATE TABLE districts (
+    district_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    region VARCHAR(100)
+);
+
+CREATE TABLE sub_counties (
+    sub_county_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    district_id UUID NOT NULL REFERENCES districts(district_id)
+);
+
+CREATE INDEX idx_subcounty_district ON sub_counties(district_id);
+
+CREATE TABLE parishes (
+    parish_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    sub_county_id UUID NOT NULL REFERENCES sub_counties(sub_county_id)
+);
+
+CREATE INDEX idx_parish_subcounty ON parishes(sub_county_id);
+
+CREATE TABLE villages (
+    village_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    parish_id UUID NOT NULL REFERENCES parishes(parish_id)
+);
+
+CREATE INDEX idx_village_parish ON villages(parish_id);
+```
+
+**submissions** *[PDM Field Data Collection (aggregate root)]*
+
+```sql
+CREATE TABLE submissions (
+    submission_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    submitted_by UUID NOT NULL REFERENCES users(user_id),
+    form_type VARCHAR(20) NOT NULL
+        CHECK (form_type IN ('BYP','IYP','LGO','PARISH_MONITORING')),
+    respondent_phone VARCHAR(15) NOT NULL, -- denormalised for uniqueness index performance
+    financial_year_period VARCHAR(9) NOT NULL, -- e.g. '2026-H1'
+    status VARCHAR(12) NOT NULL DEFAULT 'PENDING'
+        CHECK (status IN ('PENDING','SYNCED','FLAGGED','DUPLICATE')),
+    district_id UUID REFERENCES districts(district_id),
+    sub_county_id UUID REFERENCES sub_counties(sub_county_id),
+    parish_id UUID REFERENCES parishes(parish_id),
+    village_id UUID REFERENCES villages(village_id),
+    device_submission_id VARCHAR(64) NOT NULL UNIQUE, -- client idempotency key
+    submitted_at TIMESTAMPTZ NOT NULL,
+    synced_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- UNIQ-01/02/03: one non-duplicate submission per respondent phone + form type + FY period
+CREATE UNIQUE INDEX uniq_respondent_form_period
+    ON submissions (respondent_phone, form_type, financial_year_period)
+    WHERE status IN ('PENDING','SYNCED');
+
+CREATE INDEX idx_submissions_filters
+    ON submissions (form_type, district_id, financial_year_period, status);
+
+CREATE INDEX idx_submissions_collector ON submissions(submitted_by);
+CREATE INDEX idx_submissions_submitted_at ON submissions(submitted_at);
+```
+
+**respondents** *[PDM Field Data Collection (child entity of Submission)]*
+
+```sql
+CREATE TABLE respondents (
+    respondent_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    submission_id UUID NOT NULL UNIQUE REFERENCES submissions(submission_id) ON DELETE CASCADE,
+    respondent_type VARCHAR(10) NOT NULL
+        CHECK (respondent_type IN ('BYP','IYP','LGO','PC')),
+    name VARCHAR(150) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL,
+    gender VARCHAR(10),
+    age INT CHECK (age >= 15),
+    age_group VARCHAR(20),
+    contact VARCHAR(100)
+);
+```
+
+**byp_responses** *[PDM Field Data Collection (SurveyResponse subtype)]*
+
+```sql
+CREATE TABLE byp_responses (
+    byp_response_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    submission_id UUID NOT NULL UNIQUE REFERENCES submissions(submission_id) ON DELETE CASCADE,
+    fund_receipt_duration VARCHAR(30),
+    fund_receipt_duration_note TEXT,
+    received_actual_amount BOOLEAN,
+    cash_received_amount NUMERIC(14,2),
+    instalment_period VARCHAR(20),
+    instalment_period_note TEXT,
+    pdc_service_rating VARCHAR(20),
+    pdm_performance_rating VARCHAR(20),
+    group_transparency BOOLEAN,
+    received_business_services BOOLEAN,
+    business_services JSONB,
+    improvement_suggestion TEXT
+);
+```
+
+**iyp_responses** *[PDM Field Data Collection (SurveyResponse subtype)]*
+
+```sql
+CREATE TABLE iyp_responses (
+    iyp_response_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    submission_id UUID NOT NULL UNIQUE REFERENCES submissions(submission_id) ON DELETE CASCADE,
+    pdm_awareness VARCHAR(10),
+    information_channels JSONB,
+    information_channels_note TEXT,
+    eligibility_aware BOOLEAN,
+    accessibility_process_known BOOLEAN,
+    info_disseminated_adequately VARCHAR(30),
+    applied_for_fund BOOLEAN,
+    accessed_fund_after_application BOOLEAN,
+    rejection_narrative TEXT,
+    reasons_not_applying JSONB,
+    reasons_not_applying_note TEXT,
+    access_barriers JSONB,
+    access_barriers_amount_note TEXT,
+    access_barriers_note TEXT,
+    correct_targeting BOOLEAN,
+    youth_fund_aware BOOLEAN,
+    programme_opinion VARCHAR(50),
+    programme_opinion_note TEXT,
+    improvement_suggestion TEXT
+);
+```
+
+**lgo_responses** *[PDM Field Data Collection (SurveyResponse subtype)]*
+
+```sql
+CREATE TABLE lgo_responses (
+    lgo_response_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    submission_id UUID NOT NULL UNIQUE REFERENCES submissions(submission_id) ON DELETE CASCADE,
+    fy_2022_23_expected NUMERIC(16,2),
+    fy_2022_23_actual NUMERIC(16,2),
+    fy_2023_24_expected NUMERIC(16,2),
+    fy_2023_24_actual NUMERIC(16,2),
+    beneficiaries JSONB, -- {fy: {youngPeople, youngWomen, other}}
+    parish_coverage JSONB, -- {fy: {totalParishes, parishesReceived}}
+    commitment_reflected BOOLEAN,
+    fund_adequate BOOLEAN,
+    increment_recommended BOOLEAN,
+    equitable_distribution BOOLEAN,
+    spend_compliant BOOLEAN,
+    spend_compliant_note TEXT,
+    economic_transformation BOOLEAN,
+    economic_transformation_note TEXT,
+    improvement_suggestion TEXT
+);
+```
+
+**parish_monitoring_responses** *[PDM Field Data Collection (SurveyResponse subtype)]*
+
+```sql
+CREATE TABLE parish_monitoring_responses (
+    pm_response_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    submission_id UUID NOT NULL UNIQUE REFERENCES submissions(submission_id) ON DELETE CASCADE,
+    fund_expected NUMERIC(16,2),
+    fund_received NUMERIC(16,2),
+    total_beneficiaries INT,
+    young_people_beneficiaries INT,
+    young_women_beneficiaries INT,
+    access_obstacles TEXT,
+    spending_targeted_to_need BOOLEAN,
+    pdc_total_members INT,
+    pdc_youth_reps INT,
+    pdc_coopted_young_people INT,
+    pdc_coopted_young_women INT,
+    pdc_training_received BOOLEAN,
+    pdc_training_areas JSONB,
+    pdc_effectiveness VARCHAR(20),
+    monitoring_conducted BOOLEAN,
+    monitored_by JSONB,
+    monitored_by_note TEXT,
+    monitoring_method TEXT,
+    report_shared BOOLEAN,
+    improvements_seen BOOLEAN,
+    improvements_areas TEXT,
+    progress_reports_submitted BOOLEAN,
+    progress_reports_recipient TEXT,
+    youth_agri_enterprises_count INT,
+    stable_income_youth_count INT,
+    youth_trained_count INT,
+    active_youth_enterprises_count INT
+);
+```
+
+**sync_audit_log** *[PDM Field Data Collection (SYNC-04 traceability)]*
+
+```sql
+CREATE TABLE sync_audit_log (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    submission_id UUID NOT NULL REFERENCES submissions(submission_id) ON DELETE CASCADE,
+    attempt_number INT NOT NULL,
+    attempted_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    result VARCHAR(10) NOT NULL CHECK (result IN ('SUCCESS','FAILURE')),
+    error_message TEXT
+);
+
+CREATE INDEX idx_sync_audit_submission ON sync_audit_log(submission_id);
+```
+
+**budget_priority_submissions (Phase 2)** *[Budget Priorities (Phase 2)]*
+
+```sql
+CREATE TABLE budget_priority_submissions (
+    bp_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    phone_number VARCHAR(15) NOT NULL,
+    section VARCHAR(20) NOT NULL
+        CHECK (section IN ('HEALTH','AGRICULTURE','EDUCATION','CLIMATE')),
+    priority_areas JSONB,
+    demographic_data JSONB,
+    financial_year_period VARCHAR(9) NOT NULL,
+    submitted_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX uniq_bp_phone_section_period
+    ON budget_priority_submissions (phone_number, section, financial_year_period);
+```
+
+**lgo_budget_allocations (Phase 2)** *[LGO Budget Allocation (Phase 2)]*
+
+```sql
+CREATE TABLE lgo_budget_allocations (
+    lba_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    submission_id UUID NOT NULL REFERENCES submissions(submission_id),
+    previous_fy_allocations JSONB,
+    rationale TEXT,
+    recommendations TEXT,
+    submitted_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+```
+
+---
+
+# 3. Hexagonal Architecture — Package & Class Structure
+
+*The backend (Spring Boot 4.x / Java 21) follows Ports & Adapters. The domain package has zero framework dependencies. The application package implements the domain's inbound ports (use cases). Everything under adapters is a replaceable detail: REST controllers are one inbound adapter, JPA/Redis/JWT/export libraries are outbound adapters implementing domain-defined outbound ports. This keeps the core survey/eligibility rules testable without Spring, a database, or HTTP.*
+
+## 3.1 Package Tree
+
+```
+com.nac.ygb
+├── domain # Innermost hexagon --- pure business logic, zero framework deps
+│   ├── user
+│   │   ├── model (User, Role, AccountStatus, PhoneNumber, PasswordHash)
+│   │   ├── event (DataCollectorAccountCreated, UserDeactivated, ...)
+│   │   └── port
+│   │       ├── in (ManageUserAccountsUseCase, AuthenticateUserUseCase)
+│   │       └── out (UserRepositoryPort, PasswordHasherPort, TokenIssuerPort)
+│   │
+│   ├── submission # Core domain
+│   │   ├── model (Submission, Respondent, BypResponse, IypResponse,
+│   │   │    LgoResponse, ParishMonitoringResponse, FormType,
+│   │   │    SubmissionStatus, FinancialYearPeriod, GeoRef)
+│   │   ├── event (SubmissionSynced, DuplicateSubmissionFlagged, ...)
+│   │   ├── service (RespondentUniquenessPolicy, ConditionalFieldValidator,
+│   │   │    FinancialYearPeriodCalculator)
+│   │   └── port
+│   │       ├── in (SubmitSurveyUseCase, SyncQueuedSubmissionsUseCase,
+│   │       │    CheckRespondentUniquenessUseCase,
+│   │       │    GetCollectorSubmissionCountUseCase)
+│   │       └── out (SubmissionRepositoryPort)
+│   │
+│   ├── location
+│   │   ├── model (District, SubCounty, Parish, Village)
+│   │   └── port
+│   │       ├── in (QueryLocationHierarchyUseCase)
+│   │       └── out (LocationRepositoryPort)
+│   │
+│   ├── dashboard # Read/query side (CQRS)
+│   │   ├── model (SubmissionSummary, DistrictAggregate,
+│   │   │    DataCollectorLeaderboardEntry, TimeSeriesPoint,
+│   │   │    PendingSyncSnapshot, PublicAnonymisedRecord)
+│   │   └── port
+│   │       ├── in (QueryAdminDashboardUseCase, QueryPublicDashboardUseCase,
+│   │       │    ExportDatasetUseCase)
+│   │       └── out (DashboardReadPort, ExportGeneratorPort)
+│   │
+│   └── shared (Money, DateRange, Percentage --- cross-context value objects)
+│
+├── application # Use-case orchestration layer (implements domain "in" ports)
+│   ├── user (UserManagementService, AuthenticationService)
+│   ├── submission (SubmitSurveyService, SyncService, UniquenessCheckService,
+│   │    CollectorSelfServiceService)
+│   ├── location (LocationQueryService)
+│   └── dashboard (AdminDashboardService, PublicDashboardService, ExportService)
+│
+├── adapters
+│   ├── in
+│   │   └── rest
+│   │       ├── AuthController
+│   │       ├── AdminUserController
+│   │       ├── CollectorSelfServiceController
+│   │       ├── LocationController
+│   │       ├── SubmissionController
+│   │       ├── SyncController
+│   │       ├── AdminSubmissionController
+│   │       ├── AdminDashboardController
+│   │       ├── PublicDashboardController
+│   │       ├── BudgetPriorityController (Phase 2)
+│   │       ├── LgoBudgetAllocationController (Phase 2)
+│   │       ├── dto (*Request / *Response records per endpoint)
+│   │       ├── mapper (MapStruct: Dto <-> Domain model)
+│   │       └── advice (GlobalExceptionHandler → RFC 7807 problem+json)
+│   │
+│   └── out
+│       ├── persistence
+│       │   ├── entity (JPA @Entity classes mirroring the DB tables)
+│       │   ├── repository (Spring Data JpaRepository interfaces)
+│       │   ├── UserRepositoryAdapter (implements UserRepositoryPort)
+│       │   ├── SubmissionRepositoryAdapter (implements SubmissionRepositoryPort)
+│       │   ├── LocationRepositoryAdapter (implements LocationRepositoryPort)
+│       │   └── DashboardReadRepositoryAdapter (implements DashboardReadPort;
+│       │        native/JPQL aggregate queries)
+│       ├── security
+│       │   ├── JwtTokenIssuerAdapter (implements TokenIssuerPort)
+│       │   ├── BCryptPasswordHasherAdapter (implements PasswordHasherPort)
+│       │   └── SecurityConfig (Spring Security filter chain, RBAC)
+│       ├── export
+│       │   ├── CsvExportAdapter
+│       │   ├── ExcelExportAdapter (Apache POI)
+│       │   └── PdfReportAdapter (implements ExportGeneratorPort)
+│       └── cache
+│           └── RedisSyncStatusAdapter (pending-sync counters, refresh-token
+│                blocklist; supports DASH-08 / AUTH-02)
+│
+└── config
+    ├── OpenApiConfig
+    ├── WebConfig (CORS, pagination defaults)
+    └── PersistenceConfig (JPA/Flyway migrations)
+```
+
+## 3.2 Class Responsibilities by Package
+
+**domain.user**
+
+| **Class(es)** | **Responsibility** |
+|---------------|-------------------|
+| User | Aggregate root. Enforces phone-number identity, role, active status; factory methods createByAdmin(...), deactivate(), reactivate(), resetPassword(). |
+| Role, AccountStatus, PhoneNumber, PasswordHash | Value objects — immutable, self-validating. |
+| ManageUserAccountsUseCase (in port) | createDataCollector(), createAdministrator(), deactivate(), reactivate(), resetPassword(), listUsers(filter). |
+| AuthenticateUserUseCase (in port) | login(phone, password): TokenPair; refresh(token): TokenPair. |
+| UserRepositoryPort (out port) | save(User), findByPhoneNumber(...), findById(...), findAll(filter, pageable). |
+| PasswordHasherPort / TokenIssuerPort (out ports) | Abstract the hashing algorithm and JWT mechanics away from the domain. |
+
+**domain.submission**
+
+| **Class(es)** | **Responsibility** |
+|---------------|-------------------|
+| Submission | Aggregate root. Factory Submission.record(respondent, response, provenance); enforces one-response-per-formtype and delegates uniqueness check to RespondentUniquenessPolicy before allowing status PENDING/SYNCED. |
+| Respondent, BypResponse, IypResponse, LgoResponse, ParishMonitoringResponse | Child entities of Submission; each *Response validates its own form-specific field/conditional rules via ConditionalFieldValidator. |
+| RespondentUniquenessPolicy | Domain service: isUnique(phone, formType, period) — used identically on client (against local cache) and server (against SubmissionRepositoryPort). |
+| ConditionalFieldValidator | Domain service: validates FORM-08/09/10/12 rules (mandatory fields, show/hide logic, age >= 15, min text length) per form type. |
+| SubmitSurveyUseCase (in port) | submit(SubmissionCommand): SubmissionResult — used both by the online submit flow and by SyncQueuedSubmissionsUseCase replay. |
+| SyncQueuedSubmissionsUseCase (in port) | syncBatch(List<SubmissionCommand>): List<SyncResult> — idempotent via deviceSubmissionId. |
+| CheckRespondentUniquenessUseCase (in port) | check(phone, formType, period): boolean — used for the pre-submit warning (UNIQ-02). |
+| GetCollectorSubmissionCountUseCase (in port) | countToday(collectorId): int (FORM-13). |
+| SubmissionRepositoryPort (out port) | save, findById, existsByPhoneFormTypeAndPeriod, findByFilters(criteria, pageable). |
+
+**domain.location**
+
+| **Class(es)** | **Responsibility** |
+|---------------|-------------------|
+| District, SubCounty, Parish, Village | Small reference-data aggregates. |
+| QueryLocationHierarchyUseCase (in port) | listDistricts(), listSubCounties(districtId), listParishes(subCountyId), listVillages(parishId), fullBundle() (for offline pre-load, SYNC-05). |
+| LocationRepositoryPort (out port) | Read-only queries against the four reference tables. |
+
+**domain.dashboard**
+
+| **Class(es)** | **Responsibility** |
+|---------------|-------------------|
+| SubmissionSummary, DistrictAggregate, DataCollectorLeaderboardEntry, TimeSeriesPoint, PendingSyncSnapshot | Read models (DTO-like, no identity/behaviour) returned by dashboard queries. |
+| PublicAnonymisedRecord | Read model guaranteed free of PII, used only by public-facing queries/exports. |
+| QueryAdminDashboardUseCase (in port) | summary(filter), chart(type, filter), collectorTracker(filter), pendingSyncQueue(). |
+| QueryPublicDashboardUseCase (in port) | summary(filter), chart(type, filter), heatmap(filter) — always routes through AnonymisationProjector. |
+| ExportDatasetUseCase (in port) | exportCsv(filter), exportExcel(filter), exportPdfReport(filter). |
+| DashboardReadPort / ExportGeneratorPort (out ports) | Abstract the aggregate SQL/JPQL queries and the file-generation mechanics. |
+
+**application.***
+
+| **Class(es)** | **Responsibility** |
+|---------------|-------------------|
+| UserManagementService, AuthenticationService | Implement domain.user in-ports; orchestrate repository + password/token out-ports; publish domain events. |
+| SubmitSurveyService, SyncService, UniquenessCheckService, CollectorSelfServiceService | Implement domain.submission in-ports; SyncService additionally writes sync_audit_log entries and applies exponential-back-off status bookkeeping consumed by the client (SYNC-04). |
+| LocationQueryService | Implements domain.location in-ports; thin pass-through with caching. |
+| AdminDashboardService, PublicDashboardService, ExportService | Implement domain.dashboard in-ports; compose DashboardReadPort queries and ExportGeneratorPort. |
+
+**adapters.in.rest**
+
+| **Class(es)** | **Responsibility** |
+|---------------|-------------------|
+| *Controller classes | Thin — deserialize request → map to command/query via *Mapper → invoke the relevant in-port (use case) → map result to *Response DTO. No business logic lives here. |
+| dto package | Immutable Java records per request/response payload (see REST API section). |
+| mapper package | MapStruct mappers between REST DTOs and domain model/commands. |
+| GlobalExceptionHandler | Translates domain exceptions (e.g. DuplicateRespondentException, UnderageRespondentException, InactiveAccountException) into RFC 7807 problem+json with correct HTTP status. |
+
+**adapters.out.persistence**
+
+| **Class(es)** | **Responsibility** |
+|---------------|-------------------|
+| JPA @Entity classes | One per DB table (Section 2); intentionally kept separate from domain.*.model classes to avoid leaking JPA annotations into the domain. |
+| Spring Data JpaRepository interfaces | UserJpaRepository, SubmissionJpaRepository, etc. — framework plumbing only. |
+| *RepositoryAdapter classes | Implement the domain out-ports; translate between JPA entities and domain aggregates/value objects. |
+| DashboardReadRepositoryAdapter | Implements DashboardReadPort using native/JPQL aggregate queries (GROUP BY district/form_type/gender/etc.) against submissions + response tables; kept separate from the write-side repositories to preserve CQRS separation. |
+
+**adapters.out.security / export / cache**
+
+| **Class(es)** | **Responsibility** |
+|---------------|-------------------|
+| JwtTokenIssuerAdapter | Implements TokenIssuerPort — issues/validates 24h access + 30-day refresh JWTs. |
+| BCryptPasswordHasherAdapter | Implements PasswordHasherPort. |
+| CsvExportAdapter, ExcelExportAdapter (Apache POI), PdfReportAdapter | Implement ExportGeneratorPort for DASH-05 / PUB-05. |
+| RedisSyncStatusAdapter | Ephemeral pending-sync counters per collector (DASH-08) and refresh-token revocation list. |
+
+---
+
+# 4. REST API Specification
+
+*All endpoints are versioned under /api/v1. Authenticated endpoints require a Bearer JWT access token issued by /api/v1/auth/login. Admin-only endpoints additionally enforce role = ADMIN via Spring Security method security; Data-Collector-only endpoints enforce role = DATA_COLLECTOR. Public endpoints require no Authorization header and never return PII fields (enforced by AnonymisationProjector, see Section 1, Reporting & Analytics context). List endpoints support standard page/size/sort query parameters unless noted otherwise.*
+
+## Authentication
+
+**Controller:** AuthController **Base path:** /api/v1/auth **Access: Public**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| POST | /api/v1/auth/login | Authenticate with phone number + password. | LoginRequest{phoneNumber, password} | TokenResponse{accessToken, refreshToken, expiresIn, user:{id,name,role}} |
+| POST | /api/v1/auth/refresh | Exchange a valid refresh token for a new access token. | RefreshRequest{refreshToken} | TokenResponse{accessToken, expiresIn} |
+| POST | /api/v1/auth/logout | Revoke the current refresh token. | --- | 204 No Content |
+
+## Admin — User Management
+
+**Controller:** AdminUserController **Base path:** /api/v1/admin/users **Access: ADMIN only**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| POST | /api/v1/admin/users/data-collectors | Create a Data Collector account (AUTH-01). | CreateDataCollectorRequest{fullName, phoneNumber, password} | UserResponse |
+| POST | /api/v1/admin/users/administrators | Create a new Administrator account (AUTH-03). | CreateAdminRequest{fullName, phoneNumber, password} | UserResponse |
+| GET | /api/v1/admin/users | List/search users with filters (role, status, name). | query params: role, isActive, q, page, size | Page<UserResponse> |
+| GET | /api/v1/admin/users/{userId} | Get a single user's profile. | --- | UserResponse |
+| PATCH | /api/v1/admin/users/{userId}/deactivate | Deactivate a user account (DASH-06). | --- | UserResponse |
+| PATCH | /api/v1/admin/users/{userId}/reactivate | Reactivate a previously deactivated account. | --- | UserResponse |
+| PATCH | /api/v1/admin/users/{userId}/reset-password | Reset a user's password (DASH-06). | ResetPasswordRequest{newPassword?} (auto-generated if omitted) | ResetPasswordResponse{temporaryPassword} |
+| GET | /api/v1/admin/users/{userId}/submissions | List a Data Collector's submissions/respondents (DASH-06). | query params: formType, districtId, dateFrom, dateTo, fyPeriod, page, size | Page<SubmissionSummaryResponse> |
+
+## Data Collector Self-Service
+
+**Controller:** CollectorSelfServiceController **Base path:** /api/v1/me **Access: DATA_COLLECTOR only**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| GET | /api/v1/me | Get my own profile. | --- | UserResponse |
+| GET | /api/v1/me/submission-count | My submission count for today/session (FORM-13). | query param: scope=today|session | SubmissionCountResponse{count} |
+
+## Location Reference Data
+
+**Controller:** LocationController **Base path:** /api/v1/locations **Access: Authenticated (DATA_COLLECTOR, ADMIN)**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| GET | /api/v1/locations/districts | List all districts. | --- | List<DistrictResponse> |
+| GET | /api/v1/locations/districts/{districtId}/sub-counties | List sub-counties in a district (FORM-07 cascade). | --- | List<SubCountyResponse> |
+| GET | /api/v1/locations/sub-counties/{subCountyId}/parishes | List parishes in a sub-county. | --- | List<ParishResponse> |
+| GET | /api/v1/locations/parishes/{parishId}/villages | List villages in a parish. | --- | List<VillageResponse> |
+| GET | /api/v1/locations/bundle | Full District→Village dataset + version tag, for offline pre-load/refresh (SYNC-05). | query param: sinceVersion? | LocationBundleResponse{version, districts:[...nested...]} |
+
+## Survey Submission
+
+**Controller:** SubmissionController **Base path:** /api/v1/submissions **Access: DATA_COLLECTOR only**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| POST | /api/v1/submissions/byp | Submit a Beneficiary Young Person form (FORM-02). | BypSubmissionRequest{deviceSubmissionId, respondent, ...fields} | SubmissionResponse{submissionId, status} |
+| POST | /api/v1/submissions/iyp | Submit an Individual Young Person form (FORM-03). | IypSubmissionRequest{deviceSubmissionId, respondent, ...fields} | SubmissionResponse |
+| POST | /api/v1/submissions/lgo | Submit a Local Government Official form (FORM-04). | LgoSubmissionRequest{deviceSubmissionId, respondent, ...fields} | SubmissionResponse |
+| POST | /api/v1/submissions/parish-monitoring | Submit a Parish Level Monitoring form (FORM-05). | ParishMonitoringSubmissionRequest{deviceSubmissionId, respondent, ...fields} | SubmissionResponse |
+| GET | /api/v1/submissions/uniqueness-check | Pre-submit uniqueness check for a phone+formType+period (UNIQ-02). | query params: phoneNumber, formType, fyPeriod | UniquenessCheckResponse{isUnique, conflictingSubmissionId?} |
+
+## Offline Sync
+
+**Controller:** SyncController **Base path:** /api/v1/sync **Access: DATA_COLLECTOR only**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| POST | /api/v1/sync/batch | Push a batch of queued offline submissions; idempotent per deviceSubmissionId (SYNC-02/SYNC-04). | SyncBatchRequest{submissions:[...mixed form payloads...]} | SyncBatchResponse{results:[{deviceSubmissionId, status, submissionId?, error?}]} |
+| GET | /api/v1/sync/status | Server-known sync status for this collector's recent submissions (backs SYNC-03 indicator after reconnect). | query param: sinceDeviceSubmissionId? | SyncStatusResponse{synced:[...], flagged:[...]} |
+
+## Admin — Submission Management
+
+**Controller:** AdminSubmissionController **Base path:** /api/v1/admin/submissions **Access: ADMIN only**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| GET | /api/v1/admin/submissions | List/filter all submissions (DASH-04 drill-down). | query params: formType, districtId, subCountyId, parishId, dateFrom, dateTo, gender, ageGroup, collectorId, fyPeriod, status, page, size | Page<SubmissionResponse> |
+| GET | /api/v1/admin/submissions/{submissionId} | Full detail of one submission (DASH-04). | --- | SubmissionDetailResponse |
+| PATCH | /api/v1/admin/submissions/{submissionId}/resolve-flag | Resolve a FLAGGED/DUPLICATE submission (accept or discard). | ResolveFlagRequest{resolution: ACCEPT|DISCARD, note?} | SubmissionResponse |
+| GET | /api/v1/admin/submissions/pending-sync-queue | Received-vs-pending sync overview across devices (DASH-08). | query params: collectorId, districtId | PendingSyncQueueResponse |
+
+## Admin Dashboard
+
+**Controller:** AdminDashboardController **Base path:** /api/v1/admin/dashboard **Access: ADMIN only**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| GET | /api/v1/admin/dashboard/summary | Summary stat cards (DASH-03). | query params: (same filter set as DASH-02) | DashboardSummaryResponse |
+| GET | /api/v1/admin/dashboard/charts/{chartType} | Chart series data; chartType ∈ {by-district, by-gender, by-form-type, trend, by-age-group} (DASH-01). | query params: filter set + chartType path var | ChartSeriesResponse |
+| GET | /api/v1/admin/dashboard/collector-tracker | Data Collector leaderboard (DASH-07). | query params: collectorId, formType, districtId, dateFrom, dateTo, fyPeriod | Page<DataCollectorLeaderboardEntryResponse> |
+| GET | /api/v1/admin/dashboard/export/csv | Export filtered/full dataset as CSV (DASH-05). | query params: filter set | text/csv file stream |
+| GET | /api/v1/admin/dashboard/export/excel | Export filtered/full dataset as Excel (DASH-05). | query params: filter set | application/vnd...xlsx file stream |
+| GET | /api/v1/admin/dashboard/export/pdf-report | Generate a printable/shareable PDF report (DASH-05). | query params: filter set | application/pdf file stream |
+
+## Public Dashboard (no auth)
+
+**Controller:** PublicDashboardController **Base path:** /api/v1/public/dashboard **Access: Public — no authentication**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| GET | /api/v1/public/dashboard/summary | Anonymised summary stats (PUB-01/02/03). | query params: district, subCounty, parish, ageGroup, gender, formType, fyPeriod, dateFrom, dateTo, programmeArea | PublicSummaryResponse (no PII) |
+| GET | /api/v1/public/dashboard/charts/{chartType} | Anonymised chart series; chartType ∈ {by-district, by-gender, by-age-group, trend} (PUB-04). | query params: filter set + chartType | ChartSeriesResponse |
+| GET | /api/v1/public/dashboard/heatmap | Geographic heat-map data (PUB-04). | query params: filter set | HeatmapResponse |
+| GET | /api/v1/public/dashboard/download/csv | Download anonymised filtered/full dataset as CSV (PUB-05). | query params: filter set | text/csv file stream |
+| GET | /api/v1/public/dashboard/download/excel | Download anonymised filtered/full dataset as Excel (PUB-05). | query params: filter set | application/vnd...xlsx file stream |
+| GET | /api/v1/public/resources | PDM information/resources content (DASH-09). | --- | List<ResourceArticleResponse> |
+
+## Budget Priorities — Phase 2
+
+**Controller:** BudgetPriorityController **Base path:** /api/v1/public/budget-priorities **Access: Public (phone-verified)**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| POST | /api/v1/public/budget-priorities/verify-phone | Send/validate a verification code for a phone number (BP-02). | VerifyPhoneRequest{phoneNumber, code?} | VerifyPhoneResponse{verified, verificationToken?} |
+| POST | /api/v1/public/budget-priorities/{section} | Submit a sectoral Budget Priorities form; section ∈ {health, agriculture, education, climate} (BP-01/03). | BudgetPrioritySubmissionRequest{verificationToken, demographics, priorityAreas} | BudgetPriorityResponse{bpId, status} |
+| GET | /api/v1/public/dashboard/budget-priorities | Aggregated Budget Priorities data on the public dashboard (BP-04). | query params: section, filter set | BudgetPrioritySummaryResponse |
+| GET | /api/v1/public/dashboard/budget-priorities/download | Download anonymised Budget Priorities dataset (BP-04). | query params: section, filter set | text/csv or xlsx file stream |
+
+## LGO Budget Allocation — Phase 2
+
+**Controller:** LgoBudgetAllocationController **Base path:** /api/v1/submissions/lgo-budget-allocation **Access: DATA_COLLECTOR only (submission); Public (aggregated read)**
+
+| **Method** | **Path** | **Description** | **Request** | **Response** |
+|------------|----------|-----------------|-------------|--------------|
+| POST | /api/v1/submissions/lgo-budget-allocation | Data Collector records an LGO's budget allocation interview (LGO-01/02). | LgoBudgetAllocationRequest{deviceSubmissionId, respondent, priorYearAllocations, rationale, recommendations} | SubmissionResponse |
+| GET | /api/v1/public/dashboard/lgo-budget-allocation | Comparative cross-district view (LGO-03). | query params: filter set | LgoBudgetAllocationSummaryResponse |
+| GET | /api/v1/public/dashboard/lgo-budget-allocation/download | Download dataset as CSV (LGO-04). | query params: filter set | text/csv file stream |
