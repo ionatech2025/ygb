@@ -1,8 +1,8 @@
 package com.ionatech.nac.ygb.adapters.in.rest;
 
-import com.ionatech.nac.ygb.adapters.in.rest.dto.CreateUserRequest;
-import com.ionatech.nac.ygb.adapters.in.rest.dto.UserResponse;
-import com.ionatech.nac.ygb.adapters.in.rest.mapper.UserRestMapper;
+import com.ionatech.nac.ygb.adapters.in.dto.CreateUserRequest;
+import com.ionatech.nac.ygb.adapters.in.dto.UserResponse;
+import com.ionatech.nac.ygb.adapters.in.mappers.UserRestMapper;
 import com.ionatech.nac.ygb.application.ports.api.CreateDataCollectorUseCase;
 import com.ionatech.nac.ygb.domain.exceptions.UserAlreadyExistsException;
 import com.ionatech.nac.ygb.domain.model.User;

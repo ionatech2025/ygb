@@ -1,7 +1,7 @@
-package com.ionatech.nac.ygb.adapters.in.rest.mapper;
+package com.ionatech.nac.ygb.adapters.in.mappers;
 
-import com.ionatech.nac.ygb.adapters.in.rest.dto.CreateUserRequest;
-import com.ionatech.nac.ygb.adapters.in.rest.dto.UserResponse;
+import com.ionatech.nac.ygb.adapters.in.dto.CreateUserRequest;
+import com.ionatech.nac.ygb.adapters.in.dto.UserResponse;
 import com.ionatech.nac.ygb.application.ports.api.CreateDataCollectorCommand;
 import com.ionatech.nac.ygb.domain.model.User;
 import org.mapstruct.Mapper;

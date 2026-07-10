@@ -1,8 +1,10 @@
 package com.ionatech.nac.ygb.adapters.in.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ionatech.nac.ygb.adapters.in.rest.dto.CreateUserRequest;
-import com.ionatech.nac.ygb.adapters.in.rest.mapper.UserRestMapper;
+import com.ionatech.nac.ygb.adapters.in.dto.CreateUserRequest;
+import com.ionatech.nac.ygb.adapters.in.mappers.UserRestMapper;
+import com.ionatech.nac.ygb.adapters.in.security.JwtAuthenticationFilter;
+import com.ionatech.nac.ygb.adapters.in.security.SecurityConfig;
 import com.ionatech.nac.ygb.application.ports.api.CreateDataCollectorCommand;
 import com.ionatech.nac.ygb.application.ports.api.CreateDataCollectorUseCase;
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
@@ -29,8 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ionatech.nac.ygb.adapters.in.rest.security.JwtAuthenticationFilter;
-import com.ionatech.nac.ygb.adapters.in.rest.security.SecurityConfig;
 import org.springframework.context.annotation.Import;
 
 @WebMvcTest(UserController.class)
@@ -67,7 +67,7 @@ class UserControllerTest {
         
         // Setup mock mapper for response, wait, actually since we didn't mock the response part properly, let's just use the mapper
         // Or better yet, we just mock toResponse too since it's a mock bean
-        com.ionatech.nac.ygb.adapters.in.rest.dto.UserResponse response = new com.ionatech.nac.ygb.adapters.in.rest.dto.UserResponse(userId, "Jane Doe", "0771234567", "DATA_COLLECTOR", true);
+        com.ionatech.nac.ygb.adapters.in.dto.UserResponse response = new com.ionatech.nac.ygb.adapters.in.dto.UserResponse(userId, "Jane Doe", "0771234567", "DATA_COLLECTOR", true);
         when(userRestMapper.toResponse(createdUser)).thenReturn(response);
 
         mockMvc.perform(post("/api/v1/admin/users/data-collectors")

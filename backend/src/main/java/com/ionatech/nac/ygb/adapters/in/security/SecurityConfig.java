@@ -1,4 +1,4 @@
-package com.ionatech.nac.ygb.adapters.in.rest.security;
+package com.ionatech.nac.ygb.adapters.in.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package com.ionatech.nac.ygb.adapters.in.rest.mapper;
+package com.ionatech.nac.ygb.adapters.in.mappers;
 
-import com.ionatech.nac.ygb.adapters.in.rest.dto.AuthRequest;
+import com.ionatech.nac.ygb.adapters.in.dto.AuthRequest;
 import com.ionatech.nac.ygb.application.ports.api.AuthenticateUserCommand;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

@@ -1,5 +1,7 @@
 package com.ionatech.nac.ygb.adapters.in.rest.security;
 
+import com.ionatech.nac.ygb.adapters.in.security.JwtAuthenticationFilter;
+import com.ionatech.nac.ygb.adapters.in.security.SecurityConfig;
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

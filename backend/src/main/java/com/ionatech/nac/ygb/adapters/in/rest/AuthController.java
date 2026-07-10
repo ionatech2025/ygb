@@ -1,8 +1,8 @@
 package com.ionatech.nac.ygb.adapters.in.rest;
 
-import com.ionatech.nac.ygb.adapters.in.rest.dto.AuthRequest;
-import com.ionatech.nac.ygb.adapters.in.rest.dto.AuthResponse;
-import com.ionatech.nac.ygb.adapters.in.rest.mapper.AuthMapper;
+import com.ionatech.nac.ygb.adapters.in.dto.AuthRequest;
+import com.ionatech.nac.ygb.adapters.in.dto.AuthResponse;
+import com.ionatech.nac.ygb.adapters.in.mappers.AuthMapper;
 import com.ionatech.nac.ygb.application.ports.api.AuthenticateUserUseCase;
 import com.ionatech.nac.ygb.application.ports.api.AuthenticationResult;
 import com.ionatech.nac.ygb.domain.exceptions.InvalidCredentialsException;
@@ -38,5 +38,5 @@ public class AuthController {
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<Object> handleInvalidCredentialsException(InvalidCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", ex.getMessage()));
-    }
+    } // TODO put this in global exception handler
 }

@@ -1,8 +1,8 @@
 package com.ionatech.nac.ygb.adapters.in.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ionatech.nac.ygb.adapters.in.rest.dto.AuthRequest;
-import com.ionatech.nac.ygb.adapters.in.rest.mapper.AuthMapper;
+import com.ionatech.nac.ygb.adapters.in.dto.AuthRequest;
+import com.ionatech.nac.ygb.adapters.in.mappers.AuthMapper;
 import com.ionatech.nac.ygb.application.ports.api.AuthenticateUserCommand;
 import com.ionatech.nac.ygb.application.ports.api.AuthenticateUserUseCase;
 import com.ionatech.nac.ygb.application.ports.api.AuthenticationResult;

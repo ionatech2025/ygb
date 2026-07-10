@@ -1,4 +1,4 @@
-package com.ionatech.nac.ygb.adapters.in.rest.security;
+package com.ionatech.nac.ygb.adapters.in.security;
 
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
 import com.ionatech.nac.ygb.domain.model.Role;

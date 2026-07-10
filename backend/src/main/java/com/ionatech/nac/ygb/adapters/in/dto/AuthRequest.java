@@ -1,4 +1,4 @@
-package com.ionatech.nac.ygb.adapters.in.rest.dto;
+package com.ionatech.nac.ygb.adapters.in.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
