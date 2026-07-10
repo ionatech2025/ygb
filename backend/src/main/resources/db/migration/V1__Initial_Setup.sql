@@ -1,0 +1,2 @@
+-- V1: Initial Flyway script to establish baseline
+-- Empty for now. Real tables will be added in V2 as entities are created.
