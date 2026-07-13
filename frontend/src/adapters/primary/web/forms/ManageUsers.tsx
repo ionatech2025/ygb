@@ -1,33 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { MockUserAdapter } from '../../../secondary/api/mock-user.adapter';
-import { type User, parseAndValidateUgandaPhone } from '../../../../core/domain/user.model';
 import { PlusCircle, Users, AlertCircle, CheckCircle2 } from 'lucide-react';
 
-// Instantiate our driven adapter repository port implementation
+function parseAndValidateUgandaPhone(input: string): string {
+  const raw = (input || '').toString().trim();
+  if (!raw) throw new Error('Phone number is required');
+
+  const cleaned = raw.replace(/[^+\d]/g, '');
+  let digits = cleaned;
+  if (digits.startsWith('+')) {
+    digits = digits.slice(1);
+  }
+  if (/^0\d{9}$/.test(digits)) {
+    digits = '256' + digits.slice(1);
+  }
+  if (/^7\d{8}$/.test(digits)) {
+    digits = '256' + digits;
+  }
+  if (!/^2567\d{8}$/.test(digits)) {
+    throw new Error('Invalid Uganda phone number format');
+  }
+  return '+' + digits;
+}
+
+type User = {
+  id: string;
+  fullName: string;
+  phoneNumber: string;
+  role: string;
+  createdAt: number;
+};
+
 const userRepo = new MockUserAdapter();
 
 export default function ManageUsers() {
-  // Component State
   const [users, setUsers] = useState<User[]>([]);
   const [fullName, setFullName] = useState('');
   const [phoneInput, setPhoneInput] = useState('');
   const [password, setPassword] = useState('');
   
-  // Validation and Feedback States
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [serverError, setServerError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  // Context Actor: Enforces the invariant that an Admin must be the creator
   const CURRENT_ADMIN_ID = "admin-2026-mvp"; 
 
-  // Load registered data collectors
   const loadCollectors = async () => {
     try {
-      const collectors = await userRepo.getUsersByRole('DATA_COLLECTOR');
-      setUsers(collectors);
+      const collectors = await userRepo.fetchActiveCollectors();
+      setUsers(collectors as User[]);
     } catch (err) {
       setServerError('Failed to fetch user directory.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -37,23 +63,16 @@ export default function ManageUsers() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Clear previous feedback cycles
     setErrors({});
     setServerError('');
     setSuccessMessage('');
     
     const localValidationErrors: { [key: string]: string } = {};
 
-    // TC-AUTH-01-03: Validate required text presence
-    if (!fullName.trim()) {
-      localValidationErrors.fullName = 'Full Name is required';
-    }
-    if (!password.trim()) {
-      localValidationErrors.password = 'Password is required';
-    }
+    // TC-AUTH-01-03 Check: Validate presence of inputs
+    if (!fullName.trim()) localValidationErrors.fullName = 'Full Name is required';
+    if (!password.trim()) localValidationErrors.password = 'Password is required';
 
-    // Invariant Rule Check: Parse and validate using the erasable-compliant function
     let validatedPhone = '';
     if (!phoneInput.trim()) {
       localValidationErrors.phoneInput = 'Phone Number is required';
@@ -65,37 +84,35 @@ export default function ManageUsers() {
       }
     }
 
-    // Block processing if any local validation checks failed
     if (Object.keys(localValidationErrors).length > 0) {
       setErrors(localValidationErrors);
       return;
     }
 
     try {
-      // Direct call through the decoupled out-port implementation strategy
+      // Create collector through port boundary
       await userRepo.createDataCollector({ 
         fullName: fullName.trim(), 
         phoneNumber: validatedPhone
       }, CURRENT_ADMIN_ID);
       
-      // TC-AUTH-01-01: Explicit Success Feedback & View Updates
+      // TC-AUTH-01-01 Feedback Loop
       setSuccessMessage(`Account for "${fullName}" created successfully!`);
       setFullName('');
       setPhoneInput('');
       setPassword('');
       
-      // Refresh matching view components
       await loadCollectors();
     } catch (err: any) {
-      // TC-AUTH-01-02: Catch domain exception layers (e.g. Duplicates)
+      // TC-AUTH-01-02 Duplicate Trap
       setServerError(err.message || 'An error occurred during account creation.');
     }
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      {/* Creation Form Panel (Driving Side Interface) */}
+      {/* Creation Side Form Panel - US-AUTH-01 */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 h-fit">
         <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2 mb-4">
           <PlusCircle className="w-5 h-5 text-indigo-600" />
@@ -103,7 +120,7 @@ export default function ManageUsers() {
         </h2>
 
         {successMessage && (
-          <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-sm flex items-center gap-2 animate-fade-in">
+          <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-sm flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>{successMessage}</span>
           </div>
@@ -151,7 +168,7 @@ export default function ManageUsers() {
 
           <div>
             <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
-              Password <span className="text-red-500">*</span>
+              Initial Password <span className="text-red-500">*</span>
             </label>
             <input
               type="password"
@@ -174,11 +191,11 @@ export default function ManageUsers() {
         </form>
       </div>
 
-      {/* Collector List Directory Panel (Observing State Outcome) */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 md:col-span-2">
+      {/* Directory Monitoring List Side */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 lg:col-span-2">
         <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2 mb-4">
           <Users className="w-5 h-5 text-indigo-600" />
-          Active Data Collectors
+          Active Data Collectors Dashboard
         </h2>
 
         <div className="overflow-x-auto border border-slate-100 rounded-lg">
@@ -187,35 +204,35 @@ export default function ManageUsers() {
               <tr className="border-b border-slate-200 bg-slate-50 text-slate-500 text-xs font-semibold uppercase">
                 <th className="p-3">Full Name</th>
                 <th className="p-3">Phone Number</th>
-                <th className="p-3">Created By</th>
+                <th className="p-3">Designation Role</th>
                 <th className="p-3">Status</th>
               </tr>
             </thead>
             <tbody className="text-sm text-slate-700 divide-y divide-slate-100">
-              {users.map((u) => (
-                <tr key={u.id} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="p-3 font-medium text-slate-900">{u.fullName}</td>
-                  <td className="p-3 text-slate-500 font-mono tracking-tight">{u.phoneNumber}</td>
-                  <td className="p-3 text-xs font-mono text-slate-400">{u.createdByAdminId}</td>
-                  <td className="p-3">
-                    <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2 py-0.5 rounded-full inline-flex items-center">
-                      {u.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {users.length === 0 && (
+              {loading ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-slate-400 italic">
-                    No active field collectors located. Use the form tool to provision accounts.
+                  <td colSpan={4} className="p-6 text-center text-slate-400 italic">
+                    Loading directory info...
                   </td>
                 </tr>
+              ) : (
+                users.map((u) => (
+                  <tr key={u.id} className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3 font-medium text-slate-900">{u.fullName}</td>
+                    <td className="p-3 text-slate-500 font-mono tracking-tight">{u.phoneNumber}</td>
+                    <td className="p-3 text-xs font-semibold text-slate-400">{u.role}</td>
+                    <td className="p-3">
+                      <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center">
+                        Active
+                      </span>
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>
         </div>
       </div>
-
     </div>
   );
 }

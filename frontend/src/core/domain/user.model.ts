@@ -1,37 +1,19 @@
 export type UserRole = 'ADMIN' | 'DATA_COLLECTOR';
-export type AccountStatus = 'ACTIVE' | 'DEACTIVATED';
-export type AuthChannel = 'ONLINE' | 'OFFLINE';
 
-// 1. Pure type definition (Completely erasable at compile time)
-export type UgandaPhoneNumber = string;
-
-// 2. Pure functional Domain Service to handle the invariant check
-export function parseAndValidateUgandaPhone(value: string): UgandaPhoneNumber {
-  const clean = value.replace(/\s+/g, '');
-  
-  // Standard validation rule for Uganda MTN/Airtel structural prefixes
-  const ugandaPhoneRegex = /^(07[0-9]{8}|\+2567[0-9]{8}|2567[0-9]{8})$/;
-  
-  if (!ugandaPhoneRegex.test(clean)) {
-    throw new Error('Invalid Uganda phone number format. Use format: 07XXXXXXXX');
-  }
-  
-  return clean as UgandaPhoneNumber;
-}
-
-// Aggregate Root
-export interface User {
+export interface UserProfile {
   id: string;
   fullName: string;
-  phoneNumber: UgandaPhoneNumber; 
+  phoneNumber: string;
   role: UserRole;
-  status: AccountStatus;
-  createdByAdminId: string; 
+  createdAt: number;
 }
 
-// Domain Event Records
-export interface UserAuthenticatedEvent {
-  userId: string;
-  channel: AuthChannel;
-  timestamp: string;
+// Domain Invariant: Only authenticated administrators can dispatch creation payloads
+export function canUserManageAdmins(currentUserRole: UserRole | undefined): boolean {
+  return currentUserRole === 'ADMIN';
+}
+
+// Domain Invariant: Enforce role isolation for PDM Survey access bounds
+export function canSubmitSurvey(currentUserRole: UserRole | undefined): boolean {
+  return currentUserRole === 'DATA_COLLECTOR';
 }
