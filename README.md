@@ -88,13 +88,4 @@ Helping citizens take charge of their own development.
 
 ---
 
-### What to do next:
-1. Create a new file in your project root called `README.md`.
-2. Paste the markdown block above into it.
-3. Push the changes to your branch using:
-   ```bash
-   git add README.md
-   git commit -m "docs: add comprehensive README with NAC styling, project overview, and testing credentials"
-   git push origin feature/epic1-authentication
-This gives your colleagues everything they need to run, understand, and test your login system!
 
