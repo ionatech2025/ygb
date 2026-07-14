@@ -32,7 +32,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
         AuthenticationResult result = authenticateUserUseCase.authenticate(authMapper.toCommand(request));
-        return ResponseEntity.ok(new AuthResponse(result.token()));
+        return ResponseEntity.ok(new AuthResponse(
+            result.token(),
+            result.userId().toString(),
+            result.name(),
+            result.phoneNumber(),
+            result.role()
+        ));
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)

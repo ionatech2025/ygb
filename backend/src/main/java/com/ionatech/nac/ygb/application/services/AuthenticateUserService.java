@@ -39,6 +39,12 @@ public class AuthenticateUserService implements AuthenticateUserUseCase {
         }
 
         String token = tokenProviderPort.generateToken(user.getId(), user.getRole());
-        return new AuthenticationResult(token);
+        return new AuthenticationResult(
+            token,
+            user.getId(),
+            user.getName(),
+            user.getPhoneNumber(),
+            user.getRole().name()
+        );
     }
 }

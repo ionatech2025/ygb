@@ -93,7 +93,8 @@ export default function ManageUsers() {
       // Create collector through port boundary
       await userRepo.createDataCollector({ 
         fullName: fullName.trim(), 
-        phoneNumber: validatedPhone
+        phoneNumber: validatedPhone,
+        password: password.trim()
       }, CURRENT_ADMIN_ID);
       
       // TC-AUTH-01-01 Feedback Loop

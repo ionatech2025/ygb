@@ -41,30 +41,46 @@ export class PersistentAuthAdapter implements IAuthRepositoryPort {
   }
 
   async loginOnline(credentials: LoginCredentials): Promise<AuthResponse> {
-    // Simulated remote API callback network handshake
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (credentials.passwordPlain === 'Password123' && credentials.phoneNumber === '0772123456') {
-          const now = Date.now();
-          resolve({
-            user: {
-              id: 'dc-991',
-              fullName: 'Jane Nakato',
-              phoneNumber: credentials.phoneNumber,
-              role: 'DATA_COLLECTOR'
-            },
-            tokens: {
-              accessToken: 'mock-jwt-access-token',
-              refreshToken: 'mock-jwt-refresh-token',
-              issuedAt: now,
-              expiresAt: now + 24 * 60 * 60 * 1000 // 24 Hours
-            }
-          });
-        } else {
-          reject(new Error('invalid phone number or password'));
-        }
-      }, 800);
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+    const response = await fetch(`${apiUrl}/api/v1/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        phoneNumber: credentials.phoneNumber,
+        password: credentials.passwordPlain,
+      }),
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      let errorMessage = 'invalid phone number or password';
+      try {
+        const errorJson = JSON.parse(errorText);
+        if (errorJson.message) {
+          errorMessage = errorJson.message;
+        }
+      } catch {}
+      throw new Error(errorMessage);
+    }
+
+    const data = await response.json();
+    const now = Date.now();
+    return {
+      user: {
+        id: data.id,
+        fullName: data.fullName,
+        phoneNumber: data.phoneNumber,
+        role: data.role,
+      },
+      tokens: {
+        accessToken: data.token,
+        refreshToken: 'mock-jwt-refresh-token',
+        issuedAt: now,
+        expiresAt: now + 24 * 60 * 60 * 1000
+      }
+    };
   }
 
   async cacheCredentials(user: AuthenticatedUser, passwordPlain: string, tokens: TokenPair): Promise<void> {

@@ -45,15 +45,22 @@ class AuthControllerTest {
     void shouldReturnTokenOnSuccessfulLogin() throws Exception {
         AuthRequest request = new AuthRequest("0770000000", "password");
         AuthenticateUserCommand command = new AuthenticateUserCommand("0770000000", "password");
+        java.util.UUID userId = java.util.UUID.fromString("22222222-2222-2222-2222-222222222222");
         
         when(authMapper.toCommand(any(AuthRequest.class))).thenReturn(command);
-        when(authenticateUserUseCase.authenticate(command)).thenReturn(new AuthenticationResult("jwt.token.here"));
+        when(authenticateUserUseCase.authenticate(command)).thenReturn(new AuthenticationResult(
+                "jwt.token.here", userId, "Default Collector", "0771111111", "DATA_COLLECTOR"
+        ));
 
         mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("jwt.token.here"));
+                .andExpect(jsonPath("$.token").value("jwt.token.here"))
+                .andExpect(jsonPath("$.id").value("22222222-2222-2222-2222-222222222222"))
+                .andExpect(jsonPath("$.fullName").value("Default Collector"))
+                .andExpect(jsonPath("$.phoneNumber").value("0771111111"))
+                .andExpect(jsonPath("$.role").value("DATA_COLLECTOR"));
     }
 
     @Test
