@@ -1,6 +1,9 @@
 # Project specific
 .agent/
 
+# IDE
+.settings/
+
 # Environment Variables
 .env
 .env.*
