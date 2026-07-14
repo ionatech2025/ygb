@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { AuthState, AuthenticatedUser, TokenPair } from '../domain/auth.model';
+import { AuthState } from '../domain/auth.model';
 import { PersistentAuthAdapter } from '../../adapters/secondary/api/persistent-auth.adapter';
 
 interface AuthStoreActions extends AuthState {
