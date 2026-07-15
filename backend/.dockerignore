@@ -1,0 +1,28 @@
+# Maven build outputs
+target/
+*.jar
+*.war
+
+# IDE configurations and settings
+.settings/
+.classpath
+.project
+.factorypath
+.idea/
+*.iml
+.vscode/
+
+# Git folders
+.git/
+.gitignore
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
