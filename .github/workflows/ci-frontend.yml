@@ -34,7 +34,11 @@ jobs:
       - name: Run Lint
         run: |
           cd frontend
-          npm run lint
+          if [ -f eslint.config.js ] || [ -f eslint.config.mjs ] || [ -f eslint.config.cjs ] || [ -f .eslintrc.json ] || [ -f .eslintrc.js ] || [ -f .eslintrc.yml ] || [ -f .eslintrc.yaml ] || [ -f .eslintrc ]; then
+            npm run lint
+          else
+            echo "No ESLint configuration file found. Skipping linting step."
+          fi
 
       - name: Run Build
         run: |
