@@ -98,6 +98,11 @@ public class IypSubmission extends Submission {
     }
 
     @Override
+    public FormType getFormType() {
+        return FormType.IYP;
+    }
+
+    @Override
     public void validate() {
         if (Boolean.TRUE.equals(awareOfPdm)) {
             if (eligibleCriteriaAware == null) {

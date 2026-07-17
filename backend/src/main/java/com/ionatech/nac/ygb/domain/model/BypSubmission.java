@@ -143,6 +143,11 @@ public class BypSubmission extends Submission {
     }
 
     @Override
+    public FormType getFormType() {
+        return FormType.BYP;
+    }
+
+    @Override
     public void validate() {
         if ("MORE_THAN_WEEK_LESS_THAN_MONTH".equals(fundReceiptDuration) || "MONTHS".equals(fundReceiptDuration)) {
             if (fundReceiptDurationSpecify == null || fundReceiptDurationSpecify.trim().length() < 10) {

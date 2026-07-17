@@ -225,6 +225,11 @@ public class PcSubmission extends Submission {
     }
 
     @Override
+    public FormType getFormType() {
+        return FormType.PC;
+    }
+
+    @Override
     public void validate() {
         if (Boolean.TRUE.equals(pdcTrainingReceived) && pdcTrainingAreas.isEmpty()) {
             throw new IllegalArgumentException("PDC training areas list cannot be empty when pdcTrainingReceived is true");

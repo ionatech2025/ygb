@@ -76,6 +76,11 @@ public class LgoSubmission extends Submission {
     }
 
     @Override
+    public FormType getFormType() {
+        return FormType.LGO;
+    }
+
+    @Override
     public void validate() {
         if (Boolean.FALSE.equals(fundsSpentAsRequired) && fundsSpentExplanation == null) {
             throw new IllegalArgumentException("Explanation is required when funds were not spent as required");

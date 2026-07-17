@@ -90,12 +90,14 @@ public abstract class Submission {
         return status;
     }
 
-    public void updateStatus(SubmissionStatus status) {
+    public void setStatus(SubmissionStatus status) {
         if (status == null) {
             throw new IllegalArgumentException("Status cannot be null");
         }
         this.status = status;
     }
+
+    public abstract FormType getFormType();
 
     public abstract void validate();
 }
