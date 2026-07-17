@@ -74,7 +74,7 @@ class SubmitSubmissionServiceTest {
         BypSubmission byp = (BypSubmission) result;
         assertThat(byp.getRespondentName()).isEqualTo("Jane Doe");
         assertThat(byp.getExactAge().getValue()).isEqualTo(22);
-        assertThat(byp.getStatus()).isEqualTo(SubmissionStatus.PENDING);
+        assertThat(byp.getStatus()).isEqualTo(SubmissionStatus.SYNCED);
         assertThat(byp.getMetadata().financialYearPeriod().toString()).isNotNull();
 
         ArgumentCaptor<Submission> captor = ArgumentCaptor.forClass(Submission.class);
@@ -236,5 +236,66 @@ class SubmitSubmissionServiceTest {
         assertThat(pc.getAmountExpected()).isEqualTo(1500000L);
 
         verify(repositoryPort, times(1)).save(any(Submission.class));
+    }
+
+    @Test
+    void shouldSubmitAsSyncedWhenNoDuplicateExists() {
+        BypSubmitCommand command = createSampleBypCommand();
+        when(repositoryPort.existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
+                anyString(), any(FormType.class), anyString(), any(SubmissionStatus.class)
+        )).thenReturn(false);
+        when(repositoryPort.save(any(Submission.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Submission result = service.submit(command);
+
+        assertThat(result.getStatus()).isEqualTo(SubmissionStatus.SYNCED);
+        verify(repositoryPort, times(1)).existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
+                "0772111222", FormType.BYP, result.getMetadata().financialYearPeriod().toString(), SubmissionStatus.SYNCED
+        );
+    }
+
+    @Test
+    void shouldSubmitAsFlaggedWhenDuplicateSyncedExists() {
+        BypSubmitCommand command = createSampleBypCommand();
+        when(repositoryPort.existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
+                anyString(), any(FormType.class), anyString(), any(SubmissionStatus.class)
+        )).thenReturn(true);
+        when(repositoryPort.save(any(Submission.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Submission result = service.submit(command);
+
+        assertThat(result.getStatus()).isEqualTo(SubmissionStatus.FLAGGED);
+        verify(repositoryPort, times(1)).existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
+                "0772111222", FormType.BYP, result.getMetadata().financialYearPeriod().toString(), SubmissionStatus.SYNCED
+        );
+    }
+
+    private BypSubmitCommand createSampleBypCommand() {
+        return new BypSubmitCommand(
+                collectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_20_24,
+                22,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                "Provide more technical support."
+        );
     }
 }

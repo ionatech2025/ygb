@@ -445,7 +445,7 @@ class SubmissionRepositoryAdapterTest {
         assertThatThrownBy(() -> {
             adapter.save(byp2);
             submissionJpaRepository.flush();
-        }).isInstanceOf(DataIntegrityViolationException.class);
+        }).isInstanceOf(com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException.class);
     }
 
     @Test

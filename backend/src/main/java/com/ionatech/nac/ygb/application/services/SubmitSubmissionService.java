@@ -18,6 +18,20 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
     public Submission submit(SubmitSubmissionCommand command) {
         Submission submission = mapToDomain(command);
         submission.validate();
+
+        boolean existsSynced = repositoryPort.existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
+                submission.getRespondentPhone(),
+                submission.getFormType(),
+                submission.getMetadata().financialYearPeriod().toString(),
+                SubmissionStatus.SYNCED
+        );
+
+        if (existsSynced) {
+            submission.setStatus(SubmissionStatus.FLAGGED);
+        } else {
+            submission.setStatus(SubmissionStatus.SYNCED);
+        }
+
         return repositoryPort.save(submission);
     }
 

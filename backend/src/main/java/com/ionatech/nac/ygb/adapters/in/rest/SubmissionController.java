@@ -4,6 +4,7 @@ import com.ionatech.nac.ygb.adapters.in.rest.dto.SubmissionRequestDto;
 import com.ionatech.nac.ygb.adapters.in.rest.dto.SubmissionResponseDto;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.SubmissionRestMapper;
 import com.ionatech.nac.ygb.application.ports.api.SubmitSubmissionUseCase;
+import com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException;
 import com.ionatech.nac.ygb.domain.model.Submission;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,13 @@ public class SubmissionController {
             java.security.Principal principal
     ) {
         UUID collectorId = UUID.fromString(principal.getName());
-        Submission submission = submitUseCase.submit(restMapper.toCommand(request, collectorId));
+        var command = restMapper.toCommand(request, collectorId);
+        Submission submission;
+        try {
+            submission = submitUseCase.submit(command);
+        } catch (DuplicateSyncedSubmissionException ex) {
+            submission = submitUseCase.submit(command);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(restMapper.toResponse(submission));
     }
 

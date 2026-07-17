@@ -19,9 +19,20 @@ public class SubmissionRepositoryAdapter implements SubmissionRepositoryPort {
 
     @Override
     public Submission save(Submission submission) {
-        SubmissionJpaEntity entity = mapper.toEntity(submission);
-        SubmissionJpaEntity saved = jpaRepository.save(entity);
-        return mapper.toDomain(saved);
+        try {
+            SubmissionJpaEntity entity = mapper.toEntity(submission);
+            SubmissionJpaEntity saved = jpaRepository.saveAndFlush(entity);
+            return mapper.toDomain(saved);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            String msg = ex.getMessage();
+            if (msg != null && msg.contains("idx_unique_synced_respondent")) {
+                throw new com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException(
+                        "A synced submission for this respondent and form type already exists in the current financial year period.",
+                        ex
+                );
+            }
+            throw ex;
+        }
     }
 
     @Override

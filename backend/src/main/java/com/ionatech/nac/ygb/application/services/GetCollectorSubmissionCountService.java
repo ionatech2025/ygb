@@ -2,14 +2,11 @@ package com.ionatech.nac.ygb.application.services;
 
 import com.ionatech.nac.ygb.application.ports.api.GetCollectorSubmissionCountQuery;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
-@Service
 public class GetCollectorSubmissionCountService implements GetCollectorSubmissionCountQuery {
     private final SubmissionRepositoryPort repositoryPort;
 
