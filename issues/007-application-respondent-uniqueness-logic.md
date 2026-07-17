@@ -1,31 +1,47 @@
 ## Objective
 
-Implement the application-level logic to validate respondent uniqueness at sync/submission time, map the submission status to `SYNCED` or `FLAGGED`, and handle concurrency exceptions correctly.
+Implement the application-level logic to validate respondent uniqueness at sync/submission time, map the submission status to `SYNCED` or `FLAGGED`, configure all application services programmatically without Spring annotations, and handle concurrency exceptions correctly with controller-level retry.
 
 ## Architectural Context
 
+- **Core Domain**:
+  - Create `DuplicateSyncedSubmissionException` in `domain/exceptions`.
+
 - **Application Services**:
-  - `SubmitSubmissionService`: Before saving the submission, check if a `SYNCED` duplicate exists in the database for this phone number, form type, and financial year period using the updated SPI:
-    `existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(...)`.
-  - If a `SYNCED` duplicate exists, set the incoming submission status to `SubmissionStatus.FLAGGED`.
+  - Remove `@Service` annotations from `SubmitSubmissionService`, `CreateDataCollectorService`, `AuthenticateUserService`, and `GetCollectorSubmissionCountService`.
+  - Update `SubmitSubmissionService`: Before saving the submission, check if a `SYNCED` duplicate exists in the database for this phone number, form type, and financial year period using the SPI:
+    `existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(phone, formType, period, SubmissionStatus.SYNCED)`.
+  - If a `SYNCED` duplicate exists, set the incoming submission status to `SubmissionStatus.FLAGGED` using `submission.setStatus(...)`.
   - If no duplicate exists, set the incoming submission status to `SubmissionStatus.SYNCED`.
-  - **Concurrency Handling**: If `repositoryPort.save(submission)` throws a persistence duplicate error (due to a concurrent insert violating the unique constraint in index `idx_unique_synced_respondent`), catch the exception, set the submission status to `SubmissionStatus.FLAGGED`, and retry saving the submission.
+
+- **Configuration Layer**:
+  - Create `UseCaseConfig` configuration class in the new `configuration` package.
+  - Wire all use case beans programmatically. Declare `@Transactional` on the factory methods for write use cases (like `submit` and `createDataCollector`).
+
+- **Adapters**:
+  - Update `SubmissionRepositoryAdapter`: Catch Spring's `DataIntegrityViolationException` (due to unique index `idx_unique_synced_respondent` violation) and translate it to `DuplicateSyncedSubmissionException`.
+  - Update `SubmissionController`: Catch `DuplicateSyncedSubmissionException` at the endpoint post method, and retry the use case invocation once.
+
+- **Coding Standards Rules**:
+  - Update `.agent/rules/CODING_STANDARDS.md` to strictly forbid Spring/framework annotations in the application layer services.
 
 ## Technical Constraints & Clean Code
 
-- **Ports and Adapters**: The Application service must only interact with the domain models and the SPI ports. It must not reference any JPA models or controller classes.
-- **Status Transition**: Update status using the domain method `submission.updateStatus(...)`.
+- **Ports and Adapters**: The Application services must remain completely framework-independent (no Spring annotations).
 - **File limits**: Keep files under 200 lines.
 
 ## Acceptance Criteria & TDD Checklist
 
+- [ ] Update `.agent/rules/CODING_STANDARDS.md` to enforce framework-free application layer rules.
+- [ ] Implement `DuplicateSyncedSubmissionException` in the domain layer.
 - [ ] Write **Application Tests** in `SubmitSubmissionServiceTest` verifying:
-  - Happy path: when no duplicate exists, the service queries the SPI, gets `false`, sets the submission status to `SYNCED`, saves it, and returns the saved submission.
-  - Duplicate path: when a duplicate is found by the SPI check, the service queries the SPI, gets `true`, sets the submission status to `FLAGGED`, saves it, and returns it.
-  - Concurrency exception handling: when the service gets `false` from the check, tries to save with `SYNCED`, but the repository throws an exception (due to a concurrent write), the service catches the exception, updates the status to `FLAGGED`, and successfully saves and returns the submission.
-  - Validation failure: if domain validation fails, the service does not perform the duplicate check or save.
-- [ ] Implement the uniqueness check, status mapping, and exception recovery logic in `SubmitSubmissionService`.
-- [ ] Refactor to ensure all methods remain under 20 lines.
+  - Happy path: when no duplicate exists, the service queries the SPI, gets `false`, sets the submission status to `SYNCED`, and saves it.
+  - Duplicate path: when a duplicate is found by the SPI check, the service queries the SPI, gets `true`, sets the submission status to `FLAGGED`, and saves it.
+- [ ] Remove `@Service` from all services and implement `UseCaseConfig`.
+- [ ] Update `SubmissionRepositoryAdapter` to translate `DataIntegrityViolationException` into `DuplicateSyncedSubmissionException`.
+- [ ] Write **Controller Tests** in `SubmissionControllerTest` to verify that when the first call to `submitUseCase.submit` throws `DuplicateSyncedSubmissionException`, the controller retries the call once and returns `201 Created`.
+- [ ] Implement the retry logic in `SubmissionController`.
+- [ ] Verify that all Maven tests pass.
 
 ## Blocked by
 
