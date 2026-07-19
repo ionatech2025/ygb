@@ -2,6 +2,7 @@ package com.ionatech.nac.ygb.application.services;
 
 import com.ionatech.nac.ygb.application.ports.api.*;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
+import com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException;
 import com.ionatech.nac.ygb.domain.model.*;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -268,6 +269,65 @@ class SubmitSubmissionServiceTest {
         verify(repositoryPort, times(1)).existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
                 "0772111222", FormType.BYP, result.getMetadata().financialYearPeriod().toString(), SubmissionStatus.SYNCED
         );
+    }
+
+    @Test
+    void shouldSucceedOnSecondAttemptWhenFirstSaveFailsDueToRaceCondition() {
+        // Simulates: both devices think no SYNCED record exists, first device wins the DB race.
+        // On retry, existsSynced is now true so status becomes FLAGGED and save succeeds.
+        BypSubmitCommand command = createSampleBypCommand();
+        when(repositoryPort.existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
+                anyString(), any(FormType.class), anyString(), any(SubmissionStatus.class)
+        )).thenReturn(false).thenReturn(true);
+        when(repositoryPort.save(any(Submission.class)))
+                .thenThrow(new DuplicateSyncedSubmissionException("concurrent insert")
+                )
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Submission result = service.submit(command);
+
+        assertThat(result.getStatus()).isEqualTo(SubmissionStatus.FLAGGED);
+        verify(repositoryPort, times(2)).save(any(Submission.class));
+        verify(repositoryPort, times(2)).existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
+                anyString(), any(FormType.class), anyString(), any(SubmissionStatus.class)
+        );
+    }
+
+    @Test
+    void shouldSucceedOnThirdAttemptWhenFirstTwoSavesFail() {
+        // Simulates an extreme race where two concurrent saves both hit the index violation;
+        // on the third attempt the status is correctly FLAGGED and save succeeds.
+        BypSubmitCommand command = createSampleBypCommand();
+        when(repositoryPort.existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
+                anyString(), any(FormType.class), anyString(), any(SubmissionStatus.class)
+        )).thenReturn(false).thenReturn(false).thenReturn(true);
+        when(repositoryPort.save(any(Submission.class)))
+                .thenThrow(new DuplicateSyncedSubmissionException("concurrent insert 1"))
+                .thenThrow(new DuplicateSyncedSubmissionException("concurrent insert 2"))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Submission result = service.submit(command);
+
+        assertThat(result.getStatus()).isEqualTo(SubmissionStatus.FLAGGED);
+        verify(repositoryPort, times(3)).save(any(Submission.class));
+    }
+
+    @Test
+    void shouldPropagateExceptionWhenAllAttemptsAreExhausted() {
+        // Simulates a pathological scenario where all three save attempts hit the index violation.
+        // The service exhausts its retries and propagates DuplicateSyncedSubmissionException.
+        BypSubmitCommand command = createSampleBypCommand();
+        when(repositoryPort.existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
+                anyString(), any(FormType.class), anyString(), any(SubmissionStatus.class)
+        )).thenReturn(false);
+        when(repositoryPort.save(any(Submission.class)))
+                .thenThrow(new DuplicateSyncedSubmissionException("exhausted"));
+
+        assertThatThrownBy(() -> service.submit(command))
+                .isInstanceOf(DuplicateSyncedSubmissionException.class)
+                .hasMessageContaining("exhausted");
+
+        verify(repositoryPort, times(3)).save(any(Submission.class));
     }
 
     private BypSubmitCommand createSampleBypCommand() {

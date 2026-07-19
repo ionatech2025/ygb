@@ -284,7 +284,9 @@ class SubmissionControllerTest {
 
     @Test
     @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
-    void shouldRetrySubmissionOnceOnConcurrencyDuplicateConflict() throws Exception {
+    void shouldReturn409WhenServiceExhaustsDuplicateSyncedRetries() throws Exception {
+        // The service has already retried internally; once it propagates the exception,
+        // the controller must translate it to 409 Conflict — not 500 or a silent re-call.
         BypSubmissionRequestDto requestDto = new BypSubmissionRequestDto(
                 "BYP",
                 deviceSubmissionId,
@@ -313,81 +315,28 @@ class SubmissionControllerTest {
         );
 
         UUID testCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
-
         BypSubmitCommand command = new BypSubmitCommand(
-                testCollectorId,
-                deviceSubmissionId,
-                completedAt,
-                districtId,
-                subcountyId,
-                parishId,
-                villageId,
-                "Jane Doe",
-                "0772111222",
-                "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
-                "ONE_WEEK",
-                null,
-                true,
-                500000L,
-                "MONTHLY",
-                null,
-                Rating.VERY_GOOD,
-                Rating.GOOD,
-                true,
-                true,
-                List.of("TRAINING"),
-                "Provide more technical support."
-        );
-
-        BypSubmission dummyByp = new BypSubmission(
-                UUID.randomUUID(),
-                new SubmissionMetadata(testCollectorId, deviceSubmissionId, completedAt),
-                new Location(districtId, subcountyId, parishId, villageId),
-                "Jane Doe",
-                "0772111222",
-                "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
-                "ONE_WEEK",
-                null,
-                true,
-                500000L,
-                "MONTHLY",
-                null,
-                Rating.VERY_GOOD,
-                Rating.GOOD,
-                true,
-                true,
-                List.of("TRAINING"),
-                new NarrativeText("Provide more technical support.")
-        );
-        dummyByp.setStatus(SubmissionStatus.FLAGGED);
-
-        SubmissionResponseDto responseDto = new SubmissionResponseDto(
-                dummyByp.getId(),
-                "BYP",
-                "Jane Doe",
-                "FLAGGED",
-                completedAt
+                testCollectorId, deviceSubmissionId, completedAt,
+                districtId, subcountyId, parishId, villageId,
+                "Jane Doe", "0772111222", "FEMALE", AgeGroup.AGE_20_24, 22,
+                "ONE_WEEK", null, true, 500000L, "MONTHLY", null,
+                Rating.VERY_GOOD, Rating.GOOD, true, true,
+                List.of("TRAINING"), "Provide more technical support."
         );
 
         when(submissionRestMapper.toCommand(any(BypSubmissionRequestDto.class), eq(testCollectorId))).thenReturn(command);
         when(submitSubmissionUseCase.submit(command))
-                .thenThrow(new com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException("concurrency duplicate"))
-                .thenReturn(dummyByp);
-        when(submissionRestMapper.toResponse(dummyByp)).thenReturn(responseDto);
+                .thenThrow(new com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException(
+                        "All retry attempts exhausted due to concurrent duplicate submissions."
+                ));
 
         mockMvc.perform(post("/api/v1/submissions")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.respondentName").value("Jane Doe"))
-                .andExpect(jsonPath("$.status").value("FLAGGED"));
+                .andExpect(status().isConflict());
 
-        verify(submitSubmissionUseCase, times(2)).submit(command);
+        // Controller must call submit exactly once — retries are the service's responsibility.
+        verify(submitSubmissionUseCase, times(1)).submit(command);
     }
 }

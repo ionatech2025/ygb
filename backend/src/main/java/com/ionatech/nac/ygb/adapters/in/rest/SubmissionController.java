@@ -38,12 +38,7 @@ public class SubmissionController {
     ) {
         UUID collectorId = UUID.fromString(principal.getName());
         var command = restMapper.toCommand(request, collectorId);
-        Submission submission;
-        try {
-            submission = submitUseCase.submit(command);
-        } catch (DuplicateSyncedSubmissionException ex) {
-            submission = submitUseCase.submit(command);
-        }
+        Submission submission = submitUseCase.submit(command);
         return ResponseEntity.status(HttpStatus.CREATED).body(restMapper.toResponse(submission));
     }
 
@@ -52,6 +47,11 @@ public class SubmissionController {
         UUID collectorId = UUID.fromString(principal.getName());
         long count = countQuery.getDailyCount(collectorId);
         return ResponseEntity.ok(count);
+    }
+
+    @ExceptionHandler(DuplicateSyncedSubmissionException.class)
+    public ResponseEntity<String> handleDuplicateSyncedSubmission(DuplicateSyncedSubmissionException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

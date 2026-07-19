@@ -2,12 +2,17 @@ package com.ionatech.nac.ygb.application.services;
 
 import com.ionatech.nac.ygb.application.ports.api.*;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
+import com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException;
 import com.ionatech.nac.ygb.domain.model.*;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 
 import java.util.UUID;
 
 public class SubmitSubmissionService implements SubmitSubmissionUseCase {
+
+    // Total attempts = 1 initial + 2 retries, covering realistic multi-device race conditions.
+    private static final int MAX_ATTEMPTS = 3;
+
     private final SubmissionRepositoryPort repositoryPort;
 
     public SubmitSubmissionService(SubmissionRepositoryPort repositoryPort) {
@@ -18,7 +23,15 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
     public Submission submit(SubmitSubmissionCommand command) {
         Submission submission = mapToDomain(command);
         submission.validate();
+        return saveWithRetry(submission, MAX_ATTEMPTS);
+    }
 
+    /**
+     * Attempts to determine the correct status (SYNCED vs FLAGGED) and persist the submission.
+     * On a DB-level unique-index violation (concurrent race condition), the existence check is
+     * re-evaluated and the save is retried. After all attempts are exhausted the exception propagates.
+     */
+    private Submission saveWithRetry(Submission submission, int remainingAttempts) {
         boolean existsSynced = repositoryPort.existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
                 submission.getRespondentPhone(),
                 submission.getFormType(),
@@ -26,13 +39,16 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                 SubmissionStatus.SYNCED
         );
 
-        if (existsSynced) {
-            submission.setStatus(SubmissionStatus.FLAGGED);
-        } else {
-            submission.setStatus(SubmissionStatus.SYNCED);
-        }
+        submission.setStatus(existsSynced ? SubmissionStatus.FLAGGED : SubmissionStatus.SYNCED);
 
-        return repositoryPort.save(submission);
+        try {
+            return repositoryPort.save(submission);
+        } catch (DuplicateSyncedSubmissionException ex) {
+            if (remainingAttempts > 1) {
+                return saveWithRetry(submission, remainingAttempts - 1);
+            }
+            throw ex;
+        }
     }
 
     private Submission mapToDomain(SubmitSubmissionCommand command) {
