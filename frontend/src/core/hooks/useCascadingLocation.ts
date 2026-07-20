@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { AdminLocation } from '../domain/admin-location.model';
 import type { LocationFields } from '../domain/admin-location.model';
+import { getSampleVillagesForParish } from '../domain/sample-location-zones';
 import type { ILocationRepositoryPort } from '../../ports/location-repository.port';
 import { locationRepository } from '../../adapters/secondary/location/location-repository.adapter';
 import { locationService } from '../LocationService';
@@ -85,7 +86,8 @@ export function useCascadingLocation(
         return;
       }
       const list = await repository.findByParentId(value.parishId);
-      if (!cancelled) setVillages(list);
+      const resolved = list.length > 0 ? list : getSampleVillagesForParish(value.parishId);
+      if (!cancelled) setVillages(resolved);
     }
     void loadVillages();
     return () => {

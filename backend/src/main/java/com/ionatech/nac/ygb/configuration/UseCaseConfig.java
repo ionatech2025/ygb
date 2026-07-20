@@ -29,6 +29,13 @@ public class UseCaseConfig {
     }
 
     @Bean
+    public ListActiveDataCollectorsUseCase listActiveDataCollectorsUseCase(
+            UserRepositoryPort userRepositoryPort
+    ) {
+        return new ListActiveDataCollectorsService(userRepositoryPort);
+    }
+
+    @Bean
     public GetCollectorSubmissionCountQuery getCollectorSubmissionCountQuery(
             SubmissionRepositoryPort submissionRepositoryPort
     ) {

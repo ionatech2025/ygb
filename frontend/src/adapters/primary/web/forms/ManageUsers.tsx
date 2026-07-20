@@ -86,7 +86,7 @@ export default function ManageUsers() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-        <section className="rounded-2xl border border-border bg-white p-4 shadow-sm sm:p-6 lg:col-span-2">
+        <section className="rounded-2xl border border-border bg-surface p-4 shadow-sm sm:p-6 lg:col-span-2">
           <header className="mb-4 space-y-1 border-b border-border pb-3">
             <h3 className="text-sm font-bold text-text">Add Data Collector</h3>
             <p className="text-xs text-text-muted">POST /api/v1/admin/users/data-collectors</p>
@@ -153,12 +153,14 @@ export default function ManageUsers() {
             </form>
         </section>
 
-        <section className="rounded-2xl border border-border bg-white p-4 shadow-sm sm:p-6 lg:col-span-3">
+        <section className="rounded-2xl border border-border bg-surface p-4 shadow-sm sm:p-6 lg:col-span-3">
           <header className="mb-4 flex items-center gap-2 border-b border-border pb-3">
             <Users className="h-5 w-5 text-brand" aria-hidden="true" />
             <div>
               <h3 className="text-sm font-bold text-text">Active Data Collectors</h3>
-              <p className="text-xs text-text-muted">Session cache — list API pending on backend</p>
+              <p className="text-xs text-text-muted">
+                {users.length} active collector{users.length === 1 ? '' : 's'} in the database
+              </p>
             </div>
           </header>
 
@@ -166,7 +168,7 @@ export default function ManageUsers() {
             <p className="py-8 text-center text-sm text-text-muted">Loading directory…</p>
           ) : users.length === 0 ? (
             <p className="rounded-xl border border-dashed border-border bg-surface-muted px-4 py-8 text-center text-sm text-text-muted">
-              No collectors registered in this browser session yet. Create one using the form.
+              No active data collectors found. Register one using the form.
             </p>
           ) : (
             <>

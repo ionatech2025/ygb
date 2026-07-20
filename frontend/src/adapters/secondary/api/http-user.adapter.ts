@@ -3,8 +3,6 @@ import { IUserRepositoryPort, CreateCollectorPayload } from '../../../ports/user
 import { UserProfile } from '../../../core/domain/user.model';
 import { normalizeUgandaPhoneLocal } from '../../../core/utils/phone-utils';
 
-const COLLECTORS_CACHE_KEY = 'ygb-admin-collectors';
-
 interface BackendUserResponse {
   id: string;
   name: string;
@@ -13,24 +11,32 @@ interface BackendUserResponse {
   isActive: boolean;
 }
 
-function readCache(): UserProfile[] {
-  try {
-    const raw = localStorage.getItem(COLLECTORS_CACHE_KEY);
-    return raw ? (JSON.parse(raw) as UserProfile[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeCache(collectors: UserProfile[]): void {
-  localStorage.setItem(COLLECTORS_CACHE_KEY, JSON.stringify(collectors));
+function mapCollector(user: BackendUserResponse): UserProfile {
+  return {
+    id: user.id,
+    fullName: user.name,
+    phoneNumber: user.phoneNumber,
+    role: 'DATA_COLLECTOR',
+    createdAt: Date.now(),
+  };
 }
 
 export class HttpUserAdapter implements IUserRepositoryPort {
   constructor(private readonly getAccessToken: () => string | null) {}
 
   async fetchActiveCollectors(): Promise<UserProfile[]> {
-    return readCache().filter((u) => u.role === 'DATA_COLLECTOR');
+    const token = this.getAccessToken();
+    if (!token) {
+      throw new Error('You must be signed in as an administrator.');
+    }
+
+    const collectors = await apiFetch<BackendUserResponse[]>(
+      '/api/v1/admin/users/data-collectors',
+      { method: 'GET' },
+      token
+    );
+
+    return collectors.filter((user) => user.isActive).map(mapCollector);
   }
 
   async createDataCollector(payload: CreateCollectorPayload, adminId: string): Promise<UserProfile> {
@@ -54,15 +60,6 @@ export class HttpUserAdapter implements IUserRepositoryPort {
       token
     );
 
-    const profile: UserProfile = {
-      id: created.id,
-      fullName: created.name,
-      phoneNumber: created.phoneNumber,
-      role: 'DATA_COLLECTOR',
-      createdAt: Date.now(),
-    };
-
-    writeCache([profile, ...readCache()]);
-    return profile;
+    return mapCollector(created);
   }
 }

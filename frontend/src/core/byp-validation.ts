@@ -5,7 +5,7 @@ import {
 } from './domain/byp-form.model';
 import type { RespondentFields } from './domain/respondent-fields.model';
 import type { AgeGroup, Rating } from './domain/form-validation.model';
-import { normalizeUgandaPhoneLocal, isValidUgandaPhoneLocal } from './utils/phone-utils';
+import { normalizeUgandaPhoneLocal } from './utils/phone-utils';
 import { validateAge, validateNarrativeText, validatePhone, validateRequired } from './form-validation';
 
 export type BypFormErrors = Record<string, string>;
