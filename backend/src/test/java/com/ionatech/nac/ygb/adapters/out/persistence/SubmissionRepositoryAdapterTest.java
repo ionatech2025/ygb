@@ -505,4 +505,129 @@ class SubmissionRepositoryAdapterTest {
         assertThat(savedByp2).isNotNull();
         assertThat(savedByp2.getStatus()).isEqualTo(SubmissionStatus.FLAGGED);
     }
+
+    @Test
+    void shouldCountSubmissionsByStatus() {
+        BypSubmission pendingSub = new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(UUID.randomUUID()),
+                createLocation(),
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_20_24,
+                new Age(22),
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+        pendingSub.setStatus(SubmissionStatus.PENDING);
+
+        BypSubmission syncedSub = new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(UUID.randomUUID()),
+                createLocation(),
+                "John Doe",
+                "0772111223",
+                "MALE",
+                AgeGroup.AGE_20_24,
+                new Age(22),
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+        syncedSub.setStatus(SubmissionStatus.SYNCED);
+
+        adapter.save(pendingSub);
+        adapter.save(syncedSub);
+
+        long pendingCount = adapter.countByCollectorIdAndStatus(collectorId, SubmissionStatus.PENDING);
+        long syncedCount = adapter.countByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED);
+
+        assertThat(pendingCount).isEqualTo(1L);
+        assertThat(syncedCount).isEqualTo(1L);
+    }
+
+    @Test
+    void shouldFindLatestFormCompletedAtByCollectorIdAndStatus() {
+        LocalDateTime time1 = LocalDateTime.of(2026, 7, 19, 10, 0);
+        LocalDateTime time2 = LocalDateTime.of(2026, 7, 19, 11, 30);
+
+        BypSubmission sub1 = new BypSubmission(
+                UUID.randomUUID(),
+                new SubmissionMetadata(collectorId, UUID.randomUUID(), time1),
+                createLocation(),
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_20_24,
+                new Age(22),
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+        sub1.setStatus(SubmissionStatus.SYNCED);
+
+        BypSubmission sub2 = new BypSubmission(
+                UUID.randomUUID(),
+                new SubmissionMetadata(collectorId, UUID.randomUUID(), time2),
+                createLocation(),
+                "John Doe",
+                "0772111223",
+                "MALE",
+                AgeGroup.AGE_20_24,
+                new Age(22),
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+        sub2.setStatus(SubmissionStatus.SYNCED);
+
+        adapter.save(sub1);
+        adapter.save(sub2);
+
+        java.util.Optional<LocalDateTime> latestTime = adapter.findLatestFormCompletedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED);
+
+        assertThat(latestTime).isPresent();
+        assertThat(latestTime.get()).isEqualTo(time2);
+
+        java.util.Optional<LocalDateTime> noPendingTime = adapter.findLatestFormCompletedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.PENDING);
+        assertThat(noPendingTime).isEmpty();
+    }
 }

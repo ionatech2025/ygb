@@ -55,6 +55,9 @@ class SubmissionControllerTest {
     @MockBean
     private GetCollectorSubmissionCountQuery getCollectorSubmissionCountQuery;
 
+    @MockBean
+    private GetCollectorSyncStatusQuery getCollectorSyncStatusQuery;
+
     private final UUID collectorId = UUID.randomUUID();
     private final UUID deviceSubmissionId = UUID.randomUUID();
     private final LocalDateTime completedAt = LocalDateTime.of(2026, 7, 17, 2, 0);
@@ -338,5 +341,42 @@ class SubmissionControllerTest {
 
         // Controller must call submit exactly once — retries are the service's responsibility.
         verify(submitSubmissionUseCase, times(1)).submit(command);
+    }
+
+    @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldGetSyncStatusSuccessfullyWhenDataCollector() throws Exception {
+        UUID testCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        LocalDateTime latestTime = LocalDateTime.of(2026, 7, 19, 12, 0);
+        var domainStatus = new com.ionatech.nac.ygb.domain.valueobjects.CollectorSyncStatus(3L, 12L, latestTime);
+        var responseDto = new com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorSyncStatusResponseDto(3L, 12L, latestTime);
+
+        when(getCollectorSyncStatusQuery.getSyncStatus(testCollectorId)).thenReturn(domainStatus);
+        when(submissionRestMapper.toResponse(domainStatus)).thenReturn(responseDto);
+
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/api/v1/submissions/my-sync-status"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pendingCount").value(3L))
+                .andExpect(jsonPath("$.syncedCount").value(12L))
+                .andExpect(jsonPath("$.lastSyncedAt").value("2026-07-19T12:00:00"));
+
+        verify(getCollectorSyncStatusQuery, times(1)).getSyncStatus(testCollectorId);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnForbiddenForGetSyncStatusWhenAdmin() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/api/v1/submissions/my-sync-status"))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(getCollectorSyncStatusQuery);
+    }
+
+    @Test
+    void shouldReturnForbiddenForGetSyncStatusWhenUnauthenticated() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/api/v1/submissions/my-sync-status"))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(getCollectorSyncStatusQuery);
     }
 }

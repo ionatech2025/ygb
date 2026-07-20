@@ -54,4 +54,16 @@ public class SubmissionRepositoryAdapter implements SubmissionRepositoryPort {
                 status.name()
         );
     }
+
+    @Override
+    public long countByCollectorIdAndStatus(java.util.UUID collectorId, com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status) {
+        return jpaRepository.countByCollectorIdAndStatus(collectorId, status.name());
+    }
+
+    @Override
+    public java.util.Optional<java.time.LocalDateTime> findLatestFormCompletedAtByCollectorIdAndStatus(
+            java.util.UUID collectorId, com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status) {
+        return jpaRepository.findFirstByCollectorIdAndStatusOrderByFormCompletedAtDesc(collectorId, status.name())
+                .map(com.ionatech.nac.ygb.adapters.out.persistence.entity.SubmissionJpaEntity::getFormCompletedAt);
+    }
 }

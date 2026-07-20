@@ -11,4 +11,6 @@ public interface SubmissionRepositoryPort {
             String financialYearPeriod,
             com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status
     );
+    long countByCollectorIdAndStatus(java.util.UUID collectorId, com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status);
+    java.util.Optional<java.time.LocalDateTime> findLatestFormCompletedAtByCollectorIdAndStatus(java.util.UUID collectorId, com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status);
 }

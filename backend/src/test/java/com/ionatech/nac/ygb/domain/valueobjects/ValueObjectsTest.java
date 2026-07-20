@@ -195,5 +195,34 @@ class ValueObjectsTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Form completed timestamp cannot be null");
     }
+
+    @Test
+    void adminLocationShouldCreateSuccessfully() {
+        UUID id = UUID.randomUUID();
+        UUID parentId = UUID.randomUUID();
+        AdminLocation adminLocation = new AdminLocation(id, "Central", parentId, AdminLocationLevel.SUBCOUNTY);
+
+        assertThat(adminLocation.id()).isEqualTo(id);
+        assertThat(adminLocation.name()).isEqualTo("Central");
+        assertThat(adminLocation.parentId()).isEqualTo(parentId);
+        assertThat(adminLocation.level()).isEqualTo(AdminLocationLevel.SUBCOUNTY);
+    }
+
+    @Test
+    void adminLocationShouldThrowExceptionWhenRequiredFieldsAreNull() {
+        UUID validId = UUID.randomUUID();
+
+        assertThatThrownBy(() -> new AdminLocation(null, "District Name", null, AdminLocationLevel.DISTRICT))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("AdminLocation id must not be null.");
+
+        assertThatThrownBy(() -> new AdminLocation(validId, null, null, AdminLocationLevel.DISTRICT))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("AdminLocation name must not be null.");
+
+        assertThatThrownBy(() -> new AdminLocation(validId, "District Name", null, null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("AdminLocation level must not be null.");
+    }
 }
 

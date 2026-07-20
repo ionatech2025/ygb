@@ -20,15 +20,18 @@ public class SubmissionController {
     private final SubmitSubmissionUseCase submitUseCase;
     private final SubmissionRestMapper restMapper;
     private final com.ionatech.nac.ygb.application.ports.api.GetCollectorSubmissionCountQuery countQuery;
+    private final com.ionatech.nac.ygb.application.ports.api.GetCollectorSyncStatusQuery syncStatusQuery;
 
     public SubmissionController(
             SubmitSubmissionUseCase submitUseCase,
             SubmissionRestMapper restMapper,
-            com.ionatech.nac.ygb.application.ports.api.GetCollectorSubmissionCountQuery countQuery
+            com.ionatech.nac.ygb.application.ports.api.GetCollectorSubmissionCountQuery countQuery,
+            com.ionatech.nac.ygb.application.ports.api.GetCollectorSyncStatusQuery syncStatusQuery
     ) {
         this.submitUseCase = submitUseCase;
         this.restMapper = restMapper;
         this.countQuery = countQuery;
+        this.syncStatusQuery = syncStatusQuery;
     }
 
     @PostMapping
@@ -47,6 +50,13 @@ public class SubmissionController {
         UUID collectorId = UUID.fromString(principal.getName());
         long count = countQuery.getDailyCount(collectorId);
         return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/my-sync-status")
+    public ResponseEntity<com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorSyncStatusResponseDto> getMySyncStatus(java.security.Principal principal) {
+        UUID collectorId = UUID.fromString(principal.getName());
+        var syncStatus = syncStatusQuery.getSyncStatus(collectorId);
+        return ResponseEntity.ok(restMapper.toResponse(syncStatus));
     }
 
     @ExceptionHandler(DuplicateSyncedSubmissionException.class)
