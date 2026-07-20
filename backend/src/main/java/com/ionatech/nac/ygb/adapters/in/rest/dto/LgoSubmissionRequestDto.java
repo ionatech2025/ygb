@@ -9,6 +9,10 @@ import java.util.UUID;
 
 public class LgoSubmissionRequestDto extends SubmissionRequestDto {
     private List<FiscalYearRecord> fiscalYearRecords;
+    private Boolean fundsAllocatedEquitably;
+    private Boolean allocatedFundsSufficient;
+    private Boolean adequateUtilisationOversight;
+    private Boolean transparentBeneficiarySelection;
     private Boolean fundsSpentAsRequired;
     private String fundsSpentExplanation;
     private Boolean economicTransformation;
@@ -30,6 +34,10 @@ public class LgoSubmissionRequestDto extends SubmissionRequestDto {
             String respondentGender,
             AgeGroup respondentAgeGroup,
             List<FiscalYearRecord> fiscalYearRecords,
+            Boolean fundsAllocatedEquitably,
+            Boolean allocatedFundsSufficient,
+            Boolean adequateUtilisationOversight,
+            Boolean transparentBeneficiarySelection,
             Boolean fundsSpentAsRequired,
             String fundsSpentExplanation,
             Boolean economicTransformation,
@@ -38,6 +46,10 @@ public class LgoSubmissionRequestDto extends SubmissionRequestDto {
     ) {
         super(formType, deviceSubmissionId, formCompletedAt, districtId, subcountyId, parishId, villageId, respondentName, respondentPhone, respondentGender, respondentAgeGroup);
         this.fiscalYearRecords = fiscalYearRecords;
+        this.fundsAllocatedEquitably = fundsAllocatedEquitably;
+        this.allocatedFundsSufficient = allocatedFundsSufficient;
+        this.adequateUtilisationOversight = adequateUtilisationOversight;
+        this.transparentBeneficiarySelection = transparentBeneficiarySelection;
         this.fundsSpentAsRequired = fundsSpentAsRequired;
         this.fundsSpentExplanation = fundsSpentExplanation;
         this.economicTransformation = economicTransformation;
@@ -46,6 +58,10 @@ public class LgoSubmissionRequestDto extends SubmissionRequestDto {
     }
 
     public List<FiscalYearRecord> getFiscalYearRecords() { return fiscalYearRecords; }
+    public Boolean getFundsAllocatedEquitably() { return fundsAllocatedEquitably; }
+    public Boolean getAllocatedFundsSufficient() { return allocatedFundsSufficient; }
+    public Boolean getAdequateUtilisationOversight() { return adequateUtilisationOversight; }
+    public Boolean getTransparentBeneficiarySelection() { return transparentBeneficiarySelection; }
     public Boolean getFundsSpentAsRequired() { return fundsSpentAsRequired; }
     public String getFundsSpentExplanation() { return fundsSpentExplanation; }
     public Boolean getEconomicTransformation() { return economicTransformation; }

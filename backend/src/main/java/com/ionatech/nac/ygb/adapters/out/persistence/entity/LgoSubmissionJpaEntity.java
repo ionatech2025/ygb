@@ -24,6 +24,18 @@ public class LgoSubmissionJpaEntity extends SubmissionJpaEntity {
     @Column(name = "fiscal_year_records", nullable = false)
     private List<FiscalYearRecord> fiscalYearRecords;
 
+    @Column(name = "funds_allocated_equitably", nullable = false)
+    private Boolean fundsAllocatedEquitably;
+
+    @Column(name = "allocated_funds_sufficient", nullable = false)
+    private Boolean allocatedFundsSufficient;
+
+    @Column(name = "adequate_utilisation_oversight", nullable = false)
+    private Boolean adequateUtilisationOversight;
+
+    @Column(name = "transparent_beneficiary_selection", nullable = false)
+    private Boolean transparentBeneficiarySelection;
+
     @Column(name = "funds_spent_as_required", nullable = false)
     private Boolean fundsSpentAsRequired;
 

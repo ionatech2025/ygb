@@ -299,6 +299,10 @@ class SubmissionTest {
                 AgeGroup.AGE_30_AND_ABOVE,
                 List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
                 true,
+                true,
+                true,
+                true,
+                true,
                 null,
                 true,
                 null,
@@ -320,6 +324,10 @@ class SubmissionTest {
                 "FEMALE",
                 AgeGroup.AGE_30_AND_ABOVE,
                 List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                true,
+                true,
+                true,
+                true,
                 false, // funds NOT spent as required
                 null, // missing explanation
                 true,
@@ -330,6 +338,33 @@ class SubmissionTest {
         assertThatThrownBy(lgo::validate)
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Explanation is required when funds were not spent as required");
+    }
+
+    @Test
+    void lgoShouldRejectUnsupportedFiscalYearLabel() {
+        LgoSubmission lgo = new LgoSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Official Name",
+                "0772111444",
+                "FEMALE",
+                AgeGroup.AGE_30_AND_ABOVE,
+                List.of(new FiscalYearRecord("2030/31", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                true,
+                true,
+                true,
+                true,
+                true,
+                null,
+                true,
+                null,
+                new NarrativeText("Provide more monitoring tools.")
+        );
+
+        assertThatThrownBy(lgo::validate)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Unsupported fiscal year label");
     }
 
     // ==========================================

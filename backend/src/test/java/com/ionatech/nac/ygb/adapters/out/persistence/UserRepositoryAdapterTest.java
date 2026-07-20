@@ -16,6 +16,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,5 +73,15 @@ class UserRepositoryAdapterTest {
         Optional<User> admin = userRepositoryPort.findByPhoneNumber("0770000000");
         assertThat(admin).isPresent();
         assertThat(admin.get().getRole()).isEqualTo(Role.ADMIN);
+    }
+
+    @Test
+    void shouldFindActiveDataCollectorsFromSeedData() {
+        List<User> collectors = userRepositoryPort.findActiveByRole(Role.DATA_COLLECTOR);
+
+        assertThat(collectors).isNotEmpty();
+        assertThat(collectors).allMatch(user -> user.getRole() == Role.DATA_COLLECTOR);
+        assertThat(collectors).allMatch(User::isActive);
+        assertThat(collectors).extracting(User::getPhoneNumber).contains("0771111111");
     }
 }

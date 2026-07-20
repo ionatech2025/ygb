@@ -4,9 +4,11 @@ import com.ionatech.nac.ygb.adapters.out.persistence.entity.UserEntity;
 import com.ionatech.nac.ygb.adapters.out.persistence.repository.UserJpaRepository;
 import com.ionatech.nac.ygb.adapters.out.persistence.mapper.UserMapper;
 import com.ionatech.nac.ygb.application.ports.spi.UserRepositoryPort;
+import com.ionatech.nac.ygb.domain.model.Role;
 import com.ionatech.nac.ygb.domain.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,5 +40,12 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
         UserEntity entity = mapper.toEntity(user);
         UserEntity saved = jpaRepository.save(entity);
         return mapper.toDomain(saved);
+    }
+
+    @Override
+    public List<User> findActiveByRole(Role role) {
+        return jpaRepository.findByRoleAndIsActiveTrueOrderByNameAsc(role.name()).stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }

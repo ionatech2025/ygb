@@ -5,6 +5,7 @@ import com.ionatech.nac.ygb.adapters.in.rest.dto.CreateUserRequest;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.UserRestMapper;
 import com.ionatech.nac.ygb.application.ports.api.CreateDataCollectorCommand;
 import com.ionatech.nac.ygb.application.ports.api.CreateDataCollectorUseCase;
+import com.ionatech.nac.ygb.application.ports.api.ListActiveDataCollectorsUseCase;
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
 import com.ionatech.nac.ygb.domain.exceptions.UserAlreadyExistsException;
 import com.ionatech.nac.ygb.domain.model.Role;
@@ -19,11 +20,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -48,10 +51,40 @@ class UserControllerTest {
     private CreateDataCollectorUseCase createDataCollectorUseCase;
 
     @MockBean
+    private ListActiveDataCollectorsUseCase listActiveDataCollectorsUseCase;
+
+    @MockBean
     private UserRestMapper userRestMapper;
 
     @MockBean
     private TokenProviderPort tokenProviderPort;
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldListActiveDataCollectorsWhenUserIsAdmin() throws Exception {
+        UUID userId = UUID.randomUUID();
+        User collector = new User(userId, "Jane Doe", "0771234567", "encoded", Role.DATA_COLLECTOR, true, LocalDateTime.now());
+        com.ionatech.nac.ygb.adapters.in.rest.dto.UserResponse response =
+                new com.ionatech.nac.ygb.adapters.in.rest.dto.UserResponse(userId, "Jane Doe", "0771234567", "DATA_COLLECTOR", true);
+
+        when(listActiveDataCollectorsUseCase.listActiveDataCollectors()).thenReturn(List.of(collector));
+        when(userRestMapper.toResponse(collector)).thenReturn(response);
+
+        mockMvc.perform(get("/api/v1/admin/users/data-collectors"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(userId.toString()))
+                .andExpect(jsonPath("$[0].name").value("Jane Doe"))
+                .andExpect(jsonPath("$[0].phoneNumber").value("0771234567"))
+                .andExpect(jsonPath("$[0].role").value("DATA_COLLECTOR"))
+                .andExpect(jsonPath("$[0].isActive").value(true));
+    }
+
+    @Test
+    @WithMockUser(roles = "DATA_COLLECTOR")
+    void shouldReturnForbiddenWhenListingCollectorsAsNonAdmin() throws Exception {
+        mockMvc.perform(get("/api/v1/admin/users/data-collectors"))
+                .andExpect(status().isForbidden());
+    }
 
     @Test
     @WithMockUser(roles = "ADMIN")

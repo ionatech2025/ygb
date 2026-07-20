@@ -19,8 +19,9 @@ export interface AuthState {
   isInitialized: boolean;
 }
 
+import { isValidUgandaPhoneLocal } from '../utils/phone-utils';
+
 // Client-side invariant schema matching Uganda telecom formats
 export function validateLoginPayload(phoneNumber: string): boolean {
-  const ugandaPhoneRegex = /^(077|078|076|070|075)\d{7}$/;
-  return ugandaPhoneRegex.test(phoneNumber.trim());
+  return isValidUgandaPhoneLocal(phoneNumber);
 }
