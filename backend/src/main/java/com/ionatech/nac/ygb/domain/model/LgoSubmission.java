@@ -7,6 +7,10 @@ import java.util.UUID;
 
 public class LgoSubmission extends Submission {
     private final List<FiscalYearRecord> fiscalYearRecords;
+    private final Boolean fundsAllocatedEquitably;
+    private final Boolean allocatedFundsSufficient;
+    private final Boolean adequateUtilisationOversight;
+    private final Boolean transparentBeneficiarySelection;
     private final Boolean fundsSpentAsRequired;
     private final NarrativeText fundsSpentExplanation;
     private final Boolean economicTransformation;
@@ -22,6 +26,10 @@ public class LgoSubmission extends Submission {
             String respondentGender,
             AgeGroup respondentAgeGroup,
             List<FiscalYearRecord> fiscalYearRecords,
+            Boolean fundsAllocatedEquitably,
+            Boolean allocatedFundsSufficient,
+            Boolean adequateUtilisationOversight,
+            Boolean transparentBeneficiarySelection,
             Boolean fundsSpentAsRequired,
             NarrativeText fundsSpentExplanation,
             Boolean economicTransformation,
@@ -29,9 +37,21 @@ public class LgoSubmission extends Submission {
             NarrativeText improvementSuggestion
     ) {
         super(id, metadata, location, respondentName, respondentPhone, respondentGender, respondentAgeGroup);
-        
+
         if (fiscalYearRecords == null || fiscalYearRecords.isEmpty()) {
             throw new IllegalArgumentException("Fiscal year records cannot be null or empty");
+        }
+        if (fundsAllocatedEquitably == null) {
+            throw new IllegalArgumentException("Funds allocated equitably is required");
+        }
+        if (allocatedFundsSufficient == null) {
+            throw new IllegalArgumentException("Allocated funds sufficient is required");
+        }
+        if (adequateUtilisationOversight == null) {
+            throw new IllegalArgumentException("Adequate utilisation oversight is required");
+        }
+        if (transparentBeneficiarySelection == null) {
+            throw new IllegalArgumentException("Transparent beneficiary selection is required");
         }
         if (fundsSpentAsRequired == null) {
             throw new IllegalArgumentException("Funds spent as required is required");
@@ -44,6 +64,10 @@ public class LgoSubmission extends Submission {
         }
 
         this.fiscalYearRecords = List.copyOf(fiscalYearRecords);
+        this.fundsAllocatedEquitably = fundsAllocatedEquitably;
+        this.allocatedFundsSufficient = allocatedFundsSufficient;
+        this.adequateUtilisationOversight = adequateUtilisationOversight;
+        this.transparentBeneficiarySelection = transparentBeneficiarySelection;
         this.fundsSpentAsRequired = fundsSpentAsRequired;
         this.fundsSpentExplanation = fundsSpentExplanation;
         this.economicTransformation = economicTransformation;
@@ -53,6 +77,22 @@ public class LgoSubmission extends Submission {
 
     public List<FiscalYearRecord> getFiscalYearRecords() {
         return fiscalYearRecords;
+    }
+
+    public Boolean getFundsAllocatedEquitably() {
+        return fundsAllocatedEquitably;
+    }
+
+    public Boolean getAllocatedFundsSufficient() {
+        return allocatedFundsSufficient;
+    }
+
+    public Boolean getAdequateUtilisationOversight() {
+        return adequateUtilisationOversight;
+    }
+
+    public Boolean getTransparentBeneficiarySelection() {
+        return transparentBeneficiarySelection;
     }
 
     public Boolean getFundsSpentAsRequired() {
@@ -82,6 +122,11 @@ public class LgoSubmission extends Submission {
 
     @Override
     public void validate() {
+        for (FiscalYearRecord record : fiscalYearRecords) {
+            if (!LgoFiscalYearCatalog.SUPPORTED_LABELS.contains(record.fiscalYearLabel())) {
+                throw new IllegalArgumentException("Unsupported fiscal year label: " + record.fiscalYearLabel());
+            }
+        }
         if (Boolean.FALSE.equals(fundsSpentAsRequired) && fundsSpentExplanation == null) {
             throw new IllegalArgumentException("Explanation is required when funds were not spent as required");
         }

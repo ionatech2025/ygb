@@ -48,7 +48,7 @@ function ActiveFormPanel({
       </div>
       {formType === 'BYP' && <BypForm key={formType} onSubmitted={onBack} />}
       {formType === 'IYP' && <IypForm key={formType} onSubmitted={onBack} />}
-      {formType === 'LGO' && <LgoForm key={formType} />}
+      {formType === 'LGO' && <LgoForm key={formType} onSubmitted={onBack} />}
       {formType === 'PC' && <PcForm key={formType} />}
     </div>
   );

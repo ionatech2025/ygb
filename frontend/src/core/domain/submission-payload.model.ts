@@ -55,6 +55,10 @@ export interface IypSubmissionPayload extends SubmissionPayloadBase {
 export interface LgoSubmissionPayload extends SubmissionPayloadBase {
   formType: 'LGO';
   fiscalYearRecords: FiscalYearRecordPayload[];
+  fundsAllocatedEquitably: boolean;
+  allocatedFundsSufficient: boolean;
+  adequateUtilisationOversight: boolean;
+  transparentBeneficiarySelection: boolean;
   fundsSpentAsRequired: boolean;
   fundsSpentExplanation?: string | null;
   economicTransformation: boolean;

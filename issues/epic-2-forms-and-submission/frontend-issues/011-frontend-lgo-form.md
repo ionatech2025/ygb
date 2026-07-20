@@ -31,12 +31,12 @@ Implement the full **Local Government Official (LGO)** survey form UI with fisca
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: separate Expected/Actual inputs exist for FY2022/23 and FY2023/24 (TC-FORM-04-01).
-- [ ] Component test: Q8 = No shows explain field and blocks submit if empty (TC-FORM-04-02).
-- [ ] Component test: non-numeric fund input blocked with inline error (TC-FORM-04-03).
-- [ ] Component test: Q8/Q9 = Yes path submits without explain fields (TC-FORM-04-04).
-- [ ] Unit test: payload `fiscalYearRecords` array structure matches backend `FiscalYearRecord` JSON shape.
-- [ ] Narrative fields enforce ≥ 10 characters (TC-FORM-12-03 on LGO explain field).
+- [x] Component test: separate Expected/Actual inputs exist for FY2022/23 and FY2023/24 (TC-FORM-04-01).
+- [x] Component test: Q8 = No shows explain field and blocks submit if empty (TC-FORM-04-02).
+- [x] Component test: non-numeric fund input blocked with inline error (TC-FORM-04-03).
+- [x] Component test: Q8/Q9 = Yes path submits without explain fields (TC-FORM-04-04).
+- [x] Unit test: payload `fiscalYearRecords` array structure matches backend `FiscalYearRecord` JSON shape.
+- [x] Narrative fields enforce ≥ 10 characters (TC-FORM-12-03 on LGO explain field).
 
 ## Blocked by
 
