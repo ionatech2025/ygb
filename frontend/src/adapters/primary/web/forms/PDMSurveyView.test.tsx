@@ -1,9 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { PDMSurveyView } from './PDMSurveyView';
 import { FORM_TYPE_OPTIONS } from '../../../../core/domain/form-type.model';
+
+vi.mock('../../../../core/LocationService', () => ({
+  locationService: {
+    ensureLoaded: vi.fn().mockResolvedValue(undefined),
+  },
+}));
 
 const collectorUser = {
   id: '22222222-2222-2222-2222-222222222222',

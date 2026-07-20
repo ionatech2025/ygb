@@ -36,3 +36,7 @@ export const RATING_LABELS: Record<Rating, string> = {
 };
 
 export const MULTI_SELECT_OTHER_VALUE = 'OTHERS_SPECIFY';
+
+export const GENDER_OPTIONS = ['Male', 'Female'] as const;
+
+export type Gender = (typeof GENDER_OPTIONS)[number];

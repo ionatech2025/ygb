@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
+import { locationService } from '../../../../core/LocationService';
 import { PortalLogin } from '../forms/PortalLogin';
 import ManageUsers from '../forms/ManageUsers';
 import { CollectorDashboard } from '../forms/CollectorDashboard';
@@ -15,6 +16,7 @@ export function AppRouter() {
 
   useEffect(() => {
     initialize();
+    void locationService.ensureLoaded();
   }, [initialize]);
 
   useEffect(() => {

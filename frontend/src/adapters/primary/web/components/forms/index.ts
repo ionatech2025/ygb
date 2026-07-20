@@ -8,3 +8,6 @@ export { NarrativeTextarea } from './NarrativeTextarea';
 export type { NarrativeTextareaProps } from './NarrativeTextarea';
 export { YesNoRadioGroup } from './YesNoRadioGroup';
 export type { YesNoRadioGroupProps } from './YesNoRadioGroup';
+export { RespondentSection } from './RespondentSection';
+export type { RespondentSectionProps } from './RespondentSection';
+export { buildSubmissionProvenance, buildAuthProvenanceSnapshot } from './buildSubmissionProvenance';

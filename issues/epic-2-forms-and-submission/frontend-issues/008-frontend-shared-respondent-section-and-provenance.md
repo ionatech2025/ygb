@@ -28,12 +28,12 @@ The shared section must include:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: all four demographic fields render (Name, Phone, Gender, Age Group) (TC-FORM-06-03 partial).
-- [ ] Component test: `CascadingLocationSelector` is rendered (not text inputs) for location fields.
-- [ ] Unit test: `buildSubmissionProvenance` returns a new UUID on each call and a valid ISO timestamp.
-- [ ] Unit test: provenance includes the authenticated collector's ID from the auth store mock.
-- [ ] Integration test (with mocked location repo): parent district change clears sub-county/parish/village (TC-FORM-07-03) — may defer to Epic 4 issue 015 if selector not yet available.
-- [ ] No UI input exists for collector ID, submitted-at, or device submission ID.
+- [x] Component test: all four demographic fields render (Name, Phone, Gender, Age Group) (TC-FORM-06-03 partial).
+- [x] Component test: `CascadingLocationSelector` is rendered (not text inputs) for location fields.
+- [x] Unit test: `buildSubmissionProvenance` returns a new UUID on each call and a valid ISO timestamp.
+- [x] Unit test: provenance includes the authenticated collector's ID from the auth store mock.
+- [x] Integration test (with mocked location repo): parent district change clears sub-county/parish/village (TC-FORM-07-03) — may defer to Epic 4 issue 015 if selector not yet available.
+- [x] No UI input exists for collector ID, submitted-at, or device submission ID.
 
 ## Blocked by
 

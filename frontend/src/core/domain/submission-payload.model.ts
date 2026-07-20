@@ -1,18 +1,12 @@
 import type { AgeGroup, Rating } from './form-validation.model';
 import type { FormType } from './form-type.model';
+import type { RespondentFields, SubmissionProvenance } from './respondent-fields.model';
+
+export type { RespondentFields, SubmissionProvenance, AuthProvenanceSnapshot } from './respondent-fields.model';
 
 /** Shared respondent + provenance fields on every submission payload. */
-export interface SubmissionPayloadBase {
+export interface SubmissionPayloadBase extends RespondentFields, SubmissionProvenance {
   formType: FormType;
-  deviceSubmissionId: string;
-  formCompletedAt: string;
-  districtId: string;
-  subcountyId: string;
-  parishId: string;
-  villageId: string;
-  respondentName: string;
-  respondentPhone: string;
-  respondentGender: string;
   respondentAgeGroup: AgeGroup;
 }
 
