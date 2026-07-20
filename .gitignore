@@ -1,5 +1,6 @@
 # Project specific
 .agent/
+.cursor/
 
 # Environment Variables
 .env
