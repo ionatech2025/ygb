@@ -1,18 +1,17 @@
 package com.ionatech.nac.ygb.adapters.out.persistence;
 
 import com.ionatech.nac.ygb.adapters.out.persistence.mapper.SubmissionMapper;
-import com.ionatech.nac.ygb.adapters.out.persistence.mapper.SubmissionMapperImpl;
 import com.ionatech.nac.ygb.adapters.out.persistence.repository.SubmissionJpaRepository;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.*;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -28,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(SubmissionMapperImpl.class)
 class SubmissionRepositoryAdapterTest {
 
     @Container
@@ -38,9 +36,7 @@ class SubmissionRepositoryAdapterTest {
     @Autowired
     private SubmissionJpaRepository submissionJpaRepository;
 
-    @Autowired
     private SubmissionMapper submissionMapper;
-
     private SubmissionRepositoryPort adapter;
 
     // Seeded IDs from Flyway V2 & V3 migrations
@@ -60,6 +56,7 @@ class SubmissionRepositoryAdapterTest {
 
     @BeforeEach
     void setUp() {
+        submissionMapper = Mappers.getMapper(SubmissionMapper.class);
         adapter = new SubmissionRepositoryAdapter(submissionJpaRepository, submissionMapper);
     }
 
