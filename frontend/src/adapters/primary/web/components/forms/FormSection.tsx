@@ -8,10 +8,10 @@ export interface FormSectionProps {
 
 export function FormSection({ title, description, children }: FormSectionProps) {
   return (
-    <section className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm space-y-4">
-      <header className="space-y-1 border-b border-slate-100 pb-3">
-        <h3 className="text-sm font-bold text-slate-800 tracking-tight">{title}</h3>
-        {description && <p className="text-xs text-slate-500">{description}</p>}
+    <section className="rounded-2xl border border-border bg-surface p-4 shadow-sm space-y-4">
+      <header className="space-y-1 border-b border-border pb-3">
+        <h3 className="text-sm font-bold text-text tracking-tight">{title}</h3>
+        {description && <p className="text-xs text-text-muted">{description}</p>}
       </header>
       <div className="space-y-4">{children}</div>
     </section>

@@ -45,7 +45,7 @@ export function MultiCheckboxGroup({
 
   return (
     <fieldset className="space-y-2">
-      <legend className="block text-xs font-semibold text-slate-700 mb-2">
+      <legend className="block text-xs font-semibold text-text mb-2">
         {legend}
         {required && (
           <span className="text-rose-600 ml-0.5" aria-hidden="true">
@@ -60,16 +60,16 @@ export function MultiCheckboxGroup({
             <label
               key={option.value}
               htmlFor={inputId}
-              className="flex items-center gap-3 min-h-11 px-3 rounded-xl border border-slate-100 bg-slate-50/80 cursor-pointer transition-colors hover:bg-brand-light/60 has-[:checked]:border-brand/40 has-[:checked]:bg-brand-light/40"
+              className="flex items-center gap-3 min-h-11 px-3 rounded-xl border border-border bg-surface-muted cursor-pointer transition-colors hover:bg-brand-light/60 has-[:checked]:border-brand/40 has-[:checked]:bg-brand-light/40 dark:has-[:checked]:bg-brand/20"
             >
               <input
                 id={inputId}
                 type="checkbox"
                 checked={selected.includes(option.value)}
                 onChange={() => toggle(option.value)}
-                className="h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand/30"
+                className="h-4 w-4 rounded border-border text-brand focus:ring-brand/30"
               />
-              <span className="text-sm text-slate-700">{option.label}</span>
+              <span className="text-sm text-text">{option.label}</span>
             </label>
           );
         })}

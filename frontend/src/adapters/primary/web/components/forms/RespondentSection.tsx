@@ -57,7 +57,7 @@ export function RespondentSection({
           htmlFor="respondentPhone"
           required
           error={errors.respondentPhone}
-          hint="Uganda format, e.g. 0772123456"
+          hint="Uganda format, e.g. 0772123456 or +256772123456"
         >
           <input
             id="respondentPhone"
@@ -81,8 +81,8 @@ export function RespondentSection({
           >
             <option value="">Select gender…</option>
             {GENDER_OPTIONS.map((gender) => (
-              <option key={gender} value={gender}>
-                {gender}
+              <option key={gender.value} value={gender.value}>
+                {gender.label}
               </option>
             ))}
           </select>

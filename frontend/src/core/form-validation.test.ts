@@ -29,5 +29,13 @@ describe('form-validation', () => {
 
   it('accepts valid uganda phone numbers', () => {
     expect(validatePhone('0772123456').valid).toBe(true);
+    expect(validatePhone('+256772123456').valid).toBe(true);
+    expect(validatePhone('+256752350470').valid).toBe(true);
+    expect(validatePhone('+256 752 350 470').valid).toBe(true);
+  });
+
+  it('rejects invalid uganda phone numbers', () => {
+    expect(validatePhone('+256123').valid).toBe(false);
+    expect(validatePhone('12345').valid).toBe(false);
   });
 });

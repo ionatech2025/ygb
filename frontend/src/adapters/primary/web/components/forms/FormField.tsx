@@ -15,7 +15,7 @@ export function FormField({ label, htmlFor, required, error, hint, children }: F
 
   return (
     <div className="space-y-1.5">
-      <label htmlFor={htmlFor} className="block text-xs font-semibold text-slate-700">
+      <label htmlFor={htmlFor} className="block text-xs font-semibold text-text">
         {label}
         {required && (
           <span className="text-rose-600 ml-0.5" aria-hidden="true">
@@ -25,7 +25,7 @@ export function FormField({ label, htmlFor, required, error, hint, children }: F
         {required && <span className="sr-only"> (required)</span>}
       </label>
       {hint && (
-        <p id={hintId} className="text-[11px] text-slate-500">
+        <p id={hintId} className="text-[11px] text-text-muted">
           {hint}
         </p>
       )}
@@ -45,7 +45,7 @@ export function FormField({ label, htmlFor, required, error, hint, children }: F
 }
 
 export const formControlClassName =
-  'w-full min-h-11 px-3 py-2.5 text-sm text-slate-800 bg-white border border-slate-200 rounded-xl ' +
+  'w-full min-h-11 px-3 py-2.5 text-sm text-text bg-surface border border-border rounded-xl ' +
   'transition-[border-color,box-shadow] duration-150 ' +
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand ' +
-  'disabled:bg-slate-50 disabled:text-slate-400';
+  'disabled:bg-surface-muted disabled:text-text-muted';

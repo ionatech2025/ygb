@@ -20,7 +20,7 @@ export function YesNoRadioGroup({ name, label, value, onChange, required, error 
           <label
             key={id}
             htmlFor={id}
-            className="flex flex-1 items-center justify-center gap-2 min-h-11 px-4 rounded-xl border border-slate-200 bg-white cursor-pointer transition-all hover:border-brand/40 has-[:checked]:border-brand has-[:checked]:bg-brand-light/50"
+            className="flex flex-1 items-center justify-center gap-2 min-h-11 px-4 rounded-xl border border-border bg-surface cursor-pointer transition-all hover:border-brand/40 has-[:checked]:border-brand has-[:checked]:bg-brand-light/50 dark:has-[:checked]:bg-brand/20"
           >
             <input
               id={id}
@@ -28,10 +28,10 @@ export function YesNoRadioGroup({ name, label, value, onChange, required, error 
               name={name}
               checked={value === choice}
               onChange={() => onChange(choice)}
-              className="h-4 w-4 border-slate-300 text-brand focus:ring-brand/30"
+              className="h-4 w-4 border-border text-brand focus:ring-brand/30"
               required={required && value === null}
             />
-            <span className="text-sm font-medium text-slate-700">{optionLabel}</span>
+            <span className="text-sm font-medium text-text">{optionLabel}</span>
           </label>
         ))}
       </div>

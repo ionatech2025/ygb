@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { isValidUgandaPhoneLocal } from '../../../../core/utils/phone-utils';
+import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
 import { FormField, formControlClassName } from '../components/forms';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 const FEATURES = [
   { title: 'Works Anywhere', detail: 'Collect data in the field even when connectivity is limited.' },
@@ -31,7 +33,7 @@ export function PortalLogin() {
     }
 
     if (!isValidUgandaPhoneLocal(phone)) {
-      setError('Enter a valid Uganda phone number (e.g. 0772123456).');
+      setError(UGANDA_PHONE_ERROR);
       return;
     }
 
@@ -48,7 +50,10 @@ export function PortalLogin() {
   };
 
   return (
-    <div className="min-h-dvh bg-surface-muted">
+    <div className="relative min-h-dvh bg-surface-muted">
+      <div className="absolute right-4 top-4 z-20">
+        <ThemeToggle />
+      </div>
       {/* Mobile-first: sign-in first, hero below; desktop: split layout */}
       <div className="mx-auto flex min-h-dvh max-w-6xl flex-col lg:flex-row">
         <section className="order-2 flex flex-1 flex-col justify-between bg-gradient-to-br from-nac-blue via-nac-blue-dark to-slate-900 px-5 py-10 text-white lg:order-1 lg:px-12 lg:py-14">
@@ -91,7 +96,7 @@ export function PortalLogin() {
         </section>
 
         <section className="order-1 flex flex-1 items-center justify-center px-4 py-8 lg:order-2 lg:px-10">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-white p-6 shadow-md sm:p-8">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-md sm:p-8">
             <div className="mb-6 space-y-1">
               <h2 className="text-xl font-bold text-text sm:text-2xl">Sign in</h2>
               <p className="text-sm text-text-muted">Use your phone number and password to open your portal.</p>

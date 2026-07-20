@@ -1,4 +1,8 @@
 import { MIN_AGE, MIN_NARRATIVE_LENGTH } from './domain/form-validation.model';
+import { isValidUgandaPhoneLocal } from './utils/phone-utils';
+
+export const UGANDA_PHONE_HINT = 'Uganda format, e.g. 0772123456 or +256772123456';
+export const UGANDA_PHONE_ERROR = 'Enter a valid Uganda phone number (e.g. 0772123456 or +256772123456).';
 
 export interface ValidationResult {
   valid: boolean;
@@ -19,15 +23,13 @@ export function validateRequired(value: string | null | undefined): ValidationRe
   return { valid: true };
 }
 
-const RESPONDENT_PHONE_REGEX = /^(077|078|076|070|075)\d{7}$/;
-
 export function validatePhone(phone: string): ValidationResult {
   const trimmed = phone.trim();
   if (trimmed === '') {
     return { valid: false, message: 'Phone number is required.' };
   }
-  if (!RESPONDENT_PHONE_REGEX.test(trimmed)) {
-    return { valid: false, message: 'Enter a valid Uganda phone number (e.g. 0772123456).' };
+  if (!isValidUgandaPhoneLocal(trimmed)) {
+    return { valid: false, message: UGANDA_PHONE_ERROR };
   }
   return { valid: true };
 }

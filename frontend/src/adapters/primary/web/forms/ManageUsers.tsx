@@ -3,6 +3,7 @@ import { AlertCircle, CheckCircle2, PlusCircle, Users } from 'lucide-react';
 import { HttpUserAdapter } from '../../../secondary/api/http-user.adapter';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { isValidUgandaPhoneLocal, normalizeUgandaPhoneLocal } from '../../../../core/utils/phone-utils';
+import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
 import { FormField, formControlClassName } from '../components/forms';
 import type { UserProfile } from '../../../../core/domain/user.model';
 
@@ -47,7 +48,7 @@ export default function ManageUsers() {
     else if (password.length < 6) localValidationErrors.password = 'Password must be at least 6 characters';
     if (!phoneInput.trim()) localValidationErrors.phoneInput = 'Phone number is required';
     else if (!isValidUgandaPhoneLocal(phoneInput)) {
-      localValidationErrors.phoneInput = 'Enter a valid Uganda phone number (e.g. 0772123456)';
+      localValidationErrors.phoneInput = UGANDA_PHONE_ERROR;
     }
 
     if (Object.keys(localValidationErrors).length > 0) {

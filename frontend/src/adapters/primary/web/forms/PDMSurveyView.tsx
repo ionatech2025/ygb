@@ -10,8 +10,7 @@ import { IypForm } from './IypForm';
 import { LgoForm } from './LgoForm';
 import { PcForm } from './PcForm';
 
-const FORM_COMPONENTS: Record<FormType, ComponentType> = {
-  BYP: BypForm,
+const OTHER_FORM_COMPONENTS: Record<Exclude<FormType, 'BYP'>, ComponentType> = {
   IYP: IypForm,
   LGO: LgoForm,
   PC: PcForm,
@@ -39,7 +38,6 @@ function ActiveFormPanel({
   onBack: () => void;
 }) {
   const label = FORM_TYPE_OPTIONS.find((o) => o.value === formType)?.label ?? formType;
-  const FormComponent = FORM_COMPONENTS[formType];
 
   return (
     <div className="space-y-4">
@@ -48,13 +46,20 @@ function ActiveFormPanel({
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-border bg-white px-3 text-xs font-semibold text-text transition hover:bg-surface-muted"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-border bg-surface px-3 text-xs font-semibold text-text transition hover:bg-surface-muted"
         >
           <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
           Back to category selection
         </button>
       </div>
-      <FormComponent key={formType} />
+      {formType === 'BYP' ? (
+        <BypForm key={formType} onSubmitted={onBack} />
+      ) : (
+        (() => {
+          const FormComponent = OTHER_FORM_COMPONENTS[formType];
+          return <FormComponent key={formType} />;
+        })()
+      )}
     </div>
   );
 }

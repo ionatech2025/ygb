@@ -38,13 +38,13 @@ Implement the full **Beneficiary Young Person (BYP)** survey form UI with all fi
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: all BYP fields from US-FORM-02 Notes are rendered in logical order (TC-FORM-02-01 partial).
-- [ ] Component test: Q1 "Months (specify)" shows specify text input (TC-FORM-02-02).
-- [ ] Component test: Q8 = Yes shows BDS checkboxes; Q8 = No hides them (TC-FORM-02-03).
-- [ ] Component test: blank mandatory field blocks submit with error (TC-FORM-02-04).
-- [ ] Component test: age 12 blocked; age 15 accepted (TC-FORM-10-01/02).
-- [ ] Unit test: valid form state produces a payload matching `BypSubmissionRequestDto` shape.
-- [ ] On submit, `enqueue` is called with a payload containing a fresh `deviceSubmissionId`.
+- [x] Component test: all BYP fields from US-FORM-02 Notes are rendered in logical order (TC-FORM-02-01 partial).
+- [x] Component test: Q1 "Months (specify)" shows specify text input (TC-FORM-02-02).
+- [x] Component test: Q8 = Yes shows BDS checkboxes; Q8 = No hides them (TC-FORM-02-03).
+- [x] Component test: blank mandatory field blocks submit with error (TC-FORM-02-04).
+- [x] Component test: age 12 blocked; age 15 accepted (TC-FORM-10-01/02).
+- [x] Unit test: valid form state produces a payload matching `BypSubmissionRequestDto` shape.
+- [x] On submit, `enqueue` is called with a payload containing a fresh `deviceSubmissionId`.
 
 ## Blocked by
 

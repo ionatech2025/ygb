@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { ClipboardList, LogOut, Wifi, WifiOff } from 'lucide-react';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 export function CollectorLayout() {
   const user = useAuthStore((state) => state.user);
@@ -15,7 +16,7 @@ export function CollectorLayout() {
 
   return (
     <div className="min-h-dvh bg-surface-muted flex flex-col">
-      <header className="sticky top-0 z-50 border-b border-border bg-white/90 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-border bg-surface/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-lg items-center justify-between gap-3 px-4 py-3">
           <div className="flex min-w-0 items-center gap-2">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-light text-brand">
@@ -27,6 +28,7 @@ export function CollectorLayout() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <span
               className={`inline-flex min-h-9 items-center gap-1 rounded-full px-2.5 text-[10px] font-bold uppercase tracking-wide ${
                 isOnline ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
