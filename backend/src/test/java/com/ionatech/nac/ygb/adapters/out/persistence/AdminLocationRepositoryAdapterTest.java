@@ -1,31 +1,27 @@
 package com.ionatech.nac.ygb.adapters.out.persistence;
 
 import com.ionatech.nac.ygb.adapters.out.persistence.mapper.AdminLocationMapper;
-import com.ionatech.nac.ygb.adapters.out.persistence.mapper.AdminLocationMapperImpl;
 import com.ionatech.nac.ygb.adapters.out.persistence.repository.AdminLocationJpaRepository;
 import com.ionatech.nac.ygb.application.ports.spi.AdminLocationRepositoryPort;
 import com.ionatech.nac.ygb.domain.valueobjects.AdminLocation;
 import com.ionatech.nac.ygb.domain.valueobjects.AdminLocationLevel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.context.annotation.Import;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(AdminLocationMapperImpl.class)
 class AdminLocationRepositoryAdapterTest {
 
     @Container
@@ -35,13 +31,12 @@ class AdminLocationRepositoryAdapterTest {
     @Autowired
     private AdminLocationJpaRepository jpaRepository;
 
-    @Autowired
     private AdminLocationMapper mapper;
-
     private AdminLocationRepositoryPort repositoryPort;
 
     @BeforeEach
     void setUp() {
+        mapper = Mappers.getMapper(AdminLocationMapper.class);
         repositoryPort = new AdminLocationRepositoryAdapter(jpaRepository, mapper);
     }
 
