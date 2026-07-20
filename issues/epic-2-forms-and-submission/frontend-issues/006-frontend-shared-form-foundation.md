@@ -31,14 +31,14 @@ Establish the shared frontend foundation for all four PDM survey forms: domain t
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] `FormType` and submission payload TypeScript types exist and match backend DTO field names.
-- [ ] Unit tests verify `validateAge(14)` fails and `validateAge(15)` passes (TC-FORM-10-01/02).
-- [ ] Unit tests verify `validateNarrativeText('ok')` fails and a 12-char string passes (TC-FORM-12-01/02).
-- [ ] `FormField` renders a red asterisk when `required={true}` (TC-FORM-08-01).
-- [ ] `MultiCheckboxGroup` allows multiple simultaneous selections (TC-FORM-11-01).
-- [ ] `MultiCheckboxGroup` shows and requires a specify field when "Others (specify)" is checked (TC-FORM-11-03).
-- [ ] `useConditionalFields` clears a dependent field's value when its trigger condition becomes false (TC-FORM-09-03).
-- [ ] All new files remain under 200 lines.
+- [x] `FormType` and submission payload TypeScript types exist and match backend DTO field names.
+- [x] Unit tests verify `validateAge(14)` fails and `validateAge(15)` passes (TC-FORM-10-01/02).
+- [x] Unit tests verify `validateNarrativeText('ok')` fails and a 12-char string passes (TC-FORM-12-01/02).
+- [x] `FormField` renders a red asterisk when `required={true}` (TC-FORM-08-01).
+- [x] `MultiCheckboxGroup` allows multiple simultaneous selections (TC-FORM-11-01).
+- [x] `MultiCheckboxGroup` shows and requires a specify field when "Others (specify)" is checked (TC-FORM-11-03).
+- [x] `useConditionalFields` clears a dependent field's value when its trigger condition becomes false (TC-FORM-09-03).
+- [x] All new files remain under 200 lines.
 
 ## Blocked by
 

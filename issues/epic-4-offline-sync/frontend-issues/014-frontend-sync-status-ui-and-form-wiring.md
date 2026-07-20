@@ -26,7 +26,7 @@ This satisfies US-SYNC-01 (local save on submit), US-SYNC-03 (visible status), a
 
 **C — PDMSurveyView submission wiring**
 - Replace the placeholder `PDMSurveyView.tsx` submit button with a functional form that:
-  - Collects the minimal required fields for a valid BYP payload (scope of the full 4-form implementation belongs to a separate Epic 2 front-end issue).
+  - Delegates to the full form components built in Epic 2 ([009 BYP](file:///d:/2026/WORK/Software/sourcecode/work/1.%20iONA/webapps/ygb/issues/epic-2-forms-and-submission/frontend-issues/009-frontend-byp-form.md), [010 IYP](file:///d:/2026/WORK/Software/sourcecode/work/1.%20iONA/webapps/ygb/issues/epic-2-forms-and-submission/frontend-issues/010-frontend-iyp-form.md), [011 LGO](file:///d:/2026/WORK/Software/sourcecode/work/1.%20iONA/webapps/ygb/issues/epic-2-forms-and-submission/frontend-issues/011-frontend-lgo-form.md), [012 PC](file:///d:/2026/WORK/Software/sourcecode/work/1.%20iONA/webapps/ygb/issues/epic-2-forms-and-submission/frontend-issues/012-frontend-pc-parish-chief-form.md)) once available; until then, wire submit through the shared foundation from [006](file:///d:/2026/WORK/Software/sourcecode/work/1.%20iONA/webapps/ygb/issues/epic-2-forms-and-submission/frontend-issues/006-frontend-shared-form-foundation.md).
   - On submit: calls `enqueue(submission)` from `ISubmissionQueuePort` (retrieved via the `useSyncStore`'s sync engine or directly injected).
   - Updates the `pendingCount` in the store immediately (optimistic update).
   - Shows a brief "Saved locally" confirmation.
