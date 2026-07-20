@@ -16,5 +16,5 @@ public interface SubmissionJpaRepository extends JpaRepository<SubmissionJpaEnti
 
     long countByCollectorIdAndStatus(UUID collectorId, String status);
 
-    java.util.Optional<SubmissionJpaEntity> findFirstByCollectorIdAndStatusOrderByFormCompletedAtDesc(UUID collectorId, String status);
+    java.util.Optional<SubmissionJpaEntity> findFirstByCollectorIdAndStatusOrderBySyncedAtDesc(UUID collectorId, String status);
 }

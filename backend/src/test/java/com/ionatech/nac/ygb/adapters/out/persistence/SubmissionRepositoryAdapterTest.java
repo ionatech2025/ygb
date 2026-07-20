@@ -1,5 +1,6 @@
 package com.ionatech.nac.ygb.adapters.out.persistence;
 
+import com.ionatech.nac.ygb.adapters.out.persistence.mapper.SubmissionMapper;
 import com.ionatech.nac.ygb.adapters.out.persistence.mapper.SubmissionMapperImpl;
 import com.ionatech.nac.ygb.adapters.out.persistence.repository.SubmissionJpaRepository;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
@@ -38,7 +39,7 @@ class SubmissionRepositoryAdapterTest {
     private SubmissionJpaRepository submissionJpaRepository;
 
     @Autowired
-    private SubmissionMapperImpl submissionMapper;
+    private SubmissionMapper submissionMapper;
 
     private SubmissionRepositoryPort adapter;
 
@@ -567,13 +568,12 @@ class SubmissionRepositoryAdapterTest {
     }
 
     @Test
-    void shouldFindLatestFormCompletedAtByCollectorIdAndStatus() {
-        LocalDateTime time1 = LocalDateTime.of(2026, 7, 19, 10, 0);
-        LocalDateTime time2 = LocalDateTime.of(2026, 7, 19, 11, 30);
+    void shouldFindLatestSyncedAtByCollectorIdAndStatus() {
+        LocalDateTime formCompletedAt = LocalDateTime.of(2026, 7, 19, 10, 0);
 
         BypSubmission sub1 = new BypSubmission(
                 UUID.randomUUID(),
-                new SubmissionMetadata(collectorId, UUID.randomUUID(), time1),
+                new SubmissionMetadata(collectorId, UUID.randomUUID(), formCompletedAt),
                 createLocation(),
                 "Jane Doe",
                 "0772111222",
@@ -597,7 +597,7 @@ class SubmissionRepositoryAdapterTest {
 
         BypSubmission sub2 = new BypSubmission(
                 UUID.randomUUID(),
-                new SubmissionMetadata(collectorId, UUID.randomUUID(), time2),
+                new SubmissionMetadata(collectorId, UUID.randomUUID(), formCompletedAt.minusDays(1)),
                 createLocation(),
                 "John Doe",
                 "0772111223",
@@ -620,14 +620,14 @@ class SubmissionRepositoryAdapterTest {
         sub2.setStatus(SubmissionStatus.SYNCED);
 
         adapter.save(sub1);
+        LocalDateTime afterFirstSave = adapter.findLatestSyncedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED)
+                .orElseThrow();
+
         adapter.save(sub2);
+        LocalDateTime afterSecondSave = adapter.findLatestSyncedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED)
+                .orElseThrow();
 
-        java.util.Optional<LocalDateTime> latestTime = adapter.findLatestFormCompletedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED);
-
-        assertThat(latestTime).isPresent();
-        assertThat(latestTime.get()).isEqualTo(time2);
-
-        java.util.Optional<LocalDateTime> noPendingTime = adapter.findLatestFormCompletedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.PENDING);
-        assertThat(noPendingTime).isEmpty();
+        assertThat(afterSecondSave).isAfterOrEqualTo(afterFirstSave);
+        assertThat(adapter.findLatestSyncedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.PENDING)).isEmpty();
     }
 }

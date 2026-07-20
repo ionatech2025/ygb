@@ -28,6 +28,9 @@ public abstract class SubmissionJpaEntity {
     @Column(name = "form_completed_at", nullable = false)
     private LocalDateTime formCompletedAt;
 
+    @Column(name = "synced_at")
+    private LocalDateTime syncedAt;
+
     @Column(name = "financial_year_period", nullable = false)
     private String financialYearPeriod;
 

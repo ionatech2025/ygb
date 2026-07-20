@@ -348,15 +348,14 @@ class SubmissionControllerTest {
     void shouldGetSyncStatusSuccessfullyWhenDataCollector() throws Exception {
         UUID testCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
         LocalDateTime latestTime = LocalDateTime.of(2026, 7, 19, 12, 0);
-        var domainStatus = new com.ionatech.nac.ygb.domain.valueobjects.CollectorSyncStatus(3L, 12L, latestTime);
-        var responseDto = new com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorSyncStatusResponseDto(3L, 12L, latestTime);
+        var domainStatus = new com.ionatech.nac.ygb.domain.valueobjects.CollectorSyncStatus(12L, latestTime);
+        var responseDto = new com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorSyncStatusResponseDto(12L, latestTime);
 
         when(getCollectorSyncStatusQuery.getSyncStatus(testCollectorId)).thenReturn(domainStatus);
         when(submissionRestMapper.toResponse(domainStatus)).thenReturn(responseDto);
 
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/api/v1/submissions/my-sync-status"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.pendingCount").value(3L))
                 .andExpect(jsonPath("$.syncedCount").value(12L))
                 .andExpect(jsonPath("$.lastSyncedAt").value("2026-07-19T12:00:00"));
 

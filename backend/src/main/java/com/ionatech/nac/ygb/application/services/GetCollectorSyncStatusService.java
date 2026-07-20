@@ -18,11 +18,10 @@ public class GetCollectorSyncStatusService implements GetCollectorSyncStatusQuer
 
     @Override
     public CollectorSyncStatus getSyncStatus(UUID collectorId) {
-        long pending = repositoryPort.countByCollectorIdAndStatus(collectorId, SubmissionStatus.PENDING);
         long synced = repositoryPort.countByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED);
-        LocalDateTime lastSyncedAt = repositoryPort.findLatestFormCompletedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED)
+        LocalDateTime lastSyncedAt = repositoryPort.findLatestSyncedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED)
                 .orElse(null);
 
-        return new CollectorSyncStatus(pending, synced, lastSyncedAt);
+        return new CollectorSyncStatus(synced, lastSyncedAt);
     }
 }
