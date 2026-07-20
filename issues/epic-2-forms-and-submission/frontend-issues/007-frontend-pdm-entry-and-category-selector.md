@@ -30,11 +30,11 @@ The entry screen must:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: drop-down lists exactly BYP, IYP, LGO, PC in that order (TC-FORM-01-01).
-- [ ] Component test: selecting IYP renders the IYP form slot (TC-FORM-01-02).
-- [ ] Component test: Admin user still sees the lock screen, not the category selector (TC-AUTH-04-01).
-- [ ] "Back" action returns to category selector and clears the selected form type.
-- [ ] Remove the placeholder "Household Ref ID" field — it is not part of any Epic 2 user story.
+- [x] Component test: drop-down lists exactly BYP, IYP, LGO, PC in that order (TC-FORM-01-01).
+- [x] Component test: selecting IYP renders the IYP form slot (TC-FORM-01-02).
+- [x] Component test: Admin user still sees the lock screen, not the category selector (TC-AUTH-04-01).
+- [x] "Back" action returns to category selector and clears the selected form type.
+- [x] Remove the placeholder "Household Ref ID" field — it is not part of any Epic 2 user story.
 
 ## Blocked by
 
