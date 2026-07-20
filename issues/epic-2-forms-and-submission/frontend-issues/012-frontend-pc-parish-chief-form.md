@@ -41,12 +41,12 @@ Sections must appear in order:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: five sections render in correct order (TC-FORM-05-01).
-- [ ] Component test: PDC training = Yes requires ≥ 1 training area (TC-FORM-05-02).
-- [ ] Component test: "Others (specify)" in monitored-by shows required text field (TC-FORM-05-03).
-- [ ] Component test: full valid submission calls `enqueue` with complete payload (TC-FORM-05-04).
-- [ ] Unit test: `monitoredBy` array persisted with all checked values.
-- [ ] Narrative fields (obstacles, monitoring method) enforce ≥ 10 chars (TC-FORM-12-03).
+- [x] Component test: five sections render in correct order (TC-FORM-05-01).
+- [x] Component test: PDC training = Yes requires ≥ 1 training area (TC-FORM-05-02).
+- [x] Component test: "Others (specify)" in monitored-by shows required text field (TC-FORM-05-03).
+- [x] Component test: full valid submission calls `enqueue` with complete payload (TC-FORM-05-04).
+- [x] Unit test: `monitoredBy` array persisted with all checked values.
+- [x] Narrative fields (obstacles, monitoring method) enforce ≥ 10 chars (TC-FORM-12-03).
 
 ## Blocked by
 
