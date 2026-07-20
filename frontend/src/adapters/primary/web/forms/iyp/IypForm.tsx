@@ -9,7 +9,7 @@ import {
   buildSubmissionProvenance,
   RespondentSection,
 } from '../../components/forms';
-import { submissionQueue } from '../../../../secondary/submission/submission-queue.adapter';
+import { submitSurvey } from '../../../../../core/submission-submit.service';
 import { IypAwarenessSection } from './IypAwarenessSection';
 import { IypApplicationSection } from './IypApplicationSection';
 import { IypBarriersSection } from './IypBarriersSection';
@@ -21,6 +21,7 @@ export interface IypFormProps {
 
 export function IypForm({ onSubmitted }: IypFormProps) {
   const user = useAuthStore((state) => state.user);
+  const isOnline = useAuthStore((state) => state.isOnline);
   const formRef = useRef<HTMLFormElement>(null);
   const [respondent, setRespondent] = useState(EMPTY_RESPONDENT_FIELDS);
   const [iyp, setIyp] = useState(EMPTY_IYP_FIELDS);
@@ -56,7 +57,7 @@ export function IypForm({ onSubmitted }: IypFormProps) {
       const provenance = buildSubmissionProvenance(buildAuthProvenanceSnapshot(user?.id));
       const payload = buildIypSubmissionPayload({ respondent, iyp }, provenance);
 
-      await submissionQueue.enqueue({
+      await submitSurvey({
         formType: 'IYP',
         collectorId: provenance.collectorId,
         deviceSubmissionId: provenance.deviceSubmissionId,
@@ -66,7 +67,11 @@ export function IypForm({ onSubmitted }: IypFormProps) {
         payload,
       });
 
-      setSuccessMessage('Saved locally. Your IYP submission will sync when online.');
+      setSuccessMessage(
+        isOnline
+          ? 'Submission saved and syncing to the server.'
+          : 'Saved locally. Your IYP submission will sync when online.'
+      );
       window.setTimeout(() => {
         setRespondent(EMPTY_RESPONDENT_FIELDS);
         setIyp(EMPTY_IYP_FIELDS);

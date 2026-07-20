@@ -9,7 +9,7 @@ import {
   buildSubmissionProvenance,
   RespondentSection,
 } from '../../components/forms';
-import { submissionQueue } from '../../../../secondary/submission/submission-queue.adapter';
+import { submitSurvey } from '../../../../../core/submission-submit.service';
 import { PcFundsReceiptSection } from './PcFundsReceiptSection';
 import { PcAccessSection } from './PcAccessSection';
 import { PcPdcSection } from './PcPdcSection';
@@ -22,6 +22,7 @@ export interface PcFormProps {
 
 export function PcForm({ onSubmitted }: PcFormProps) {
   const user = useAuthStore((state) => state.user);
+  const isOnline = useAuthStore((state) => state.isOnline);
   const formRef = useRef<HTMLFormElement>(null);
   const [respondent, setRespondent] = useState(EMPTY_RESPONDENT_FIELDS);
   const [pc, setPc] = useState(EMPTY_PC_FIELDS);
@@ -57,7 +58,7 @@ export function PcForm({ onSubmitted }: PcFormProps) {
       const provenance = buildSubmissionProvenance(buildAuthProvenanceSnapshot(user?.id));
       const payload = buildPcSubmissionPayload({ respondent, pc }, provenance);
 
-      await submissionQueue.enqueue({
+      await submitSurvey({
         formType: 'PC',
         collectorId: provenance.collectorId,
         deviceSubmissionId: provenance.deviceSubmissionId,
@@ -67,7 +68,11 @@ export function PcForm({ onSubmitted }: PcFormProps) {
         payload,
       });
 
-      setSuccessMessage('Saved locally. Your PC submission will sync when online.');
+      setSuccessMessage(
+        isOnline
+          ? 'Submission saved and syncing to the server.'
+          : 'Saved locally. Your PC submission will sync when online.'
+      );
       window.setTimeout(() => {
         setRespondent(EMPTY_RESPONDENT_FIELDS);
         setPc(EMPTY_PC_FIELDS);

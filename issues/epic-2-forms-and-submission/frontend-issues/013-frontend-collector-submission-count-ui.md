@@ -38,12 +38,12 @@ The counter must:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: badge shows "Today: 0" on fresh session.
-- [ ] Component test: after 3 local enqueues, badge shows "Today: 3" (TC-FORM-13-01).
-- [ ] Component test: offline enqueue increments count before sync completes (TC-FORM-13-02).
-- [ ] Unit test: date-boundary logic resets count when mocked date advances to next day (TC-FORM-13-03).
-- [ ] Integration test: when online, server count is fetched and displayed (or reconciled) without overwriting higher local count during active session.
-- [ ] Badge visible in collector header on all form screens.
+- [x] Component test: badge shows "Today: 0" on fresh session.
+- [x] Component test: after 3 local enqueues, badge shows "Today: 3" (TC-FORM-13-01).
+- [x] Component test: offline enqueue increments count before sync completes (TC-FORM-13-02).
+- [x] Unit test: date-boundary logic resets count when mocked date advances to next day (TC-FORM-13-03).
+- [x] Integration test: when online, server count is fetched and displayed (or reconciled) without overwriting higher local count during active session.
+- [x] Badge visible in collector header on all form screens.
 
 ## Blocked by
 

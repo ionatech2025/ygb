@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
+import { useSyncStore } from '../../../../core/store/useSyncStore';
+import { useSubmissionCountStore } from '../../../../core/store/useSubmissionCountStore';
 import { locationService } from '../../../../core/LocationService';
 import { PortalLogin } from '../forms/PortalLogin';
 import ManageUsers from '../forms/ManageUsers';
@@ -17,10 +19,19 @@ export function AppRouter() {
   useEffect(() => {
     initialize();
     void locationService.ensureLoaded();
+    void useSyncStore.getState().initialize();
+    void useSubmissionCountStore.getState().initialize();
   }, [initialize]);
 
   useEffect(() => {
-    const handleOnline = () => setOnlineStatus(true);
+    const handleOnline = () => {
+      setOnlineStatus(true);
+      void useSyncStore.getState().triggerSync();
+      const token = useAuthStore.getState().getAccessToken();
+      if (token) {
+        void useSubmissionCountStore.getState().reconcileWithServer(token);
+      }
+    };
     const handleOffline = () => setOnlineStatus(false);
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);

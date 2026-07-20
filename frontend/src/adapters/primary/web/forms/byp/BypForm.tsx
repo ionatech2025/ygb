@@ -9,7 +9,7 @@ import {
   buildSubmissionProvenance,
   RespondentSection,
 } from '../../components/forms';
-import { submissionQueue } from '../../../../secondary/submission/submission-queue.adapter';
+import { submitSurvey } from '../../../../../core/submission-submit.service';
 import { BypFundSection } from './BypFundSection';
 import { BypRatingSection } from './BypRatingSection';
 import { BypBdsSection } from './BypBdsSection';
@@ -22,6 +22,7 @@ export interface BypFormProps {
 
 export function BypForm({ onSubmitted }: BypFormProps) {
   const user = useAuthStore((state) => state.user);
+  const isOnline = useAuthStore((state) => state.isOnline);
   const formRef = useRef<HTMLFormElement>(null);
   const [respondent, setRespondent] = useState(EMPTY_RESPONDENT_FIELDS);
   const [byp, setByp] = useState(EMPTY_BYP_FIELDS);
@@ -67,7 +68,7 @@ export function BypForm({ onSubmitted }: BypFormProps) {
       const provenance = buildSubmissionProvenance(buildAuthProvenanceSnapshot(user?.id));
       const payload = buildBypSubmissionPayload({ respondent, byp }, provenance);
 
-      await submissionQueue.enqueue({
+      await submitSurvey({
         formType: 'BYP',
         collectorId: provenance.collectorId,
         deviceSubmissionId: provenance.deviceSubmissionId,
@@ -77,7 +78,11 @@ export function BypForm({ onSubmitted }: BypFormProps) {
         payload,
       });
 
-      setSuccessMessage('Saved locally. Your BYP submission will sync when online.');
+      setSuccessMessage(
+        isOnline
+          ? 'Submission saved and syncing to the server.'
+          : 'Saved locally. Your BYP submission will sync when online.'
+      );
       window.setTimeout(() => {
         setRespondent(EMPTY_RESPONDENT_FIELDS);
         setByp(EMPTY_BYP_FIELDS);

@@ -9,7 +9,7 @@ import {
   buildSubmissionProvenance,
   RespondentSection,
 } from '../../components/forms';
-import { submissionQueue } from '../../../../secondary/submission/submission-queue.adapter';
+import { submitSurvey } from '../../../../../core/submission-submit.service';
 import { LgoFiscalYearSection } from './LgoFiscalYearSection';
 import { LgoGovernanceSection } from './LgoGovernanceSection';
 import { LgoExplainSection } from './LgoExplainSection';
@@ -21,6 +21,7 @@ export interface LgoFormProps {
 
 export function LgoForm({ onSubmitted }: LgoFormProps) {
   const user = useAuthStore((state) => state.user);
+  const isOnline = useAuthStore((state) => state.isOnline);
   const formRef = useRef<HTMLFormElement>(null);
   const [respondent, setRespondent] = useState(EMPTY_RESPONDENT_FIELDS);
   const [lgo, setLgo] = useState(EMPTY_LGO_FIELDS);
@@ -56,7 +57,7 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
       const provenance = buildSubmissionProvenance(buildAuthProvenanceSnapshot(user?.id));
       const payload = buildLgoSubmissionPayload({ respondent, lgo }, provenance);
 
-      await submissionQueue.enqueue({
+      await submitSurvey({
         formType: 'LGO',
         collectorId: provenance.collectorId,
         deviceSubmissionId: provenance.deviceSubmissionId,
@@ -66,7 +67,11 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
         payload,
       });
 
-      setSuccessMessage('Saved locally. Your LGO submission will sync when online.');
+      setSuccessMessage(
+        isOnline
+          ? 'Submission saved and syncing to the server.'
+          : 'Saved locally. Your LGO submission will sync when online.'
+      );
       window.setTimeout(() => {
         setRespondent(EMPTY_RESPONDENT_FIELDS);
         setLgo(EMPTY_LGO_FIELDS);

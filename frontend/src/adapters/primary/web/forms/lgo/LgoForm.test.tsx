@@ -34,8 +34,8 @@ vi.mock('../../../../../adapters/secondary/location/location-repository.adapter'
 
 const enqueueMock = vi.fn().mockResolvedValue(1);
 
-vi.mock('../../../../secondary/submission/submission-queue.adapter', () => ({
-  submissionQueue: { enqueue: (...args: unknown[]) => enqueueMock(...args) },
+vi.mock('../../../../../core/submission-submit.service', () => ({
+  submitSurvey: (...args: unknown[]) => enqueueMock(...args),
 }));
 
 vi.mock('../../../../../core/store/useAuthStore', () => ({
