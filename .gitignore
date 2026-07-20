@@ -1,5 +1,6 @@
 # Project specific
 .agent/
+.cursor/
 
 # Environment Variables
 .env
@@ -21,8 +22,8 @@ target/
 *.nar
 .gradle/
 build/
-bin/
-out/
+/bin/
+/out/
 .mvn/wrapper/maven-wrapper.jar
 
 # Logs

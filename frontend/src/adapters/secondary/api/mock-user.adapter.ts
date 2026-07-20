@@ -14,6 +14,7 @@ export class MockUserAdapter implements IUserRepositoryPort {
 
   async createDataCollector(payload: CreateCollectorPayload, adminId: string): Promise<UserProfile> {
     void adminId;
+    void payload.password;
     // TC-AUTH-01-02 Simulation: Reject duplicate phone configurations
     const exists = mockDatabase.some(u => u.phoneNumber === payload.phoneNumber);
     if (exists) {

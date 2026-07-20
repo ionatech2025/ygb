@@ -8,9 +8,6 @@ import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
 import com.ionatech.nac.ygb.application.ports.spi.UserRepositoryPort;
 import com.ionatech.nac.ygb.domain.exceptions.InvalidCredentialsException;
 import com.ionatech.nac.ygb.domain.model.User;
-import org.springframework.stereotype.Service;
-
-@Service
 public class AuthenticateUserService implements AuthenticateUserUseCase {
 
     private final UserRepositoryPort userRepositoryPort;

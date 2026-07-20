@@ -32,6 +32,10 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/locations/dataset").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/submissions").hasRole("DATA_COLLECTOR")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/my-count").hasRole("DATA_COLLECTOR")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/my-sync-status").hasRole("DATA_COLLECTOR")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

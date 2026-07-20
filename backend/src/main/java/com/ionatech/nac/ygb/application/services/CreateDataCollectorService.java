@@ -7,12 +7,9 @@ import com.ionatech.nac.ygb.application.ports.spi.UserRepositoryPort;
 import com.ionatech.nac.ygb.domain.exceptions.UserAlreadyExistsException;
 import com.ionatech.nac.ygb.domain.model.Role;
 import com.ionatech.nac.ygb.domain.model.User;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Service
 public class CreateDataCollectorService implements CreateDataCollectorUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
