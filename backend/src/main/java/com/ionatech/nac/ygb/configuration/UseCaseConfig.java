@@ -42,4 +42,18 @@ public class UseCaseConfig {
     ) {
         return new SubmitSubmissionService(submissionRepositoryPort);
     }
+
+    @Bean
+    public GetAdminLocationDatasetUseCase getAdminLocationDatasetUseCase(
+            AdminLocationRepositoryPort adminLocationRepositoryPort
+    ) {
+        return new GetAdminLocationDatasetService(adminLocationRepositoryPort);
+    }
+
+    @Bean
+    public GetCollectorSyncStatusQuery getCollectorSyncStatusQuery(
+            SubmissionRepositoryPort submissionRepositoryPort
+    ) {
+        return new GetCollectorSyncStatusService(submissionRepositoryPort);
+    }
 }

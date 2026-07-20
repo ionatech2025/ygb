@@ -1,17 +1,17 @@
 package com.ionatech.nac.ygb.adapters.out.persistence;
 
-import com.ionatech.nac.ygb.adapters.out.persistence.mapper.SubmissionMapperImpl;
+import com.ionatech.nac.ygb.adapters.out.persistence.mapper.SubmissionMapper;
 import com.ionatech.nac.ygb.adapters.out.persistence.repository.SubmissionJpaRepository;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.*;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -27,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(SubmissionMapperImpl.class)
 class SubmissionRepositoryAdapterTest {
 
     @Container
@@ -37,9 +36,7 @@ class SubmissionRepositoryAdapterTest {
     @Autowired
     private SubmissionJpaRepository submissionJpaRepository;
 
-    @Autowired
-    private SubmissionMapperImpl submissionMapper;
-
+    private SubmissionMapper submissionMapper;
     private SubmissionRepositoryPort adapter;
 
     // Seeded IDs from Flyway V2 & V3 migrations
@@ -59,6 +56,7 @@ class SubmissionRepositoryAdapterTest {
 
     @BeforeEach
     void setUp() {
+        submissionMapper = Mappers.getMapper(SubmissionMapper.class);
         adapter = new SubmissionRepositoryAdapter(submissionJpaRepository, submissionMapper);
     }
 
@@ -504,5 +502,129 @@ class SubmissionRepositoryAdapterTest {
 
         assertThat(savedByp2).isNotNull();
         assertThat(savedByp2.getStatus()).isEqualTo(SubmissionStatus.FLAGGED);
+    }
+
+    @Test
+    void shouldCountSubmissionsByStatus() {
+        BypSubmission pendingSub = new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(UUID.randomUUID()),
+                createLocation(),
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_20_24,
+                new Age(22),
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+        pendingSub.setStatus(SubmissionStatus.PENDING);
+
+        BypSubmission syncedSub = new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(UUID.randomUUID()),
+                createLocation(),
+                "John Doe",
+                "0772111223",
+                "MALE",
+                AgeGroup.AGE_20_24,
+                new Age(22),
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+        syncedSub.setStatus(SubmissionStatus.SYNCED);
+
+        adapter.save(pendingSub);
+        adapter.save(syncedSub);
+
+        long pendingCount = adapter.countByCollectorIdAndStatus(collectorId, SubmissionStatus.PENDING);
+        long syncedCount = adapter.countByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED);
+
+        assertThat(pendingCount).isEqualTo(1L);
+        assertThat(syncedCount).isEqualTo(1L);
+    }
+
+    @Test
+    void shouldFindLatestSyncedAtByCollectorIdAndStatus() {
+        LocalDateTime formCompletedAt = LocalDateTime.of(2026, 7, 19, 10, 0);
+
+        BypSubmission sub1 = new BypSubmission(
+                UUID.randomUUID(),
+                new SubmissionMetadata(collectorId, UUID.randomUUID(), formCompletedAt),
+                createLocation(),
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_20_24,
+                new Age(22),
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+        sub1.setStatus(SubmissionStatus.SYNCED);
+
+        BypSubmission sub2 = new BypSubmission(
+                UUID.randomUUID(),
+                new SubmissionMetadata(collectorId, UUID.randomUUID(), formCompletedAt.minusDays(1)),
+                createLocation(),
+                "John Doe",
+                "0772111223",
+                "MALE",
+                AgeGroup.AGE_20_24,
+                new Age(22),
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+        sub2.setStatus(SubmissionStatus.SYNCED);
+
+        adapter.save(sub1);
+        LocalDateTime afterFirstSave = adapter.findLatestSyncedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED)
+                .orElseThrow();
+
+        adapter.save(sub2);
+        LocalDateTime afterSecondSave = adapter.findLatestSyncedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.SYNCED)
+                .orElseThrow();
+
+        assertThat(afterSecondSave).isAfterOrEqualTo(afterFirstSave);
+        assertThat(adapter.findLatestSyncedAtByCollectorIdAndStatus(collectorId, SubmissionStatus.PENDING)).isEmpty();
     }
 }

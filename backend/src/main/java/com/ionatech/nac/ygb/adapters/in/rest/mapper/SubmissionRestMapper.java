@@ -43,4 +43,6 @@ public abstract class SubmissionRestMapper {
             default -> "UNKNOWN";
         };
     }
+
+    public abstract com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorSyncStatusResponseDto toResponse(com.ionatech.nac.ygb.domain.valueobjects.CollectorSyncStatus domain);
 }

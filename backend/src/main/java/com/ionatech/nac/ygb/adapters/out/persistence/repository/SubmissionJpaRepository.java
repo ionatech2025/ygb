@@ -13,4 +13,8 @@ public interface SubmissionJpaRepository extends JpaRepository<SubmissionJpaEnti
     boolean existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus(
             String respondentPhone, String formType, String financialYearPeriod, String status
     );
+
+    long countByCollectorIdAndStatus(UUID collectorId, String status);
+
+    java.util.Optional<SubmissionJpaEntity> findFirstByCollectorIdAndStatusOrderBySyncedAtDesc(UUID collectorId, String status);
 }

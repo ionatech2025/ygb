@@ -21,6 +21,9 @@ public class SubmissionRepositoryAdapter implements SubmissionRepositoryPort {
     public Submission save(Submission submission) {
         try {
             SubmissionJpaEntity entity = mapper.toEntity(submission);
+            if (submission.getStatus() == com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus.SYNCED) {
+                entity.setSyncedAt(java.time.LocalDateTime.now());
+            }
             SubmissionJpaEntity saved = jpaRepository.saveAndFlush(entity);
             return mapper.toDomain(saved);
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
@@ -53,5 +56,17 @@ public class SubmissionRepositoryAdapter implements SubmissionRepositoryPort {
                 financialYearPeriod,
                 status.name()
         );
+    }
+
+    @Override
+    public long countByCollectorIdAndStatus(java.util.UUID collectorId, com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status) {
+        return jpaRepository.countByCollectorIdAndStatus(collectorId, status.name());
+    }
+
+    @Override
+    public java.util.Optional<java.time.LocalDateTime> findLatestSyncedAtByCollectorIdAndStatus(
+            java.util.UUID collectorId, com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status) {
+        return jpaRepository.findFirstByCollectorIdAndStatusOrderBySyncedAtDesc(collectorId, status.name())
+                .map(SubmissionJpaEntity::getSyncedAt);
     }
 }
