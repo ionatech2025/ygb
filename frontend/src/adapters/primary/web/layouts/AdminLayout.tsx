@@ -18,7 +18,7 @@ export function AdminLayout() {
       <header className="sticky top-0 z-50 border-b border-border bg-surface/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-nac-orange">NAC Admin</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-nac-orange">YGB Admin</p>
             <h1 className="truncate text-base font-bold text-text sm:text-lg">Survey Tool Dashboard</h1>
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">

@@ -59,8 +59,8 @@ export function CollectorDashboard() {
 
   if (!canSubmitSurvey(user?.role)) {
     return (
-      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center">
-        <p className="text-sm font-semibold text-amber-900">Survey entry is restricted to data collectors.</p>
+      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center dark:border-amber-800 dark:bg-amber-950/40">
+        <p className="text-sm font-semibold text-amber-900 dark:text-amber-200">Survey entry is restricted to data collectors.</p>
       </div>
     );
   }
@@ -95,7 +95,9 @@ export function CollectorDashboard() {
       </div>
 
       {statsError && (
-        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">{statsError}</p>
+        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+          {statsError}
+        </p>
       )}
 
       {!loadingStats && isOnline && (
@@ -129,7 +131,7 @@ function StatCard({
   compact?: boolean;
 }) {
   return (
-    <article className="rounded-2xl border border-border bg-white p-4 shadow-sm">
+    <article className="rounded-2xl border border-border bg-surface p-4 shadow-sm">
       <div className="mb-2 flex items-center gap-2 text-brand">
         <Icon className="h-4 w-4" aria-hidden="true" />
         <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">{label}</p>
