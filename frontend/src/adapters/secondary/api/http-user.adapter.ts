@@ -36,7 +36,7 @@ export class HttpUserAdapter implements IUserRepositoryPort {
       token
     );
 
-    return collectors.filter((user) => user.isActive).map(mapCollector);
+    return collectors.map(mapCollector);
   }
 
   async createDataCollector(payload: CreateCollectorPayload, adminId: string): Promise<UserProfile> {

@@ -9,6 +9,7 @@ import type { UserProfile } from '../../../../core/domain/user.model';
 
 export default function ManageUsers() {
   const getAccessToken = useAuthStore((state) => state.getAccessToken);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const userRepo = useMemo(() => new HttpUserAdapter(getAccessToken), [getAccessToken]);
 
   const [users, setUsers] = useState<UserProfile[]>([]);
@@ -17,24 +18,29 @@ export default function ManageUsers() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState('');
+  const [loadError, setLoadError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const loadCollectors = async () => {
+    setLoading(true);
+    setLoadError('');
     try {
       const collectors = await userRepo.fetchActiveCollectors();
       setUsers(collectors);
-    } catch {
-      setServerError('Failed to load collector directory.');
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : 'Failed to load collector directory.');
+      setUsers([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     void loadCollectors();
-  }, [userRepo]);
+  }, [userRepo, isAuthenticated]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +87,7 @@ export default function ManageUsers() {
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <div>
-        <h2 className="text-lg font-bold text-text sm:text-xl">Team management</h2>
+        <h2 className="text-lg font-bold text-text sm:text-xl">Data Collector Management</h2>
         <p className="text-sm text-text-muted">Register field collectors and monitor active accounts.</p>
       </div>
 
@@ -163,6 +169,13 @@ export default function ManageUsers() {
               </p>
             </div>
           </header>
+
+          {loadError && (
+            <div className="mb-4 flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-sm text-rose-700 dark:border-rose-900/40 dark:bg-rose-950/40 dark:text-rose-200">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>{loadError}</span>
+            </div>
+          )}
 
           {loading ? (
             <p className="py-8 text-center text-sm text-text-muted">Loading directory…</p>

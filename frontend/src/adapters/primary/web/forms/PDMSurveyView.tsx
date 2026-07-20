@@ -1,4 +1,4 @@
-import { useState, type ComponentType } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { canSubmitSurvey } from '../../../../core/domain/user.model';
@@ -9,12 +9,6 @@ import { BypForm } from './BypForm';
 import { IypForm } from './IypForm';
 import { LgoForm } from './LgoForm';
 import { PcForm } from './PcForm';
-
-const OTHER_FORM_COMPONENTS: Record<Exclude<FormType, 'BYP'>, ComponentType> = {
-  IYP: IypForm,
-  LGO: LgoForm,
-  PC: PcForm,
-};
 
 function AdminLockScreen() {
   return (
@@ -52,14 +46,10 @@ function ActiveFormPanel({
           Back to category selection
         </button>
       </div>
-      {formType === 'BYP' ? (
-        <BypForm key={formType} onSubmitted={onBack} />
-      ) : (
-        (() => {
-          const FormComponent = OTHER_FORM_COMPONENTS[formType];
-          return <FormComponent key={formType} />;
-        })()
-      )}
+      {formType === 'BYP' && <BypForm key={formType} onSubmitted={onBack} />}
+      {formType === 'IYP' && <IypForm key={formType} onSubmitted={onBack} />}
+      {formType === 'LGO' && <LgoForm key={formType} />}
+      {formType === 'PC' && <PcForm key={formType} />}
     </div>
   );
 }

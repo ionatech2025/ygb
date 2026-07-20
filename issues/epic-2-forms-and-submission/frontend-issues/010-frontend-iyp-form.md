@@ -33,13 +33,13 @@ Multi-select fields (Q2 information channels, Q9 reasons, Q10 difficulties) use 
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: Q1 = Unaware hides Q3 (TC-FORM-03-01).
-- [ ] Component test: Q6 = No shows Q9, hides Q7/Q8 (TC-FORM-03-02).
-- [ ] Component test: Q6 = Yes, Q7 = No shows Q8 (TC-FORM-03-03).
-- [ ] Component test: limitation checkbox shows explanation field (TC-FORM-03-04).
-- [ ] Component test: aware + applied + accessed path submits without Q8/Q9 (TC-FORM-03-05).
-- [ ] Component test: multiple checkboxes selectable on Q2 (TC-FORM-11-01).
-- [ ] Unit test: payload arrays (`informationChannels`, `reasonsForNotApplying`, `difficultiesFaced`) contain all selected values (TC-FORM-11-02).
+- [x] Component test: Q1 = Unaware hides Q3 (TC-FORM-03-01).
+- [x] Component test: Q6 = No shows Q9, hides Q7/Q8 (TC-FORM-03-02).
+- [x] Component test: Q6 = Yes, Q7 = No shows Q8 (TC-FORM-03-03).
+- [x] Component test: limitation checkbox shows explanation field (TC-FORM-03-04).
+- [x] Component test: aware + applied + accessed path submits without Q8/Q9 (TC-FORM-03-05).
+- [x] Component test: multiple checkboxes selectable on Q2 (TC-FORM-11-01).
+- [x] Unit test: payload arrays (`informationChannels`, `reasonsForNotApplying`, `difficultiesFaced`) contain all selected values (TC-FORM-11-02).
 
 ## Blocked by
 
