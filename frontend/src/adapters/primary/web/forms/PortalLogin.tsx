@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart3, Loader2, ShieldCheck, Smartphone, Users } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -44,6 +44,11 @@ export function PortalLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const formSectionRef = useRef<HTMLElement>(null);
+
+  const scrollToSignIn = () => {
+    formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,19 +87,28 @@ export function PortalLogin() {
         <ThemeToggle />
       </div>
 
-      <div className="relative mx-auto flex min-h-dvh max-w-6xl flex-col lg:flex-row">
-        <section className="relative order-2 flex flex-1 flex-col justify-between overflow-hidden bg-linear-to-br from-nac-blue via-nac-blue-dark to-slate-950 px-5 py-10 text-white lg:order-1 lg:px-12 lg:py-14">
+      <div className="relative mx-auto flex max-w-6xl flex-col lg:min-h-dvh lg:flex-row">
+        <section className="relative order-1 flex flex-col overflow-hidden bg-linear-to-br from-nac-blue via-nac-blue-dark to-slate-950 px-5 py-10 text-white lg:min-h-dvh lg:flex-1 lg:justify-between lg:px-12 lg:py-14">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_45%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[2.5rem_2.5rem] mask-[radial-gradient(ellipse_at_center,black_30%,transparent_80%)]" />
 
-          <div className="relative z-10 flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-nac-orange text-sm font-black tracking-wider shadow-lg shadow-nac-orange/25">
-              YGB
-            </span>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-blue-100">Youth Go Budget App</p>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-orange-200/90">Survey Platform</p>
+          <div className="relative z-10 flex items-center justify-between gap-3 pt-8 lg:pt-0">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-nac-orange text-sm font-black tracking-wider shadow-lg shadow-nac-orange/25">
+                YGB
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-xs font-bold uppercase tracking-wide text-blue-100">Youth Go Budget App</p>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-orange-200/90">Survey Platform</p>
+              </div>
             </div>
+            <button
+              type="button"
+              onClick={scrollToSignIn}
+              className="inline-flex min-h-10 shrink-0 items-center rounded-xl border border-white/20 bg-white/10 px-4 text-xs font-bold text-white backdrop-blur-sm transition hover:border-white/30 hover:bg-white/15 lg:hidden"
+            >
+              Sign in
+            </button>
           </div>
 
           <div className="relative z-10 my-8 max-w-xl space-y-6 lg:my-auto">
@@ -125,23 +139,16 @@ export function PortalLogin() {
             </ul>
           </div>
 
-          <p className="relative z-10 text-xs text-blue-200/70">
+          <p className="relative z-10 mt-6 hidden text-xs text-blue-200/70 lg:mt-0 lg:block">
             &copy; {new Date().getFullYear()} Youth Go Budget App
           </p>
         </section>
-
-        <section className="order-1 flex flex-1 items-center justify-center px-4 py-8 lg:order-2 lg:px-10">
+        <section
+          ref={formSectionRef}
+          id="login-form"
+          className="order-2 flex scroll-mt-4 items-center justify-center px-4 py-8 lg:min-h-dvh lg:flex-1 lg:px-10"
+        >
           <div className="w-full max-w-md">
-            <div className="mb-6 flex items-center gap-2.5 lg:hidden">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-nac-orange text-xs font-black text-white">
-                YGB
-              </span>
-              <div>
-                <p className="text-sm font-bold text-text">Youth Go Budget App</p>
-                <p className="text-[11px] text-text-muted">Sign in to continue</p>
-              </div>
-            </div>
-
             <div className="rounded-2xl border border-border bg-surface p-6 shadow-md ring-1 ring-black/3 sm:p-8 dark:ring-white/4">
               <div className="mb-6 space-y-1.5">
                 <h2 className="text-xl font-bold tracking-tight text-text sm:text-2xl">Sign in</h2>
@@ -215,7 +222,10 @@ export function PortalLogin() {
             </div>
           </div>
         </section>
-      </div>
-    </div>
+
+        <p className="order-3 px-4 pb-8 text-center text-xs text-text-muted lg:hidden">
+          &copy; {new Date().getFullYear()} Youth Go Budget App
+        </p>
+      </div>    </div>
   );
 }
