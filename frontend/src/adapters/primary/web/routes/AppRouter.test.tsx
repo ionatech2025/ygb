@@ -111,6 +111,79 @@ const adminTokens = {
   expiresAt: Date.now() + 3_600_000,
 };
 
+const collectorUser = {
+  id: '22222222-2222-2222-2222-222222222222',
+  fullName: 'Field Collector',
+  phoneNumber: '0771111111',
+  role: 'DATA_COLLECTOR' as const,
+};
+
+describe('AppRouter public dashboard routes', () => {
+  beforeEach(() => {
+    useAuthStore.setState({
+      user: null,
+      tokens: null,
+      isAuthenticated: false,
+      isInitialized: true,
+      isOnline: true,
+    });
+  });
+
+  it('loads /dashboard without redirecting to login', async () => {
+    window.history.pushState({}, '', '/dashboard');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('public-dashboard-home')).toBeInTheDocument();
+    });
+    expect(window.location.pathname).toBe('/dashboard');
+  });
+
+  it('renders public nav with Dashboard and Resources links', async () => {
+    window.history.pushState({}, '', '/dashboard');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
+      expect(screen.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources');
+    });
+  });
+
+  it('allows ADMIN sessions to access public dashboard pages', async () => {
+    useAuthStore.setState({
+      user: adminUser,
+      tokens: adminTokens,
+      isAuthenticated: true,
+      isInitialized: true,
+      isOnline: true,
+    });
+
+    window.history.pushState({}, '', '/resources');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'PDM Information & Resources' })).toBeInTheDocument();
+    });
+  });
+
+  it('allows DATA_COLLECTOR sessions to access public dashboard pages', async () => {
+    useAuthStore.setState({
+      user: collectorUser,
+      tokens: adminTokens,
+      isAuthenticated: true,
+      isInitialized: true,
+      isOnline: true,
+    });
+
+    window.history.pushState({}, '', '/dashboard');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('public-dashboard-home')).toBeInTheDocument();
+    });
+  });
+});
+
 describe('AppRouter public resource routes', () => {
   beforeEach(() => {
     useAuthStore.setState({
@@ -128,6 +201,7 @@ describe('AppRouter public resource routes', () => {
 
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: 'PDM Information & Resources' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources');
     });
   });
 

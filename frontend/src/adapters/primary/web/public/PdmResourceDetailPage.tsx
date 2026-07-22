@@ -19,8 +19,7 @@ export function PdmResourceDetailPage() {
   const anchors = extractHeadingAnchors(markdown);
 
   return (
-    <main className="min-h-screen bg-surface-muted">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-10 lg:flex-row lg:px-8">
+    <div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row">
         <article className="min-w-0 flex-1 rounded-lg border border-border bg-surface p-6 shadow-sm sm:p-8">
           <Link to="/resources" className="text-sm font-medium text-brand hover:underline">
             ← All resources
@@ -51,7 +50,6 @@ export function PdmResourceDetailPage() {
             </nav>
           </aside>
         ) : null}
-      </div>
-    </main>
+    </div>
   );
 }
