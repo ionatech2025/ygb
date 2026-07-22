@@ -53,7 +53,7 @@ This issue delivers:
 - [x] Toggling back to online triggers `triggerSync()` automatically and processes any pending entries.
 - [x] On successful sync of all entries, `pendingCount` drops to `0` and `lastSyncedAt` is updated.
 - [x] When `ISubmissionApiPort.syncSubmission` throws (simulated server error), the entry remains `PENDING`, `lastSyncError` is set.
-- [ ] Retry delay sequence is 5 s → 10 s → 20 s → 40 s → … capped at 300 s (exponential back-off scheduler not yet implemented).
+- [x] Retry delay sequence is 5 s → 10 s → 20 s → 40 s → … capped at 300 s (via `sync-retry-scheduler.ts`).
 - [x] Entries are processed oldest-first (verified by `createdAt` ordering).
 
 ## Blocked by
