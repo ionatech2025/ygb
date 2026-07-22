@@ -46,6 +46,10 @@ Thumbs.db
 # IDEs and Editors
 .idea/
 .vscode/
+.settings/
+*.classpath
+*.project
+*.factorypath
 *.swp
 *.swo
 *~

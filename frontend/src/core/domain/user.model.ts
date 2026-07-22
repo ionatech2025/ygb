@@ -6,6 +6,11 @@ export interface UserProfile {
   phoneNumber: string;
   role: UserRole;
   createdAt: number;
+  isActive?: boolean;
+}
+
+export interface ResetPasswordResult {
+  temporaryPassword: string;
 }
 
 // Domain Invariant: Only authenticated administrators can dispatch creation payloads

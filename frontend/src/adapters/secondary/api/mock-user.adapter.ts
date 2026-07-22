@@ -1,5 +1,7 @@
 import { IUserRepositoryPort, CreateCollectorPayload } from '../../../ports/user-repository.port';
-import { UserProfile } from '../../../core/domain/user.model';
+import { ResetPasswordResult, UserProfile } from '../../../core/domain/user.model';
+import type { CollectorProfileFilter } from '../../../core/domain/collector-profile-filter.model';
+import type { SubmissionPage } from '../../../core/domain/submission-admin.model';
 
 // In-memory collection simulation to let newly created collectors persist during testing
 let mockDatabase: UserProfile[] = [
@@ -31,5 +33,40 @@ export class MockUserAdapter implements IUserRepositoryPort {
 
     mockDatabase.push(newCollector);
     return newCollector;
+  }
+
+  async deactivateUser(userId: string): Promise<UserProfile> {
+    const user = mockDatabase.find((entry) => entry.id === userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    mockDatabase = mockDatabase.filter((entry) => entry.id !== userId);
+    return { ...user, isActive: false };
+  }
+
+  async reactivateUser(userId: string): Promise<UserProfile> {
+    const user = mockDatabase.find((entry) => entry.id === userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return { ...user, isActive: true };
+  }
+
+  async resetPassword(userId: string): Promise<ResetPasswordResult> {
+    void userId;
+    return { temporaryPassword: 'MockTemp1234' };
+  }
+
+  async getCollectorSubmissions(
+    userId: string,
+    filter: CollectorProfileFilter,
+    page: number,
+    size = 25
+  ): Promise<SubmissionPage> {
+    void userId;
+    void filter;
+    void page;
+    void size;
+    return { items: [], totalElements: 0, page: 0, size: 25, totalPages: 0 };
   }
 }

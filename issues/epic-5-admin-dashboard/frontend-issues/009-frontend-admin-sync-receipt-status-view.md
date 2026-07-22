@@ -19,10 +19,10 @@ Build the Admin **Sync Receipt Status** view (US-DASH-08): server-side SYNCED/FL
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: renders status counts from mock API.
-- [ ] Component test: stale collector row has warning styling.
-- [ ] Component test: info banner mentions device pending is client-side only.
-- [ ] Implement page and adapter.
+- [x] Component test: renders status counts from mock API.
+- [x] Component test: stale collector row has warning styling.
+- [x] Component test: info banner mentions device pending is client-side only.
+- [x] Implement page and adapter.
 
 ## Blocked by
 

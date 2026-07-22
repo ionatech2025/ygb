@@ -27,11 +27,11 @@ Satisfies routing foundation for US-DASH-01 through US-DASH-08. *(PDM public res
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: Admin nav renders all primary sections.
-- [ ] Component test: `DATA_COLLECTOR` cannot access `/admin/dashboard` (redirect or 403).
-- [ ] Route test: `/admin/users` renders existing `ManageUsers`.
-- [ ] `/admin/dashboard` renders home shell with chart placeholder regions.
-- [ ] Implement layout, routes, navigation.
+- [x] Component test: Admin nav renders all primary sections.
+- [x] Component test: `DATA_COLLECTOR` cannot access `/admin/dashboard` (redirect or 403).
+- [x] Route test: `/admin/users` renders existing `ManageUsers`.
+- [x] `/admin/dashboard` renders home shell with chart placeholder regions.
+- [x] Implement layout, routes, navigation.
 
 ## Blocked by
 

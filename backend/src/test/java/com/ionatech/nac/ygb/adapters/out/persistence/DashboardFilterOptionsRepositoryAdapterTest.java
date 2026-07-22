@@ -47,10 +47,10 @@ class DashboardFilterOptionsRepositoryAdapterTest {
     private SubmissionRepositoryPort submissionRepository;
 
     private final UUID collectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
-    private final UUID aruaDistrictId = UUID.fromString("d1111111-1111-1111-1111-111111111111");
-    private final UUID aruaSubcountyId = UUID.fromString("e2222222-2222-2222-2222-222222222222");
-    private final UUID aruaParishId = UUID.fromString("b3333333-3333-3333-3333-333333333333");
-    private final UUID aruaVillageId = UUID.fromString("f4444444-4444-4444-4444-444444444444");
+    private final UUID kampalaDistrictId = UUID.fromString("6a4ec61c-d428-4a51-8af0-721f7d03d492");
+    private final UUID kampalaSubcountyId = UUID.fromString("168009f9-1188-49fb-88e8-70c93e1b7be0");
+    private final UUID kampalaParishId = UUID.fromString("9ffcadf2-8a59-46d6-8f3d-01ee344828d6");
+    private final UUID kampalaVillageId = UUID.fromString("841802f1-87ab-4efd-83f2-c9156ed33459");
 
     @BeforeEach
     void setUp() {
@@ -63,26 +63,40 @@ class DashboardFilterOptionsRepositoryAdapterTest {
     void shouldReturnDistrictsAndDistinctSubmissionValues() {
         assertThat(optionsRepository.findDistricts())
                 .extracting(FilterLocationOption::name)
-                .contains("Arua");
+                .contains("Kampala", "Ntungamo");
 
-        assertThat(optionsRepository.findSubcountiesByDistrict(aruaDistrictId))
+        assertThat(optionsRepository.findSubcountiesByDistrict(kampalaDistrictId))
                 .extracting(FilterLocationOption::name)
-                .contains("Arua Hill");
+                .contains("Kampala Central Division");
 
-        assertThat(optionsRepository.findParishesBySubcounty(aruaSubcountyId))
+        assertThat(optionsRepository.findParishesBySubcounty(kampalaSubcountyId))
                 .extracting(FilterLocationOption::name)
-                .contains("Mvara");
+                .contains("Kampala Central");
 
         assertThat(optionsRepository.findDistinctGenders()).contains("FEMALE");
         assertThat(optionsRepository.findDistinctAgeGroups()).contains("AGE_20_24");
         assertThat(optionsRepository.findDistinctFinancialYearPeriods()).contains("JAN_JUN_2026");
     }
 
+    @Test
+    void shouldReturnParishesForKampalaDivisionsPreviouslyNestedUnderSubdivisions() {
+        UUID kawempeDivisionId = UUID.fromString("035d3d78-0ce5-4c50-829a-857edc00e50d");
+        UUID rubagaDivisionId = UUID.fromString("cc1786a1-86c6-4380-81d1-c248bbd9f8d8");
+
+        assertThat(optionsRepository.findParishesBySubcounty(kawempeDivisionId))
+                .extracting(FilterLocationOption::name)
+                .contains("Bwaise I", "Komamboga");
+
+        assertThat(optionsRepository.findParishesBySubcounty(rubagaDivisionId))
+                .extracting(FilterLocationOption::name)
+                .contains("Kasubi", "Busega");
+    }
+
     private BypSubmission sampleByp(UUID deviceSubmissionId) {
         return new BypSubmission(
                 UUID.randomUUID(),
                 new SubmissionMetadata(collectorId, deviceSubmissionId, LocalDateTime.of(2026, 3, 15, 10, 0)),
-                new Location(aruaDistrictId, aruaSubcountyId, aruaParishId, aruaVillageId),
+                new Location(kampalaDistrictId, kampalaSubcountyId, kampalaParishId, kampalaVillageId),
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",

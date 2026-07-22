@@ -6,6 +6,7 @@ import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.BypSubmission;
 import com.ionatech.nac.ygb.domain.model.IypSubmission;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
+import com.ionatech.nac.ygb.testsupport.TestLocationFixtures;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -47,15 +48,6 @@ class AdminSubmissionQueryRepositoryAdapterTest {
     private SubmissionRepositoryPort submissionRepository;
 
     private final UUID collectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
-    private final UUID aruaDistrictId = UUID.fromString("d1111111-1111-1111-1111-111111111111");
-    private final UUID aruaSubcountyId = UUID.fromString("e2222222-2222-2222-2222-222222222222");
-    private final UUID aruaParishId = UUID.fromString("b3333333-3333-3333-3333-333333333333");
-    private final UUID aruaVillageId = UUID.fromString("f4444444-4444-4444-4444-444444444444");
-
-    private final UUID kampalaDistrictId = UUID.fromString("a1111111-1111-1111-1111-111111111111");
-    private final UUID kampalaSubcountyId = UUID.fromString("a2222222-2222-2222-2222-222222222222");
-    private final UUID kampalaParishId = UUID.fromString("a3333333-3333-3333-3333-333333333333");
-    private final UUID kampalaVillageId = UUID.fromString("a4444444-4444-4444-4444-444444444444");
 
     @BeforeEach
     void setUp() {
@@ -66,23 +58,23 @@ class AdminSubmissionQueryRepositoryAdapterTest {
                 adminSubmissionQueryJpaRepository,
                 null
         );
-        seedKampalaLocations();
+        TestLocationFixtures.clearAllSubmissions(jdbcTemplate);
         saveSampleSubmissions();
     }
 
     @Test
     void shouldListSubmissionsFilteredByDistrict() {
-        DashboardFilter aruaFilter = new DashboardFilter(
-                aruaDistrictId, null, null, null, null, null, null, null, null, null
+        DashboardFilter ntungamoFilter = new DashboardFilter(
+                TestLocationFixtures.NTUNGAMO_DISTRICT_ID, null, null, null, null, null, null, null, null, null
         );
 
-        SubmissionPage aruaPage = submissionRepository.findSummariesByFilter(aruaFilter, PageRequest.of(0, 25));
+        SubmissionPage ntungamoPage = submissionRepository.findSummariesByFilter(ntungamoFilter, PageRequest.of(0, 25));
 
-        assertThat(aruaPage.totalElements()).isEqualTo(3L);
-        assertThat(aruaPage.items()).hasSize(3);
-        assertThat(aruaPage.items()).allMatch(summary -> aruaDistrictId.equals(summary.districtId()));
-        assertThat(aruaPage.items()).allMatch(summary -> "Arua".equals(summary.districtName()));
-        assertThat(aruaPage.items()).allMatch(summary -> "Default Collector".equals(summary.collectorName()));
+        assertThat(ntungamoPage.totalElements()).isEqualTo(3L);
+        assertThat(ntungamoPage.items()).hasSize(3);
+        assertThat(ntungamoPage.items()).allMatch(summary -> TestLocationFixtures.NTUNGAMO_DISTRICT_ID.equals(summary.districtId()));
+        assertThat(ntungamoPage.items()).allMatch(summary -> TestLocationFixtures.NTUNGAMO_DISTRICT_NAME.equals(summary.districtName()));
+        assertThat(ntungamoPage.items()).allMatch(summary -> "Default Collector".equals(summary.collectorName()));
     }
 
     @Test
@@ -107,7 +99,7 @@ class AdminSubmissionQueryRepositoryAdapterTest {
         BypSubmission saved = (BypSubmission) submissionRepository.save(createByp(
                 "Detail Respondent",
                 "FEMALE",
-                aruaLocation(),
+                ntungamoLocation(),
                 UUID.randomUUID()
         ));
 
@@ -118,38 +110,19 @@ class AdminSubmissionQueryRepositoryAdapterTest {
         assertThat(detail.financialYearPeriod()).isNotBlank();
     }
 
-    private void seedKampalaLocations() {
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Kampala', 'DISTRICT', NULL)",
-                kampalaDistrictId
-        );
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Central', 'SUBCOUNTY', ?)",
-                kampalaSubcountyId, kampalaDistrictId
-        );
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Kisenyi I', 'PARISH', ?)",
-                kampalaParishId, kampalaSubcountyId
-        );
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Kakajjo Zone', 'VILLAGE', ?)",
-                kampalaVillageId, kampalaParishId
-        );
-    }
-
     private void saveSampleSubmissions() {
-        submissionRepository.save(createByp("Jane One", "FEMALE", aruaLocation(), UUID.randomUUID()));
-        submissionRepository.save(createByp("Jane Two", "FEMALE", aruaLocation(), UUID.randomUUID()));
-        submissionRepository.save(createByp("John Three", "MALE", aruaLocation(), UUID.randomUUID()));
+        submissionRepository.save(createByp("Jane One", "FEMALE", ntungamoLocation(), UUID.randomUUID()));
+        submissionRepository.save(createByp("Jane Two", "FEMALE", ntungamoLocation(), UUID.randomUUID()));
+        submissionRepository.save(createByp("John Three", "MALE", ntungamoLocation(), UUID.randomUUID()));
         submissionRepository.save(createIyp("John Four", "MALE", kampalaLocation(), UUID.randomUUID()));
     }
 
-    private Location aruaLocation() {
-        return new Location(aruaDistrictId, aruaSubcountyId, aruaParishId, aruaVillageId);
+    private Location ntungamoLocation() {
+        return TestLocationFixtures.ntungamoLocation();
     }
 
     private Location kampalaLocation() {
-        return new Location(kampalaDistrictId, kampalaSubcountyId, kampalaParishId, kampalaVillageId);
+        return TestLocationFixtures.kampalaLocation();
     }
 
     private SubmissionMetadata metadata(UUID deviceSubmissionId) {

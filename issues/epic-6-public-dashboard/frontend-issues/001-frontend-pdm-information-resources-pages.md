@@ -27,7 +27,7 @@ Content is sourced from the single Markdown file [`docs/pdm_public_info.md`](../
 
 - Sanitize rendered Markdown (XSS-safe).
 - Public pages accessible without login (TC-DASH-09-01).
-- Link from public dashboard shell nav (“About PDM” / “Resources”) when Epic 6 dashboard home exists.
+- Link from public dashboard shell nav (“About PDM” / “Resources”) — wired in [002-frontend-public-dashboard-shell-and-navigation.md](002-frontend-public-dashboard-shell-and-navigation.md).
 - Do **not** add `/admin/content` or admin CMS UI (supersedes Epic 5 issue `010`).
 
 ## Acceptance Criteria & TDD Checklist
