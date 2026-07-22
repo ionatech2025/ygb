@@ -111,6 +111,52 @@ const adminTokens = {
   expiresAt: Date.now() + 3_600_000,
 };
 
+describe('AppRouter public resource routes', () => {
+  beforeEach(() => {
+    useAuthStore.setState({
+      user: null,
+      tokens: null,
+      isAuthenticated: false,
+      isInitialized: true,
+      isOnline: true,
+    });
+  });
+
+  it('loads the resources index without authentication', async () => {
+    window.history.pushState({}, '', '/resources');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'PDM Information & Resources' })).toBeInTheDocument();
+    });
+  });
+
+  it('loads programme overview detail without authentication', async () => {
+    window.history.pushState({}, '', '/resources/programme-overview');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Programme Overview' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'About the Parish Development Model (PDM)' })).toBeInTheDocument();
+    });
+  });
+
+  it('loads all configured resource routes', async () => {
+    const routes = ['/resources/budget-allocations', '/resources/priorities'];
+
+    for (const route of routes) {
+      window.history.pushState({}, '', route);
+      const { unmount } = render(<AppRouter />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('link', { name: '← All resources' })).toBeInTheDocument();
+      });
+
+      unmount();
+    }
+  });
+});
+
 describe('AppRouter admin routes', () => {
   beforeEach(() => {
     window.history.pushState({}, '', '/admin/users');

@@ -4,6 +4,8 @@ import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { useSyncStore } from '../../../../core/store/useSyncStore';
 import { useSubmissionCountStore } from '../../../../core/store/useSubmissionCountStore';
 import { locationService } from '../../../../core/LocationService';
+import { PdmResourceDetailPage } from '../public/PdmResourceDetailPage';
+import { PdmResourcesIndexPage } from '../public/PdmResourcesIndexPage';
 import { PortalLogin } from '../forms/PortalLogin';
 import ManageUsers from '../forms/ManageUsers';
 import CollectorProfilePage from '../admin/CollectorProfilePage';
@@ -60,6 +62,9 @@ export function AppRouter() {
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<PortalLogin />} />
         </Route>
+
+        <Route path="/resources" element={<PdmResourcesIndexPage />} />
+        <Route path="/resources/:slug" element={<PdmResourceDetailPage />} />
 
         <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
           <Route element={<AdminLayout />}>
