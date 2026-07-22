@@ -44,4 +44,14 @@ public class DashboardAggregationRepositoryAdapter implements DashboardAggregati
     public List<FinancialYearPeriodCount> countByFinancialYearPeriod(DashboardFilter filter) {
         return jpaRepository.countByFinancialYearPeriod(filter);
     }
+
+    @Override
+    public List<AgeGroupCount> countByAgeGroup(DashboardFilter filter) {
+        return jpaRepository.countByAgeGroup(filter);
+    }
+
+    @Override
+    public List<HeatmapEntry> countHeatmap(DashboardFilter filter) {
+        return jpaRepository.countHeatmap(filter);
+    }
 }

@@ -1,15 +1,19 @@
 package com.ionatech.nac.ygb.adapters.in.rest;
 
-import com.ionatech.nac.ygb.adapters.in.rest.dto.FilterLocationOptionDto;
-import com.ionatech.nac.ygb.adapters.in.rest.dto.PublicDashboardFilterOptionsResponseDto;
+import com.ionatech.nac.ygb.adapters.in.rest.dto.*;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.PublicDashboardFilterOptionsRestMapper;
+import com.ionatech.nac.ygb.adapters.in.rest.mapper.PublicDashboardFilterRequestMapper;
+import com.ionatech.nac.ygb.adapters.in.rest.mapper.PublicDashboardRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.security.JwtAuthenticationFilter;
 import com.ionatech.nac.ygb.adapters.in.rest.security.SecurityConfig;
+import com.ionatech.nac.ygb.application.ports.api.GetPublicDashboardChartQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetPublicDashboardFilterOptionsQuery;
+import com.ionatech.nac.ygb.application.ports.api.GetPublicDashboardHeatmapQuery;
+import com.ionatech.nac.ygb.application.ports.api.GetPublicDashboardSummaryQuery;
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
+import com.ionatech.nac.ygb.domain.model.FormType;
 import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
-import com.ionatech.nac.ygb.domain.valueobjects.FilterLocationOption;
-import com.ionatech.nac.ygb.domain.valueobjects.PublicDashboardFilterOptions;
+import com.ionatech.nac.ygb.domain.valueobjects.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,9 +25,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,7 +39,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PublicDashboardController.class)
 @AutoConfigureMockMvc
-@Import({SecurityConfig.class, JwtAuthenticationFilter.class, AnonymisationProjector.class})
+@Import({
+        SecurityConfig.class,
+        JwtAuthenticationFilter.class,
+        AnonymisationProjector.class,
+        PublicDashboardFilterRequestMapper.class
+})
 class PublicDashboardControllerTest {
 
     @Autowired
@@ -42,7 +54,19 @@ class PublicDashboardControllerTest {
     private GetPublicDashboardFilterOptionsQuery getPublicDashboardFilterOptionsQuery;
 
     @MockBean
+    private GetPublicDashboardSummaryQuery getPublicDashboardSummaryQuery;
+
+    @MockBean
+    private GetPublicDashboardChartQuery getPublicDashboardChartQuery;
+
+    @MockBean
+    private GetPublicDashboardHeatmapQuery getPublicDashboardHeatmapQuery;
+
+    @MockBean
     private PublicDashboardFilterOptionsRestMapper filterOptionsRestMapper;
+
+    @MockBean
+    private PublicDashboardRestMapper restMapper;
 
     @MockBean
     private TokenProviderPort tokenProviderPort;
@@ -78,6 +102,115 @@ class PublicDashboardControllerTest {
                 .andExpect(jsonPath("$.phone").doesNotExist())
                 .andExpect(jsonPath("$.collectorName").doesNotExist())
                 .andExpect(jsonPath("$.respondentName").doesNotExist());
+    }
+
+    @Test
+    void shouldReturnSummaryWithoutAuthentication() throws Exception {
+        UUID districtId = UUID.randomUUID();
+        PublicDashboardSummary summary = new PublicDashboardSummary(
+                4L,
+                List.of(new FormTypeCount(FormType.BYP, 3L)),
+                List.of(new GenderCount("FEMALE", 2L)),
+                List.of(new FinancialYearPeriodCount("JAN_JUN_2026", 4L))
+        );
+        PublicSummaryResponseDto responseDto = new PublicSummaryResponseDto(
+                4L,
+                List.of(new FormTypeCountDto("BYP", 3L)),
+                List.of(new GenderCountDto("FEMALE", 2L)),
+                List.of(new FinancialYearPeriodCountDto("JAN_JUN_2026", 4L))
+        );
+
+        when(getPublicDashboardSummaryQuery.getSummary(any(PublicDashboardFilter.class))).thenReturn(summary);
+        when(restMapper.toSummaryResponse(summary)).thenReturn(responseDto);
+
+        mockMvc.perform(get("/api/v1/public/dashboard/summary")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalSubmissions").value(4))
+                .andExpect(jsonPath("$.byFormType[0].formType").value("BYP"))
+                .andExpect(jsonPath("$.byGender[0].gender").value("FEMALE"))
+                .andExpect(jsonPath("$.byFinancialYearPeriod[0].financialYearPeriod").value("JAN_JUN_2026"))
+                .andExpect(jsonPath("$.collectorName").doesNotExist())
+                .andExpect(jsonPath("$.respondentPhone").doesNotExist());
+    }
+
+    @Test
+    void shouldReturnChartSeriesForAllSupportedTypes() throws Exception {
+        UUID districtId = UUID.randomUUID();
+        stubChart(PublicChartType.BY_DISTRICT, new PublicChartSeries(
+                PublicChartType.BY_DISTRICT,
+                List.of(new PublicChartDataPoint("Kampala", districtId, null, 2L))
+        ), "by-district");
+
+        stubChart(PublicChartType.BY_GENDER, new PublicChartSeries(
+                PublicChartType.BY_GENDER,
+                List.of(new PublicChartDataPoint("FEMALE", null, null, 2L))
+        ), "by-gender");
+
+        stubChart(PublicChartType.BY_AGE_GROUP, new PublicChartSeries(
+                PublicChartType.BY_AGE_GROUP,
+                List.of(new PublicChartDataPoint("AGE_20_24", null, null, 2L))
+        ), "by-age-group");
+
+        stubChart(PublicChartType.TREND, new PublicChartSeries(
+                PublicChartType.TREND,
+                List.of(new PublicChartDataPoint("2026-03-15", null, LocalDate.of(2026, 3, 15), 2L))
+        ), "trend");
+
+        mockMvc.perform(get("/api/v1/public/dashboard/charts/by-district"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.chartType").value("by-district"))
+                .andExpect(jsonPath("$.data[0].count").value(2));
+
+        mockMvc.perform(get("/api/v1/public/dashboard/charts/by-gender"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].label").value("FEMALE"));
+
+        mockMvc.perform(get("/api/v1/public/dashboard/charts/by-age-group"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].label").value("AGE_20_24"));
+
+        mockMvc.perform(get("/api/v1/public/dashboard/charts/trend"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].date").value("2026-03-15"));
+    }
+
+    @Test
+    void shouldReturnHeatmapWithoutRespondentIdentifiers() throws Exception {
+        UUID districtId = UUID.randomUUID();
+        PublicHeatmap heatmap = new PublicHeatmap(List.of(new HeatmapEntry(districtId, null, "Kampala", 3L)));
+        PublicHeatmapResponseDto responseDto = new PublicHeatmapResponseDto(
+                List.of(new PublicHeatmapEntryDto(districtId, null, "Kampala", 3L))
+        );
+
+        when(getPublicDashboardHeatmapQuery.getHeatmap(any(PublicDashboardFilter.class))).thenReturn(heatmap);
+        when(restMapper.toHeatmapResponse(heatmap)).thenReturn(responseDto);
+
+        mockMvc.perform(get("/api/v1/public/dashboard/heatmap"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.entries[0].districtId").value(districtId.toString()))
+                .andExpect(jsonPath("$.entries[0].label").value("Kampala"))
+                .andExpect(jsonPath("$.entries[0].count").value(3))
+                .andExpect(jsonPath("$.entries[0].respondentName").doesNotExist())
+                .andExpect(jsonPath("$.entries[0].phone").doesNotExist());
+    }
+
+    private void stubChart(PublicChartType chartType, PublicChartSeries series, String pathSegment) {
+        PublicChartSeriesResponseDto responseDto = new PublicChartSeriesResponseDto(
+                pathSegment,
+                List.of(new PublicChartDataPointDto(
+                        series.data().getFirst().label(),
+                        series.data().getFirst().locationId(),
+                        series.data().getFirst().date(),
+                        series.data().getFirst().count()
+                ))
+        );
+        when(getPublicDashboardChartQuery.getChart(
+                any(PublicDashboardFilter.class),
+                eq(chartType),
+                any(TimeSeriesGranularity.class)
+        )).thenReturn(series);
+        when(restMapper.toChartResponse(series)).thenReturn(responseDto);
     }
 
     private ResultActions performFilterOptionsRequest() throws Exception {

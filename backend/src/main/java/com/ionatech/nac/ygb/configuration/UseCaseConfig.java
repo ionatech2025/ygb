@@ -190,4 +190,38 @@ public class UseCaseConfig {
     ) {
         return new GetPublicDashboardFilterOptionsService(dashboardFilterOptionsRepositoryPort);
     }
+
+    @Bean
+    public PublicDashboardService publicDashboardService(
+            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new PublicDashboardService(
+                dashboardAggregationRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                anonymisationProjector
+        );
+    }
+
+    @Bean
+    public GetPublicDashboardSummaryQuery getPublicDashboardSummaryQuery(
+            PublicDashboardService publicDashboardService
+    ) {
+        return publicDashboardService;
+    }
+
+    @Bean
+    public GetPublicDashboardChartQuery getPublicDashboardChartQuery(
+            PublicDashboardService publicDashboardService
+    ) {
+        return publicDashboardService;
+    }
+
+    @Bean
+    public GetPublicDashboardHeatmapQuery getPublicDashboardHeatmapQuery(
+            PublicDashboardService publicDashboardService
+    ) {
+        return publicDashboardService;
+    }
 }

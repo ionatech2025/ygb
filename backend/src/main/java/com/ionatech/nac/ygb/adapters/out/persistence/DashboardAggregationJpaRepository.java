@@ -106,6 +106,68 @@ class DashboardAggregationJpaRepository {
                 .toList();
     }
 
+    List<AgeGroupCount> countByAgeGroup(DashboardFilter filter) {
+        Map<String, Object> params = new java.util.HashMap<>();
+        String sql = """
+                SELECT s.respondent_age_group, COUNT(*)
+                FROM submissions s
+                """ + DashboardFilterSqlSupport.whereClause(filter, params) + """
+                 GROUP BY s.respondent_age_group
+                 ORDER BY COUNT(*) DESC
+                """;
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = runQuery(sql, params);
+        return rows.stream()
+                .map(row -> new AgeGroupCount((String) row[0], ((Number) row[1]).longValue()))
+                .toList();
+    }
+
+    List<HeatmapEntry> countHeatmap(DashboardFilter filter) {
+        if (filter.districtId() != null) {
+            return countHeatmapByParish(filter);
+        }
+        return countHeatmapByDistrict(filter);
+    }
+
+    private List<HeatmapEntry> countHeatmapByDistrict(DashboardFilter filter) {
+        Map<String, Object> params = new java.util.HashMap<>();
+        String sql = """
+                SELECT l.name, s.district_id, COUNT(*)
+                FROM submissions s
+                JOIN locations l ON l.id = s.district_id
+                """ + DashboardFilterSqlSupport.whereClause(filter, params) + """
+                 GROUP BY l.name, s.district_id
+                 ORDER BY COUNT(*) DESC, l.name ASC
+                """;
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = runQuery(sql, params);
+        return rows.stream()
+                .map(row -> new HeatmapEntry(toUuid(row[1]), null, (String) row[0], ((Number) row[2]).longValue()))
+                .toList();
+    }
+
+    private List<HeatmapEntry> countHeatmapByParish(DashboardFilter filter) {
+        Map<String, Object> params = new java.util.HashMap<>();
+        String sql = """
+                SELECT l.name, s.district_id, s.parish_id, COUNT(*)
+                FROM submissions s
+                JOIN locations l ON l.id = s.parish_id
+                """ + DashboardFilterSqlSupport.whereClause(filter, params) + """
+                 GROUP BY l.name, s.district_id, s.parish_id
+                 ORDER BY COUNT(*) DESC, l.name ASC
+                """;
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = runQuery(sql, params);
+        return rows.stream()
+                .map(row -> new HeatmapEntry(
+                        toUuid(row[1]),
+                        toUuid(row[2]),
+                        (String) row[0],
+                        ((Number) row[3]).longValue()
+                ))
+                .toList();
+    }
+
     private List<DistrictCount> mapDistrictRows(List<Object[]> rows) {
         return rows.stream()
                 .map(row -> new DistrictCount(
