@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { httpSubmissionApi } from '../../adapters/secondary/api/http-submission-api.adapter';
 import { submissionQueue } from '../../adapters/secondary/submission/submission-queue.adapter';
 import { SyncEngine } from '../SyncEngine';
+import { SyncRetryScheduler } from '../sync-retry-scheduler';
 import { useAuthStore } from './useAuthStore';
 import { useSubmissionCountStore } from './useSubmissionCountStore';
 
@@ -11,20 +12,36 @@ interface SyncStoreState {
   lastSyncError: string | null;
   syncing: boolean;
   initialize: () => Promise<void>;
+  incrementPendingCount: () => void;
   refreshPendingCount: () => Promise<void>;
+  clearSyncError: () => void;
   triggerSync: () => Promise<void>;
 }
+
+const syncRetryScheduler = new SyncRetryScheduler(() => {
+  void useSyncStore.getState().triggerSync();
+});
 
 const syncEngine = new SyncEngine(submissionQueue, httpSubmissionApi, {
   onSynced: () => {
     void useSyncStore.getState().refreshPendingCount();
   },
-  onFailed: (_localId, error) => {
+  onFailed: (_localId, error, retryCount) => {
     useSyncStore.setState({ lastSyncError: error });
+    syncRetryScheduler.schedule(retryCount);
   },
-  onComplete: async () => {
+  onComplete: async ({ failedCount }) => {
     const lastSyncedAt = await submissionQueue.getLastSyncedAt();
-    useSyncStore.setState({ lastSyncedAt, lastSyncError: null });
+    const pendingCount = await submissionQueue.countPending();
+
+    if (pendingCount === 0) {
+      syncRetryScheduler.cancel();
+    }
+
+    useSyncStore.setState((state) => ({
+      lastSyncedAt,
+      lastSyncError: failedCount > 0 ? state.lastSyncError : null,
+    }));
     void refreshSubmissionCounts();
   },
 });
@@ -49,9 +66,17 @@ export const useSyncStore = create<SyncStoreState>((set, get) => ({
     set({ lastSyncedAt, pendingCount });
   },
 
+  incrementPendingCount: () => {
+    set((state) => ({ pendingCount: state.pendingCount + 1 }));
+  },
+
   refreshPendingCount: async () => {
     const pendingCount = await submissionQueue.countPending();
     set({ pendingCount });
+  },
+
+  clearSyncError: () => {
+    set({ lastSyncError: null });
   },
 
   triggerSync: async () => {

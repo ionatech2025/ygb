@@ -15,6 +15,8 @@ class YGBLocationDatabase extends Dexie {
 
 const db = new YGBLocationDatabase();
 
+export { db as locationDb };
+
 export class LocationRepositoryAdapter implements ILocationRepositoryPort {
   async save(locations: AdminLocation[]): Promise<void> {
     await db.adminLocations.clear();

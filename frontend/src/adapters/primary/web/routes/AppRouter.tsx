@@ -23,9 +23,10 @@ export function AppRouter() {
     void useSubmissionCountStore.getState().initialize();
   }, [initialize]);
 
-  useEffect(() => {
+    useEffect(() => {
     const handleOnline = () => {
       setOnlineStatus(true);
+      void locationService.ensureLoaded();
       void useSyncStore.getState().triggerSync();
       const token = useAuthStore.getState().getAccessToken();
       if (token) {

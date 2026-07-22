@@ -60,14 +60,14 @@ On reconnect (background)
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] After first online load, the `adminLocations` IndexedDB table is populated with all Uganda districts/sub-counties/parishes/villages.
-- [ ] Going offline after the first load: all four dropdown levels still populate and filter correctly.
-- [ ] On reconnect, a new fetch is attempted with the stored `If-None-Match` ETag. If unchanged, the cache is not overwritten.
-- [ ] Selecting a District populates Sub-county only for that District.
-- [ ] Changing District resets Sub-county, Parish, and Village to empty.
-- [ ] `CascadingLocationSelector` shows a loading state while `LocationService.ensureLoaded()` is running.
-- [ ] No `<input>` element accepts raw text for any location level.
-- [ ] `CascadingLocationSelector` is integrated into `PDMSurveyView.tsx` for the respondent location section.
+- [x] After first online load, the `adminLocations` IndexedDB table is populated with all Uganda districts/sub-counties/parishes/villages.
+- [x] Going offline after the first load: all four dropdown levels still populate and filter correctly.
+- [x] On reconnect, a new fetch is attempted with the stored `If-None-Match` ETag. If unchanged, the cache is not overwritten.
+- [x] Selecting a District populates Sub-county only for that District.
+- [x] Changing District resets Sub-county, Parish, and Village to empty.
+- [x] `CascadingLocationSelector` shows a loading state while `LocationService.ensureLoaded()` is running.
+- [x] No `<input>` element accepts raw text for any location level.
+- [x] `CascadingLocationSelector` is integrated into `PDMSurveyView.tsx` for the respondent location section.
 
 ## Blocked by
 

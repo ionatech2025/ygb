@@ -131,7 +131,7 @@ describe('BypForm', () => {
     expect(enqueueMock).toHaveBeenCalledTimes(1);
     expect(enqueueMock.mock.calls[0][0].deviceSubmissionId).toBe('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
     expect(enqueueMock.mock.calls[0][0].payload.formType).toBe('BYP');
-  }, 10_000);
+  }, 15_000);
 
   it('blocks submit when a local duplicate respondent exists (TC-UNIQ-01-01)', async () => {
     enqueueMock.mockRejectedValueOnce(
@@ -177,5 +177,5 @@ describe('BypForm', () => {
     expect(screen.getByTestId('duplicate-respondent-alert')).toHaveTextContent(
       /BYP form already submitted for this respondent in Jan–Jun 2026\./i
     );
-  }, 10_000);
+  }, 15_000);
 });

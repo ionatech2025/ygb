@@ -51,12 +51,10 @@ class AdminLocationRepositoryAdapterTest {
                 .filter(loc -> loc.level() == AdminLocationLevel.DISTRICT)
                 .count();
 
-        // We seeded exactly 3 districts (Kampala, Wakiso, Gulu)
-        assertThat(districtCount).isEqualTo(3);
+        assertThat(districtCount).isEqualTo(2);
 
-        // Check presence of specific districts
         assertThat(dataset).anyMatch(loc -> "Kampala".equals(loc.name()) && loc.level() == AdminLocationLevel.DISTRICT);
-        assertThat(dataset).anyMatch(loc -> "Wakiso".equals(loc.name()) && loc.level() == AdminLocationLevel.DISTRICT);
-        assertThat(dataset).anyMatch(loc -> "Gulu".equals(loc.name()) && loc.level() == AdminLocationLevel.DISTRICT);
+        assertThat(dataset).anyMatch(loc -> "Ntungamo".equals(loc.name()) && loc.level() == AdminLocationLevel.DISTRICT);
+        assertThat(dataset.size()).isGreaterThan(1000);
     }
 }

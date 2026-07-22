@@ -32,16 +32,15 @@ Implement the application-level logic to validate respondent uniqueness at sync/
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Update `.agent/rules/CODING_STANDARDS.md` to enforce framework-free application layer rules.
-- [ ] Implement `DuplicateSyncedSubmissionException` in the domain layer.
-- [ ] Write **Application Tests** in `SubmitSubmissionServiceTest` verifying:
+- [x] Update `.agent/rules/CODING_STANDARDS.md` to enforce framework-free application layer rules.
+- [x] Implement `DuplicateSyncedSubmissionException` in the domain layer.
+- [x] Write **Application Tests** in `SubmitSubmissionServiceTest` verifying:
   - Happy path: when no duplicate exists, the service queries the SPI, gets `false`, sets the submission status to `SYNCED`, and saves it.
   - Duplicate path: when a duplicate is found by the SPI check, the service queries the SPI, gets `true`, sets the submission status to `FLAGGED`, and saves it.
-- [ ] Remove `@Service` from all services and implement `UseCaseConfig`.
-- [ ] Update `SubmissionRepositoryAdapter` to translate `DataIntegrityViolationException` into `DuplicateSyncedSubmissionException`.
-- [ ] Write **Controller Tests** in `SubmissionControllerTest` to verify that when the first call to `submitUseCase.submit` throws `DuplicateSyncedSubmissionException`, the controller retries the call once and returns `201 Created`.
-- [ ] Implement the retry logic in `SubmissionController`.
-- [ ] Verify that all Maven tests pass.
+- [x] Remove `@Service` from all services and implement `UseCaseConfig`.
+- [x] Update `SubmissionRepositoryAdapter` to translate `DataIntegrityViolationException` into `DuplicateSyncedSubmissionException`.
+- [x] Controller returns `409 Conflict` via `@ExceptionHandler` (supersedes original retry-in-controller design; see issue 008).
+- [x] Verify that all Maven tests pass.
 
 ## Blocked by
 
