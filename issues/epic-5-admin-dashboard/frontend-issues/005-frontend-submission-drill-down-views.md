@@ -23,11 +23,11 @@ Implement **drill-down navigation** from charts and summary stats to individual 
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: chart drill-down navigates to list with district filter applied (TC-DASH-04-01).
-- [ ] Component test: row click opens detail view.
-- [ ] Component test: back navigation preserves prior dashboard filters.
-- [ ] Adapter test: list/detail API calls include auth header.
-- [ ] Implement pages, adapter, routes.
+- [x] Component test: chart drill-down navigates to list with district filter applied (TC-DASH-04-01).
+- [x] Component test: row click opens detail view.
+- [x] Component test: back navigation preserves prior dashboard filters.
+- [x] Adapter test: list/detail API calls include auth header.
+- [x] Implement pages, adapter, routes.
 
 ## Blocked by
 

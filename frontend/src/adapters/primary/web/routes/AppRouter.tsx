@@ -10,6 +10,8 @@ import { CollectorDashboard } from '../forms/CollectorDashboard';
 import { AdminDashboardHome } from '../admin/AdminDashboardHome';
 import { AdminCollectorTrackerPage } from '../admin/AdminCollectorTrackerPage';
 import { AdminSyncStatusPage } from '../admin/AdminSyncStatusPage';
+import { SubmissionDetailPage } from '../admin/SubmissionDetailPage';
+import { SubmissionListPage } from '../admin/SubmissionListPage';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { CollectorLayout } from '../layouts/CollectorLayout';
 import { GuestRoute, ProtectedRoute, RootRedirect } from './ProtectedRoute';
@@ -61,6 +63,8 @@ export function AppRouter() {
         <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboardHome />} />
+            <Route path="/admin/submissions" element={<SubmissionListPage />} />
+            <Route path="/admin/submissions/:id" element={<SubmissionDetailPage />} />
             <Route path="/admin/users" element={<ManageUsers />} />
             <Route path="/admin/collectors" element={<AdminCollectorTrackerPage />} />
             <Route path="/admin/sync-status" element={<AdminSyncStatusPage />} />

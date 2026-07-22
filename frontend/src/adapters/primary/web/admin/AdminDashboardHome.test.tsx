@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AdminDashboardHome } from './AdminDashboardHome';
 import type { DashboardAggregates } from '../../../../core/domain/dashboard-aggregates.model';
@@ -58,7 +59,11 @@ describe('AdminDashboardHome', () => {
   });
 
   it('renders filter panel, summary cards, and dashboard charts', async () => {
-    render(<AdminDashboardHome />);
+    render(
+      <MemoryRouter>
+        <AdminDashboardHome />
+      </MemoryRouter>
+    );
 
     expect(screen.getByTestId('admin-dashboard-home')).toBeInTheDocument();
     expect(screen.getByTestId('dashboard-filter-panel')).toBeInTheDocument();

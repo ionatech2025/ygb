@@ -27,6 +27,53 @@ vi.mock('../../../../core/store/useSubmissionCountStore', () => ({
   }),
 }));
 
+vi.mock('echarts', () => ({
+  init: vi.fn(() => ({
+    setOption: vi.fn(),
+    resize: vi.fn(),
+    dispose: vi.fn(),
+    on: vi.fn(),
+    off: vi.fn(),
+  })),
+}));
+
+vi.mock('../../../secondary/api/dashboard-api.adapter', () => ({
+  HttpDashboardAdapter: vi.fn().mockImplementation(() => ({
+    fetchFilterOptions: vi.fn().mockResolvedValue({
+      districts: [],
+      subcounties: [],
+      parishes: [],
+      formTypes: [],
+      genders: [],
+      ageGroups: [],
+      collectors: [],
+      financialYearPeriods: [],
+    }),
+    buildFilterQueryString: vi.fn(),
+    fetchAggregates: vi.fn().mockResolvedValue({
+      totalSubmissions: 0,
+      byDistrict: [],
+      byGender: [],
+      overTime: [],
+      byFormType: [],
+      byFinancialYearPeriod: [],
+    }),
+  })),
+}));
+
+vi.mock('../../../secondary/api/submission-admin-api.adapter', () => ({
+  HttpSubmissionAdminAdapter: vi.fn().mockImplementation(() => ({
+    listSubmissions: vi.fn().mockResolvedValue({
+      items: [],
+      totalElements: 0,
+      page: 0,
+      size: 25,
+      totalPages: 0,
+    }),
+    getSubmissionDetail: vi.fn(),
+  })),
+}));
+
 vi.mock('../../../secondary/api/http-user.adapter', () => ({
   HttpUserAdapter: vi.fn().mockImplementation(() => ({
     fetchActiveCollectors: vi.fn().mockResolvedValue([]),
