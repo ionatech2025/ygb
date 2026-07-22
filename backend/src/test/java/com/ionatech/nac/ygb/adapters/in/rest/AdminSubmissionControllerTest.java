@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import org.springframework.http.HttpHeaders;
 
@@ -39,9 +40,11 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AdminSubmissionController.class)
@@ -166,7 +169,11 @@ class AdminSubmissionControllerTest {
     void shouldReturnCsvExportWithCorrectHeaders() throws Exception {
         stubExport(ExportFormat.CSV, "ID,Form Type\n");
 
-        mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "csv"))
+        MvcResult asyncResult = mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "csv"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(asyncResult))
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("text/csv")))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString("attachment")))
@@ -178,7 +185,11 @@ class AdminSubmissionControllerTest {
     void shouldReturnExcelExportWithCorrectHeaders() throws Exception {
         stubExport(ExportFormat.XLSX, new byte[]{1, 2, 3});
 
-        mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "xlsx"))
+        MvcResult asyncResult = mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "xlsx"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(asyncResult))
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("spreadsheetml.sheet")))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".xlsx")));
@@ -189,7 +200,11 @@ class AdminSubmissionControllerTest {
     void shouldReturnPdfExportWithCorrectHeaders() throws Exception {
         stubExport(ExportFormat.PDF, "%PDF-1.4");
 
-        mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "pdf"))
+        MvcResult asyncResult = mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "pdf"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(asyncResult))
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("application/pdf")))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".pdf")));
