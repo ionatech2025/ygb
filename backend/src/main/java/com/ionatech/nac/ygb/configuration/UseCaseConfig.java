@@ -63,4 +63,11 @@ public class UseCaseConfig {
     ) {
         return new GetCollectorSyncStatusService(submissionRepositoryPort);
     }
+
+    @Bean
+    public GetDashboardAggregatesQuery getDashboardAggregatesQuery(
+            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort
+    ) {
+        return new GetDashboardAggregatesService(dashboardAggregationRepositoryPort);
+    }
 }

@@ -41,13 +41,13 @@ Minimum aggregations:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Domain Tests** for `DashboardFilter` validation (invalid date range, empty AND semantics).
-- [ ] Write **Application Tests** with mocked `DashboardAggregationRepositoryPort` verifying `GetDashboardAggregatesService` assembles all datasets.
-- [ ] Write **Persistence Integration Tests** (Testcontainers) with seeded submissions verifying correct counts per district/gender/form type.
-- [ ] Write **Controller Tests** (`@WebMvcTest`) verifying:
+- [x] Write **Domain Tests** for `DashboardFilter` validation (invalid date range, empty AND semantics).
+- [x] Write **Application Tests** with mocked `DashboardAggregationRepositoryPort` verifying `GetDashboardAggregatesService` assembles all datasets.
+- [x] Write **Persistence Integration Tests** (Testcontainers) with seeded submissions verifying correct counts per district/gender/form type.
+- [x] Write **Controller Tests** (`@WebMvcTest`) verifying:
   - `ADMIN` → `200 OK` with expected JSON shape.
   - `DATA_COLLECTOR` / unauthenticated → `403 Forbidden`.
-- [ ] Implement repository queries, service, controller, and DTOs.
+- [x] Implement repository queries, service, controller, and DTOs.
 
 ## Blocked by
 
