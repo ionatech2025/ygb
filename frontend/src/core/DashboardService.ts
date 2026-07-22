@@ -1,4 +1,5 @@
 import type { DashboardAggregates } from './domain/dashboard-aggregates.model';
+import type { DashboardChartsViewModel } from './domain/dashboard-charts.model';
 import type { DashboardFilter } from './domain/dashboard-filter.model';
 import type { StatCardViewModel } from './domain/dashboard-summary.model';
 import { FORM_TYPE_OPTIONS } from './domain/form-type.model';
@@ -78,11 +79,42 @@ export function mapAggregatesToSummaryCards(aggregates: DashboardAggregates): St
   ];
 }
 
+function formatChartDate(isoDate: string): string {
+  const parsed = new Date(`${isoDate}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) {
+    return isoDate;
+  }
+  return parsed.toLocaleDateString('en-UG', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+export function mapAggregatesToCharts(aggregates: DashboardAggregates): DashboardChartsViewModel {
+  return {
+    byDistrict: [...aggregates.byDistrict].sort((a, b) => b.count - a.count),
+    byGender: aggregates.byGender.map((entry) => ({
+      gender: entry.gender,
+      label: GENDER_LABELS[entry.gender] ?? entry.gender,
+      count: entry.count,
+    })),
+    overTime: [...aggregates.overTime]
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .map((entry) => ({
+        date: entry.date,
+        label: formatChartDate(entry.date),
+        count: entry.count,
+      })),
+  };
+}
+
 export class DashboardService {
   constructor(private readonly api: IDashboardApiPort) {}
 
   async loadSummaryCards(filter: DashboardFilter): Promise<StatCardViewModel[]> {
     const aggregates = await this.api.fetchAggregates(filter);
     return mapAggregatesToSummaryCards(aggregates);
+  }
+
+  async loadCharts(filter: DashboardFilter): Promise<DashboardChartsViewModel> {
+    const aggregates = await this.api.fetchAggregates(filter);
+    return mapAggregatesToCharts(aggregates);
   }
 }

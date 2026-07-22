@@ -14,6 +14,16 @@ const emptyAggregates: DashboardAggregates = {
   byFinancialYearPeriod: [],
 };
 
+vi.mock('echarts', () => ({
+  init: vi.fn(() => ({
+    setOption: vi.fn(),
+    resize: vi.fn(),
+    dispose: vi.fn(),
+    on: vi.fn(),
+    off: vi.fn(),
+  })),
+}));
+
 vi.mock('../../../secondary/api/dashboard-api.adapter', () => ({
   HttpDashboardAdapter: vi.fn().mockImplementation(() => ({
     fetchFilterOptions: vi.fn().mockResolvedValue({
@@ -47,7 +57,7 @@ describe('AdminDashboardHome', () => {
     useDashboardFilterStore.setState({ filter: EMPTY_DASHBOARD_FILTER, locationFilterError: null });
   });
 
-  it('renders filter panel, summary cards, and chart placeholders', async () => {
+  it('renders filter panel, summary cards, and dashboard charts', async () => {
     render(<AdminDashboardHome />);
 
     expect(screen.getByTestId('admin-dashboard-home')).toBeInTheDocument();
@@ -57,8 +67,8 @@ describe('AdminDashboardHome', () => {
       expect(screen.getByTestId('dashboard-summary-cards')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('admin-chart-placeholders')).toBeInTheDocument();
-    expect(screen.getByText('Submissions over time')).toBeInTheDocument();
-    expect(screen.getByText('Breakdown by district / form type')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('dashboard-charts')).toBeInTheDocument();
+    });
   });
 });

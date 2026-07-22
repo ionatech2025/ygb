@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { DashboardService, mapAggregatesToSummaryCards } from './DashboardService';
+import { DashboardService, mapAggregatesToCharts, mapAggregatesToSummaryCards } from './DashboardService';
 import type { DashboardAggregates } from './domain/dashboard-aggregates.model';
 import { EMPTY_DASHBOARD_FILTER } from './domain/dashboard-filter.model';
 import type { IDashboardApiPort } from '../ports/dashboard-api.port';
@@ -42,6 +42,21 @@ describe('mapAggregatesToSummaryCards', () => {
   });
 });
 
+describe('mapAggregatesToCharts', () => {
+  it('maps API response to chart view models', () => {
+    const charts = mapAggregatesToCharts(sampleAggregates);
+
+    expect(charts.byDistrict.map((entry) => entry.districtName)).toEqual(['Arua', 'Kampala', 'Gulu']);
+    expect(charts.byGender).toEqual([
+      { gender: 'FEMALE', label: 'Female', count: 25 },
+      { gender: 'MALE', label: 'Male', count: 17 },
+    ]);
+    expect(charts.overTime).toEqual([
+      { date: '2026-03-15', label: '15 Mar 2026', count: 42 },
+    ]);
+  });
+});
+
 describe('DashboardService', () => {
   it('loads summary cards via the dashboard API port', async () => {
     const fetchAggregates = vi.fn().mockResolvedValue(sampleAggregates);
@@ -56,5 +71,20 @@ describe('DashboardService', () => {
 
     expect(fetchAggregates).toHaveBeenCalledWith(EMPTY_DASHBOARD_FILTER);
     expect(cards[0]?.primaryValue).toBe('42');
+  });
+
+  it('loads charts via the dashboard API port', async () => {
+    const fetchAggregates = vi.fn().mockResolvedValue(sampleAggregates);
+    const api: IDashboardApiPort = {
+      fetchFilterOptions: vi.fn(),
+      buildFilterQueryString: vi.fn(),
+      fetchAggregates,
+    };
+
+    const service = new DashboardService(api);
+    const charts = await service.loadCharts(EMPTY_DASHBOARD_FILTER);
+
+    expect(fetchAggregates).toHaveBeenCalledWith(EMPTY_DASHBOARD_FILTER);
+    expect(charts.byDistrict[0]?.districtName).toBe('Arua');
   });
 });
