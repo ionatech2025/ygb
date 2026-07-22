@@ -37,6 +37,12 @@ vi.mock('echarts', () => ({
   })),
 }));
 
+vi.mock('../../../secondary/api/submission-export-api.adapter', () => ({
+  HttpSubmissionExportAdapter: vi.fn().mockImplementation(() => ({
+    downloadExport: vi.fn().mockResolvedValue(undefined),
+  })),
+}));
+
 vi.mock('../../../secondary/api/dashboard-api.adapter', () => ({
   HttpDashboardAdapter: vi.fn().mockImplementation(() => ({
     fetchFilterOptions: vi.fn().mockResolvedValue({

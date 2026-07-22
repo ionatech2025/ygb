@@ -7,6 +7,7 @@ import { applyChartDrillDown, buildSubmissionListSearch } from '../../../../core
 import type { DashboardChartDrillDownEvent } from '../../../../core/domain/dashboard-charts.model';
 import { useDashboardFilterStore } from '../../../../core/store/useDashboardFilterStore';
 import { DashboardCharts } from './DashboardCharts';
+import { DashboardExportToolbar } from './DashboardExportToolbar';
 import { DashboardFilterPanel } from './DashboardFilterPanel';
 import { DashboardSummaryCards } from './DashboardSummaryCards';
 
@@ -26,6 +27,7 @@ export function AdminDashboardHome() {
   return (
     <div className="mx-auto max-w-6xl space-y-6" data-testid="admin-dashboard-home">
       <DashboardFilterPanel dashboardApi={dashboardApi} />
+      <DashboardExportToolbar />
       <DashboardSummaryCards dashboardApi={dashboardApi} />
 
       <div>

@@ -13,6 +13,7 @@ import type { SubmissionSummary } from '../../../../core/domain/submission-admin
 import { useDashboardFilterStore } from '../../../../core/store/useDashboardFilterStore';
 import { HttpSubmissionAdminAdapter } from '../../../secondary/api/submission-admin-api.adapter';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
+import { DashboardExportToolbar } from './DashboardExportToolbar';
 
 export function SubmissionListPage() {
   const getAccessToken = useAuthStore((state) => state.getAccessToken);
@@ -103,6 +104,8 @@ export function SubmissionListPage() {
           </p>
         </div>
       </div>
+
+      <DashboardExportToolbar />
 
       {error && (
         <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
