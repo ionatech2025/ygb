@@ -65,9 +65,28 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public GetDashboardAggregatesQuery getDashboardAggregatesQuery(
-            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort
+    public DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator(
+            LocationHierarchyPort locationHierarchyPort
     ) {
-        return new GetDashboardAggregatesService(dashboardAggregationRepositoryPort);
+        return new DashboardFilterHierarchyValidator(locationHierarchyPort);
+    }
+
+    @Bean
+    public GetDashboardAggregatesQuery getDashboardAggregatesQuery(
+            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator
+    ) {
+        return new GetDashboardAggregatesService(
+                dashboardAggregationRepositoryPort,
+                dashboardFilterHierarchyValidator
+        );
+    }
+
+    @Bean
+    public GetDashboardFilterOptionsQuery getDashboardFilterOptionsQuery(
+            DashboardFilterOptionsRepositoryPort dashboardFilterOptionsRepositoryPort,
+            UserRepositoryPort userRepositoryPort
+    ) {
+        return new GetDashboardFilterOptionsService(dashboardFilterOptionsRepositoryPort, userRepositoryPort);
     }
 }

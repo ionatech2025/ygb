@@ -18,12 +18,14 @@ import static org.mockito.Mockito.when;
 class GetDashboardAggregatesServiceTest {
 
     private DashboardAggregationRepositoryPort repositoryPort;
+    private DashboardFilterHierarchyValidator filterValidator;
     private GetDashboardAggregatesService service;
 
     @BeforeEach
     void setUp() {
         repositoryPort = mock(DashboardAggregationRepositoryPort.class);
-        service = new GetDashboardAggregatesService(repositoryPort);
+        filterValidator = mock(DashboardFilterHierarchyValidator.class);
+        service = new GetDashboardAggregatesService(repositoryPort, filterValidator);
     }
 
     @Test
@@ -45,6 +47,7 @@ class GetDashboardAggregatesServiceTest {
         DashboardAggregates aggregates = service.getAggregates(filter, TimeSeriesGranularity.DAY);
 
         assertThat(aggregates.totalSubmissions()).isEqualTo(3L);
+        verify(filterValidator).validate(filter);
         assertThat(aggregates.byDistrict()).hasSize(1);
         assertThat(aggregates.byGender()).containsExactly(new GenderCount("FEMALE", 3L));
         assertThat(aggregates.overTime()).hasSize(1);

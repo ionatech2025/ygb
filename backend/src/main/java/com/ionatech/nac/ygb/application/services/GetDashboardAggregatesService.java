@@ -12,14 +12,20 @@ import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesGranularity;
 public class GetDashboardAggregatesService implements GetDashboardAggregatesQuery {
 
     private final DashboardAggregationRepositoryPort repositoryPort;
+    private final DashboardFilterHierarchyValidator filterValidator;
 
-    public GetDashboardAggregatesService(DashboardAggregationRepositoryPort repositoryPort) {
+    public GetDashboardAggregatesService(
+            DashboardAggregationRepositoryPort repositoryPort,
+            DashboardFilterHierarchyValidator filterValidator
+    ) {
         this.repositoryPort = repositoryPort;
+        this.filterValidator = filterValidator;
     }
 
     @Override
     public DashboardAggregates getAggregates(DashboardFilter filter, TimeSeriesGranularity granularity) {
         DashboardFilter effectiveFilter = filter != null ? filter : DashboardFilter.empty();
+        filterValidator.validate(effectiveFilter);
         TimeSeriesGranularity effectiveGranularity =
                 granularity != null ? granularity : TimeSeriesGranularity.DAY;
 

@@ -98,6 +98,39 @@ class DashboardAggregationRepositoryAdapterTest {
                 .containsExactly(new GenderCount("FEMALE", 2L));
     }
 
+    @Test
+    void emptyFilterShouldReturnFullDatasetCount() {
+        assertThat(aggregationRepository.countTotal(DashboardFilter.empty())).isEqualTo(4L);
+    }
+
+    @Test
+    void shouldFilterByFinancialYearPeriod() {
+        UUID julSubmissionId = UUID.randomUUID();
+        submissionRepository.save(createByp(
+                "July Respondent",
+                "FEMALE",
+                aruaLocation(),
+                julSubmissionId,
+                LocalDateTime.of(2026, 8, 1, 9, 0)
+        ));
+
+        DashboardFilter janJunFilter = new DashboardFilter(
+                null, null, null, null, null, null, null, null, null, "JAN_JUN_2026"
+        );
+
+        assertThat(aggregationRepository.countTotal(janJunFilter)).isEqualTo(4L);
+        assertThat(aggregationRepository.countTotal(DashboardFilter.empty())).isEqualTo(5L);
+    }
+
+    @Test
+    void shouldFilterByDistrictAndFormTypeWithAndSemantics() {
+        DashboardFilter filter = new DashboardFilter(
+                aruaDistrictId, null, null, FormType.BYP, null, null, null, null, null, null
+        );
+
+        assertThat(aggregationRepository.countTotal(filter)).isEqualTo(3L);
+    }
+
     private DashboardAggregates loadAggregates(DashboardFilter filter) {
         return new DashboardAggregates(
                 aggregationRepository.countTotal(filter),
@@ -144,13 +177,27 @@ class DashboardAggregationRepositoryAdapterTest {
     }
 
     private SubmissionMetadata metadata(UUID deviceSubmissionId) {
-        return new SubmissionMetadata(collectorId, deviceSubmissionId, LocalDateTime.of(2026, 3, 15, 10, 0));
+        return metadata(deviceSubmissionId, LocalDateTime.of(2026, 3, 15, 10, 0));
+    }
+
+    private SubmissionMetadata metadata(UUID deviceSubmissionId, LocalDateTime completedAt) {
+        return new SubmissionMetadata(collectorId, deviceSubmissionId, completedAt);
     }
 
     private BypSubmission createByp(String name, String gender, Location location, UUID deviceSubmissionId) {
+        return createByp(name, gender, location, deviceSubmissionId, LocalDateTime.of(2026, 3, 15, 10, 0));
+    }
+
+    private BypSubmission createByp(
+            String name,
+            String gender,
+            Location location,
+            UUID deviceSubmissionId,
+            LocalDateTime completedAt
+    ) {
         return new BypSubmission(
                 UUID.randomUUID(),
-                metadata(deviceSubmissionId),
+                metadata(deviceSubmissionId, completedAt),
                 location,
                 name,
                 "0772000" + deviceSubmissionId.toString().substring(0, 3),
