@@ -35,15 +35,15 @@ This issue does **not** deliver chart/export endpoints (issues `002`–`003`); i
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Domain Tests** for `PublicDashboardFilter` validation (invalid date range, AND semantics, rejects collectorId).
-- [ ] Write **Domain Tests** for `AnonymisationProjector` — strips/denies PII fields on sample internal records.
-- [ ] Write **Application Tests** with mocked SPI verifying filter-options service returns no collector fields.
-- [ ] Write **Controller Tests** (`@WebMvcTest`):
+- [x] Write **Domain Tests** for `PublicDashboardFilter` validation (invalid date range, AND semantics, rejects collectorId).
+- [x] Write **Domain Tests** for `AnonymisationProjector` — strips/denies PII fields on sample internal records.
+- [x] Write **Application Tests** with mocked SPI verifying filter-options service returns no collector fields.
+- [x] Write **Controller Tests** (`@WebMvcTest`):
   - Unauthenticated `GET /api/v1/public/dashboard/filters/options` → `200 OK`.
   - Authenticated admin calling same endpoint → still `200` (public read).
   - Response JSON keys never match PII deny-list (`phone`, `fullName`, `collectorName`, etc.).
-- [ ] Configure Spring Security `permitAll` for public dashboard paths.
-- [ ] Implement filter value object, projector, filter-options endpoint, and security config.
+- [x] Configure Spring Security `permitAll` for public dashboard paths.
+- [x] Implement filter value object, projector, filter-options endpoint, and security config.
 
 ## Blocked by
 

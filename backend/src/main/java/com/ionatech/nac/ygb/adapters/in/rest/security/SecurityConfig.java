@@ -35,6 +35,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/locations/dataset").permitAll()
+                .requestMatchers("/api/v1/public/dashboard/**").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/submissions").hasRole("DATA_COLLECTOR")
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/my-count").hasRole("DATA_COLLECTOR")
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/my-sync-status").hasRole("DATA_COLLECTOR")

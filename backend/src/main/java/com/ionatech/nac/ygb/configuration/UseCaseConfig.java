@@ -3,6 +3,7 @@ package com.ionatech.nac.ygb.configuration;
 import com.ionatech.nac.ygb.application.ports.api.*;
 import com.ionatech.nac.ygb.application.ports.spi.*;
 import com.ionatech.nac.ygb.application.services.*;
+import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,5 +177,17 @@ public class UseCaseConfig {
     @Bean
     public GetAdminReceiptStatusQuery getAdminReceiptStatusQuery(SubmissionRepositoryPort submissionRepositoryPort) {
         return new GetAdminReceiptStatusService(submissionRepositoryPort);
+    }
+
+    @Bean
+    public AnonymisationProjector anonymisationProjector() {
+        return new AnonymisationProjector();
+    }
+
+    @Bean
+    public GetPublicDashboardFilterOptionsQuery getPublicDashboardFilterOptionsQuery(
+            DashboardFilterOptionsRepositoryPort dashboardFilterOptionsRepositoryPort
+    ) {
+        return new GetPublicDashboardFilterOptionsService(dashboardFilterOptionsRepositoryPort);
     }
 }
