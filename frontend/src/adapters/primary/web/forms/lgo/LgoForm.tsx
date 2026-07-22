@@ -7,8 +7,11 @@ import { useAuthStore } from '../../../../../core/store/useAuthStore';
 import {
   buildAuthProvenanceSnapshot,
   buildSubmissionProvenance,
+  DuplicateRespondentAlert,
   RespondentSection,
 } from '../../components/forms';
+import { applyDuplicateRespondentError } from '../../../../../core/apply-form-submit-error';
+import { isDuplicateRespondentMessage } from '../../../../../core/duplicate-respondent.error';
 import { submitSurvey } from '../../../../../core/submission-submit.service';
 import { LgoFiscalYearSection } from './LgoFiscalYearSection';
 import { LgoGovernanceSection } from './LgoGovernanceSection';
@@ -78,6 +81,11 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
         setErrors({});
         onSubmitted?.();
       }, 1200);
+    } catch (error) {
+      if (applyDuplicateRespondentError(error, setErrors, scrollToFirstError)) {
+        return;
+      }
+      throw error;
     } finally {
       setSubmitting(false);
     }
@@ -95,6 +103,10 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
           <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <span>{successMessage}</span>
         </div>
+      )}
+
+      {isDuplicateRespondentMessage(errors.respondentPhone ?? '') && (
+        <DuplicateRespondentAlert message={errors.respondentPhone!} />
       )}
 
       <RespondentSection value={respondent} onChange={setRespondent} errors={errors} />

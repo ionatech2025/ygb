@@ -1,20 +1,7 @@
-import Dexie, { Table } from 'dexie';
 import type { PendingSubmission } from '../../../core/domain/pending-submission.model';
 import { isCreatedToday } from '../../../core/utils/submission-date.utils';
 import type { ISubmissionQueuePort } from '../../../ports/submission-queue.port';
-
-class YGBSubmissionDatabase extends Dexie {
-  pendingSubmissions!: Table<PendingSubmission, number>;
-
-  constructor() {
-    super('YGBSubmissionDatabase');
-    this.version(1).stores({
-      pendingSubmissions: '++localId, formType, status, collectorId, deviceSubmissionId, createdAt',
-    });
-  }
-}
-
-export const submissionDb = new YGBSubmissionDatabase();
+import { submissionDb } from './submission-queue.db';
 
 export class SubmissionQueueAdapter implements ISubmissionQueuePort {
   async enqueue(submission: Omit<PendingSubmission, 'localId'>): Promise<number> {
@@ -65,3 +52,4 @@ export class SubmissionQueueAdapter implements ISubmissionQueuePort {
 }
 
 export const submissionQueue = new SubmissionQueueAdapter();
+export { submissionDb } from './submission-queue.db';
