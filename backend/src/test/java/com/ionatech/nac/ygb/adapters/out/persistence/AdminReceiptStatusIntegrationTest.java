@@ -5,6 +5,7 @@ import com.ionatech.nac.ygb.adapters.out.persistence.repository.SubmissionJpaRep
 import com.ionatech.nac.ygb.application.services.GetAdminReceiptStatusService;
 import com.ionatech.nac.ygb.domain.model.BypSubmission;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
+import com.ionatech.nac.ygb.testsupport.TestLocationFixtures;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -50,10 +51,6 @@ class AdminReceiptStatusIntegrationTest {
 
     private final UUID primaryCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
     private final UUID staleCollectorId = UUID.fromString("33333333-3333-3333-3333-333333333333");
-    private final UUID aruaDistrictId = UUID.fromString("d1111111-1111-1111-1111-111111111111");
-    private final UUID aruaSubcountyId = UUID.fromString("e2222222-2222-2222-2222-222222222222");
-    private final UUID aruaParishId = UUID.fromString("b3333333-3333-3333-3333-333333333333");
-    private final UUID aruaVillageId = UUID.fromString("f4444444-4444-4444-4444-444444444444");
 
     @BeforeEach
     void setUp() {
@@ -142,7 +139,12 @@ class AdminReceiptStatusIntegrationTest {
         BypSubmission submission = new BypSubmission(
                 UUID.randomUUID(),
                 new SubmissionMetadata(collectorId, deviceSubmissionId, LocalDateTime.of(2026, 3, 15, 10, 0)),
-                new Location(aruaDistrictId, aruaSubcountyId, aruaParishId, aruaVillageId),
+                new Location(
+                        TestLocationFixtures.KAMPALA_DISTRICT_ID,
+                        TestLocationFixtures.KAMPALA_SUBCOUNTY_ID,
+                        TestLocationFixtures.KAMPALA_PARISH_ID,
+                        TestLocationFixtures.KAMPALA_VILLAGE_ID
+                ),
                 name,
                 nextUniquePhone(),
                 "FEMALE",

@@ -15,6 +15,7 @@ import com.ionatech.nac.ygb.domain.model.FormType;
 import com.ionatech.nac.ygb.domain.model.Role;
 import com.ionatech.nac.ygb.domain.model.User;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
+import com.ionatech.nac.ygb.testsupport.TestLocationFixtures;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -211,16 +212,10 @@ class AdminSubmissionControllerTest {
     }
 
     private BypSubmission sampleByp(UUID id, UUID collectorId) {
-        Location location = new Location(
-                UUID.fromString("d1111111-1111-1111-1111-111111111111"),
-                UUID.fromString("e2222222-2222-2222-2222-222222222222"),
-                UUID.fromString("b3333333-3333-3333-3333-333333333333"),
-                UUID.fromString("f4444444-4444-4444-4444-444444444444")
-        );
         return new BypSubmission(
                 id,
                 new SubmissionMetadata(collectorId, UUID.randomUUID(), LocalDateTime.of(2026, 3, 15, 10, 0)),
-                location,
+                TestLocationFixtures.kampalaLocation(),
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",

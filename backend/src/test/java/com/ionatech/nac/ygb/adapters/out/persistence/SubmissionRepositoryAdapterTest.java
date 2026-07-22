@@ -5,6 +5,7 @@ import com.ionatech.nac.ygb.adapters.out.persistence.repository.SubmissionJpaRep
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.*;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
+import com.ionatech.nac.ygb.testsupport.TestLocationFixtures;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -36,26 +38,25 @@ class SubmissionRepositoryAdapterTest {
     @Autowired
     private SubmissionJpaRepository submissionJpaRepository;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     private SubmissionMapper submissionMapper;
     private SubmissionRepositoryPort adapter;
 
-    // Seeded IDs from Flyway V2 & V3 migrations
     private final UUID collectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
-    private final UUID districtId = UUID.fromString("d1111111-1111-1111-1111-111111111111");
-    private final UUID subcountyId = UUID.fromString("e2222222-2222-2222-2222-222222222222");
-    private final UUID parishId = UUID.fromString("b3333333-3333-3333-3333-333333333333");
-    private final UUID villageId = UUID.fromString("f4444444-4444-4444-4444-444444444444");
 
     private SubmissionMetadata createMetadata(UUID deviceSubmissionId) {
         return new SubmissionMetadata(collectorId, deviceSubmissionId, LocalDateTime.now());
     }
 
     private Location createLocation() {
-        return new Location(districtId, subcountyId, parishId, villageId);
+        return TestLocationFixtures.kampalaLocation();
     }
 
     @BeforeEach
     void setUp() {
+        TestLocationFixtures.clearAllSubmissions(jdbcTemplate);
         submissionMapper = Mappers.getMapper(SubmissionMapper.class);
         adapter = new SubmissionRepositoryAdapter(submissionJpaRepository, submissionMapper, null, null);
     }

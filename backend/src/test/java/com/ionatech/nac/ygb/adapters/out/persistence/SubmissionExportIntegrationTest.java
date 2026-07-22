@@ -12,6 +12,7 @@ import com.ionatech.nac.ygb.application.services.ExportSubmissionsService;
 import com.ionatech.nac.ygb.domain.model.BypSubmission;
 import com.ionatech.nac.ygb.domain.model.IypSubmission;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
+import com.ionatech.nac.ygb.testsupport.TestLocationFixtures;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
@@ -76,15 +77,6 @@ class SubmissionExportIntegrationTest {
     private SubmissionRepositoryAdapter submissionRepository;
 
     private final UUID collectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
-    private final UUID aruaDistrictId = UUID.fromString("d1111111-1111-1111-1111-111111111111");
-    private final UUID aruaSubcountyId = UUID.fromString("e2222222-2222-2222-2222-222222222222");
-    private final UUID aruaParishId = UUID.fromString("b3333333-3333-3333-3333-333333333333");
-    private final UUID aruaVillageId = UUID.fromString("f4444444-4444-4444-4444-444444444444");
-
-    private final UUID kampalaDistrictId = UUID.fromString("a1111111-1111-1111-1111-111111111111");
-    private final UUID kampalaSubcountyId = UUID.fromString("a2222222-2222-2222-2222-222222222222");
-    private final UUID kampalaParishId = UUID.fromString("a3333333-3333-3333-3333-333333333333");
-    private final UUID kampalaVillageId = UUID.fromString("a4444444-4444-4444-4444-444444444444");
 
     @BeforeEach
     void setUp() {
@@ -101,24 +93,24 @@ class SubmissionExportIntegrationTest {
                 new DashboardFilterHierarchyValidator(id -> java.util.Optional.empty()),
                 exportAdapter
         );
-        seedKampalaLocations();
+        TestLocationFixtures.clearAllSubmissions(jdbcTemplate);
         saveSampleSubmissions();
     }
 
     @Test
     void shouldExportCsvFilteredByDistrict() throws Exception {
-        DashboardFilter aruaFilter = new DashboardFilter(
-                aruaDistrictId, null, null, null, null, null, null, null, null, null
+        DashboardFilter ntungamoFilter = new DashboardFilter(
+                TestLocationFixtures.NTUNGAMO_DISTRICT_ID, null, null, null, null, null, null, null, null, null
         );
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        exportService.export(aruaFilter, ExportFormat.CSV, output);
+        exportService.export(ntungamoFilter, ExportFormat.CSV, output);
 
         List<String> lines = output.toString(StandardCharsets.UTF_8).lines().toList();
         assertThat(lines).hasSize(4);
         assertThat(lines.get(0)).startsWith("ID,Form Type,Respondent Name");
         assertThat(lines.stream().skip(1))
-                .allMatch(line -> line.contains("Arua") && !line.contains("Kampala"));
+                .allMatch(line -> line.contains(TestLocationFixtures.NTUNGAMO_DISTRICT_NAME) && !line.contains(TestLocationFixtures.KAMPALA_DISTRICT_NAME));
     }
 
     @Test
@@ -168,10 +160,10 @@ class SubmissionExportIntegrationTest {
                     completedAt,
                     "JAN_JUN_2026",
                     "SYNCED",
-                    aruaDistrictId,
-                    aruaSubcountyId,
-                    aruaParishId,
-                    aruaVillageId,
+                    TestLocationFixtures.NTUNGAMO_DISTRICT_ID,
+                    TestLocationFixtures.NTUNGAMO_SUBCOUNTY_ID,
+                    TestLocationFixtures.NTUNGAMO_PARISH_ID,
+                    TestLocationFixtures.NTUNGAMO_VILLAGE_ID,
                     "Bulk Respondent " + index,
                     "0772" + String.format("%07d", index),
                     "FEMALE",
@@ -200,38 +192,19 @@ class SubmissionExportIntegrationTest {
         }
     }
 
-    private void seedKampalaLocations() {
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Kampala', 'DISTRICT', NULL)",
-                kampalaDistrictId
-        );
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Central', 'SUBCOUNTY', ?)",
-                kampalaSubcountyId, kampalaDistrictId
-        );
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Kisenyi I', 'PARISH', ?)",
-                kampalaParishId, kampalaSubcountyId
-        );
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Kakajjo Zone', 'VILLAGE', ?)",
-                kampalaVillageId, kampalaParishId
-        );
-    }
-
     private void saveSampleSubmissions() {
-        submissionRepository.save(createByp("Jane One", "FEMALE", aruaLocation(), UUID.randomUUID()));
-        submissionRepository.save(createByp("Jane Two", "FEMALE", aruaLocation(), UUID.randomUUID()));
-        submissionRepository.save(createByp("John Three", "MALE", aruaLocation(), UUID.randomUUID()));
+        submissionRepository.save(createByp("Jane One", "FEMALE", ntungamoLocation(), UUID.randomUUID()));
+        submissionRepository.save(createByp("Jane Two", "FEMALE", ntungamoLocation(), UUID.randomUUID()));
+        submissionRepository.save(createByp("John Three", "MALE", ntungamoLocation(), UUID.randomUUID()));
         submissionRepository.save(createIyp("John Four", "MALE", kampalaLocation(), UUID.randomUUID()));
     }
 
-    private Location aruaLocation() {
-        return new Location(aruaDistrictId, aruaSubcountyId, aruaParishId, aruaVillageId);
+    private Location ntungamoLocation() {
+        return TestLocationFixtures.ntungamoLocation();
     }
 
     private Location kampalaLocation() {
-        return new Location(kampalaDistrictId, kampalaSubcountyId, kampalaParishId, kampalaVillageId);
+        return TestLocationFixtures.kampalaLocation();
     }
 
     private SubmissionMetadata metadata(UUID deviceSubmissionId) {

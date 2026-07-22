@@ -1,11 +1,24 @@
 package com.ionatech.nac.ygb.application.services;
 
-import com.ionatech.nac.ygb.adapters.in.rest.dto.*;
+import com.ionatech.nac.ygb.adapters.in.rest.dto.BypSubmissionRequestDto;
+import com.ionatech.nac.ygb.adapters.in.rest.dto.IypSubmissionRequestDto;
+import com.ionatech.nac.ygb.adapters.in.rest.dto.LgoSubmissionRequestDto;
+import com.ionatech.nac.ygb.adapters.in.rest.dto.PcSubmissionRequestDto;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.AdminSubmissionPayloadMapper;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.exceptions.SubmissionNotFoundException;
-import com.ionatech.nac.ygb.domain.model.*;
-import com.ionatech.nac.ygb.domain.valueobjects.*;
+import com.ionatech.nac.ygb.domain.model.BypSubmission;
+import com.ionatech.nac.ygb.domain.model.IypSubmission;
+import com.ionatech.nac.ygb.domain.model.LgoSubmission;
+import com.ionatech.nac.ygb.domain.model.PcSubmission;
+import com.ionatech.nac.ygb.domain.valueobjects.AdminSubmissionDetail;
+import com.ionatech.nac.ygb.domain.valueobjects.Age;
+import com.ionatech.nac.ygb.domain.valueobjects.AgeGroup;
+import com.ionatech.nac.ygb.domain.valueobjects.FiscalYearRecord;
+import com.ionatech.nac.ygb.domain.valueobjects.Location;
+import com.ionatech.nac.ygb.domain.valueobjects.NarrativeText;
+import com.ionatech.nac.ygb.domain.valueobjects.Rating;
+import com.ionatech.nac.ygb.domain.valueobjects.SubmissionMetadata;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,17 +37,18 @@ class GetSubmissionDetailServiceTest {
     private SubmissionRepositoryPort submissionRepositoryPort;
     private GetSubmissionDetailService service;
     private AdminSubmissionPayloadMapper payloadMapper;
+    private Location location;
 
     private final UUID collectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
-    private final Location location = new Location(
-            UUID.fromString("d1111111-1111-1111-1111-111111111111"),
-            UUID.fromString("e2222222-2222-2222-2222-222222222222"),
-            UUID.fromString("b3333333-3333-3333-3333-333333333333"),
-            UUID.fromString("f4444444-4444-4444-4444-444444444444")
-    );
 
     @BeforeEach
     void setUp() {
+        location = new Location(
+                UUID.fromString("6a4ec61c-d428-4a51-8af0-721f7d03d492"),
+                UUID.fromString("168009f9-1188-49fb-88e8-70c93e1b7be0"),
+                UUID.fromString("9ffcadf2-8a59-46d6-8f3d-01ee344828d6"),
+                UUID.fromString("841802f1-87ab-4efd-83f2-c9156ed33459")
+        );
         submissionRepositoryPort = mock(SubmissionRepositoryPort.class);
         service = new GetSubmissionDetailService(submissionRepositoryPort);
         payloadMapper = new AdminSubmissionPayloadMapper();
