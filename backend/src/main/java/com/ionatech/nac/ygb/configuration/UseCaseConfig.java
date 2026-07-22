@@ -119,4 +119,33 @@ public class UseCaseConfig {
                 exportGeneratorPort
         );
     }
+
+    @Bean
+    @Transactional
+    public DeactivateUserUseCase deactivateUserUseCase(UserRepositoryPort userRepositoryPort) {
+        return new DeactivateUserService(userRepositoryPort);
+    }
+
+    @Bean
+    @Transactional
+    public ReactivateUserUseCase reactivateUserUseCase(UserRepositoryPort userRepositoryPort) {
+        return new ReactivateUserService(userRepositoryPort);
+    }
+
+    @Bean
+    @Transactional
+    public ResetUserPasswordUseCase resetUserPasswordUseCase(
+            UserRepositoryPort userRepositoryPort,
+            PasswordEncoderPort passwordEncoderPort
+    ) {
+        return new ResetUserPasswordService(userRepositoryPort, passwordEncoderPort);
+    }
+
+    @Bean
+    public GetCollectorSubmissionsQuery getCollectorSubmissionsQuery(
+            UserRepositoryPort userRepositoryPort,
+            ListSubmissionsQuery listSubmissionsQuery
+    ) {
+        return new GetCollectorSubmissionsService(userRepositoryPort, listSubmissionsQuery);
+    }
 }
