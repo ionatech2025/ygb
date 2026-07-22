@@ -16,4 +16,8 @@ public interface DashboardAggregationRepositoryPort {
     List<FormTypeCount> countByFormType(DashboardFilter filter);
 
     List<FinancialYearPeriodCount> countByFinancialYearPeriod(DashboardFilter filter);
+
+    List<AgeGroupCount> countByAgeGroup(DashboardFilter filter);
+
+    List<HeatmapEntry> countHeatmap(DashboardFilter filter);
 }

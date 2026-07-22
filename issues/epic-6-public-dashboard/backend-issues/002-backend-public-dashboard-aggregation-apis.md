@@ -29,14 +29,14 @@ Minimum endpoints (per `backend/backend_docs/domain_arch_apis`):
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Application Tests** with mocked aggregation SPI — service applies `PublicDashboardFilter` and passes output through projector.
-- [ ] Write **Persistence Integration Tests** (Testcontainers) — combined gender + form type filter returns correct counts (TC-PUB-02-03).
-- [ ] Write **Controller Tests** (`@WebMvcTest`):
+- [x] Write **Application Tests** with mocked aggregation SPI — service applies `PublicDashboardFilter` and passes output through projector.
+- [x] Write **Persistence Integration Tests** (Testcontainers) — combined gender + form type filter returns correct counts (TC-PUB-02-03).
+- [x] Write **Controller Tests** (`@WebMvcTest`):
   - Unauthenticated requests → `200 OK` with expected JSON shape (TC-PUB-01-01).
   - All chart types return non-empty series with seeded data.
   - Response payloads contain no PII fields (TC-PUB-01-03).
-- [ ] Write **Contract test** (optional `@Tag("slow")`): heatmap entry includes district/parish id, label, count — no respondent identifiers.
-- [ ] Implement use cases, controller, DTOs, and mappers.
+- [x] Write **Contract test** (optional `@Tag("slow")`): heatmap entry includes district/parish id, label, count — no respondent identifiers.
+- [x] Implement use cases, controller, DTOs, and mappers.
 
 ## Blocked by
 

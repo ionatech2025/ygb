@@ -29,14 +29,14 @@ Implement **public anonymised data export** endpoints (US-PUB-04): any unauthent
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Domain Tests** — `PublicAnonymisedRecord` factory rejects PII field injection.
-- [ ] Write **Application Tests** — export service applies filter and only streams projector output.
-- [ ] Write **Integration Tests** (Testcontainers):
+- [x] Write **Domain Tests** — `PublicAnonymisedRecord` factory rejects PII field injection.
+- [x] Write **Application Tests** — export service applies filter and only streams projector output.
+- [x] Write **Integration Tests** (Testcontainers):
   - CSV with district filter contains only that district's rows (TC-PUB-04-01).
   - Full CSV/Excel with no filters includes all anonymised rows (TC-PUB-04-02).
   - Downloaded file column headers contain no PII names (TC-PUB-04-04).
-- [ ] Write **Controller Tests** — unauthenticated `GET` returns correct `Content-Type`, `Content-Disposition`; no `401`/`403`.
-- [ ] Implement export service, adapters, and endpoints.
+- [x] Write **Controller Tests** — unauthenticated `GET` returns correct `Content-Type`, `Content-Disposition`; no `401`/`403`.
+- [x] Implement export service, adapters, and endpoints.
 
 ## Blocked by
 
