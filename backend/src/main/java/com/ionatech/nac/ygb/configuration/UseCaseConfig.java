@@ -104,4 +104,19 @@ public class UseCaseConfig {
     ) {
         return new GetSubmissionDetailService(submissionRepositoryPort);
     }
+
+    @Bean
+    public ExportSubmissionsQuery exportSubmissionsQuery(
+            SubmissionRepositoryPort submissionRepositoryPort,
+            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            ExportGeneratorPort exportGeneratorPort
+    ) {
+        return new ExportSubmissionsService(
+                submissionRepositoryPort,
+                dashboardAggregationRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                exportGeneratorPort
+        );
+    }
 }

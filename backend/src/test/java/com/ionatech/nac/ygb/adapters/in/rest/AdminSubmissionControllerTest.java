@@ -5,6 +5,7 @@ import com.ionatech.nac.ygb.adapters.in.rest.mapper.AdminSubmissionRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.DashboardFilterRequestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.security.JwtAuthenticationFilter;
 import com.ionatech.nac.ygb.adapters.in.rest.security.SecurityConfig;
+import com.ionatech.nac.ygb.application.ports.api.ExportSubmissionsQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetSubmissionDetailQuery;
 import com.ionatech.nac.ygb.application.ports.api.ListSubmissionsQuery;
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
@@ -24,6 +25,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.http.HttpHeaders;
+
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +35,11 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,6 +62,9 @@ class AdminSubmissionControllerTest {
 
     @MockBean
     private GetSubmissionDetailQuery getSubmissionDetailQuery;
+
+    @MockBean
+    private ExportSubmissionsQuery exportSubmissionsQuery;
 
     @MockBean
     private UserRepositoryPort userRepositoryPort;
@@ -149,6 +158,56 @@ class AdminSubmissionControllerTest {
     void shouldReturnForbiddenForDataCollectorOnDetail() throws Exception {
         mockMvc.perform(get("/api/v1/admin/submissions/{id}", UUID.randomUUID()))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnCsvExportWithCorrectHeaders() throws Exception {
+        stubExport(ExportFormat.CSV, "ID,Form Type\n");
+
+        mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "csv"))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("text/csv")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString("attachment")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".csv")));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnExcelExportWithCorrectHeaders() throws Exception {
+        stubExport(ExportFormat.XLSX, new byte[]{1, 2, 3});
+
+        mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "xlsx"))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("spreadsheetml.sheet")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".xlsx")));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnPdfExportWithCorrectHeaders() throws Exception {
+        stubExport(ExportFormat.PDF, "%PDF-1.4");
+
+        mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "pdf"))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("application/pdf")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".pdf")));
+    }
+
+    private void stubExport(ExportFormat format, String content) throws Exception {
+        doAnswer(invocation -> {
+            OutputStream output = invocation.getArgument(2);
+            output.write(content.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return null;
+        }).when(exportSubmissionsQuery).export(any(DashboardFilter.class), eq(format), any(OutputStream.class));
+    }
+
+    private void stubExport(ExportFormat format, byte[] content) throws Exception {
+        doAnswer(invocation -> {
+            OutputStream output = invocation.getArgument(2);
+            output.write(content);
+            return null;
+        }).when(exportSubmissionsQuery).export(any(DashboardFilter.class), eq(format), any(OutputStream.class));
     }
 
     private BypSubmission sampleByp(UUID id, UUID collectorId) {

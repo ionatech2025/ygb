@@ -4,6 +4,8 @@ import com.ionatech.nac.ygb.adapters.in.rest.dto.AdminSubmissionDetailDto;
 import com.ionatech.nac.ygb.adapters.in.rest.dto.SubmissionPageResponseDto;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.AdminSubmissionRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.DashboardFilterRequestMapper;
+import com.ionatech.nac.ygb.adapters.out.export.ExportFilenameBuilder;
+import com.ionatech.nac.ygb.application.ports.api.ExportSubmissionsQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetSubmissionDetailQuery;
 import com.ionatech.nac.ygb.application.ports.api.ListSubmissionsQuery;
 import com.ionatech.nac.ygb.application.ports.spi.UserRepositoryPort;
@@ -13,10 +15,13 @@ import com.ionatech.nac.ygb.domain.model.FormType;
 import com.ionatech.nac.ygb.domain.model.User;
 import com.ionatech.nac.ygb.domain.valueobjects.AdminSubmissionDetail;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
+import com.ionatech.nac.ygb.domain.valueobjects.ExportFormat;
 import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import com.ionatech.nac.ygb.domain.valueobjects.SubmissionPage;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -36,6 +42,7 @@ public class AdminSubmissionController {
 
     private final ListSubmissionsQuery listSubmissionsQuery;
     private final GetSubmissionDetailQuery getSubmissionDetailQuery;
+    private final ExportSubmissionsQuery exportSubmissionsQuery;
     private final UserRepositoryPort userRepositoryPort;
     private final DashboardFilterRequestMapper filterMapper;
     private final AdminSubmissionRestMapper restMapper;
@@ -43,12 +50,14 @@ public class AdminSubmissionController {
     public AdminSubmissionController(
             ListSubmissionsQuery listSubmissionsQuery,
             GetSubmissionDetailQuery getSubmissionDetailQuery,
+            ExportSubmissionsQuery exportSubmissionsQuery,
             UserRepositoryPort userRepositoryPort,
             DashboardFilterRequestMapper filterMapper,
             AdminSubmissionRestMapper restMapper
     ) {
         this.listSubmissionsQuery = listSubmissionsQuery;
         this.getSubmissionDetailQuery = getSubmissionDetailQuery;
+        this.exportSubmissionsQuery = exportSubmissionsQuery;
         this.userRepositoryPort = userRepositoryPort;
         this.filterMapper = filterMapper;
         this.restMapper = restMapper;
@@ -95,6 +104,43 @@ public class AdminSubmissionController {
                         "Collector not found for submission: " + detail.submission().getId()
                 ));
         return ResponseEntity.ok(restMapper.toDetailResponse(detail, collector));
+    }
+
+    @GetMapping("/export")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<StreamingResponseBody> exportSubmissions(
+            @RequestParam String format,
+            @RequestParam(required = false) UUID districtId,
+            @RequestParam(required = false) UUID subcountyId,
+            @RequestParam(required = false) UUID parishId,
+            @RequestParam(required = false) FormType formType,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
+            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) String ageGroup,
+            @RequestParam(required = false) UUID collectorId,
+            @RequestParam(required = false) String financialYearPeriod
+    ) {
+        ExportFormat exportFormat = ExportFormat.fromParam(format);
+        DashboardFilter filter = filterMapper.toFilter(
+                districtId,
+                subcountyId,
+                parishId,
+                formType,
+                dateFrom,
+                dateTo,
+                gender,
+                ageGroup,
+                collectorId,
+                financialYearPeriod
+        );
+        String filename = ExportFilenameBuilder.build(exportFormat);
+        StreamingResponseBody body = output -> exportSubmissionsQuery.export(filter, exportFormat, output);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentType(MediaType.parseMediaType(exportFormat.contentType()))
+                .body(body);
     }
 
     @ExceptionHandler(InvalidDashboardFilterException.class)
