@@ -22,10 +22,10 @@ Build the **Data Collector Tracker** leaderboard page (US-DASH-07): sortable tab
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: leaderboard renders sorted by count.
-- [ ] Component test: row expand shows form type + district breakdown (TC-DASH-07-03).
-- [ ] Component test: FY filter triggers refetch with period param.
-- [ ] Implement page, service, adapter.
+- [x] Component test: leaderboard renders sorted by count.
+- [x] Component test: row expand shows form type + district breakdown (TC-DASH-07-03).
+- [x] Component test: FY filter triggers refetch with period param.
+- [x] Implement page, service, adapter.
 
 ## Blocked by
 

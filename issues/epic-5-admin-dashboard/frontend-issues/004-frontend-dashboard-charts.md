@@ -7,7 +7,7 @@ Implement **dashboard charts** (US-DASH-01): bar chart (submissions by district)
 - **Components**:
   - `DashboardCharts.tsx` — layout grid for three chart types.
   - `SubmissionsByDistrictChart.tsx`, `GenderSplitChart.tsx`, `SubmissionsOverTimeChart.tsx`.
-  - Use **Recharts** (or existing chart library if already in `package.json`).
+  - Use **ECharts** (already in `package.json`; bar, pie, and line chart types).
 
 - **Interaction (prep for drill-down)**:
   - Chart segment click emits `{ dimension, value }` event for issue `005`.
@@ -20,10 +20,10 @@ Implement **dashboard charts** (US-DASH-01): bar chart (submissions by district)
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: all three chart types render with mock data (TC-DASH-01-01).
-- [ ] Component test: refresh/re-fetch updates chart values (TC-DASH-01-02).
-- [ ] Component test: segment click fires drill-down callback with correct dimension.
-- [ ] Implement charts; wire to `DashboardService` and filter store.
+- [x] Component test: all three chart types render with mock data (TC-DASH-01-01).
+- [x] Component test: refresh/re-fetch updates chart values (TC-DASH-01-02).
+- [x] Component test: segment click fires drill-down callback with correct dimension.
+- [x] Implement charts; wire to `DashboardService` and filter store.
 
 ## Blocked by
 

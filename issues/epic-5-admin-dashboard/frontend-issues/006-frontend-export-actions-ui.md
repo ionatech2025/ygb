@@ -18,10 +18,10 @@ Add **Export CSV, Export Excel, and Generate PDF Report** actions to the Admin D
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: Export CSV triggers download with correct query params.
-- [ ] Adapter test: handles blob response and sets filename from `Content-Disposition`.
+- [x] Component test: Export CSV triggers download with correct query params.
+- [x] Adapter test: handles blob response and sets filename from `Content-Disposition`.
 - [ ] Manual test: Excel opens with typed columns (TC-DASH-05-02).
-- [ ] Implement toolbar and download adapter.
+- [x] Implement toolbar and download adapter.
 
 ## Blocked by
 

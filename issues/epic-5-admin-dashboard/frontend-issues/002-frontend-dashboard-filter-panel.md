@@ -25,11 +25,11 @@ Build the **Dashboard Filter Panel** (US-DASH-02): nine filter dimensions with A
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: all nine dimensions render (TC-DASH-02-01).
-- [ ] Unit test: combined filters serialize to correct query string (TC-DASH-02-03).
-- [ ] Component test: Clear all resets to empty filter (TC-DASH-02-04).
-- [ ] Integration test: changing district triggers sub-county repopulation from cached locations.
-- [ ] Implement panel, store, URL sync.
+- [x] Component test: all nine dimensions render (TC-DASH-02-01).
+- [x] Unit test: combined filters serialize to correct query string (TC-DASH-02-03).
+- [x] Component test: Clear all resets to empty filter (TC-DASH-02-04).
+- [x] Integration test: changing district triggers sub-county repopulation from cached locations.
+- [x] Implement panel, store, URL sync.
 
 ## Blocked by
 

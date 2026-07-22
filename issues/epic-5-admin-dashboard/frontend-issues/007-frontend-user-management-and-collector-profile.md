@@ -24,11 +24,11 @@ Enhance **Manage Users** for full US-DASH-06: deactivate/reactivate collectors, 
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: deactivate button calls API and refreshes list (TC-DASH-06-01).
-- [ ] Component test: reset password shows success with new password hint (TC-DASH-06-02).
-- [ ] Component test: collector profile lists submissions with filter controls (TC-DASH-06-03).
-- [ ] Adapter tests for new HTTP methods.
-- [ ] Implement UI and adapter extensions.
+- [x] Component test: deactivate button calls API and refreshes list (TC-DASH-06-01).
+- [x] Component test: reset password shows success with new password hint (TC-DASH-06-02).
+- [x] Component test: collector profile lists submissions with filter controls (TC-DASH-06-03).
+- [x] Adapter tests for new HTTP methods.
+- [x] Implement UI and adapter extensions.
 
 ## Blocked by
 

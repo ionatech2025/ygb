@@ -22,10 +22,10 @@ Render **summary stat cards** at the top of the Admin Dashboard (US-DASH-03): to
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: cards render with mocked aggregate data.
-- [ ] Component test: filter change triggers new API call with updated params.
-- [ ] Service test: maps API response to card labels correctly.
-- [ ] Implement service, adapter, components; wire into `AdminDashboardHome`.
+- [x] Component test: cards render with mocked aggregate data.
+- [x] Component test: filter change triggers new API call with updated params.
+- [x] Service test: maps API response to card labels correctly.
+- [x] Implement service, adapter, components; wire into `AdminDashboardHome`.
 
 ## Blocked by
 

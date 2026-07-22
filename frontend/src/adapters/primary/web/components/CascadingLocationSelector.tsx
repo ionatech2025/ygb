@@ -8,6 +8,8 @@ export interface CascadingLocationSelectorProps {
   value: LocationFields;
   onChange: (value: LocationFields) => void;
   repository?: ILocationRepositoryPort;
+  /** When false, parish is the deepest level (admin dashboard filters). Default true. */
+  includeVillage?: boolean;
 }
 
 function LocationSelect({
@@ -47,10 +49,16 @@ function LocationSelect({
   );
 }
 
-export function CascadingLocationSelector({ value, onChange, repository }: CascadingLocationSelectorProps) {
+export function CascadingLocationSelector({
+  value,
+  onChange,
+  repository,
+  includeVillage = true,
+}: CascadingLocationSelectorProps) {
   const {
     loading,
     ready,
+    loadError,
     districts,
     subcounties,
     parishes,
@@ -78,8 +86,10 @@ export function CascadingLocationSelector({ value, onChange, repository }: Casca
       )}
 
       {!loading && !ready && (
-        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-800">
-          Location data is unavailable offline. Connect once to download the dataset.
+        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-900">
+          {loadError === 'fetch-failed'
+            ? 'Unable to download location data. Check your connection and refresh the page.'
+            : 'Location data is unavailable offline. Connect once while online to download the Kampala and Ntungamo dataset.'}
         </p>
       )}
 
@@ -111,15 +121,17 @@ export function CascadingLocationSelector({ value, onChange, repository }: Casca
           disabled={locationDisabled || !value.subcountyId}
           placeholder="Select parish…"
         />
-        <LocationSelect
-          id="village"
-          label="Village / Zone"
-          value={value.villageId}
-          options={villages}
-          onSelect={setVillage}
-          disabled={locationDisabled || !value.parishId}
-          placeholder="Select village…"
-        />
+        {includeVillage && (
+          <LocationSelect
+            id="village"
+            label="Village / Zone"
+            value={value.villageId}
+            options={villages}
+            onSelect={setVillage}
+            disabled={locationDisabled || !value.parishId}
+            placeholder="Select village…"
+          />
+        )}
       </div>
     </div>
   );

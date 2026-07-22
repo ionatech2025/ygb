@@ -3,6 +3,7 @@ package com.ionatech.nac.ygb.adapters.in.rest.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.HeaderWriterFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -38,6 +40,14 @@ public class SecurityConfig {
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/my-sync-status").hasRole("DATA_COLLECTOR")
                 .anyRequest().authenticated()
             )
+            .headers(headers -> headers.addObjectPostProcessor(new ObjectPostProcessor<HeaderWriterFilter>() {
+                @Override
+                public HeaderWriterFilter postProcess(HeaderWriterFilter filter) {
+                    // Avoid race with StreamingResponseBody async writes (MockMvc + export endpoints).
+                    filter.setShouldWriteHeadersEagerly(true);
+                    return filter;
+                }
+            }))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

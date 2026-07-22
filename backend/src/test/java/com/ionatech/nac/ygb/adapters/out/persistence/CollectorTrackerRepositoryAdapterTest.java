@@ -8,6 +8,7 @@ import com.ionatech.nac.ygb.domain.model.BypSubmission;
 import com.ionatech.nac.ygb.domain.model.FormType;
 import com.ionatech.nac.ygb.domain.model.IypSubmission;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
+import com.ionatech.nac.ygb.testsupport.TestLocationFixtures;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -50,22 +51,13 @@ class CollectorTrackerRepositoryAdapterTest {
 
     private final UUID primaryCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
     private final UUID secondaryCollectorId = UUID.fromString("33333333-3333-3333-3333-333333333333");
-    private final UUID aruaDistrictId = UUID.fromString("d1111111-1111-1111-1111-111111111111");
-    private final UUID aruaSubcountyId = UUID.fromString("e2222222-2222-2222-2222-222222222222");
-    private final UUID aruaParishId = UUID.fromString("b3333333-3333-3333-3333-333333333333");
-    private final UUID aruaVillageId = UUID.fromString("f4444444-4444-4444-4444-444444444444");
-
-    private final UUID kampalaDistrictId = UUID.fromString("a1111111-1111-1111-1111-111111111111");
-    private final UUID kampalaSubcountyId = UUID.fromString("a2222222-2222-2222-2222-222222222222");
-    private final UUID kampalaParishId = UUID.fromString("a3333333-3333-3333-3333-333333333333");
-    private final UUID kampalaVillageId = UUID.fromString("a4444444-4444-4444-4444-444444444444");
 
     @BeforeEach
     void setUp() {
         SubmissionMapper submissionMapper = Mappers.getMapper(SubmissionMapper.class);
         submissionRepository = new SubmissionRepositoryAdapter(submissionJpaRepository, submissionMapper, null, null);
+        TestLocationFixtures.clearAllSubmissions(jdbcTemplate);
         seedSecondaryCollector();
-        seedKampalaLocations();
         saveSampleSubmissions();
     }
 
@@ -87,7 +79,7 @@ class CollectorTrackerRepositoryAdapterTest {
         submissionRepository.save(createByp(
                 "July Respondent",
                 "FEMALE",
-                aruaLocation(),
+                ntungamoLocation(),
                 UUID.randomUUID(),
                 primaryCollectorId,
                 LocalDateTime.of(2026, 8, 1, 9, 0)
@@ -122,38 +114,19 @@ class CollectorTrackerRepositoryAdapterTest {
         );
     }
 
-    private void seedKampalaLocations() {
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Kampala', 'DISTRICT', NULL)",
-                kampalaDistrictId
-        );
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Central', 'SUBCOUNTY', ?)",
-                kampalaSubcountyId, kampalaDistrictId
-        );
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Kisenyi I', 'PARISH', ?)",
-                kampalaParishId, kampalaSubcountyId
-        );
-        jdbcTemplate.update(
-                "INSERT INTO locations (id, name, type, parent_id) VALUES (?, 'Kakajjo Zone', 'VILLAGE', ?)",
-                kampalaVillageId, kampalaParishId
-        );
-    }
-
     private void saveSampleSubmissions() {
-        submissionRepository.save(createByp("Jane One", "FEMALE", aruaLocation(), UUID.randomUUID(), primaryCollectorId));
-        submissionRepository.save(createByp("Jane Two", "FEMALE", aruaLocation(), UUID.randomUUID(), primaryCollectorId));
-        submissionRepository.save(createByp("John Three", "MALE", aruaLocation(), UUID.randomUUID(), primaryCollectorId));
+        submissionRepository.save(createByp("Jane One", "FEMALE", ntungamoLocation(), UUID.randomUUID(), primaryCollectorId));
+        submissionRepository.save(createByp("Jane Two", "FEMALE", ntungamoLocation(), UUID.randomUUID(), primaryCollectorId));
+        submissionRepository.save(createByp("John Three", "MALE", ntungamoLocation(), UUID.randomUUID(), primaryCollectorId));
         submissionRepository.save(createIyp("John Four", "MALE", kampalaLocation(), UUID.randomUUID(), secondaryCollectorId));
     }
 
-    private Location aruaLocation() {
-        return new Location(aruaDistrictId, aruaSubcountyId, aruaParishId, aruaVillageId);
+    private Location ntungamoLocation() {
+        return TestLocationFixtures.ntungamoLocation();
     }
 
     private Location kampalaLocation() {
-        return new Location(kampalaDistrictId, kampalaSubcountyId, kampalaParishId, kampalaVillageId);
+        return TestLocationFixtures.kampalaLocation();
     }
 
     private SubmissionMetadata metadata(UUID deviceSubmissionId, UUID collectorId) {
