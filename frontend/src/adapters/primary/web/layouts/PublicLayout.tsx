@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { usePublicDashboardFilterUrlSync } from '../../../../core/hooks/usePublicDashboardFilterUrlSync';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { PublicNav } from './PublicNav';
 
 export function PublicLayout() {
+  usePublicDashboardFilterUrlSync();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);

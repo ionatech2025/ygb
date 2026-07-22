@@ -1,6 +1,11 @@
-import { BarChart3, Filter, LayoutDashboard } from 'lucide-react';
+import { useMemo } from 'react';
+import { BarChart3, LayoutDashboard } from 'lucide-react';
+import { HttpPublicDashboardAdapter } from '../../../secondary/api/public-dashboard-api.adapter';
+import { PublicDashboardFilterPanel } from './PublicDashboardFilterPanel';
 
 export function PublicDashboardHome() {
+  const dashboardApi = useMemo(() => new HttpPublicDashboardAdapter(), []);
+
   return (
     <div className="mx-auto max-w-6xl space-y-8" data-testid="public-dashboard-home">
       <header>
@@ -10,22 +15,12 @@ export function PublicDashboardHome() {
           Parish Development Model Insights
         </h1>
         <p className="mt-3 max-w-3xl text-text-muted">
-          Explore anonymised programme data across districts, parishes, and enterprise categories. Filters and charts
-          will load here in upcoming releases.
+          Explore anonymised programme data across districts, parishes, and enterprise categories. Adjust filters to
+          refine summary statistics and charts.
         </p>
       </header>
 
-      <section
-        aria-label="Dashboard filters"
-        data-testid="public-dashboard-filters"
-        className="rounded-lg border border-dashed border-border bg-surface p-6"
-      >
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-text">
-          <Filter className="h-5 w-5 text-brand" aria-hidden="true" />
-          Filters
-        </h2>
-        <p className="mt-2 text-sm text-text-muted">Geography, form type, and time period filters — coming soon.</p>
-      </section>
+      <PublicDashboardFilterPanel dashboardApi={dashboardApi} />
 
       <section
         aria-label="Summary statistics"

@@ -30,12 +30,12 @@ Public filters mirror admin behaviour but **exclude Data Collector** and include
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: all nine dimensions render (TC-PUB-02-01).
-- [ ] Unit test: combined filters serialize to correct query string (TC-PUB-02-03).
-- [ ] Component test: Clear all resets filter and URL params.
-- [ ] Component test: loading saved URL applies filters on mount (TC-PUB-05-02).
-- [ ] Adapter test: filter options request hits public endpoint without auth header.
-- [ ] Implement panel, store, URL sync, and API adapter.
+- [x] Component test: all nine dimensions render (TC-PUB-02-01).
+- [x] Unit test: combined filters serialize to correct query string (TC-PUB-02-03).
+- [x] Component test: Clear all resets filter and URL params.
+- [x] Component test: loading saved URL applies filters on mount (TC-PUB-05-02).
+- [x] Adapter test: filter options request hits public endpoint without auth header.
+- [x] Implement panel, store, URL sync, and API adapter.
 
 ## Blocked by
 
