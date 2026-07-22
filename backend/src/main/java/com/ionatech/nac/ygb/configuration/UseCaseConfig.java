@@ -89,4 +89,19 @@ public class UseCaseConfig {
     ) {
         return new GetDashboardFilterOptionsService(dashboardFilterOptionsRepositoryPort, userRepositoryPort);
     }
+
+    @Bean
+    public ListSubmissionsQuery listSubmissionsQuery(
+            SubmissionRepositoryPort submissionRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator
+    ) {
+        return new ListSubmissionsService(submissionRepositoryPort, dashboardFilterHierarchyValidator);
+    }
+
+    @Bean
+    public GetSubmissionDetailQuery getSubmissionDetailQuery(
+            SubmissionRepositoryPort submissionRepositoryPort
+    ) {
+        return new GetSubmissionDetailService(submissionRepositoryPort);
+    }
 }

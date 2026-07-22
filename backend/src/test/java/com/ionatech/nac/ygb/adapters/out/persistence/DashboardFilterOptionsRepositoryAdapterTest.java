@@ -55,7 +55,7 @@ class DashboardFilterOptionsRepositoryAdapterTest {
     @BeforeEach
     void setUp() {
         SubmissionMapper submissionMapper = Mappers.getMapper(SubmissionMapper.class);
-        submissionRepository = new SubmissionRepositoryAdapter(submissionJpaRepository, submissionMapper);
+        submissionRepository = new SubmissionRepositoryAdapter(submissionJpaRepository, submissionMapper, null);
         submissionRepository.save(sampleByp(UUID.randomUUID()));
     }
 

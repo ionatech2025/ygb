@@ -2,10 +2,8 @@ package com.ionatech.nac.ygb.adapters.out.persistence;
 
 import com.ionatech.nac.ygb.adapters.out.persistence.mapper.SubmissionMapper;
 import com.ionatech.nac.ygb.adapters.out.persistence.repository.SubmissionJpaRepository;
-import com.ionatech.nac.ygb.application.ports.spi.DashboardAggregationRepositoryPort;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.BypSubmission;
-import com.ionatech.nac.ygb.domain.model.FormType;
 import com.ionatech.nac.ygb.domain.model.IypSubmission;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import({DashboardAggregationJpaRepository.class, DashboardAggregationRepositoryAdapter.class})
-class DashboardAggregationRepositoryAdapterTest {
+@Import({AdminSubmissionQueryJpaRepository.class})
+class AdminSubmissionQueryRepositoryAdapterTest {
 
     @Container
     @ServiceConnection
@@ -41,10 +39,10 @@ class DashboardAggregationRepositoryAdapterTest {
     private SubmissionJpaRepository submissionJpaRepository;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private AdminSubmissionQueryJpaRepository adminSubmissionQueryJpaRepository;
 
     @Autowired
-    private DashboardAggregationRepositoryPort aggregationRepository;
+    private JdbcTemplate jdbcTemplate;
 
     private SubmissionRepositoryPort submissionRepository;
 
@@ -62,84 +60,61 @@ class DashboardAggregationRepositoryAdapterTest {
     @BeforeEach
     void setUp() {
         SubmissionMapper submissionMapper = Mappers.getMapper(SubmissionMapper.class);
-        submissionRepository = new SubmissionRepositoryAdapter(submissionJpaRepository, submissionMapper, null);
+        submissionRepository = new SubmissionRepositoryAdapter(
+                submissionJpaRepository,
+                submissionMapper,
+                adminSubmissionQueryJpaRepository
+        );
         seedKampalaLocations();
         saveSampleSubmissions();
     }
 
     @Test
-    void shouldAggregateCountsByDistrictGenderAndFormType() {
-        DashboardAggregates viaPort = loadAggregates(DashboardFilter.empty());
+    void shouldListSubmissionsFilteredByDistrict() {
+        DashboardFilter aruaFilter = new DashboardFilter(
+                aruaDistrictId, null, null, null, null, null, null, null, null, null
+        );
 
-        assertThat(viaPort.totalSubmissions()).isEqualTo(4L);
-        assertThat(viaPort.byDistrict()).hasSize(2);
-        assertThat(viaPort.byDistrict()).anyMatch(row -> "Arua".equals(row.districtName()) && row.count() == 3L);
-        assertThat(viaPort.byDistrict()).anyMatch(row -> "Kampala".equals(row.districtName()) && row.count() == 1L);
-        assertThat(viaPort.byGender()).contains(
-                new GenderCount("FEMALE", 2L),
-                new GenderCount("MALE", 2L)
-        );
-        assertThat(viaPort.byFormType()).contains(
-                new FormTypeCount(FormType.BYP, 3L),
-                new FormTypeCount(FormType.IYP, 1L)
-        );
+        SubmissionPage aruaPage = submissionRepository.findSummariesByFilter(aruaFilter, PageRequest.of(0, 25));
+
+        assertThat(aruaPage.totalElements()).isEqualTo(3L);
+        assertThat(aruaPage.items()).hasSize(3);
+        assertThat(aruaPage.items()).allMatch(summary -> aruaDistrictId.equals(summary.districtId()));
+        assertThat(aruaPage.items()).allMatch(summary -> "Arua".equals(summary.districtName()));
+        assertThat(aruaPage.items()).allMatch(summary -> "Default Collector".equals(summary.collectorName()));
     }
 
     @Test
-    void shouldApplyGenderAndFormTypeFiltersWithAndSemantics() {
-        DashboardFilter filter = new DashboardFilter(
-                null, null, null, FormType.BYP, null, null, "FEMALE", null, null, null
+    void shouldPaginateSubmissionSummaries() {
+        SubmissionPage firstPage = submissionRepository.findSummariesByFilter(
+                DashboardFilter.empty(),
+                PageRequest.of(0, 2)
+        );
+        SubmissionPage secondPage = submissionRepository.findSummariesByFilter(
+                DashboardFilter.empty(),
+                PageRequest.of(1, 2)
         );
 
-        assertThat(aggregationRepository.countTotal(filter)).isEqualTo(2L);
-        assertThat(aggregationRepository.countByFormType(filter))
-                .containsExactly(new FormTypeCount(FormType.BYP, 2L));
-        assertThat(aggregationRepository.countByGender(filter))
-                .containsExactly(new GenderCount("FEMALE", 2L));
+        assertThat(firstPage.totalElements()).isEqualTo(4L);
+        assertThat(firstPage.items()).hasSize(2);
+        assertThat(secondPage.items()).hasSize(2);
+        assertThat(firstPage.totalPages()).isEqualTo(2);
     }
 
     @Test
-    void emptyFilterShouldReturnFullDatasetCount() {
-        assertThat(aggregationRepository.countTotal(DashboardFilter.empty())).isEqualTo(4L);
-    }
-
-    @Test
-    void shouldFilterByFinancialYearPeriod() {
-        UUID julSubmissionId = UUID.randomUUID();
-        submissionRepository.save(createByp(
-                "July Respondent",
+    void shouldLoadSubmissionDetailById() {
+        BypSubmission saved = (BypSubmission) submissionRepository.save(createByp(
+                "Detail Respondent",
                 "FEMALE",
                 aruaLocation(),
-                julSubmissionId,
-                LocalDateTime.of(2026, 8, 1, 9, 0)
+                UUID.randomUUID()
         ));
 
-        DashboardFilter janJunFilter = new DashboardFilter(
-                null, null, null, null, null, null, null, null, null, "JAN_JUN_2026"
-        );
+        AdminSubmissionDetail detail = submissionRepository.findDetailById(saved.getId()).orElseThrow();
 
-        assertThat(aggregationRepository.countTotal(janJunFilter)).isEqualTo(4L);
-        assertThat(aggregationRepository.countTotal(DashboardFilter.empty())).isEqualTo(5L);
-    }
-
-    @Test
-    void shouldFilterByDistrictAndFormTypeWithAndSemantics() {
-        DashboardFilter filter = new DashboardFilter(
-                aruaDistrictId, null, null, FormType.BYP, null, null, null, null, null, null
-        );
-
-        assertThat(aggregationRepository.countTotal(filter)).isEqualTo(3L);
-    }
-
-    private DashboardAggregates loadAggregates(DashboardFilter filter) {
-        return new DashboardAggregates(
-                aggregationRepository.countTotal(filter),
-                aggregationRepository.countByDistrict(filter),
-                aggregationRepository.countByGender(filter),
-                aggregationRepository.countOverTime(filter, TimeSeriesGranularity.DAY),
-                aggregationRepository.countByFormType(filter),
-                aggregationRepository.countByFinancialYearPeriod(filter)
-        );
+        assertThat(detail.submission()).isInstanceOf(BypSubmission.class);
+        assertThat(detail.submission().getRespondentName()).isEqualTo("Detail Respondent");
+        assertThat(detail.financialYearPeriod()).isNotBlank();
     }
 
     private void seedKampalaLocations() {
@@ -177,27 +152,13 @@ class DashboardAggregationRepositoryAdapterTest {
     }
 
     private SubmissionMetadata metadata(UUID deviceSubmissionId) {
-        return metadata(deviceSubmissionId, LocalDateTime.of(2026, 3, 15, 10, 0));
-    }
-
-    private SubmissionMetadata metadata(UUID deviceSubmissionId, LocalDateTime completedAt) {
-        return new SubmissionMetadata(collectorId, deviceSubmissionId, completedAt);
+        return new SubmissionMetadata(collectorId, deviceSubmissionId, LocalDateTime.of(2026, 3, 15, 10, 0));
     }
 
     private BypSubmission createByp(String name, String gender, Location location, UUID deviceSubmissionId) {
-        return createByp(name, gender, location, deviceSubmissionId, LocalDateTime.of(2026, 3, 15, 10, 0));
-    }
-
-    private BypSubmission createByp(
-            String name,
-            String gender,
-            Location location,
-            UUID deviceSubmissionId,
-            LocalDateTime completedAt
-    ) {
         return new BypSubmission(
                 UUID.randomUUID(),
-                metadata(deviceSubmissionId, completedAt),
+                metadata(deviceSubmissionId),
                 location,
                 name,
                 "0772000" + deviceSubmissionId.toString().substring(0, 3),

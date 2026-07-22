@@ -57,7 +57,7 @@ class SubmissionRepositoryAdapterTest {
     @BeforeEach
     void setUp() {
         submissionMapper = Mappers.getMapper(SubmissionMapper.class);
-        adapter = new SubmissionRepositoryAdapter(submissionJpaRepository, submissionMapper);
+        adapter = new SubmissionRepositoryAdapter(submissionJpaRepository, submissionMapper, null);
     }
 
     @Test
