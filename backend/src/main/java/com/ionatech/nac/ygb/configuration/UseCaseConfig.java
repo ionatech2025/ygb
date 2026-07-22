@@ -3,6 +3,7 @@ package com.ionatech.nac.ygb.configuration;
 import com.ionatech.nac.ygb.application.ports.api.*;
 import com.ionatech.nac.ygb.application.ports.spi.*;
 import com.ionatech.nac.ygb.application.services.*;
+import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,5 +177,66 @@ public class UseCaseConfig {
     @Bean
     public GetAdminReceiptStatusQuery getAdminReceiptStatusQuery(SubmissionRepositoryPort submissionRepositoryPort) {
         return new GetAdminReceiptStatusService(submissionRepositoryPort);
+    }
+
+    @Bean
+    public AnonymisationProjector anonymisationProjector() {
+        return new AnonymisationProjector();
+    }
+
+    @Bean
+    public GetPublicDashboardFilterOptionsQuery getPublicDashboardFilterOptionsQuery(
+            DashboardFilterOptionsRepositoryPort dashboardFilterOptionsRepositoryPort
+    ) {
+        return new GetPublicDashboardFilterOptionsService(dashboardFilterOptionsRepositoryPort);
+    }
+
+    @Bean
+    public PublicDashboardService publicDashboardService(
+            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new PublicDashboardService(
+                dashboardAggregationRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                anonymisationProjector
+        );
+    }
+
+    @Bean
+    public GetPublicDashboardSummaryQuery getPublicDashboardSummaryQuery(
+            PublicDashboardService publicDashboardService
+    ) {
+        return publicDashboardService;
+    }
+
+    @Bean
+    public GetPublicDashboardChartQuery getPublicDashboardChartQuery(
+            PublicDashboardService publicDashboardService
+    ) {
+        return publicDashboardService;
+    }
+
+    @Bean
+    public GetPublicDashboardHeatmapQuery getPublicDashboardHeatmapQuery(
+            PublicDashboardService publicDashboardService
+    ) {
+        return publicDashboardService;
+    }
+
+    @Bean
+    public ExportPublicDatasetQuery exportPublicDatasetQuery(
+            PublicAnonymisedExportRepositoryPort publicAnonymisedExportRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            PublicExportGeneratorPort publicExportGeneratorPort,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new ExportPublicDatasetService(
+                publicAnonymisedExportRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                publicExportGeneratorPort,
+                anonymisationProjector
+        );
     }
 }

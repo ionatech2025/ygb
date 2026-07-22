@@ -9,7 +9,11 @@ public enum ExportFormat {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException("Export format is required.");
         }
-        return ExportFormat.valueOf(value.trim().toUpperCase());
+        String normalized = value.trim().toUpperCase();
+        if ("EXCEL".equals(normalized)) {
+            return XLSX;
+        }
+        return ExportFormat.valueOf(normalized);
     }
 
     public String fileExtension() {
