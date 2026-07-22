@@ -11,7 +11,9 @@ interface SyncStoreState {
   lastSyncError: string | null;
   syncing: boolean;
   initialize: () => Promise<void>;
+  incrementPendingCount: () => void;
   refreshPendingCount: () => Promise<void>;
+  clearSyncError: () => void;
   triggerSync: () => Promise<void>;
 }
 
@@ -49,9 +51,17 @@ export const useSyncStore = create<SyncStoreState>((set, get) => ({
     set({ lastSyncedAt, pendingCount });
   },
 
+  incrementPendingCount: () => {
+    set((state) => ({ pendingCount: state.pendingCount + 1 }));
+  },
+
   refreshPendingCount: async () => {
     const pendingCount = await submissionQueue.countPending();
     set({ pendingCount });
+  },
+
+  clearSyncError: () => {
+    set({ lastSyncError: null });
   },
 
   triggerSync: async () => {

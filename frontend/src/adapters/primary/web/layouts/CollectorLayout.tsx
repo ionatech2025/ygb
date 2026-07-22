@@ -1,12 +1,13 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { ClipboardList, LogOut, Wifi, WifiOff } from 'lucide-react';
+import { ClipboardList, LogOut } from 'lucide-react';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { SubmissionCountBadge } from '../components/SubmissionCountBadge';
+import { SyncFailedToast } from '../components/SyncFailedToast';
+import { SyncStatusBar } from '../components/SyncStatusBar';
 
 export function CollectorLayout() {
   const user = useAuthStore((state) => state.user);
-  const isOnline = useAuthStore((state) => state.isOnline);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
 
@@ -31,20 +32,6 @@ export function CollectorLayout() {
           <div className="flex items-center gap-2">
             <SubmissionCountBadge />
             <ThemeToggle />
-            <span
-              className={`inline-flex min-h-9 items-center gap-1 rounded-full px-2.5 text-[10px] font-bold uppercase tracking-wide ${
-                isOnline
-                  ? 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-300'
-                  : 'border border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-300'
-              }`}
-            >
-              {isOnline ? (
-                <Wifi className="h-3 w-3" aria-hidden="true" />
-              ) : (
-                <WifiOff className="h-3 w-3" aria-hidden="true" />
-              )}
-              {isOnline ? 'Online' : 'Offline'}
-            </span>
             <button
               type="button"
               onClick={handleLogout}
@@ -56,6 +43,8 @@ export function CollectorLayout() {
           </div>
         </div>
       </header>
+      <SyncStatusBar />
+      <SyncFailedToast />
       <main className="flex-1 px-4 py-5">
         <div className="mx-auto max-w-lg">
           <Outlet />

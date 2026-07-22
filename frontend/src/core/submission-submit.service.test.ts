@@ -5,6 +5,7 @@ import { submitSurvey } from './submission-submit.service';
 
 const enqueueMock = vi.fn().mockResolvedValue(1);
 const recordSubmissionMock = vi.fn();
+const incrementPendingMock = vi.fn();
 const validateMock = vi.fn().mockResolvedValue({ valid: true });
 
 vi.mock('../adapters/secondary/submission/submission-queue.adapter', () => ({
@@ -28,6 +29,7 @@ vi.mock('./store/useSyncStore', () => ({
   useSyncStore: {
     getState: () => ({
       refreshPendingCount: vi.fn().mockResolvedValue(undefined),
+      incrementPendingCount: incrementPendingMock,
       triggerSync: vi.fn().mockResolvedValue(undefined),
     }),
   },
@@ -46,6 +48,7 @@ describe('submitSurvey index fields', () => {
   beforeEach(() => {
     enqueueMock.mockClear();
     recordSubmissionMock.mockClear();
+    incrementPendingMock.mockClear();
     validateMock.mockResolvedValue({ valid: true });
   });
 
@@ -64,6 +67,7 @@ describe('submitSurvey index fields', () => {
     });
 
     expect(enqueueMock).toHaveBeenCalledTimes(1);
+    expect(incrementPendingMock).toHaveBeenCalledTimes(1);
     expect(enqueueMock.mock.calls[0][0]).toMatchObject({
       respondentPhone: '0772111222',
       financialYearPeriod: 'JAN_JUN_2026',
@@ -92,6 +96,7 @@ describe('submitSurvey index fields', () => {
     ).rejects.toBeInstanceOf(DuplicateRespondentError);
 
     expect(recordSubmissionMock).not.toHaveBeenCalled();
+    expect(incrementPendingMock).not.toHaveBeenCalled();
     expect(enqueueMock).not.toHaveBeenCalled();
   });
 

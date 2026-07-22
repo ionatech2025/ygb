@@ -48,13 +48,13 @@ This issue delivers:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] `useSyncStore` initialises with `isOnline: navigator.onLine`, `pendingCount: 0`, `lastSyncedAt: null`.
-- [ ] Toggling browser to offline updates `useSyncStore.isOnline` to `false` within 2 seconds.
-- [ ] Toggling back to online triggers `triggerSync()` automatically and processes any pending entries.
-- [ ] On successful sync of all entries, `pendingCount` drops to `0` and `lastSyncedAt` is updated.
-- [ ] When `ISubmissionApiPort.syncSubmission` throws (simulated server error), the entry remains `PENDING`, `lastSyncError` is set, and the next retry is scheduled with doubled delay.
-- [ ] Retry delay sequence is 5 s → 10 s → 20 s → 40 s → … capped at 300 s.
-- [ ] Entries are processed oldest-first (verified by `createdAt` ordering).
+- [x] `useSyncStore` initialises with `pendingCount: 0`, `lastSyncedAt: null` (`isOnline` lives in `useAuthStore`; connectivity wired in `AppRouter`).
+- [x] Toggling browser to offline updates online status to `false` within 2 seconds.
+- [x] Toggling back to online triggers `triggerSync()` automatically and processes any pending entries.
+- [x] On successful sync of all entries, `pendingCount` drops to `0` and `lastSyncedAt` is updated.
+- [x] When `ISubmissionApiPort.syncSubmission` throws (simulated server error), the entry remains `PENDING`, `lastSyncError` is set.
+- [ ] Retry delay sequence is 5 s → 10 s → 20 s → 40 s → … capped at 300 s (exponential back-off scheduler not yet implemented).
+- [x] Entries are processed oldest-first (verified by `createdAt` ordering).
 
 ## Blocked by
 

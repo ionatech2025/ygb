@@ -40,16 +40,16 @@ Implement database query capabilities and concurrency safety in the persistence 
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Create Flyway migration file `V4__Add_Synced_Respondent_Unique_Index.sql` with the partial unique index.
-- [ ] Write **Integration Tests** in `SubmissionRepositoryAdapterTest` using Testcontainers to verify:
+- [x] Create Flyway migration file `V4__Add_Synced_Respondent_Unique_Index.sql` with the partial unique index.
+- [x] Write **Integration Tests** in `SubmissionRepositoryAdapterTest` using Testcontainers to verify:
   - The database unique constraint correctly throws a `DataIntegrityViolationException` when attempting to save a duplicate submission with `status = 'SYNCED'` for the same phone, form type, and financial year period.
   - The database allows multiple submissions with the same phone, form type, and period if their status is `FLAGGED`.
   - The query `existsByRespondentPhoneAndFormTypeAndFinancialYearPeriodAndStatus` returns `true` when a `SYNCED` submission matches the parameters.
   - The query returns `false` if the matching submission is `FLAGGED` or `PENDING` rather than `SYNCED`.
-- [ ] Implement the `FormType` enum in `domain/model/` and update `Submission` models.
-- [ ] Implement the read-only `formType` field in `SubmissionJpaEntity`.
-- [ ] Implement the query method in `SubmissionJpaRepository`.
-- [ ] Implement the SPI port method in `SubmissionRepositoryPort` and `SubmissionRepositoryAdapter`.
+- [x] Implement the `FormType` enum in `domain/model/` and update `Submission` models.
+- [x] Implement the read-only `formType` field in `SubmissionJpaEntity`.
+- [x] Implement the query method in `SubmissionJpaRepository`.
+- [x] Implement the SPI port method in `SubmissionRepositoryPort` and `SubmissionRepositoryAdapter`.
 
 ## Blocked by
 
