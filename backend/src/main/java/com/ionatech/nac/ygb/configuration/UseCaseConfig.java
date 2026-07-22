@@ -172,4 +172,9 @@ public class UseCaseConfig {
                 dashboardFilterHierarchyValidator
         );
     }
+
+    @Bean
+    public GetAdminReceiptStatusQuery getAdminReceiptStatusQuery(SubmissionRepositoryPort submissionRepositoryPort) {
+        return new GetAdminReceiptStatusService(submissionRepositoryPort);
+    }
 }

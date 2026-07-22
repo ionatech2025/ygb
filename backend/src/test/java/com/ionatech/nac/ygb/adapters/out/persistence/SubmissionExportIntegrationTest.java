@@ -92,7 +92,8 @@ class SubmissionExportIntegrationTest {
         submissionRepository = new SubmissionRepositoryAdapter(
                 submissionJpaRepository,
                 submissionMapper,
-                adminSubmissionQueryJpaRepository
+                adminSubmissionQueryJpaRepository,
+                null
         );
         exportService = new ExportSubmissionsService(
                 submissionRepository,

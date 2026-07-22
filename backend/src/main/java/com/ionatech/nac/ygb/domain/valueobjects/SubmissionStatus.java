@@ -4,5 +4,6 @@ public enum SubmissionStatus {
     PENDING,
     SYNCED,
     FLAGGED,
+    DUPLICATE,
     REJECTED
 }

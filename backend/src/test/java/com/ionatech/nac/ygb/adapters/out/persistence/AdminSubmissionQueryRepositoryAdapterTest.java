@@ -63,7 +63,8 @@ class AdminSubmissionQueryRepositoryAdapterTest {
         submissionRepository = new SubmissionRepositoryAdapter(
                 submissionJpaRepository,
                 submissionMapper,
-                adminSubmissionQueryJpaRepository
+                adminSubmissionQueryJpaRepository,
+                null
         );
         seedKampalaLocations();
         saveSampleSubmissions();

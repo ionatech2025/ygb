@@ -161,6 +161,7 @@ class ValueObjectsTest {
                 SubmissionStatus.PENDING,
                 SubmissionStatus.SYNCED,
                 SubmissionStatus.FLAGGED,
+                SubmissionStatus.DUPLICATE,
                 SubmissionStatus.REJECTED
         );
     }
