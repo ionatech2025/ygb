@@ -10,4 +10,5 @@ export { YesNoRadioGroup } from './YesNoRadioGroup';
 export type { YesNoRadioGroupProps } from './YesNoRadioGroup';
 export { RespondentSection } from './RespondentSection';
 export type { RespondentSectionProps } from './RespondentSection';
+export { DuplicateRespondentAlert } from './DuplicateRespondentAlert';
 export { buildSubmissionProvenance, buildAuthProvenanceSnapshot } from './buildSubmissionProvenance';

@@ -1,17 +1,24 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { enrichPendingSubmission } from './build-pending-submission-index';
+import { DuplicateRespondentError } from './duplicate-respondent.error';
 import { submitSurvey } from './submission-submit.service';
 
 const enqueueMock = vi.fn().mockResolvedValue(1);
+const recordSubmissionMock = vi.fn();
+const validateMock = vi.fn().mockResolvedValue({ valid: true });
 
 vi.mock('../adapters/secondary/submission/submission-queue.adapter', () => ({
   submissionQueue: { enqueue: (...args: unknown[]) => enqueueMock(...args) },
 }));
 
+vi.mock('./respondent-uniqueness.validation', () => ({
+  validateRespondentUniqueness: (...args: unknown[]) => validateMock(...args),
+}));
+
 vi.mock('./store/useSubmissionCountStore', () => ({
   useSubmissionCountStore: {
     getState: () => ({
-      recordSubmission: vi.fn(),
+      recordSubmission: recordSubmissionMock,
       refreshFromLocal: vi.fn().mockResolvedValue(undefined),
     }),
   },
@@ -36,9 +43,13 @@ vi.mock('./store/useAuthStore', () => ({
 }));
 
 describe('submitSurvey index fields', () => {
-  it('populates respondentPhone and financialYearPeriod on enqueue', async () => {
+  beforeEach(() => {
     enqueueMock.mockClear();
+    recordSubmissionMock.mockClear();
+    validateMock.mockResolvedValue({ valid: true });
+  });
 
+  it('populates respondentPhone and financialYearPeriod on enqueue', async () => {
     await submitSurvey({
       formType: 'BYP',
       collectorId: 'collector-1',
@@ -57,6 +68,31 @@ describe('submitSurvey index fields', () => {
       respondentPhone: '0772111222',
       financialYearPeriod: 'JAN_JUN_2026',
     });
+  });
+
+  it('throws DuplicateRespondentError and skips enqueue when duplicate exists', async () => {
+    validateMock.mockResolvedValueOnce({
+      valid: false,
+      message: 'BYP form already submitted for this respondent in Jan–Jun 2026.',
+    });
+
+    await expect(
+      submitSurvey({
+        formType: 'BYP',
+        collectorId: 'collector-1',
+        deviceSubmissionId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+        status: 'PENDING',
+        retryCount: 0,
+        createdAt: '2026-03-15T10:00:00.000Z',
+        payload: {
+          respondentPhone: '0772111222',
+          formCompletedAt: '2026-03-15T10:00:00.000Z',
+        },
+      })
+    ).rejects.toBeInstanceOf(DuplicateRespondentError);
+
+    expect(recordSubmissionMock).not.toHaveBeenCalled();
+    expect(enqueueMock).not.toHaveBeenCalled();
   });
 
   it('derives index fields from payload via enrichPendingSubmission', () => {

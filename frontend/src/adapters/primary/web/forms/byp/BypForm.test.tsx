@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { DuplicateRespondentError } from '../../../../../core/duplicate-respondent.error';
 import { BypForm } from './BypForm';
 
 vi.mock('../../../../../core/LocationService', () => ({
@@ -130,5 +131,51 @@ describe('BypForm', () => {
     expect(enqueueMock).toHaveBeenCalledTimes(1);
     expect(enqueueMock.mock.calls[0][0].deviceSubmissionId).toBe('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
     expect(enqueueMock.mock.calls[0][0].payload.formType).toBe('BYP');
+  }, 10_000);
+
+  it('blocks submit when a local duplicate respondent exists (TC-UNIQ-01-01)', async () => {
+    enqueueMock.mockRejectedValueOnce(
+      new DuplicateRespondentError(
+        'BYP form already submitted for this respondent in Jan–Jun 2026.'
+      )
+    );
+
+    vi.spyOn(crypto, 'randomUUID').mockReturnValue('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
+
+    const user = userEvent.setup();
+    render(<BypForm />);
+
+    await user.type(screen.getByLabelText(/name of respondent/i), 'Jane Doe');
+    await user.type(screen.getByLabelText(/phone number/i), '0772111222');
+    await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
+    await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_20_24');
+    await user.type(screen.getByLabelText(/exact age/i), '22');
+
+    await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
+    await user.selectOptions(document.getElementById('district')!, 'district-1');
+    await waitFor(() => expect(document.getElementById('subcounty')).not.toBeDisabled());
+    await user.selectOptions(document.getElementById('subcounty')!, 'subcounty-1');
+    await waitFor(() => expect(document.getElementById('parish')).not.toBeDisabled());
+    await user.selectOptions(document.getElementById('parish')!, 'parish-1');
+    await waitFor(() => expect(document.getElementById('village')).not.toBeDisabled());
+    await user.selectOptions(document.getElementById('village')!, 'village-1');
+
+    await user.selectOptions(screen.getByLabelText(/Q1\. Fund receipt duration/i), 'ONE_WEEK');
+    await user.click(document.getElementById('receivedActualAmountRequested-yes')!);
+    await user.type(screen.getByLabelText(/Q3\. Cash amount received/i), '500000');
+    await user.selectOptions(screen.getByLabelText(/Q4\. Instalment period/i), 'MONTHLY');
+    await user.selectOptions(screen.getByLabelText(/Q5\. PDC/i), 'VERY_GOOD');
+    await user.selectOptions(screen.getByLabelText(/Q6\. PDM performance rating/i), 'GOOD');
+    await user.click(document.getElementById('groupOrganizedTransparently-yes')!);
+    await user.click(document.getElementById('receivedBds-yes')!);
+    await user.click(screen.getByLabelText(/Training/i));
+    await user.type(screen.getByLabelText(/Q9\. Suggestions for improvement/i), 'Provide more technical support.');
+
+    await user.click(screen.getByRole('button', { name: /Submit BYP Survey/i }));
+
+    expect(enqueueMock).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId('duplicate-respondent-alert')).toHaveTextContent(
+      /BYP form already submitted for this respondent in Jan–Jun 2026\./i
+    );
   }, 10_000);
 });

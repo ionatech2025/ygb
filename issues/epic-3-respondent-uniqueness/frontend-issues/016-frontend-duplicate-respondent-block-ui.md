@@ -35,13 +35,13 @@ Example message:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit test: `validateRespondentUniqueness` returns invalid with message containing form type + period label when port returns duplicate (TC-UNIQ-01-04).
-- [ ] Unit test: different form type allowed (TC-UNIQ-01-02).
-- [ ] Unit test: different FY period allowed (TC-UNIQ-01-03).
-- [ ] Integration test (`BypForm.test.tsx`): after mocking a local duplicate, submit is blocked and `submitSurvey` / enqueue is **not** called (TC-UNIQ-01-01).
-- [ ] Integration test: non-duplicate submit still calls `submitSurvey` normally.
-- [ ] Duplicate error is shown adjacent to phone field and/or as form alert; user can correct phone and resubmit.
-- [ ] All four forms (BYP, IYP, LGO, PC) use the shared validation path.
+- [x] Unit test: `validateRespondentUniqueness` returns invalid with message containing form type + period label when port returns duplicate (TC-UNIQ-01-04).
+- [x] Unit test: different form type allowed (TC-UNIQ-01-02).
+- [x] Unit test: different FY period allowed (TC-UNIQ-01-03).
+- [x] Integration test (`BypForm.test.tsx`): after mocking a local duplicate, submit is blocked and `submitSurvey` / enqueue is **not** called (TC-UNIQ-01-01).
+- [x] Integration test: non-duplicate submit still calls `submitSurvey` normally.
+- [x] Duplicate error is shown adjacent to phone field and/or as form alert; user can correct phone and resubmit.
+- [x] All four forms (BYP, IYP, LGO, PC) use the shared validation path.
 
 ## Blocked by
 
