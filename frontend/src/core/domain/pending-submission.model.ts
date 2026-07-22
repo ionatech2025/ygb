@@ -11,5 +11,12 @@ export interface PendingSubmission {
   retryCount: number;
   createdAt: string;
   syncedAt?: string;
+  respondentPhone: string;
+  financialYearPeriod: string;
   payload: object;
 }
+
+export type PendingSubmissionInput = Omit<
+  PendingSubmission,
+  'localId' | 'respondentPhone' | 'financialYearPeriod'
+>;

@@ -36,12 +36,12 @@ Do **not** count `FAILED` entries unless product confirms otherwise.
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Dexie schema stores `respondentPhone` and `financialYearPeriod` on each queued record.
-- [ ] Adapter test (fake-indexeddb): after enqueueing BYP for `0772111222` in `JAN_JUN_2026`, `existsLocalDuplicate('BYP', '0772111222', 'JAN_JUN_2026')` returns `true`.
-- [ ] Adapter test: same phone + `IYP` in same period returns `false` (TC-UNIQ-01-02).
-- [ ] Adapter test: same phone + `BYP` in `JUL_DEC_2026` returns `false` (TC-UNIQ-01-03).
-- [ ] Adapter test: `FAILED` record does not trigger duplicate (if excluded by design).
-- [ ] `submitSurvey` populates denormalised fields on every new enqueue.
+- [x] Dexie schema stores `respondentPhone` and `financialYearPeriod` on each queued record.
+- [x] Adapter test (fake-indexeddb): after enqueueing BYP for `0772111222` in `JAN_JUN_2026`, `existsLocalDuplicate('BYP', '0772111222', 'JAN_JUN_2026')` returns `true`.
+- [x] Adapter test: same phone + `IYP` in same period returns `false` (TC-UNIQ-01-02).
+- [x] Adapter test: same phone + `BYP` in `JUL_DEC_2026` returns `false` (TC-UNIQ-01-03).
+- [x] Adapter test: `FAILED` record does not trigger duplicate (if excluded by design).
+- [x] `submitSurvey` populates denormalised fields on every new enqueue.
 
 ## Blocked by
 
