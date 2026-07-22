@@ -29,11 +29,11 @@ The period is derived from the **device's local date/time** at the point of chec
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit test: March 2026 → `JAN_JUN_2026` (TC-UNIQ-01-01 boundary).
-- [ ] Unit test: June 30 2026 → `JAN_JUN_2026`; July 1 2026 → `JUL_DEC_2026` (TC-UNIQ-01-03).
-- [ ] Unit test: August 2026 → `JUL_DEC_2026`.
-- [ ] Unit test: `formatFinancialYearPeriodLabel` returns `'Jan–Jun 2026'` and `'Jul–Dec 2026'` for UI messages (TC-UNIQ-01-04).
-- [ ] `toString()` / key format matches backend (`JAN_JUN_2026`, not `H1-2026` or similar).
+- [x] Unit test: March 2026 → `JAN_JUN_2026` (TC-UNIQ-01-01 boundary).
+- [x] Unit test: June 30 2026 → `JAN_JUN_2026`; July 1 2026 → `JUL_DEC_2026` (TC-UNIQ-01-03).
+- [x] Unit test: August 2026 → `JUL_DEC_2026`.
+- [x] Unit test: `formatFinancialYearPeriodLabel` returns `'Jan–Jun 2026'` and `'Jul–Dec 2026'` for UI messages (TC-UNIQ-01-04).
+- [x] `toString()` / key format matches backend (`JAN_JUN_2026`, not `H1-2026` or similar).
 
 ## Blocked by
 
