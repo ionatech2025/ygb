@@ -18,6 +18,7 @@ import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
 
 export interface DashboardFilterPanelProps {
   dashboardApi: IDashboardApiPort;
+  compact?: boolean;
 }
 
 function labelFromFinancialYearPeriodKey(key: string): string {
@@ -31,13 +32,13 @@ function labelFromFinancialYearPeriodKey(key: string): string {
   });
 }
 
-export function DashboardFilterPanel({ dashboardApi }: DashboardFilterPanelProps) {
+export function DashboardFilterPanel({ dashboardApi, compact = false }: DashboardFilterPanelProps) {
   const filter = useDashboardFilterStore((state) => state.filter);
   const locationFilterError = useDashboardFilterStore((state) => state.locationFilterError);
   const setFilter = useDashboardFilterStore((state) => state.setFilter);
   const setLocationFilterError = useDashboardFilterStore((state) => state.setLocationFilterError);
   const clearAll = useDashboardFilterStore((state) => state.clearAll);
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(!compact);
   const [collectors, setCollectors] = useState<Array<{ id: string; fullName: string }>>([]);
   const [financialYearPeriods, setFinancialYearPeriods] = useState<string[]>([]);
 

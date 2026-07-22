@@ -13,7 +13,11 @@ function filtersEqual(a: DashboardFilter, b: DashboardFilter): boolean {
 }
 
 export function isDashboardFilterRoute(pathname: string): boolean {
-  return pathname === '/admin/dashboard' || pathname.startsWith('/admin/submissions');
+  return (
+    pathname === '/admin/dashboard' ||
+    pathname.startsWith('/admin/submissions') ||
+    pathname === '/admin/collectors'
+  );
 }
 
 /** Keeps dashboard filter state in sync with URL search params on dashboard routes only. */
