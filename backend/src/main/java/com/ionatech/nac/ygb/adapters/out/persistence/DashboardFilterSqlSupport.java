@@ -15,6 +15,11 @@ final class DashboardFilterSqlSupport {
         return appendPredicates(filter, params, "s");
     }
 
+    /** Submission-table predicates without the leading {@code WHERE 1=1} (for JOIN ON clauses). */
+    static String andPredicates(DashboardFilter filter, Map<String, Object> params, String alias) {
+        return appendPredicates(filter, params, alias).substring(" WHERE 1=1".length());
+    }
+
     private static String appendPredicates(DashboardFilter filter, Map<String, Object> params, String alias) {
         StringBuilder where = new StringBuilder(" WHERE 1=1 ");
         appendUuid(where, params, alias, "district_id", "districtId", filter.districtId());

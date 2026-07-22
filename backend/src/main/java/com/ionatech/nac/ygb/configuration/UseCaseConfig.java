@@ -148,4 +148,28 @@ public class UseCaseConfig {
     ) {
         return new GetCollectorSubmissionsService(userRepositoryPort, listSubmissionsQuery);
     }
+
+    @Bean
+    public GetCollectorLeaderboardQuery getCollectorLeaderboardQuery(
+            CollectorTrackerRepositoryPort collectorTrackerRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator
+    ) {
+        return new GetCollectorLeaderboardService(
+                collectorTrackerRepositoryPort,
+                dashboardFilterHierarchyValidator
+        );
+    }
+
+    @Bean
+    public GetCollectorBreakdownQuery getCollectorBreakdownQuery(
+            UserRepositoryPort userRepositoryPort,
+            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator
+    ) {
+        return new GetCollectorBreakdownService(
+                userRepositoryPort,
+                dashboardAggregationRepositoryPort,
+                dashboardFilterHierarchyValidator
+        );
+    }
 }
