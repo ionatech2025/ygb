@@ -84,6 +84,16 @@ vi.mock('../../../secondary/api/http-user.adapter', () => ({
   HttpUserAdapter: vi.fn().mockImplementation(() => ({
     fetchActiveCollectors: vi.fn().mockResolvedValue([]),
     createDataCollector: vi.fn(),
+    deactivateUser: vi.fn(),
+    reactivateUser: vi.fn(),
+    resetPassword: vi.fn(),
+    getCollectorSubmissions: vi.fn().mockResolvedValue({
+      items: [],
+      totalElements: 0,
+      page: 0,
+      size: 25,
+      totalPages: 0,
+    }),
   })),
 }));
 

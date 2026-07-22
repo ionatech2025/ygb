@@ -21,6 +21,7 @@ function renderAdminLayout(initialPath = '/admin/dashboard') {
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<div>Dashboard page</div>} />
           <Route path="/admin/users" element={<div>Users page</div>} />
+          <Route path="/admin/users/:id" element={<div>Collector profile page</div>} />
           <Route path="/admin/collectors" element={<div>Collectors page</div>} />
           <Route path="/admin/sync-status" element={<div>Sync page</div>} />
         </Route>
@@ -60,6 +61,20 @@ describe('AdminLayout', () => {
 
     await waitFor(() => {
       expect(useDashboardFilterStore.getState().filter.districtId).toBe('d1');
+      expect(useDashboardFilterStore.getState().filter.formType).toBe('BYP');
+    });
+  });
+
+  it('does not overwrite dashboard filter state from collector profile URLs', async () => {
+    useDashboardFilterStore.setState({
+      filter: { ...EMPTY_DASHBOARD_FILTER, districtId: 'dashboard-district', formType: 'BYP' },
+      locationFilterError: null,
+    });
+
+    renderAdminLayout('/admin/users/collector-1?districtId=profile-district&formType=IYP');
+
+    await waitFor(() => {
+      expect(useDashboardFilterStore.getState().filter.districtId).toBe('dashboard-district');
       expect(useDashboardFilterStore.getState().filter.formType).toBe('BYP');
     });
   });

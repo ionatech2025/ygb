@@ -6,6 +6,7 @@ import { useSubmissionCountStore } from '../../../../core/store/useSubmissionCou
 import { locationService } from '../../../../core/LocationService';
 import { PortalLogin } from '../forms/PortalLogin';
 import ManageUsers from '../forms/ManageUsers';
+import CollectorProfilePage from '../admin/CollectorProfilePage';
 import { CollectorDashboard } from '../forms/CollectorDashboard';
 import { AdminDashboardHome } from '../admin/AdminDashboardHome';
 import { AdminCollectorTrackerPage } from '../admin/AdminCollectorTrackerPage';
@@ -66,6 +67,7 @@ export function AppRouter() {
             <Route path="/admin/submissions" element={<SubmissionListPage />} />
             <Route path="/admin/submissions/:id" element={<SubmissionDetailPage />} />
             <Route path="/admin/users" element={<ManageUsers />} />
+            <Route path="/admin/users/:id" element={<CollectorProfilePage />} />
             <Route path="/admin/collectors" element={<AdminCollectorTrackerPage />} />
             <Route path="/admin/sync-status" element={<AdminSyncStatusPage />} />
           </Route>

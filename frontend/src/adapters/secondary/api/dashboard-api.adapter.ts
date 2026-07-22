@@ -8,9 +8,19 @@ interface BackendAggregatesResponse {
   totalSubmissions: number;
   byDistrict: Array<{ districtName: string; districtId: string; count: number }>;
   byGender: Array<{ gender: string; count: number }>;
-  overTime: Array<{ date: string; count: number }>;
+  overTime: Array<{ bucketStart: string; count: number }>;
   byFormType: Array<{ formType: string; count: number }>;
   byFinancialYearPeriod: Array<{ financialYearPeriod: string; count: number }>;
+}
+
+function mapAggregatesResponse(response: BackendAggregatesResponse): DashboardAggregates {
+  return {
+    ...response,
+    overTime: response.overTime.map((point) => ({
+      date: point.bucketStart,
+      count: point.count,
+    })),
+  };
 }
 
 interface BackendFilterOptionsResponse {
@@ -56,10 +66,11 @@ export class HttpDashboardAdapter implements IDashboardApiPort {
     }
 
     const query = this.buildFilterQueryString(filter).replace(/^\?/, '');
-    return apiFetch<BackendAggregatesResponse>(
+    const response = await apiFetch<BackendAggregatesResponse>(
       `/api/v1/admin/dashboard/aggregates${query ? `?${query}` : ''}`,
       { method: 'GET' },
       token
     );
+    return mapAggregatesResponse(response);
   }
 }
