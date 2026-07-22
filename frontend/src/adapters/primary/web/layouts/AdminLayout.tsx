@@ -1,10 +1,12 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { LogOut, Shield } from 'lucide-react';
+import { useDashboardFilterUrlSync } from '../../../../core/hooks/useDashboardFilterUrlSync';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { AdminNav } from './AdminNav';
 
 export function AdminLayout() {
+  useDashboardFilterUrlSync();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();

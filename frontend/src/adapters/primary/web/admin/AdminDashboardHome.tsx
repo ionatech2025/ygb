@@ -1,8 +1,17 @@
+import { useMemo } from 'react';
 import { BarChart3, LayoutDashboard } from 'lucide-react';
+import { HttpDashboardAdapter } from '../../../secondary/api/dashboard-api.adapter';
+import { useAuthStore } from '../../../../core/store/useAuthStore';
+import { DashboardFilterPanel } from './DashboardFilterPanel';
 
 export function AdminDashboardHome() {
+  const getAccessToken = useAuthStore((state) => state.getAccessToken);
+  const dashboardApi = useMemo(() => new HttpDashboardAdapter(getAccessToken), [getAccessToken]);
+
   return (
     <div className="mx-auto max-w-6xl space-y-6" data-testid="admin-dashboard-home">
+      <DashboardFilterPanel dashboardApi={dashboardApi} />
+
       <div>
         <h2 className="flex items-center gap-2 text-lg font-bold text-text sm:text-xl">
           <LayoutDashboard className="h-5 w-5 text-brand" aria-hidden="true" />

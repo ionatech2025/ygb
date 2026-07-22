@@ -1,8 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AdminLayout } from './AdminLayout';
+import { EMPTY_DASHBOARD_FILTER } from '../../../../core/domain/dashboard-filter.model';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
+import { useDashboardFilterStore } from '../../../../core/store/useDashboardFilterStore';
 
 vi.mock('../../../../core/store/useAuthStore', () => ({
   useAuthStore: vi.fn(),
@@ -30,6 +32,7 @@ function renderAdminLayout(initialPath = '/admin/dashboard') {
 describe('AdminLayout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    useDashboardFilterStore.setState({ filter: EMPTY_DASHBOARD_FILTER });
     vi.mocked(useAuthStore).mockImplementation((selector) =>
       selector({
         user: { id: '1', fullName: 'Admin User', phoneNumber: '0771000000', role: 'ADMIN' },
@@ -50,5 +53,14 @@ describe('AdminLayout', () => {
   it('renders the active route outlet', () => {
     renderAdminLayout('/admin/users');
     expect(screen.getByText('Users page')).toBeInTheDocument();
+  });
+
+  it('hydrates dashboard filter state from URL search params', async () => {
+    renderAdminLayout('/admin/dashboard?districtId=d1&formType=BYP');
+
+    await waitFor(() => {
+      expect(useDashboardFilterStore.getState().filter.districtId).toBe('d1');
+      expect(useDashboardFilterStore.getState().filter.formType).toBe('BYP');
+    });
   });
 });

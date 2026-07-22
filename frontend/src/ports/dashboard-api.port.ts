@@ -1,8 +1,22 @@
-/** Stub port — full implementation in Epic 5 dashboard issues 002–004. */
+import type { DashboardFilter } from '../core/domain/dashboard-filter.model';
+
+export interface DashboardFilterOptions {
+  districts: Array<{ id: string; name: string }>;
+  subcounties: Array<{ id: string; name: string }>;
+  parishes: Array<{ id: string; name: string }>;
+  formTypes: string[];
+  genders: string[];
+  ageGroups: string[];
+  collectors: Array<{ id: string; fullName: string }>;
+  financialYearPeriods: string[];
+}
+
 export interface DashboardAggregatesStub {
   totalSubmissions: number;
 }
 
 export interface IDashboardApiPort {
-  fetchAggregates(): Promise<DashboardAggregatesStub>;
+  fetchFilterOptions(districtId?: string, subcountyId?: string): Promise<DashboardFilterOptions>;
+  buildFilterQueryString(filter: DashboardFilter): string;
+  fetchAggregates(filter: DashboardFilter): Promise<DashboardAggregatesStub>;
 }
