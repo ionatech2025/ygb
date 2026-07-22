@@ -46,6 +46,7 @@ Thumbs.db
 # IDEs and Editors
 .idea/
 .vscode/
+backend/.settings/org.eclipse.jdt.core.prefs
 *.swp
 *.swo
 *~

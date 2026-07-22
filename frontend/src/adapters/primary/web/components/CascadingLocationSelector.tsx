@@ -58,6 +58,7 @@ export function CascadingLocationSelector({
   const {
     loading,
     ready,
+    loadError,
     districts,
     subcounties,
     parishes,
@@ -85,8 +86,10 @@ export function CascadingLocationSelector({
       )}
 
       {!loading && !ready && (
-        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-800">
-          Location data is unavailable offline. Connect once to download the dataset.
+        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-900">
+          {loadError === 'fetch-failed'
+            ? 'Unable to download location data. Check your connection and refresh the page.'
+            : 'Location data is unavailable offline. Connect once while online to download the Kampala and Ntungamo dataset.'}
         </p>
       )}
 

@@ -21,6 +21,7 @@ export function useCascadingLocation(
   const [subcounties, setSubcounties] = useState<AdminLocation[]>([]);
   const [parishes, setParishes] = useState<AdminLocation[]>([]);
   const [villages, setVillages] = useState<AdminLocation[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -33,6 +34,7 @@ export function useCascadingLocation(
         if (!cancelled) {
           setDistricts(districtList);
           setReady(districtList.length > 0);
+          setLoadError(locationService.getLoadError?.() ?? null);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -124,6 +126,7 @@ export function useCascadingLocation(
   return {
     loading,
     ready,
+    loadError,
     districts,
     subcounties,
     parishes,

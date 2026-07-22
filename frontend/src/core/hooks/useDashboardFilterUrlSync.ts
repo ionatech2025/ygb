@@ -61,5 +61,5 @@ export function useDashboardFilterUrlSync() {
 }
 
 export function resetDashboardFilterUrlSyncForTests() {
-  useDashboardFilterStore.setState({ filter: EMPTY_DASHBOARD_FILTER });
+  useDashboardFilterStore.setState({ filter: EMPTY_DASHBOARD_FILTER, locationFilterError: null });
 }

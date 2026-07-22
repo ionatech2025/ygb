@@ -1,4 +1,5 @@
 import type { AdminLocation } from '../../../core/domain/admin-location.model';
+import { API_BASE } from '../../../core/api/api-base';
 
 const ETAG_KEY = 'ygb:location-etag';
 
@@ -33,7 +34,7 @@ export async function fetchLocationDataset(
     headers['If-None-Match'] = cachedEtag;
   }
 
-  const response = await fetch('/api/v1/locations/dataset', { headers });
+  const response = await fetch(`${API_BASE}/api/v1/locations/dataset`, { headers });
 
   if (response.status === 304) {
     return null;

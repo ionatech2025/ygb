@@ -1,8 +1,18 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AdminDashboardHome } from './AdminDashboardHome';
+import type { DashboardAggregates } from '../../../../core/domain/dashboard-aggregates.model';
 import { EMPTY_DASHBOARD_FILTER } from '../../../../core/domain/dashboard-filter.model';
 import { useDashboardFilterStore } from '../../../../core/store/useDashboardFilterStore';
+
+const emptyAggregates: DashboardAggregates = {
+  totalSubmissions: 0,
+  byDistrict: [],
+  byGender: [],
+  overTime: [],
+  byFormType: [],
+  byFinancialYearPeriod: [],
+};
 
 vi.mock('../../../secondary/api/dashboard-api.adapter', () => ({
   HttpDashboardAdapter: vi.fn().mockImplementation(() => ({
@@ -17,7 +27,7 @@ vi.mock('../../../secondary/api/dashboard-api.adapter', () => ({
       financialYearPeriods: [],
     }),
     buildFilterQueryString: vi.fn(),
-    fetchAggregates: vi.fn(),
+    fetchAggregates: vi.fn().mockResolvedValue(emptyAggregates),
   })),
 }));
 
@@ -34,17 +44,20 @@ vi.mock('../../../../core/store/useAuthStore', () => ({
 
 describe('AdminDashboardHome', () => {
   beforeEach(() => {
-    useDashboardFilterStore.setState({ filter: EMPTY_DASHBOARD_FILTER });
+    useDashboardFilterStore.setState({ filter: EMPTY_DASHBOARD_FILTER, locationFilterError: null });
   });
 
-  it('renders filter panel plus summary stat and chart placeholder regions', async () => {
+  it('renders filter panel, summary cards, and chart placeholders', async () => {
     render(<AdminDashboardHome />);
 
     expect(screen.getByTestId('admin-dashboard-home')).toBeInTheDocument();
     expect(screen.getByTestId('dashboard-filter-panel')).toBeInTheDocument();
-    expect(screen.getByTestId('admin-stat-placeholders')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('dashboard-summary-cards')).toBeInTheDocument();
+    });
+
     expect(screen.getByTestId('admin-chart-placeholders')).toBeInTheDocument();
-    expect(screen.getByText('Total submissions')).toBeInTheDocument();
     expect(screen.getByText('Submissions over time')).toBeInTheDocument();
     expect(screen.getByText('Breakdown by district / form type')).toBeInTheDocument();
   });

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronDown, Filter, X } from 'lucide-react';
-import { CascadingLocationSelector } from '../components/CascadingLocationSelector';
+import { AlertCircle, ChevronDown, Filter, X } from 'lucide-react';
+import { AdminDashboardLocationSelector } from './AdminDashboardLocationSelector';
 import { FormField, formControlClassName } from '../components/forms/FormField';
 import type { LocationFields } from '../../../../core/domain/admin-location.model';
 import { FORM_TYPE_OPTIONS } from '../../../../core/domain/form-type.model';
@@ -11,14 +11,13 @@ import {
 } from '../../../../core/domain/form-validation.model';
 import { formatFinancialYearPeriodLabel } from '../../../../core/financial-year-period';
 import type { FinancialYearPeriodHalf } from '../../../../core/domain/financial-year-period.model';
+import { sanitizeDashboardLocationFilterFromApiOptions } from '../../../../core/domain/dashboard-filter-location.validation';
 import { hasActiveDashboardFilters } from '../../../../core/domain/dashboard-filter.model';
 import { useDashboardFilterStore } from '../../../../core/store/useDashboardFilterStore';
 import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
-import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
 
 export interface DashboardFilterPanelProps {
   dashboardApi: IDashboardApiPort;
-  locationRepository?: ILocationRepositoryPort;
 }
 
 function labelFromFinancialYearPeriodKey(key: string): string {
@@ -32,9 +31,11 @@ function labelFromFinancialYearPeriodKey(key: string): string {
   });
 }
 
-export function DashboardFilterPanel({ dashboardApi, locationRepository }: DashboardFilterPanelProps) {
+export function DashboardFilterPanel({ dashboardApi }: DashboardFilterPanelProps) {
   const filter = useDashboardFilterStore((state) => state.filter);
+  const locationFilterError = useDashboardFilterStore((state) => state.locationFilterError);
   const setFilter = useDashboardFilterStore((state) => state.setFilter);
+  const setLocationFilterError = useDashboardFilterStore((state) => state.setLocationFilterError);
   const clearAll = useDashboardFilterStore((state) => state.clearAll);
   const [expanded, setExpanded] = useState(true);
   const [collectors, setCollectors] = useState<Array<{ id: string; fullName: string }>>([]);
@@ -45,10 +46,23 @@ export function DashboardFilterPanel({ dashboardApi, locationRepository }: Dashb
     void dashboardApi
       .fetchFilterOptions(filter.districtId || undefined, filter.subcountyId || undefined)
       .then((options) => {
-        if (!cancelled) {
-          setCollectors(options.collectors);
-          setFinancialYearPeriods(options.financialYearPeriods);
+        if (cancelled) {
+          return;
         }
+
+        const currentFilter = useDashboardFilterStore.getState().filter;
+        const sanitized = sanitizeDashboardLocationFilterFromApiOptions(currentFilter, options);
+        if (sanitized.wasSanitized) {
+          setFilter({
+            districtId: sanitized.filter.districtId,
+            subcountyId: sanitized.filter.subcountyId,
+            parishId: sanitized.filter.parishId,
+          });
+          setLocationFilterError(sanitized.message ?? 'Outdated location filters were cleared.');
+        }
+
+        setCollectors(options.collectors);
+        setFinancialYearPeriods(options.financialYearPeriods);
       })
       .catch(() => {
         if (!cancelled) {
@@ -59,7 +73,7 @@ export function DashboardFilterPanel({ dashboardApi, locationRepository }: Dashb
     return () => {
       cancelled = true;
     };
-  }, [dashboardApi, filter.districtId, filter.subcountyId]);
+  }, [dashboardApi, filter.districtId, filter.subcountyId, filter.parishId, setFilter, setLocationFilterError]);
 
   const locationValue: LocationFields = useMemo(
     () => ({
@@ -116,12 +130,22 @@ export function DashboardFilterPanel({ dashboardApi, locationRepository }: Dashb
 
       {expanded && (
         <div className="space-y-5 px-4 py-4 sm:px-5 sm:py-5">
+          {locationFilterError && (
+            <div
+              role="alert"
+              data-testid="dashboard-location-filter-error"
+              className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+            >
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>{locationFilterError}</span>
+            </div>
+          )}
+
           <div data-testid="filter-location">
-            <CascadingLocationSelector
+            <AdminDashboardLocationSelector
               value={locationValue}
               onChange={handleLocationChange}
-              repository={locationRepository}
-              includeVillage={false}
+              dashboardApi={dashboardApi}
             />
           </div>
 

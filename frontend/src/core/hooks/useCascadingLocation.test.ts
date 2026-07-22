@@ -8,6 +8,7 @@ import { useCascadingLocation } from './useCascadingLocation';
 vi.mock('../LocationService', () => ({
   locationService: {
     ensureLoaded: vi.fn().mockResolvedValue(undefined),
+    getLoadError: vi.fn().mockReturnValue(null),
   },
 }));
 

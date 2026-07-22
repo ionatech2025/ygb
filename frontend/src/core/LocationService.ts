@@ -8,8 +8,13 @@ import { locationRepository } from '../adapters/secondary/location/location-repo
 
 export class LocationService {
   private loadingPromise: Promise<void> | null = null;
+  private loadError: string | null = null;
 
   constructor(private readonly repository: ILocationRepositoryPort = locationRepository) {}
+
+  getLoadError(): string | null {
+    return this.loadError;
+  }
 
   async ensureLoaded(): Promise<void> {
     if (this.loadingPromise) {
@@ -25,6 +30,7 @@ export class LocationService {
 
   private async loadInternal(): Promise<void> {
     if (await this.repository.hasData()) {
+      this.loadError = null;
       if (navigator.onLine) {
         await this.refreshInBackground();
       }
@@ -32,6 +38,7 @@ export class LocationService {
     }
 
     if (!navigator.onLine) {
+      this.loadError = 'offline-no-cache';
       return;
     }
 
@@ -45,18 +52,25 @@ export class LocationService {
         await this.repository.save(result.locations);
         writeLocationEtag(result.etag);
       }
+      this.loadError = null;
     } catch {
       // Keep serving cached data when background refresh fails.
     }
   }
 
   private async fetchAndPersist(): Promise<void> {
-    const result = await fetchLocationDataset(readLocationEtag());
-    if (!result) {
-      return;
+    try {
+      const result = await fetchLocationDataset(readLocationEtag());
+      if (!result) {
+        this.loadError = null;
+        return;
+      }
+      await this.repository.save(result.locations);
+      writeLocationEtag(result.etag);
+      this.loadError = null;
+    } catch {
+      this.loadError = 'fetch-failed';
     }
-    await this.repository.save(result.locations);
-    writeLocationEtag(result.etag);
   }
 }
 

@@ -32,7 +32,7 @@ function renderAdminLayout(initialPath = '/admin/dashboard') {
 describe('AdminLayout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    useDashboardFilterStore.setState({ filter: EMPTY_DASHBOARD_FILTER });
+    useDashboardFilterStore.setState({ filter: EMPTY_DASHBOARD_FILTER, locationFilterError: null });
     vi.mocked(useAuthStore).mockImplementation((selector) =>
       selector({
         user: { id: '1', fullName: 'Admin User', phoneNumber: '0771000000', role: 'ADMIN' },

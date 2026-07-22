@@ -1,11 +1,17 @@
 import { apiFetch } from '../../../core/api/api-client';
+import type { DashboardAggregates } from '../../../core/domain/dashboard-aggregates.model';
 import { buildDashboardFilterQueryString } from '../../../core/domain/dashboard-filter.model';
 import type { DashboardFilter } from '../../../core/domain/dashboard-filter.model';
-import type {
-  DashboardAggregatesStub,
-  DashboardFilterOptions,
-  IDashboardApiPort,
-} from '../../../ports/dashboard-api.port';
+import type { DashboardFilterOptions, IDashboardApiPort } from '../../../ports/dashboard-api.port';
+
+interface BackendAggregatesResponse {
+  totalSubmissions: number;
+  byDistrict: Array<{ districtName: string; districtId: string; count: number }>;
+  byGender: Array<{ gender: string; count: number }>;
+  overTime: Array<{ date: string; count: number }>;
+  byFormType: Array<{ formType: string; count: number }>;
+  byFinancialYearPeriod: Array<{ financialYearPeriod: string; count: number }>;
+}
 
 interface BackendFilterOptionsResponse {
   districts: Array<{ id: string; name: string }>;
@@ -43,19 +49,17 @@ export class HttpDashboardAdapter implements IDashboardApiPort {
     );
   }
 
-  async fetchAggregates(filter: DashboardFilter): Promise<DashboardAggregatesStub> {
+  async fetchAggregates(filter: DashboardFilter): Promise<DashboardAggregates> {
     const token = this.getAccessToken();
     if (!token) {
       throw new Error('You must be signed in as an administrator.');
     }
 
     const query = this.buildFilterQueryString(filter).replace(/^\?/, '');
-    const response = await apiFetch<{ totalSubmissions: number }>(
+    return apiFetch<BackendAggregatesResponse>(
       `/api/v1/admin/dashboard/aggregates${query ? `?${query}` : ''}`,
       { method: 'GET' },
       token
     );
-
-    return { totalSubmissions: response.totalSubmissions };
   }
 }

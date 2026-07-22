@@ -3,6 +3,7 @@ import { BarChart3, LayoutDashboard } from 'lucide-react';
 import { HttpDashboardAdapter } from '../../../secondary/api/dashboard-api.adapter';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { DashboardFilterPanel } from './DashboardFilterPanel';
+import { DashboardSummaryCards } from './DashboardSummaryCards';
 
 export function AdminDashboardHome() {
   const getAccessToken = useAuthStore((state) => state.getAccessToken);
@@ -11,31 +12,15 @@ export function AdminDashboardHome() {
   return (
     <div className="mx-auto max-w-6xl space-y-6" data-testid="admin-dashboard-home">
       <DashboardFilterPanel dashboardApi={dashboardApi} />
+      <DashboardSummaryCards dashboardApi={dashboardApi} />
 
       <div>
         <h2 className="flex items-center gap-2 text-lg font-bold text-text sm:text-xl">
           <LayoutDashboard className="h-5 w-5 text-brand" aria-hidden="true" />
           Dashboard Overview
         </h2>
-        <p className="text-sm text-text-muted">
-          Summary statistics and charts will appear here (issues 003–004).
-        </p>
+        <p className="text-sm text-text-muted">Charts will appear here (issue 004).</p>
       </div>
-
-      <section aria-label="Summary statistics placeholders" data-testid="admin-stat-placeholders">
-        <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-text-muted">Summary stats</h3>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {['Total submissions', 'Active collectors', 'Districts covered', 'This period'].map((label) => (
-            <div
-              key={label}
-              className="rounded-2xl border border-dashed border-border bg-surface p-5 shadow-sm"
-            >
-              <p className="text-xs font-semibold text-text-muted">{label}</p>
-              <p className="mt-2 text-2xl font-bold text-text-muted/40">—</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <section aria-label="Chart placeholders" data-testid="admin-chart-placeholders">
         <h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-text-muted">

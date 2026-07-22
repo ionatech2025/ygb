@@ -1,3 +1,4 @@
+import type { DashboardAggregates } from '../core/domain/dashboard-aggregates.model';
 import type { DashboardFilter } from '../core/domain/dashboard-filter.model';
 
 export interface DashboardFilterOptions {
@@ -11,12 +12,8 @@ export interface DashboardFilterOptions {
   financialYearPeriods: string[];
 }
 
-export interface DashboardAggregatesStub {
-  totalSubmissions: number;
-}
-
 export interface IDashboardApiPort {
   fetchFilterOptions(districtId?: string, subcountyId?: string): Promise<DashboardFilterOptions>;
   buildFilterQueryString(filter: DashboardFilter): string;
-  fetchAggregates(filter: DashboardFilter): Promise<DashboardAggregatesStub>;
+  fetchAggregates(filter: DashboardFilter): Promise<DashboardAggregates>;
 }

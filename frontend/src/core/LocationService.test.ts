@@ -78,4 +78,15 @@ describe('LocationService', () => {
     expect(fetchLocationDataset).toHaveBeenCalledWith('etag-v0');
     expect(repository.save).not.toHaveBeenCalled();
   });
+
+  it('records a fetch failure when online with an empty cache', async () => {
+    const repository = createRepository(false);
+    const service = new LocationService(repository);
+    Object.defineProperty(navigator, 'onLine', { configurable: true, value: true });
+    fetchLocationDataset.mockRejectedValue(new Error('Network error'));
+
+    await service.ensureLoaded();
+
+    expect(service.getLoadError()).toBe('fetch-failed');
+  });
 });
