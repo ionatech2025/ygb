@@ -21,6 +21,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,6 +46,8 @@ class AdminReceiptStatusIntegrationTest {
 
     private GetAdminReceiptStatusService receiptStatusService;
 
+    private final AtomicInteger phoneSequence = new AtomicInteger(1_000_000);
+
     private final UUID primaryCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
     private final UUID staleCollectorId = UUID.fromString("33333333-3333-3333-3333-333333333333");
     private final UUID aruaDistrictId = UUID.fromString("d1111111-1111-1111-1111-111111111111");
@@ -54,6 +57,7 @@ class AdminReceiptStatusIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        jdbcTemplate.update("DELETE FROM submissions");
         SubmissionMapper submissionMapper = Mappers.getMapper(SubmissionMapper.class);
         SubmissionRepositoryAdapter submissionRepository = new SubmissionRepositoryAdapter(
                 submissionJpaRepository,
@@ -104,6 +108,7 @@ class AdminReceiptStatusIntegrationTest {
                 INSERT INTO users (id, name, phone_number, password_hash, role, is_active, created_at)
                 VALUES (?, 'Stale Collector', '0772222222',
                 '$2a$10$KHK5f8Lz/uT8/0S91J9LRe4hF/t08qH7wR/70P71k0T8y.4XJ7.sC', 'DATA_COLLECTOR', true, CURRENT_TIMESTAMP)
+                ON CONFLICT (id) DO NOTHING
                 """,
                 staleCollectorId
         );
@@ -139,7 +144,7 @@ class AdminReceiptStatusIntegrationTest {
                 new SubmissionMetadata(collectorId, deviceSubmissionId, LocalDateTime.of(2026, 3, 15, 10, 0)),
                 new Location(aruaDistrictId, aruaSubcountyId, aruaParishId, aruaVillageId),
                 name,
-                "0772000" + deviceSubmissionId.toString().substring(0, 3),
+                nextUniquePhone(),
                 "FEMALE",
                 AgeGroup.AGE_20_24,
                 new Age(22),
@@ -158,5 +163,9 @@ class AdminReceiptStatusIntegrationTest {
         );
         submission.setStatus(status);
         return submission;
+    }
+
+    private String nextUniquePhone() {
+        return String.format("0772%07d", phoneSequence.getAndIncrement());
     }
 }
