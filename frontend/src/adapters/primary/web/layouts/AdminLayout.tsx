@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { LogOut, Shield } from 'lucide-react';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { AdminNav } from './AdminNav';
 
 export function AdminLayout() {
   const user = useAuthStore((state) => state.user);
@@ -38,9 +39,17 @@ export function AdminLayout() {
           </div>
         </div>
       </header>
-      <main className="flex-1 px-4 py-5 sm:px-6 sm:py-8">
-        <Outlet />
-      </main>
+
+      <AdminNav variant="horizontal" />
+
+      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col md:flex-row">
+        <aside className="hidden w-56 shrink-0 border-r border-border bg-surface md:block">
+          <AdminNav variant="sidebar" />
+        </aside>
+        <main className="flex-1 px-4 py-5 sm:px-6 sm:py-8">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

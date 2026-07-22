@@ -1,0 +1,84 @@
+import { render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { AppRouter } from './AppRouter';
+import { useAuthStore } from '../../../../core/store/useAuthStore';
+
+vi.mock('../../../../core/LocationService', () => ({
+  locationService: {
+    ensureLoaded: vi.fn().mockResolvedValue(undefined),
+  },
+}));
+
+vi.mock('../../../../core/store/useSyncStore', () => ({
+  useSyncStore: Object.assign(vi.fn(), {
+    getState: () => ({
+      initialize: vi.fn(),
+      triggerSync: vi.fn(),
+    }),
+  }),
+}));
+
+vi.mock('../../../../core/store/useSubmissionCountStore', () => ({
+  useSubmissionCountStore: Object.assign(vi.fn(), {
+    getState: () => ({
+      initialize: vi.fn(),
+      reconcileWithServer: vi.fn(),
+    }),
+  }),
+}));
+
+vi.mock('../../../secondary/api/http-user.adapter', () => ({
+  HttpUserAdapter: vi.fn().mockImplementation(() => ({
+    fetchActiveCollectors: vi.fn().mockResolvedValue([]),
+    createDataCollector: vi.fn(),
+  })),
+}));
+
+const adminUser = {
+  id: '11111111-1111-1111-1111-111111111111',
+  fullName: 'Administrator',
+  phoneNumber: '0770000000',
+  role: 'ADMIN' as const,
+};
+
+const adminTokens = {
+  accessToken: 'test-token',
+  refreshToken: 'refresh-token',
+  issuedAt: Date.now(),
+  expiresAt: Date.now() + 3_600_000,
+};
+
+describe('AppRouter admin routes', () => {
+  beforeEach(() => {
+    window.history.pushState({}, '', '/admin/users');
+    useAuthStore.setState({
+      user: adminUser,
+      tokens: adminTokens,
+      isAuthenticated: true,
+      isInitialized: true,
+      isOnline: true,
+    });
+  });
+
+  afterEach(() => {
+    useAuthStore.getState().logout();
+    useAuthStore.setState({ isInitialized: true });
+  });
+
+  it('renders ManageUsers at /admin/users', async () => {
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Data Collector Management')).toBeInTheDocument();
+    });
+  });
+
+  it('renders dashboard home placeholders at /admin/dashboard', async () => {
+    window.history.pushState({}, '', '/admin/dashboard');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('admin-dashboard-home')).toBeInTheDocument();
+    });
+  });
+});
