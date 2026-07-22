@@ -1,6 +1,13 @@
 package com.ionatech.nac.ygb.application.ports.spi;
 
 import com.ionatech.nac.ygb.domain.model.Submission;
+import com.ionatech.nac.ygb.domain.valueobjects.AdminSubmissionDetail;
+import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
+import com.ionatech.nac.ygb.domain.valueobjects.SubmissionPage;
+
+import java.util.Optional;
+import java.util.UUID;
 
 public interface SubmissionRepositoryPort {
     Submission save(Submission submission);
@@ -13,4 +20,12 @@ public interface SubmissionRepositoryPort {
     );
     long countByCollectorIdAndStatus(java.util.UUID collectorId, com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status);
     java.util.Optional<java.time.LocalDateTime> findLatestSyncedAtByCollectorIdAndStatus(java.util.UUID collectorId, com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status);
+
+    long countByStatus(com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status);
+
+    java.util.List<com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetrics> findReceiptMetricsByCollector();
+
+    SubmissionPage findSummariesByFilter(DashboardFilter filter, PageRequest pageRequest);
+
+    Optional<AdminSubmissionDetail> findDetailById(UUID id);
 }

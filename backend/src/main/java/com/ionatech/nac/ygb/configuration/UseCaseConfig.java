@@ -63,4 +63,118 @@ public class UseCaseConfig {
     ) {
         return new GetCollectorSyncStatusService(submissionRepositoryPort);
     }
+
+    @Bean
+    public DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator(
+            LocationHierarchyPort locationHierarchyPort
+    ) {
+        return new DashboardFilterHierarchyValidator(locationHierarchyPort);
+    }
+
+    @Bean
+    public GetDashboardAggregatesQuery getDashboardAggregatesQuery(
+            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator
+    ) {
+        return new GetDashboardAggregatesService(
+                dashboardAggregationRepositoryPort,
+                dashboardFilterHierarchyValidator
+        );
+    }
+
+    @Bean
+    public GetDashboardFilterOptionsQuery getDashboardFilterOptionsQuery(
+            DashboardFilterOptionsRepositoryPort dashboardFilterOptionsRepositoryPort,
+            UserRepositoryPort userRepositoryPort
+    ) {
+        return new GetDashboardFilterOptionsService(dashboardFilterOptionsRepositoryPort, userRepositoryPort);
+    }
+
+    @Bean
+    public ListSubmissionsQuery listSubmissionsQuery(
+            SubmissionRepositoryPort submissionRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator
+    ) {
+        return new ListSubmissionsService(submissionRepositoryPort, dashboardFilterHierarchyValidator);
+    }
+
+    @Bean
+    public GetSubmissionDetailQuery getSubmissionDetailQuery(
+            SubmissionRepositoryPort submissionRepositoryPort
+    ) {
+        return new GetSubmissionDetailService(submissionRepositoryPort);
+    }
+
+    @Bean
+    public ExportSubmissionsQuery exportSubmissionsQuery(
+            SubmissionRepositoryPort submissionRepositoryPort,
+            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            ExportGeneratorPort exportGeneratorPort
+    ) {
+        return new ExportSubmissionsService(
+                submissionRepositoryPort,
+                dashboardAggregationRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                exportGeneratorPort
+        );
+    }
+
+    @Bean
+    @Transactional
+    public DeactivateUserUseCase deactivateUserUseCase(UserRepositoryPort userRepositoryPort) {
+        return new DeactivateUserService(userRepositoryPort);
+    }
+
+    @Bean
+    @Transactional
+    public ReactivateUserUseCase reactivateUserUseCase(UserRepositoryPort userRepositoryPort) {
+        return new ReactivateUserService(userRepositoryPort);
+    }
+
+    @Bean
+    @Transactional
+    public ResetUserPasswordUseCase resetUserPasswordUseCase(
+            UserRepositoryPort userRepositoryPort,
+            PasswordEncoderPort passwordEncoderPort
+    ) {
+        return new ResetUserPasswordService(userRepositoryPort, passwordEncoderPort);
+    }
+
+    @Bean
+    public GetCollectorSubmissionsQuery getCollectorSubmissionsQuery(
+            UserRepositoryPort userRepositoryPort,
+            ListSubmissionsQuery listSubmissionsQuery
+    ) {
+        return new GetCollectorSubmissionsService(userRepositoryPort, listSubmissionsQuery);
+    }
+
+    @Bean
+    public GetCollectorLeaderboardQuery getCollectorLeaderboardQuery(
+            CollectorTrackerRepositoryPort collectorTrackerRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator
+    ) {
+        return new GetCollectorLeaderboardService(
+                collectorTrackerRepositoryPort,
+                dashboardFilterHierarchyValidator
+        );
+    }
+
+    @Bean
+    public GetCollectorBreakdownQuery getCollectorBreakdownQuery(
+            UserRepositoryPort userRepositoryPort,
+            DashboardAggregationRepositoryPort dashboardAggregationRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator
+    ) {
+        return new GetCollectorBreakdownService(
+                userRepositoryPort,
+                dashboardAggregationRepositoryPort,
+                dashboardFilterHierarchyValidator
+        );
+    }
+
+    @Bean
+    public GetAdminReceiptStatusQuery getAdminReceiptStatusQuery(SubmissionRepositoryPort submissionRepositoryPort) {
+        return new GetAdminReceiptStatusService(submissionRepositoryPort);
+    }
 }

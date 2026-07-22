@@ -23,11 +23,11 @@ Implement the **Data Collector Tracker** aggregation API (US-DASH-07): a leaderb
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Integration test: leaderboard counts match seeded submissions per collector.
-- [ ] Integration test: FY period filter recalculates counts (TC-DASH-07-02).
-- [ ] Application test: breakdown query returns form type and district slices.
-- [ ] Controller tests: `ADMIN` only access.
-- [ ] Implement repository, services, controller, DTOs.
+- [x] Integration test: leaderboard counts match seeded submissions per collector.
+- [x] Integration test: FY period filter recalculates counts (TC-DASH-07-02).
+- [x] Application test: breakdown query returns form type and district slices.
+- [x] Controller tests: `ADMIN` only access.
+- [x] Implement repository, services, controller, DTOs.
 
 ## Blocked by
 

@@ -1,6 +1,6 @@
 # Epic 5 — Admin Dashboard
 
-Issues for **US-DASH-01** through **US-DASH-09** (`docs/user_stories.md`).
+Issues for **US-DASH-01** through **US-DASH-08** (`docs/user_stories.md`). **US-DASH-09** (PDM resources) moved to [Epic 6](../epic-6-public-dashboard/README.md).
 
 ## Recommended implementation order
 
@@ -26,11 +26,11 @@ Issues for **US-DASH-01** through **US-DASH-09** (`docs/user_stories.md`).
 13. [backend/006-backend-collector-tracker-leaderboard-api.md](backend-issues/006-backend-collector-tracker-leaderboard-api.md)
 14. [frontend/008-frontend-collector-tracker-leaderboard.md](frontend-issues/008-frontend-collector-tracker-leaderboard.md)
 
-### Phase 5 — Sync status & public content (US-DASH-08, 09)
+### Phase 5 — Sync status (US-DASH-08)
 15. [backend/007-backend-admin-receipt-status-api.md](backend-issues/007-backend-admin-receipt-status-api.md)
 16. [frontend/009-frontend-admin-sync-receipt-status-view.md](frontend-issues/009-frontend-admin-sync-receipt-status-view.md)
-17. [backend/008-backend-pdm-content-cms-api.md](backend-issues/008-backend-pdm-content-cms-api.md)
-18. [frontend/010-frontend-pdm-information-cms-pages.md](frontend-issues/010-frontend-pdm-information-cms-pages.md)
+
+> **US-DASH-09 (PDM resources):** deferred CMS — [backend/008](backend-issues/008-backend-pdm-content-cms-api.md) · cancelled admin UI — [frontend/010](frontend-issues/010-frontend-pdm-information-cms-pages.md) · **Epic 6 static pages** — [../epic-6-public-dashboard/frontend-issues/001-frontend-pdm-information-resources-pages.md](../epic-6-public-dashboard/frontend-issues/001-frontend-pdm-information-resources-pages.md)
 
 ## User story mapping
 
@@ -44,7 +44,7 @@ Issues for **US-DASH-01** through **US-DASH-09** (`docs/user_stories.md`).
 | US-DASH-06 User management | 005 | 007 |
 | US-DASH-07 Collector tracker | 006 | 008 |
 | US-DASH-08 Pending/sync queue | 007 | 009 |
-| US-DASH-09 PDM resources | 008 | 010 |
+| US-DASH-09 PDM resources | — (CMS [008](backend-issues/008-backend-pdm-content-cms-api.md) deferred) | — ([010](frontend-issues/010-frontend-pdm-information-cms-pages.md) cancelled → [Epic 6 001](../epic-6-public-dashboard/frontend-issues/001-frontend-pdm-information-resources-pages.md)) |
 
 ## Related
 

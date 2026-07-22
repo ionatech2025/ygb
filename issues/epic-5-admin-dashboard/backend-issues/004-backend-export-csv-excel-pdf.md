@@ -29,12 +29,12 @@ Implement Admin **export endpoints** for CSV, Excel (.xlsx), and PDF report gene
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Application test: export service applies filter to SPI before streaming.
-- [ ] Integration test: CSV export with district filter contains only filtered rows (TC-DASH-05-01).
-- [ ] Integration test: Excel file opens with header row and typed columns (TC-DASH-05-02).
-- [ ] Integration test: 50k-row export completes without truncation (TC-DASH-05-04) — may use `@Tag("slow")`.
-- [ ] Controller test: correct `Content-Type` and `Content-Disposition` headers per format.
-- [ ] Implement export adapters and endpoint.
+- [x] Application test: export service applies filter to SPI before streaming.
+- [x] Integration test: CSV export with district filter contains only filtered rows (TC-DASH-05-01).
+- [x] Integration test: Excel file opens with header row and typed columns (TC-DASH-05-02).
+- [x] Integration test: 50k-row export completes without truncation (TC-DASH-05-04) — may use `@Tag("slow")`.
+- [x] Controller test: correct `Content-Type` and `Content-Disposition` headers per format.
+- [x] Implement export adapters and endpoint.
 
 ## Blocked by
 

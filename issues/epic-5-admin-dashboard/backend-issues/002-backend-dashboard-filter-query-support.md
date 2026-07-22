@@ -26,11 +26,11 @@ This issue completes the backend filter contract started in issue `001` so every
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Domain test: combined filter `District=A AND FormType=BYP` produces correct SPI predicate (TC-DASH-02-03).
-- [ ] Integration test: filter by FY period `JAN_JUN_2026` excludes other periods (TC-DASH-02-02).
-- [ ] Integration test: `DashboardFilter.empty()` returns full dataset count (TC-DASH-02-04).
-- [ ] Controller test: all nine query params accepted and forwarded to use case (TC-DASH-02-01).
-- [ ] Implement filter options endpoint if included in scope.
+- [x] Domain test: combined filter `District=A AND FormType=BYP` produces correct SPI predicate (TC-DASH-02-03).
+- [x] Integration test: filter by FY period `JAN_JUN_2026` excludes other periods (TC-DASH-02-02).
+- [x] Integration test: `DashboardFilter.empty()` returns full dataset count (TC-DASH-02-04).
+- [x] Controller test: all nine query params accepted and forwarded to use case (TC-DASH-02-01).
+- [x] Implement filter options endpoint if included in scope.
 
 ## Blocked by
 
