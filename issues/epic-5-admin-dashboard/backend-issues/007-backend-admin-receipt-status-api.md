@@ -24,10 +24,10 @@ This endpoint exposes:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Integration test: status counts match seeded DB state (TC-DASH-08-01).
-- [ ] Integration test: collector with old `lastReceivedAt` flagged stale.
-- [ ] Controller test: `ADMIN` only.
-- [ ] Implement query, service, endpoint.
+- [x] Integration test: status counts match seeded DB state (TC-DASH-08-01).
+- [x] Integration test: collector with old `lastReceivedAt` flagged stale.
+- [x] Controller test: `ADMIN` only.
+- [x] Implement query, service, endpoint.
 
 ## Blocked by
 

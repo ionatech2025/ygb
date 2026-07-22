@@ -28,12 +28,12 @@ Extend Admin **user lifecycle APIs** beyond create/list (US-DASH-06). Admins mus
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Domain/application tests: deactivate prevents login use case path.
-- [ ] Application test: password reset invalidates old hash (TC-DASH-06-02).
-- [ ] Integration test: deactivated user login returns appropriate error (TC-DASH-06-01).
-- [ ] Controller tests for each new endpoint (`403` for non-admin).
-- [ ] Flyway migration if `active` column not yet present on users table.
-- [ ] Implement use cases, persistence, REST.
+- [x] Domain/application tests: deactivate prevents login use case path.
+- [x] Application test: password reset invalidates old hash (TC-DASH-06-02).
+- [x] Integration test: deactivated user login returns appropriate error (TC-DASH-06-01).
+- [x] Controller tests for each new endpoint (`403` for non-admin).
+- [x] Flyway migration if `active` column not yet present on users table. *(Already present in V2.)*
+- [x] Implement use cases, persistence, REST.
 
 ## Blocked by
 

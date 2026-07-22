@@ -5,16 +5,33 @@ import com.ionatech.nac.ygb.adapters.out.persistence.mapper.SubmissionMapper;
 import com.ionatech.nac.ygb.adapters.out.persistence.repository.SubmissionJpaRepository;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.Submission;
+import com.ionatech.nac.ygb.domain.valueobjects.AdminSubmissionDetail;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetrics;
+import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
+import com.ionatech.nac.ygb.domain.valueobjects.SubmissionPage;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class SubmissionRepositoryAdapter implements SubmissionRepositoryPort {
     private final SubmissionJpaRepository jpaRepository;
     private final SubmissionMapper mapper;
+    private final AdminSubmissionQueryJpaRepository adminSubmissionQueryJpaRepository;
+    private final AdminReceiptStatusQueryJpaRepository adminReceiptStatusQueryJpaRepository;
 
-    public SubmissionRepositoryAdapter(SubmissionJpaRepository jpaRepository, SubmissionMapper mapper) {
+    public SubmissionRepositoryAdapter(
+            SubmissionJpaRepository jpaRepository,
+            SubmissionMapper mapper,
+            AdminSubmissionQueryJpaRepository adminSubmissionQueryJpaRepository,
+            AdminReceiptStatusQueryJpaRepository adminReceiptStatusQueryJpaRepository
+    ) {
         this.jpaRepository = jpaRepository;
         this.mapper = mapper;
+        this.adminSubmissionQueryJpaRepository = adminSubmissionQueryJpaRepository;
+        this.adminReceiptStatusQueryJpaRepository = adminReceiptStatusQueryJpaRepository;
     }
 
     @Override
@@ -68,5 +85,30 @@ public class SubmissionRepositoryAdapter implements SubmissionRepositoryPort {
             java.util.UUID collectorId, com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status) {
         return jpaRepository.findFirstByCollectorIdAndStatusOrderBySyncedAtDesc(collectorId, status.name())
                 .map(SubmissionJpaEntity::getSyncedAt);
+    }
+
+    @Override
+    public long countByStatus(com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status) {
+        return jpaRepository.countByStatus(status.name());
+    }
+
+    @Override
+    public java.util.List<CollectorReceiptMetrics> findReceiptMetricsByCollector() {
+        return adminReceiptStatusQueryJpaRepository.findReceiptMetricsByCollector();
+    }
+
+    @Override
+    public SubmissionPage findSummariesByFilter(DashboardFilter filter, PageRequest pageRequest) {
+        return adminSubmissionQueryJpaRepository.findSummaries(filter, pageRequest);
+    }
+
+    @Override
+    public Optional<AdminSubmissionDetail> findDetailById(UUID id) {
+        return jpaRepository.findById(id)
+                .map(entity -> new AdminSubmissionDetail(
+                        mapper.toDomain(entity),
+                        entity.getSyncedAt(),
+                        entity.getFinancialYearPeriod()
+                ));
     }
 }

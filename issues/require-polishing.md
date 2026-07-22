@@ -37,7 +37,13 @@ Multiple form/respondent tests log `act(...)` warnings when location data loads 
 
 ### Admin pending-sync queue (US-DASH-08) — scope clarification
 
-Server only sees **SYNCED** submissions. Device **PENDING** queue depth is client-side (IndexedDB). Epic 5 issue `006-backend-admin-receipt-status-api.md` documents server-side receipt metrics; true cross-device pending visibility may need a future “last-seen heartbeat” or explicit device sync report — do not over-promise in UI copy.
+Server only sees **SYNCED** submissions. Device **PENDING** queue depth is client-side (IndexedDB). Epic 5 issue `007-backend-admin-receipt-status-api.md` documents server-side receipt metrics; true cross-device pending visibility may need a future “last-seen heartbeat” or explicit device sync report — do not over-promise in UI copy.
+
+---
+
+### PDM information CMS (US-DASH-09) — deferred
+
+Public programme content ships as **static Markdown** on the Epic 6 public dashboard ([`docs/pdm_public_info.md`](../docs/pdm_public_info.md), [epic-6-public-dashboard/frontend-issues/001-frontend-pdm-information-resources-pages.md](epic-6-public-dashboard/frontend-issues/001-frontend-pdm-information-resources-pages.md)). Admin in-app editing without deploy ([epic-5-admin-dashboard/backend-issues/008-backend-pdm-content-cms-api.md](epic-5-admin-dashboard/backend-issues/008-backend-pdm-content-cms-api.md)) is deferred until the client requests it.
 
 ---
 

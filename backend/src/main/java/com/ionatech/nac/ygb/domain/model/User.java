@@ -44,4 +44,11 @@ public class User {
     public void deactivate() {
         this.isActive = false;
     }
+
+    public User withPasswordHash(String newPasswordHash) {
+        if (newPasswordHash == null || newPasswordHash.isBlank()) {
+            throw new IllegalArgumentException("Password hash cannot be null or blank");
+        }
+        return new User(id, name, phoneNumber, newPasswordHash, role, isActive, createdAt);
+    }
 }

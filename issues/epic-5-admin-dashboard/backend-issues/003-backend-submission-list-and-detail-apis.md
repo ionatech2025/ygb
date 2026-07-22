@@ -27,11 +27,11 @@ Implement paginated **submission list** and **submission detail** read APIs for 
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Application tests: list query delegates to SPI with filter + pageable.
-- [ ] Application tests: detail query returns full payload for each form type.
-- [ ] Integration tests: list filtered by district returns only matching rows (TC-DASH-04-01).
-- [ ] Controller tests: `ADMIN` list/detail `200`; `DATA_COLLECTOR` `403`.
-- [ ] Implement services, repository methods, controller, DTOs.
+- [x] Application tests: list query delegates to SPI with filter + pageable.
+- [x] Application tests: detail query returns full payload for each form type.
+- [x] Integration tests: list filtered by district returns only matching rows (TC-DASH-04-01).
+- [x] Controller tests: `ADMIN` list/detail `200`; `DATA_COLLECTOR` `403`.
+- [x] Implement services, repository methods, controller, DTOs.
 
 ## Blocked by
 
