@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { BarChart3, LayoutDashboard } from 'lucide-react';
 import { HttpPublicDashboardAdapter } from '../../../secondary/api/public-dashboard-api.adapter';
 import { PublicDashboardFilterPanel } from './PublicDashboardFilterPanel';
+import { PublicDashboardSummaryCards } from './PublicDashboardSummaryCards';
 
 export function PublicDashboardHome() {
   const dashboardApi = useMemo(() => new HttpPublicDashboardAdapter(), []);
@@ -22,14 +23,7 @@ export function PublicDashboardHome() {
 
       <PublicDashboardFilterPanel dashboardApi={dashboardApi} />
 
-      <section
-        aria-label="Summary statistics"
-        data-testid="public-dashboard-summary"
-        className="rounded-lg border border-dashed border-border bg-surface p-6"
-      >
-        <h2 className="text-lg font-semibold text-text">Summary</h2>
-        <p className="mt-2 text-sm text-text-muted">Key stat cards will appear here.</p>
-      </section>
+      <PublicDashboardSummaryCards dashboardApi={dashboardApi} />
 
       <section
         aria-label="Dashboard charts"

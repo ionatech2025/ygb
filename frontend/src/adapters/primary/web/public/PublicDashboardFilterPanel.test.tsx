@@ -58,6 +58,7 @@ function createDashboardApi(overrides: Partial<IPublicDashboardApiPort> = {}): I
       programmeAreas: [],
     }),
     buildFilterQueryString: vi.fn(),
+    fetchSummary: vi.fn(),
     ...overrides,
   };
 }
