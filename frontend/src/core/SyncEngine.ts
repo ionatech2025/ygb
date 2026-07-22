@@ -4,8 +4,8 @@ import type { ISubmissionQueuePort } from '../ports/submission-queue.port';
 
 export interface SyncEngineCallbacks {
   onSynced?: (localId: number) => void;
-  onFailed?: (localId: number, error: string) => void;
-  onComplete?: (syncedCount: number) => void;
+  onFailed?: (localId: number, error: string, retryCount: number) => void;
+  onComplete?: (result: { syncedCount: number; failedCount: number }) => void;
 }
 
 export class SyncEngine {
@@ -22,6 +22,7 @@ export class SyncEngine {
     this.syncing = true;
 
     let syncedCount = 0;
+    let failedCount = 0;
     try {
       const pending = await this.queue.dequeueAll();
       for (const submission of pending) {
@@ -40,14 +41,16 @@ export class SyncEngine {
             continue;
           }
 
+          const nextRetryCount = submission.retryCount + 1;
           const message = err instanceof Error ? err.message : 'Sync failed';
-          await this.queue.markFailed(submission.localId, submission.retryCount + 1);
-          this.callbacks.onFailed?.(submission.localId, message);
+          await this.queue.markFailed(submission.localId, nextRetryCount);
+          failedCount += 1;
+          this.callbacks.onFailed?.(submission.localId, message, nextRetryCount);
         }
       }
     } finally {
       this.syncing = false;
-      this.callbacks.onComplete?.(syncedCount);
+      this.callbacks.onComplete?.({ syncedCount, failedCount });
     }
   }
 }

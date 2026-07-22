@@ -36,13 +36,13 @@ The existing `YGBAuthDatabase` in `persistent-auth.adapter.ts` uses a separate D
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] `PendingSubmission` domain type exists with all required fields typed correctly.
-- [ ] `ISubmissionQueuePort` interface matches the method signatures above.
-- [ ] `SubmissionQueueAdapter` correctly implements all 6 methods.
-- [ ] Manual smoke test (browser DevTools → IndexedDB): after calling `enqueue(...)`, a record appears in the `pendingSubmissions` object store with `status: 'PENDING'`.
-- [ ] After `markSynced(id)`, the record's `status` updates to `'SYNCED'` and `syncedAt` is set.
-- [ ] `countPending()` returns 0 after all records are marked synced.
-- [ ] `getLastSyncedAt()` returns `null` when no records are synced, and the correct date after one is synced.
+- [x] `PendingSubmission` domain type exists with all required fields typed correctly.
+- [x] `ISubmissionQueuePort` interface matches the method signatures above.
+- [x] `SubmissionQueueAdapter` correctly implements all 6 methods.
+- [x] Manual smoke test (browser DevTools → IndexedDB): after calling `enqueue(...)`, a record appears in the `pendingSubmissions` object store with `status: 'PENDING'`.
+- [x] After `markSynced(id)`, the record's `status` updates to `'SYNCED'` and `syncedAt` is set.
+- [x] `countPending()` returns 0 after all records are marked synced.
+- [x] `getLastSyncedAt()` returns `null` when no records are synced, and the correct date after one is synced.
 
 ## Blocked by
 

@@ -28,6 +28,7 @@ export async function submitSurvey(submission: PendingSubmissionInput): Promise<
   }
 
   useSubmissionCountStore.getState().recordSubmission();
+  useSyncStore.getState().incrementPendingCount();
 
   const localId = await submissionQueue.enqueue(enrichPendingSubmission(submission));
 

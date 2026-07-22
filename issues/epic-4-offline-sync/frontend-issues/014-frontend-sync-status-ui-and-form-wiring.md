@@ -57,14 +57,14 @@ This satisfies US-SYNC-01 (local save on submit), US-SYNC-03 (visible status), a
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] `SyncStatusBar` renders an "Offline" indicator when `isOnline = false`.
-- [ ] `SyncStatusBar` renders "Online" and hides "Pending" badge when `pendingCount = 0`.
-- [ ] `SyncStatusBar` shows "Pending: 3" when `pendingCount = 3`.
-- [ ] `SyncStatusBar` shows "Last synced: HH:MM" after a successful sync.
-- [ ] `SyncFailedToast` appears when `lastSyncError` is set and auto-dismisses after 5 s.
-- [ ] Tapping the PDMSurveyView submit button writes a record to IndexedDB (verify via browser DevTools).
-- [ ] After submit, the pending count in `SyncStatusBar` increments immediately.
-- [ ] When online, the sync engine automatically attempts to push the queued submission to the server within a few seconds.
+- [x] `SyncStatusBar` renders an "Offline" indicator when `isOnline = false`.
+- [x] `SyncStatusBar` renders "Online" and hides "Pending" badge when `pendingCount = 0`.
+- [x] `SyncStatusBar` shows "Pending: 3" when `pendingCount = 3`.
+- [x] `SyncStatusBar` shows "Last synced: HH:MM" after a successful sync.
+- [x] `SyncFailedToast` appears when `lastSyncError` is set and auto-dismisses after 5 s.
+- [x] Tapping the PDMSurveyView submit button writes a record to IndexedDB (verify via browser DevTools).
+- [x] After submit, the pending count in `SyncStatusBar` increments immediately.
+- [x] When online, the sync engine automatically attempts to push the queued submission to the server within a few seconds.
 
 ## Blocked by
 

@@ -21,11 +21,11 @@ The fix requires:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write a **Controller Test** (`@WebMvcTest`) verifying that when `submitUseCase.submit` throws `DuplicateSyncedSubmissionException`, the endpoint returns `409 Conflict` with a JSON body containing a `message` field.
-- [ ] Write a **Controller Test** verifying that a normal successful submission still returns `201 Created`.
-- [ ] Remove the broken `try/catch` retry block from the `submit` method.
-- [ ] Add `@ExceptionHandler(DuplicateSyncedSubmissionException.class)` returning `ResponseEntity` with `HttpStatus.CONFLICT` and a descriptive error body.
-- [ ] Verify all existing `SubmissionControllerTest` tests still pass.
+- [x] Write a **Controller Test** (`@WebMvcTest`) verifying that when `submitUseCase.submit` throws `DuplicateSyncedSubmissionException`, the endpoint returns `409 Conflict` with a JSON body containing a `message` field.
+- [x] Write a **Controller Test** verifying that a normal successful submission still returns `201 Created`.
+- [x] Remove the broken `try/catch` retry block from the `submit` method.
+- [x] Add `@ExceptionHandler(DuplicateSyncedSubmissionException.class)` returning `ResponseEntity` with `HttpStatus.CONFLICT` and a descriptive error body.
+- [x] Verify all existing `SubmissionControllerTest` tests still pass.
 
 ## Blocked by
 

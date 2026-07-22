@@ -65,4 +65,30 @@ describe('useCascadingLocation', () => {
       villageId: '',
     });
   });
+
+  it('loads sub-counties only for the selected district (TC-FORM-07-02)', async () => {
+    const repository = createRepository();
+    const onChange = vi.fn();
+    const initial: LocationFields = {
+      districtId: district.id,
+      subcountyId: '',
+      parishId: '',
+      villageId: '',
+    };
+
+    const { result } = renderHook(() => useCascadingLocation(initial, onChange, { repository }));
+
+    await waitFor(() => expect(result.current.subcounties).toEqual([subcounty]));
+
+    act(() => {
+      result.current.setSubcounty(subcounty.id);
+    });
+
+    expect(onChange).toHaveBeenCalledWith({
+      districtId: district.id,
+      subcountyId: subcounty.id,
+      parishId: '',
+      villageId: '',
+    });
+  });
 });

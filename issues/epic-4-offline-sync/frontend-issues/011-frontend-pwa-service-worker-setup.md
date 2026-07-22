@@ -29,12 +29,12 @@ This issue delivers:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] `vite build` completes without errors and produces a `sw.js` file in `dist/`.
-- [ ] Running `vite preview` and opening Chrome DevTools → Application → Service Workers shows the SW registered and active.
-- [ ] Going offline in DevTools and refreshing the app serves the cached shell (no network error).
-- [ ] The location dataset URL (`/api/v1/locations/dataset`) is listed in the Workbox runtime cache strategy.
-- [ ] `manifest.webmanifest` is present in `dist/` with correct `name`, `short_name`, `display`, and at least one icon.
-- [ ] `registerSW()` call is present in `src/main.tsx` with an `onNeedRefresh` / `onOfflineReady` callback (even if no UI is shown yet — that is handled in a later issue).
+- [x] `vite build` completes without errors and produces a `sw.js` file in `dist/`.
+- [x] Running `vite preview` and opening Chrome DevTools → Application → Service Workers shows the SW registered and active.
+- [x] Going offline in DevTools and refreshing the app serves the cached shell (no network error).
+- [x] The location dataset URL (`/api/v1/locations/dataset`) is listed in the Workbox runtime cache strategy.
+- [x] `manifest.webmanifest` is present in `dist/` with correct `name`, `short_name`, `display`, and at least one icon.
+- [x] `registerSW()` call is present in `src/main.tsx` with an `onNeedRefresh` / `onOfflineReady` callback (even if no UI is shown yet — that is handled in a later issue).
 
 ## Blocked by
 

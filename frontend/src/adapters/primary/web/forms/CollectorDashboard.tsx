@@ -26,7 +26,6 @@ export function CollectorDashboard() {
 
   const pendingCount = useSyncStore((state) => state.pendingCount);
   const lastSyncedAt = useSyncStore((state) => state.lastSyncedAt);
-  const lastSyncError = useSyncStore((state) => state.lastSyncError);
   const syncing = useSyncStore((state) => state.syncing);
   const triggerSync = useSyncStore((state) => state.triggerSync);
   const initializeSync = useSyncStore((state) => state.initialize);
@@ -90,12 +89,6 @@ export function CollectorDashboard() {
           compact
         />
       </div>
-
-      {lastSyncError && isOnline && (
-        <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
-          {lastSyncError}
-        </p>
-      )}
 
       <button
         type="button"

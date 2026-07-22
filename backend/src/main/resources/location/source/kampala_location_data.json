@@ -1,0 +1,1466 @@
+{
+  "district": "Kampala",
+  "source": "Administrative Units_August_2010.pdf",
+  "divisions": [
+    {
+      "division": "Kampala Central Division",
+      "parishes": [
+        {
+          "parish": "Kampala Central",
+          "villages": [
+            "CHURCH ZONE",
+            "JAMBULA",
+            "KAKAJJO II",
+            "KAKAJO 1",
+            "KATENDE",
+            "KIYINDI",
+            "NAMAALWA I",
+            "NAMAALWA II",
+            "NSALO"
+          ]
+        },
+        {
+          "parish": "Civic Centre",
+          "villages": [
+            "CHRIST THE KING",
+            "NEETA CINEMA",
+            "NKRUMAH",
+            "RADIO UGANDA",
+            "SHIMONI"
+          ]
+        },
+        {
+          "parish": "Industrial Area",
+          "villages": [
+            "PEPSI COLA",
+            "SEVENTH STREET",
+            "SIXTH STREET"
+          ]
+        },
+        {
+          "parish": "Kagugube",
+          "villages": [
+            "INDUSTRIAL AREA",
+            "KAGUGUBE",
+            "KITAMANYANGAMBA",
+            "KIVULU I",
+            "KIVULU II",
+            "LDC",
+            "WANDEGEYA NHCC"
+          ]
+        },
+        {
+          "parish": "Kamwokya I",
+          "villages": [
+            "VILLAGE A",
+            "VILLAGE B",
+            "VILLAGE C",
+            "VILLAGE D"
+          ]
+        },
+        {
+          "parish": "Kamwokya II",
+          "villages": [
+            "CENTRAL ZONE",
+            "CHURCH ZONE",
+            "CONTAFRICA",
+            "GREEN VALLY",
+            "KIFUMBIRA A",
+            "KIFUMBIRA B",
+            "KISENYI I",
+            "KISENYI II",
+            "MARKET AREA",
+            "MAWANDA"
+          ]
+        },
+        {
+          "parish": "Kisenyi I",
+          "villages": [
+            "BLUE ROOM",
+            "BUWANIKA",
+            "CENTRAL",
+            "MUZAANA"
+          ]
+        },
+        {
+          "parish": "Kisenyi II",
+          "villages": [
+            "CHURCH AREA",
+            "KAKAJJO",
+            "KASAATO",
+            "KIBWA",
+            "KIGANDA",
+            "LUBIRI TRIANGLE",
+            "MARKET VIEW",
+            "MBIRO",
+            "MENGO HILL",
+            "SCHOOL VIEW"
+          ]
+        },
+        {
+          "parish": "Kisenyi III",
+          "villages": [
+            "KAWEMPE",
+            "KIGULI",
+            "KITI",
+            "LUZIGE",
+            "NOOK",
+            "SAPOBA"
+          ]
+        },
+        {
+          "parish": "Kololo I",
+          "villages": [
+            "BASKER VILLE",
+            "MACKENZIE",
+            "YORK VILLAGE"
+          ]
+        },
+        {
+          "parish": "Kololo II",
+          "villages": [
+            "VILLAGE I",
+            "VILLAGE II",
+            "VILLAGE III",
+            "VILLAGE IV",
+            "VILLAGE V",
+            "VILLAGE VI"
+          ]
+        },
+        {
+          "parish": "Kololo III",
+          "villages": [
+            "KITANTE COURTS",
+            "KITANTE HILL",
+            "WINDSOR"
+          ]
+        },
+        {
+          "parish": "Kololo IV",
+          "villages": [
+            "COMMUNITY",
+            "CORAL CRESCENT",
+            "GOLF COURSE",
+            "LUGOGO",
+            "NGABO",
+            "NYONYI GARDENS"
+          ]
+        },
+        {
+          "parish": "Mengo",
+          "villages": [
+            "BUDONIAN",
+            "HOIMA ROAD",
+            "MUSAJJA-ALUMBWA",
+            "MUSAJJA-ALUMBWA FLATS",
+            "NAMIREMBE ROAD",
+            "NANNOZI",
+            "RUBAGA ROAD A",
+            "RUBAGA ROAD B",
+            "SEBALIJJA",
+            "SOCIAL CENTRE",
+            "SSERWANGA",
+            "YOANA MARIA"
+          ]
+        },
+        {
+          "parish": "Nakasero I",
+          "villages": [
+            "CRESTED",
+            "FAIRWAY",
+            "KATONGA",
+            "KITANTE",
+            "NILE",
+            "SHIMON"
+          ]
+        },
+        {
+          "parish": "Nakasero II",
+          "villages": [
+            "ALL SAINTS",
+            "BUGANDA ROAD",
+            "FLATS",
+            "KYADONDO",
+            "LOURDEL",
+            "MUWAFU",
+            "NAKASERO HILL",
+            "STANDARD",
+            "SUMMIT",
+            "WATER BOARD",
+            "YMCA"
+          ]
+        },
+        {
+          "parish": "Nakasero III",
+          "villages": [
+            "BOMBO ROAD I",
+            "BOMBO ROAD II",
+            "BUGANDA ROAD",
+            "NAKIVUBO ROAD",
+            "PARAMEDICAL",
+            "WILLIAM STREET"
+          ]
+        },
+        {
+          "parish": "Nakasero IV",
+          "villages": [
+            "CITY HOUSE",
+            "DRAPER",
+            "HUSSEIN",
+            "KIYEMBE",
+            "LUWUM STREET",
+            "NAKASERO",
+            "OWINO VIEW",
+            "SULTAN",
+            "TEMPLE",
+            "UNIVERSAL",
+            "UTC VILLAGE",
+            "WILLIAM VILLAGE"
+          ]
+        },
+        {
+          "parish": "Nakivubo",
+          "villages": [
+            "MUNNO A",
+            "MUNNO B",
+            "REMAND A",
+            "REMAND B",
+            "SALOMPAS A",
+            "SALOMPAS B",
+            "SHAURIYAKO A",
+            "SHAURIYAKO B"
+          ]
+        },
+        {
+          "parish": "Old Kampala",
+          "villages": [
+            "ZONE ONE",
+            "ZONE TWO",
+            "ZONE THREE",
+            "ZONE FOUR"
+          ]
+        }
+      ]
+    },
+    {
+      "division": "Kawempe Division",
+      "subdivisions": [
+        {
+          "subdivision": "Kawempe Division North",
+          "parishes": [
+            {
+              "parish": "Bwaise I",
+              "villages": [
+                "BISHOP MUKWAYA",
+                "BUBAJWE",
+                "INDUSTRIAL AREA",
+                "KISENYI",
+                "KIYAGA",
+                "KIYINDI",
+                "KULUMBA",
+                "LULE",
+                "SEMPA"
+              ]
+            },
+            {
+              "parish": "Kanyanya",
+              "villages": [
+                "KIKUBO",
+                "KITAMBUZA",
+                "KIYANJA",
+                "LUTUNDA",
+                "WAMPAMBA ZONE"
+              ]
+            },
+            {
+              "parish": "Komamboga",
+              "villages": [
+                "CENTRAL",
+                "KANYANYA-KOMAMBOGA",
+                "KATALEMWA",
+                "KWATA"
+              ]
+            },
+            {
+              "parish": "Kawempe I",
+              "villages": [
+                "KAKUNGULU",
+                "KALULE",
+                "KETI-FALAWO",
+                "KILOKOLE",
+                "KISOWERA",
+                "KIZZA ZONE",
+                "MBOGO"
+              ]
+            },
+            {
+              "parish": "Kawempe II",
+              "villages": [
+                "KIGANDA",
+                "MUGALU",
+                "NAMERE",
+                "SEBAGGALA",
+                "TTULA"
+              ]
+            },
+            {
+              "parish": "Kazo - Angola",
+              "villages": [
+                "ANGOLA CENTRAL",
+                "CORNER",
+                "LUGOBA"
+              ]
+            },
+            {
+              "parish": "Kikaya",
+              "villages": [
+                "DDUNGU",
+                "KANISA",
+                "KIKAAYA A",
+                "KIKAAYA B",
+                "KIKULU",
+                "KISOTA"
+              ]
+            },
+            {
+              "parish": "Kyebando",
+              "villages": [
+                "ERISA",
+                "KANYANYA QR",
+                "KATALE",
+                "KISALOSALO",
+                "KYEBANDO CENTRAL",
+                "NSOOBA"
+              ]
+            },
+            {
+              "parish": "Mpererwe",
+              "villages": [
+                "SEKANYONYI",
+                "SEKATI"
+              ]
+            }
+          ]
+        },
+        {
+          "subdivision": "Kawempe Division South",
+          "parishes": [
+            {
+              "parish": "Bwaise II",
+              "villages": [
+                "JAMBULA-KIMOMBASA",
+                "KATALE",
+                "LUFULA",
+                "MUGOWA",
+                "MUKALAZI",
+                "NABUKALU",
+                "NAKAMIRO",
+                "TEBUYOLEKA"
+              ]
+            },
+            {
+              "parish": "Bwaise III",
+              "villages": [
+                "BOKASSA",
+                "BUGALANI",
+                "KALIMALI",
+                "KATOOGO",
+                "KAWAALA",
+                "ST. FRANCIS"
+              ]
+            },
+            {
+              "parish": "Makerere I",
+              "villages": [
+                "BANDA",
+                "BATAKA",
+                "MINI-TRIANGLE",
+                "MUKUBIRA",
+                "MUKWENDA"
+              ]
+            },
+            {
+              "parish": "Makerere II",
+              "villages": [
+                "ZONE A",
+                "ZONE B",
+                "ZONE D",
+                "ZONE C"
+              ]
+            },
+            {
+              "parish": "Makerere III",
+              "villages": [
+                "DDOBI",
+                "GOOD HOPE",
+                "KIBE",
+                "KIGGUNDU",
+                "MAYINJA",
+                "SEBINA"
+              ]
+            },
+            {
+              "parish": "Mulago I",
+              "villages": [
+                "BUTAKABUKIRWA",
+                "DOCTOR'S VILLAGE",
+                "KIBAWO",
+                "HOSPITAL",
+                "NHC & MEDICAL QTRS",
+                "OWEN ROAD",
+                "TUFNELL",
+                "UPPER MAWANDA"
+              ]
+            },
+            {
+              "parish": "Mulago II",
+              "villages": [
+                "BAKERY",
+                "KAFEERO",
+                "KATALE",
+                "KIWONVU",
+                "NALWEWUBA",
+                "TRIANGLE",
+                "U.E.B"
+              ]
+            },
+            {
+              "parish": "Mulago III",
+              "villages": [
+                "KALERWE",
+                "KIFUMBIRA",
+                "LOWER NSOOBA",
+                "NSOOBA EAST",
+                "UPPER NSOOBA"
+              ]
+            },
+            {
+              "parish": "Wandegaya",
+              "villages": [
+                "BUSIA",
+                "KATALE",
+                "KIMWANYI",
+                "SOWETO"
+              ]
+            }
+          ]
+        },
+        {
+          "subdivision": "Makerere University",
+          "parishes": [
+            {
+              "parish": "Muluka I",
+              "villages": [
+                "COMPLEX HALL (CCE)",
+                "ZONE 5",
+                "ZONE I",
+                "ZONE 8"
+              ]
+            },
+            {
+              "parish": "Muluka II",
+              "villages": [
+                "LIVINGSTONE HALL",
+                "LUMUMBA HALL",
+                "MARY STUART",
+                "QUARRY FLATS (ZONE 3)",
+                "QUARRY FLATS (ZONE 4)",
+                "ZONE II"
+              ]
+            },
+            {
+              "parish": "Muluka III",
+              "villages": [
+                "AFRICA HALL",
+                "MITCHELL HALL",
+                "NKRUMAH HALL",
+                "NSIBIRWA HALL"
+              ]
+            },
+            {
+              "parish": "Muluka IV",
+              "villages": [
+                "DAG HALL",
+                "MUGANZI FLATS (ZONE 6A)",
+                "UNIVERSITY HALL",
+                "ZONE 6A",
+                "ZONE 6B",
+                "ZONE 7"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "division": "Makindye Division",
+      "subdivisions": [
+        {
+          "subdivision": "Makindye Division East",
+          "parishes": [
+            {
+              "parish": "Nsamlya Estate",
+              "villages": [
+                "ZONE A",
+                "ZONE B",
+                "ZONE D"
+              ]
+            },
+            {
+              "parish": "Bukasa",
+              "villages": [
+                "BUKASA",
+                "KANYOGOGA",
+                "KANYONZA",
+                "KAYONGO",
+                "KYEYITABYA",
+                "MUYENGA A",
+                "MUYENGA B",
+                "NAMUWONGO A",
+                "NAMUWONGO B",
+                "MUGALU",
+                "KIJJWA",
+                "YOKA",
+                "TEBALEKA",
+                "KYEYITABYA LOWER",
+                "SSEKINDI"
+              ]
+            },
+            {
+              "parish": "Ggaba",
+              "villages": [
+                "BUNGA HILL",
+                "BUNGA TRADING CENTRE",
+                "GGABA MISSION",
+                "GGABA T/C",
+                "KALUNGU",
+                "KAWUKU",
+                "KATOOGO",
+                "ST. MBAGA",
+                "GGABA WATER",
+                "NSUBUGA GODEOS",
+                "SSENDAWULA"
+              ]
+            },
+            {
+              "parish": "Kabalagala",
+              "villages": [
+                "BIYINJA",
+                "CENTRAL",
+                "KALANZI",
+                "KISASIZI",
+                "KISEMENTI",
+                "KIWAFU",
+                "MUZAANA",
+                "PANTALEO",
+                "MUZUNGU",
+                "MOYOR",
+                "OKILING",
+                "KYEYUNE",
+                "BWIRE"
+              ]
+            },
+            {
+              "parish": "Kansanga",
+              "villages": [
+                "CHURCH",
+                "DIPLOMATE",
+                "KATAABU",
+                "KIWAFU",
+                "KIWAFU ESTATE",
+                "MASAANA",
+                "MUTESASIRA",
+                "NABUTITI",
+                "PEPSI COLA",
+                "SEBULIBA",
+                "WHEELING",
+                "HERITAGE",
+                "KIGGUNDU",
+                "SSIMBWA",
+                "SSEBAGALA",
+                "TEBANDEKE",
+                "YTK (MUYENGA)",
+                "MALE"
+              ]
+            },
+            {
+              "parish": "Kibuli",
+              "villages": [
+                "AGIP",
+                "CENTRAL",
+                "INSTITUTION",
+                "KAKUNGULU",
+                "KANAKULYA",
+                "KISASA",
+                "KITOORO",
+                "LUBOWA",
+                "LUBUGA",
+                "MARKET A",
+                "MARKET B",
+                "MOSQUE",
+                "GREENHILL",
+                "KIMBUGWE",
+                "NAKIBINGE",
+                "RAJAB KYEYUNE",
+                "KIGUMBA"
+              ]
+            },
+            {
+              "parish": "Kisugu",
+              "villages": [
+                "CENTRAL",
+                "KASANVU",
+                "KISUGU B",
+                "LAKE SIDE",
+                "MUTAJAZI A",
+                "MUTAJAZI B",
+                "MUTAJAZI C",
+                "SOUTH A",
+                "SOUTH B",
+                "SOUTH C",
+                "KISUGU UPPER",
+                "KISUGU LOWER",
+                "MUGALASI",
+                "GODOWN",
+                "MARKET",
+                "HOSPITAL",
+                "MINISTER'S",
+                "BANANA",
+                "NZIREBERA",
+                "UPPER LAKESIDE"
+              ]
+            },
+            {
+              "parish": "Wabigalo",
+              "villages": [
+                "CENTINERY",
+                "CENTRAL",
+                "CHURCH",
+                "KALINA",
+                "KELEZIA",
+                "KITOORO",
+                "LOWER ZONE",
+                "MARKET",
+                "MIVULE",
+                "MUWAFU",
+                "PROJECT",
+                "UPPER",
+                "RAILWAY",
+                "MASIJID",
+                "INDUSTRIAL VIEW"
+              ]
+            }
+          ]
+        },
+        {
+          "subdivision": "Makindye Division West",
+          "parishes": [
+            {
+              "parish": "Buziga",
+              "villages": [
+                "KATUUSO",
+                "KIRUDDU",
+                "MAWANGA",
+                "UPPER BUZIGA",
+                "SSERWADDA",
+                "KAKANDE",
+                "LOWER MAWANGA",
+                "UPPER MAWANGA",
+                "MUDDE",
+                "BUZIGA HILL VIEW"
+              ]
+            },
+            {
+              "parish": "Katwe I",
+              "villages": [
+                "BULIGWANGA",
+                "KASULE",
+                "LUFULA",
+                "MUSOKE",
+                "MUWANGA",
+                "NAWANKU",
+                "WHITE NILE",
+                "BAGIRINYA",
+                "LUBIRI RING ROAD",
+                "MUWONGE"
+              ]
+            },
+            {
+              "parish": "Katwe II",
+              "villages": [
+                "BASE",
+                "CENTRAL",
+                "KEVINA",
+                "KIGANDA",
+                "TAAWO",
+                "WEST",
+                "BYUMA",
+                "KATENDA"
+              ]
+            },
+            {
+              "parish": "Kibuye I",
+              "villages": [
+                "BARRACKS",
+                "JUUKO",
+                "NABISALU",
+                "NKERE",
+                "WASSWA",
+                "ST. BENDECT",
+                "KANAKULYA",
+                "NSUWA",
+                "KAPEKE",
+                "MASAKU",
+                "WANYANA"
+              ]
+            },
+            {
+              "parish": "Kibuye II",
+              "villages": [
+                "KATEGULA",
+                "KAVULE",
+                "KIRUNDU",
+                "WANSANSO",
+                "LUBIRI",
+                "LWANGA",
+                "NYAGO",
+                "KIYEMBE"
+              ]
+            },
+            {
+              "parish": "Lukuli",
+              "villages": [
+                "KALULE",
+                "KATIMBO",
+                "KIZUNGU",
+                "LOWER KONGE",
+                "TYAABA",
+                "UPPER KONGE",
+                "ZONE 5",
+                "KINTU",
+                "NSEREKO",
+                "MPONYE",
+                "KASULE",
+                "YORAM",
+                "BRUNO",
+                "KAGODA",
+                "KANISA",
+                "KIBALAMA",
+                "KIWEMPE",
+                "SANKARA",
+                "SERUWAGI",
+                "UPPER KONGE II"
+              ]
+            },
+            {
+              "parish": "Luwafu",
+              "villages": [
+                "BUKEJJE",
+                "KIRUNDU",
+                "NAKINYUGUZI",
+                "AMAZON",
+                "LUWAFU-KIZUNGU",
+                "ABAS",
+                "SEMPA",
+                "SSENDAGALA",
+                "DIPLOMAT",
+                "NAKINYUGUZI LOWER"
+              ]
+            },
+            {
+              "parish": "Makindye I",
+              "villages": [
+                "KIROMBE",
+                "KIZUNGU",
+                "LUSAKA",
+                "LUVUMA",
+                "MILITARY BARRACKS",
+                "MUBARRAK",
+                "WATER PUMP",
+                "KATALE ZONE",
+                "ISMAEL MATOVU",
+                "KAZINGA CLOSE"
+              ]
+            },
+            {
+              "parish": "Makindye II",
+              "villages": [
+                "DUBAI",
+                "KANISA",
+                "KEREZIA",
+                "KIPAMBA",
+                "MADIRISA",
+                "MUSWANGALI"
+              ]
+            },
+            {
+              "parish": "Nsambya Central",
+              "villages": [
+                "CENTRAL",
+                "GOGONYA I",
+                "GOGONYA II",
+                "HOSPITAL",
+                "KAMWANYI",
+                "NSAMBYA ESTATE",
+                "NSAMBYA WEST",
+                "KATABIRA",
+                "ST PAUL",
+                "MUGWANYA",
+                "BUYONDO",
+                "NTUUSE",
+                "CONVENT",
+                "EMBASSY",
+                "NSUBUGA",
+                "MUBIRU",
+                "GOODWILL",
+                "ST AUGUSTINE",
+                "KITAWULUZI",
+                "INSTITUTION",
+                "CHURCH"
+              ]
+            },
+            {
+              "parish": "Nsambya Railways",
+              "villages": [
+                "ZONE A",
+                "ZONE B",
+                "ZONE C",
+                "ZONE D"
+              ]
+            },
+            {
+              "parish": "Salaama",
+              "villages": [
+                "BUZIGA",
+                "KYAMULA",
+                "MULUNGU",
+                "NAKINYUGUZI",
+                "KALANI",
+                "KOSOVO",
+                "KIGAGA",
+                "BOSTON",
+                "BADONGO",
+                "ZIKUSOKA",
+                "VALLEY",
+                "MUNYONYO",
+                "SALAMA CENTRAL",
+                "TAKAJUNGE"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "division": "Nakawa Division",
+      "parishes": [
+        {
+          "parish": "Banda",
+          "villages": [
+            "B1 - MIN. OF WORKS",
+            "B10 BANDA P/SCHOOL",
+            "B11- BAGALA'S PLACE",
+            "B2 - KAMWANYI",
+            "B3 - KAWOOYA CHANNEL",
+            "B4 - MUGERWA'S",
+            "B5 - LCII OFFICES",
+            "B6 - NAMUWAWS",
+            "B7 - ABDALLAS PLACE",
+            "B8 - BANDA MOSQUE",
+            "B9 - WAKALUMIRA"
+          ]
+        },
+        {
+          "parish": "Bugolobi",
+          "villages": [
+            "BANGALOWS I",
+            "BANGALOWS II",
+            "BANGALOWS III",
+            "BLOCK 17-24",
+            "BLOCK 25-33",
+            "BLOCK 9-16",
+            "BLOCK 1-8",
+            "JAMBULA",
+            "KIYEMBE",
+            "PRISONS"
+          ]
+        },
+        {
+          "parish": "Bukoto I",
+          "villages": [
+            "KALONDA",
+            "KATENDE",
+            "KEZIRONI",
+            "MAKONZI",
+            "MASALANI",
+            "MOWLEM",
+            "MUKALAZI",
+            "MULIMIRA",
+            "NAMULI",
+            "OLD KIIRA ROAD",
+            "SEMWOGERERE",
+            "SSEMPIJJA",
+            "UCB"
+          ]
+        },
+        {
+          "parish": "Bukoto II",
+          "villages": [
+            "BBUYE CENTRAL",
+            "BUKENYA",
+            "BUTUKIRWA",
+            "KALINABIRI I",
+            "KALINABIRI II",
+            "KIGOWA I",
+            "KIGOWA II",
+            "KINAWATAKA",
+            "MUTOOLA",
+            "NSIMBI ZIWOME",
+            "SEMPAGALA",
+            "UEB"
+          ]
+        },
+        {
+          "parish": "Butabika",
+          "villages": [
+            "BBIINA A",
+            "BBIINA B",
+            "BBIINA C",
+            "BBIINA D",
+            "BUTABIKA HOSPITAL",
+            "KIROMBE A",
+            "KIROMBE B"
+          ]
+        },
+        {
+          "parish": "Kiswa",
+          "villages": [
+            "ZONE 2",
+            "ZONE 3",
+            "ZONE 4",
+            "ZONE 5",
+            "ZONE 6",
+            "ZONE 7",
+            "ZONE 8"
+          ]
+        },
+        {
+          "parish": "Ki watule (Ki wande)",
+          "villages": [
+            "BALINTUMA",
+            "CENTRAL",
+            "KAZINGA",
+            "SEBOWA"
+          ]
+        },
+        {
+          "parish": "Kyanja",
+          "villages": [
+            "KASANA",
+            "KATUMBA",
+            "KISAASI CENTRAL",
+            "KONDOGOLO",
+            "KULAMBIRO CENTRAL",
+            "KYANJA CENTRAL",
+            "NAZARETH",
+            "TUBA",
+            "WALUFUMBE"
+          ]
+        },
+        {
+          "parish": "Luzira",
+          "villages": [
+            "AGATII",
+            "CENTRAL",
+            "KAMWANYI",
+            "KASASIRO",
+            "KASUMBA",
+            "KISENYI I",
+            "KISENYI II",
+            "KISENYI III",
+            "KISENYI IV",
+            "LAKE DRIVE",
+            "LAKESIDE",
+            "MAMBO BADO",
+            "MARINES",
+            "MAWEJJE",
+            "PANDA PIER",
+            "RAILWAY QTRs",
+            "SAFINA",
+            "STAGE 5",
+            "STAGE 6",
+            "STAGE 7",
+            "UPPER BBIINA",
+            "WATER DEVELOPMENTS"
+          ]
+        },
+        {
+          "parish": "Luzira Prisons",
+          "villages": [
+            "VILLAGE 1",
+            "VILLAGE 10",
+            "VILLAGE 2",
+            "VILLAGE 3",
+            "VILLAGE 4",
+            "VILLAGE 5",
+            "VILLAGE 6",
+            "VILLAGE 7",
+            "VILLAGE 8",
+            "VILLAGE 9"
+          ]
+        },
+        {
+          "parish": "Mbuya I",
+          "villages": [
+            "BUYINJA",
+            "CENTRAL",
+            "KAGGO",
+            "KALERWE",
+            "KINAWATAKA",
+            "MBUYA HILL"
+          ]
+        },
+        {
+          "parish": "Mbuya II",
+          "villages": [
+            "ZONE 1",
+            "ZONE 10",
+            "ZONE 2",
+            "ZONE 3",
+            "ZONE 4",
+            "ZONE 5",
+            "ZONE 6",
+            "ZONE 7",
+            "ZONE 8",
+            "ZONE 9"
+          ]
+        },
+        {
+          "parish": "Mutungo",
+          "villages": [
+            "ZONE 1",
+            "ZONE 10",
+            "ZONE 11",
+            "ZONE 12",
+            "ZONE 13",
+            "ZONE 2",
+            "ZONE 3",
+            "ZONE 4",
+            "ZONE 5",
+            "ZONE 6",
+            "ZONE 7",
+            "ZONE 8",
+            "ZONE 9"
+          ]
+        },
+        {
+          "parish": "Naguru I",
+          "villages": [
+            "VILLAGE 1",
+            "VILLAGE 10",
+            "VILLAGE 11",
+            "VILLAGE 12",
+            "VILLAGE 13",
+            "VILLAGE 14",
+            "VILLAGE 15",
+            "VILLAGE 16",
+            "VILLAGE 17",
+            "VILLAGE 18",
+            "VILLAGE 19",
+            "VILLAGE 2",
+            "VILLAGE 20",
+            "VILLAGE 21",
+            "VILLAGE 22",
+            "VILLAGE 23",
+            "VILLAGE 24",
+            "VILLAGE 25",
+            "VILLAGE 26",
+            "VILLAGE 27",
+            "VILLAGE 28",
+            "VILLAGE 29",
+            "VILLAGE 3",
+            "VILLAGE 30",
+            "VILLAGE 31",
+            "VILLAGE 32",
+            "VILLAGE 4",
+            "VILLAGE 5",
+            "VILLAGE 6",
+            "VILLAGE 7",
+            "VILLAGE 8",
+            "VILLAGE 9"
+          ]
+        },
+        {
+          "parish": "Naguru II",
+          "villages": [
+            "BANK VILLAGE",
+            "BINYONYI",
+            "BROWN FLATS F",
+            "BROWN FLATS (A & C)",
+            "BROWN FLATS (E & G)",
+            "BROWN FLATS (J & k)",
+            "BROWN FLATS B",
+            "BROWN FLATS D",
+            "BROWN FLATS H",
+            "BROWN FLATS J",
+            "BROWN FLATS L",
+            "BUYINJA",
+            "CHURCH ZONE",
+            "COMMUNITY VILLAGE",
+            "EADB",
+            "GO-DOWN I",
+            "GO-DOWN II",
+            "GO-DOWN III",
+            "KASENKE IV",
+            "KASENKE I",
+            "KASENKE II",
+            "KASENKE III",
+            "KASENKE V",
+            "KATALE I",
+            "KATALE II",
+            "KATALE III",
+            "KIWALIMU",
+            "NAGURU HILL",
+            "NTINDA POLLICE",
+            "REG. CO-OP. I",
+            "REMAND HOME I",
+            "REMAND HOME II",
+            "VALLEY"
+          ]
+        },
+        {
+          "parish": "Nakawa",
+          "villages": [
+            "MIWANDA",
+            "NAKAWA A",
+            "NAKAWA B",
+            "NAKAWA C",
+            "NAKAWA D",
+            "NAKAWA E",
+            "NAKAWA F",
+            "NSIMBE KASI",
+            "SENTAMU KAVULE",
+            "ZONE H",
+            "ZONE IJKLM",
+            "ZONE NC19-59",
+            "ZONE NR 1-22",
+            "ZONE UVWXY",
+            "ZONE Z",
+            "ZONE ER",
+            "ZONE G",
+            "ZONE KR",
+            "ZONE NC 1-18/ZR 1 - 12",
+            "ZONE NOPQ",
+            "ZONE NR 23-38",
+            "ZONE NR 39-72",
+            "ZONE PS",
+            "ZONE RST"
+          ]
+        },
+        {
+          "parish": "Nakawa Institutions",
+          "villages": [
+            "EAST VILLAGE",
+            "MUBS 602",
+            "VOCATIONAL"
+          ]
+        },
+        {
+          "parish": "Ntinda",
+          "villages": [
+            "VILLAGE 1",
+            "VILLAGE 10",
+            "VILLAGE 11",
+            "VILLAGE 12",
+            "VILLAGE 13",
+            "VILLAGE 14",
+            "VILLAGE 15",
+            "VILLAGE 16",
+            "VILLAGE 17",
+            "VILLAGE 18",
+            "VILLAGE 19",
+            "VILLAGE 2",
+            "VILLAGE 3",
+            "VILLAGE 4",
+            "VILLAGE 5",
+            "VILLAGE 6",
+            "VILLAGE 7",
+            "VILLAGE 8",
+            "VILLAGE 9"
+          ]
+        },
+        {
+          "parish": "Kyambogo",
+          "villages": [
+            "K10",
+            "K11",
+            "K12",
+            "K2",
+            "K3",
+            "K4",
+            "K5",
+            "K6",
+            "K7",
+            "K8",
+            "K9"
+          ]
+        },
+        {
+          "parish": "Itek",
+          "villages": [
+            "K10",
+            "K11",
+            "K12",
+            "K13",
+            "K14",
+            "K8",
+            "K9"
+          ]
+        },
+        {
+          "parish": "Nabisunsa",
+          "villages": [
+            "K18",
+            "K19",
+            "K20"
+          ]
+        },
+        {
+          "parish": "UPK",
+          "villages": [
+            "K 1",
+            "K 2",
+            "K 3",
+            "K 4",
+            "K 5",
+            "K 6",
+            "K 7",
+            "UNISE"
+          ]
+        },
+        {
+          "parish": "Upper Estate",
+          "villages": [
+            "K 15",
+            "K 16",
+            "K 17",
+            "K 21 (KISOSONKOLE)"
+          ]
+        }
+      ]
+    },
+    {
+      "division": "Rubaga Division",
+      "subdivisions": [
+        {
+          "subdivision": "Rubaga Division North",
+          "parishes": [
+            {
+              "parish": "Kasubi",
+              "villages": [
+                "KASUBI I",
+                "KASUBI II",
+                "KASUBI III",
+                "KASUBI IV",
+                "KAWAALA I",
+                "KAWAALA II",
+                "KAWAALA CENTRAL",
+                "KAWAALA III",
+                "MUGEMA",
+                "NAMUNGOONA/KASUBI"
+              ]
+            },
+            {
+              "parish": "Lubya",
+              "villages": [
+                "BUKULUGI",
+                "KINONYA",
+                "LUBYA",
+                "LUGALA",
+                "LUSAZE",
+                "MAPEERA",
+                "NABULAGALA I",
+                "NAMUNGOONA I",
+                "NAMUNGOONA II"
+              ]
+            },
+            {
+              "parish": "Lungujja",
+              "villages": [
+                "BULANGE A",
+                "BULANGE B",
+                "KIKANDWA",
+                "KITUNZI",
+                "KYOBE",
+                "MAKAMBA",
+                "MBUUBI",
+                "SENDAWULA",
+                "WAKALIGA",
+                "ZONE 8"
+              ]
+            },
+            {
+              "parish": "Nakulabye",
+              "villages": [
+                "BALIRUNO",
+                "MASIRO",
+                "MUJOMBA",
+                "NAKULABYE WEST CHURCH",
+                "SEVENTH DAY",
+                "SUZANA",
+                "TERRACE",
+                "TREE SHADOW",
+                "ZONE 7"
+              ]
+            },
+            {
+              "parish": "Namirembe",
+              "villages": [
+                "BAKULI",
+                "BAKULI MARKET",
+                "BUTIKIRO",
+                "CHURCH",
+                "HAM MUKASA",
+                "KAYIWA",
+                "KISINGIRI",
+                "KITALA",
+                "MACKAY",
+                "MASIKI",
+                "MENGO HOSPITAL",
+                "MENGO MARKET",
+                "MENGO TOWN",
+                "MULIRA",
+                "NTULUME",
+                "SENKATUUKA"
+              ]
+            }
+          ]
+        },
+        {
+          "subdivision": "Rubaga Division South",
+          "parishes": [
+            {
+              "parish": "Busega",
+              "villages": [
+                "CENTRAL A",
+                "CENTRAL B",
+                "CENTRAL C",
+                "KABAALE",
+                "KIBUMBIRO A",
+                "KIBUMBIRO B",
+                "KIGWANYA",
+                "KITAKA",
+                "NABISASIRO"
+              ]
+            },
+            {
+              "parish": "Kabowa",
+              "villages": [
+                "CHURCH",
+                "KABOWA CENTRAL",
+                "KIRONDE",
+                "SEMBULE A",
+                "SEMBULE B",
+                "SERWADDA",
+                "SIMBWA",
+                "SSUUNA",
+                "ST. ANNE",
+                "WANKULUKUKU"
+              ]
+            },
+            {
+              "parish": "Mutundwe",
+              "villages": [
+                "KABAAWO",
+                "KIGGAGGA",
+                "KITAWULUZI",
+                "KITEBI",
+                "KWEEBA",
+                "MBAAWO",
+                "MUTINDWE I",
+                "MUTUNDWE II",
+                "NYANAMA"
+              ]
+            },
+            {
+              "parish": "Najjanankumbi II",
+              "villages": [
+                "KIZITO BLOCK",
+                "MASANYALAZE",
+                "QUARTER",
+                "STELLA"
+              ]
+            },
+            {
+              "parish": "Najjanankumbi I",
+              "villages": [
+                "BUSABALA ROAD",
+                "CENTRAL",
+                "CHURCH",
+                "NAMULI"
+              ]
+            },
+            {
+              "parish": "Nateete",
+              "villages": [
+                "CENTRAL A",
+                "CENTRAL B",
+                "CENTRAL C",
+                "CENTRAL D",
+                "CHURCH",
+                "FACTORY",
+                "KAJUMBI",
+                "KIGGAGA",
+                "KITOORO",
+                "KIVUMBI",
+                "MUSOKE",
+                "NANFUKA"
+              ]
+            },
+            {
+              "parish": "Ndeeba",
+              "villages": [
+                "AGGREY",
+                "BETANIA",
+                "CENTRAL",
+                "KAJUBI",
+                "KASUMBA",
+                "KAYANJA",
+                "KIDOOMOOLE",
+                "MPOMBA",
+                "MUTAAWE",
+                "MUTEBI",
+                "NSIIKE I",
+                "NSIIKE II",
+                "SPIRE",
+                "TOMUSANGE",
+                "WILSON"
+              ]
+            },
+            {
+              "parish": "Rubaga",
+              "villages": [
+                "BEN KIWANUKA",
+                "BULWA",
+                "CHURCH",
+                "HOSPITAL",
+                "KABUUSU",
+                "KAKEEKA",
+                "KAYANJA",
+                "LUBIRI",
+                "LULE",
+                "MUSIGULA",
+                "NABUNYA",
+                "NALUKOLONGO",
+                "POPE PAUL",
+                "WAGABA",
+                "WAKALIGA A",
+                "WAKALIGA B"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
