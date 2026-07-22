@@ -78,6 +78,20 @@ class DashboardFilterOptionsRepositoryAdapterTest {
         assertThat(optionsRepository.findDistinctFinancialYearPeriods()).contains("JAN_JUN_2026");
     }
 
+    @Test
+    void shouldReturnParishesForKampalaDivisionsPreviouslyNestedUnderSubdivisions() {
+        UUID kawempeDivisionId = UUID.fromString("035d3d78-0ce5-4c50-829a-857edc00e50d");
+        UUID rubagaDivisionId = UUID.fromString("cc1786a1-86c6-4380-81d1-c248bbd9f8d8");
+
+        assertThat(optionsRepository.findParishesBySubcounty(kawempeDivisionId))
+                .extracting(FilterLocationOption::name)
+                .contains("Bwaise I", "Komamboga");
+
+        assertThat(optionsRepository.findParishesBySubcounty(rubagaDivisionId))
+                .extracting(FilterLocationOption::name)
+                .contains("Kasubi", "Busega");
+    }
+
     private BypSubmission sampleByp(UUID deviceSubmissionId) {
         return new BypSubmission(
                 UUID.randomUUID(),

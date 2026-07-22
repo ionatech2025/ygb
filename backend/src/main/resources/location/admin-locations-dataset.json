@@ -949,10 +949,2446 @@
       "level": "SUBCOUNTY"
     },
     {
+      "id": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "name": "Bwaise I",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "05313382-8bf1-41bf-8fe4-1c788492ce76",
+      "name": "Bishop Mukwaya",
+      "parentId": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "08010ec3-ba94-44a3-8c43-ba56cce73c78",
+      "name": "Bubajwe",
+      "parentId": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8224eb0e-564d-40e7-8e6e-fe5d235957e6",
+      "name": "Industrial Area",
+      "parentId": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "806c7af1-0359-4609-8460-7ca8b6560910",
+      "name": "Kisenyi",
+      "parentId": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "174de584-4b3c-4fa0-8d03-bedecda95aa9",
+      "name": "Kiyaga",
+      "parentId": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "106fc655-99c7-41bd-801e-408615172fed",
+      "name": "Kiyindi",
+      "parentId": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3a364fd0-20b8-475b-8806-42dc3aa3040a",
+      "name": "Kulumba",
+      "parentId": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "cbce87eb-494c-47ee-8ce1-f7d696c6e60b",
+      "name": "Lule",
+      "parentId": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8ce21eee-2305-4bf6-8d18-eb8265f08274",
+      "name": "Sempa",
+      "parentId": "8e824bb6-9764-49a0-84e6-c19a309fc83e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bf2018c9-d48f-44cf-8ee5-36ec2781f689",
+      "name": "Kanyanya",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "de3bb7d4-7a83-4410-8eb7-35abca6b5d30",
+      "name": "Kikubo",
+      "parentId": "bf2018c9-d48f-44cf-8ee5-36ec2781f689",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b66a72f6-c1c8-4428-82e5-d849eb5713a4",
+      "name": "Kitambuza",
+      "parentId": "bf2018c9-d48f-44cf-8ee5-36ec2781f689",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "386ddf5e-f4f9-4b69-85c2-c1b5086cc431",
+      "name": "Kiyanja",
+      "parentId": "bf2018c9-d48f-44cf-8ee5-36ec2781f689",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9a131f23-522c-4466-8962-527e24846187",
+      "name": "Lutunda",
+      "parentId": "bf2018c9-d48f-44cf-8ee5-36ec2781f689",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6f7322ab-5422-4548-89c5-fe9dba114f5c",
+      "name": "Wampamba Zone",
+      "parentId": "bf2018c9-d48f-44cf-8ee5-36ec2781f689",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1ca9ff65-26f5-4e72-8c87-51711400da26",
+      "name": "Komamboga",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "90cf36ab-9114-4730-8f9f-825ae9b5a05c",
+      "name": "Central",
+      "parentId": "1ca9ff65-26f5-4e72-8c87-51711400da26",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b7ed657e-4ccf-4fd8-86a2-99f1e1cdf176",
+      "name": "Kanyanya-komamboga",
+      "parentId": "1ca9ff65-26f5-4e72-8c87-51711400da26",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a6da6d79-4b15-40bc-8358-0704d18d73ac",
+      "name": "Katalemwa",
+      "parentId": "1ca9ff65-26f5-4e72-8c87-51711400da26",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "86a885e2-aaf6-4fe6-85c7-b6f60cfff66f",
+      "name": "Kwata",
+      "parentId": "1ca9ff65-26f5-4e72-8c87-51711400da26",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3b03e473-7c27-4839-89b4-2f71ab53c566",
+      "name": "Kawempe I",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "a275875c-145c-4717-8388-6fe10c49bd2b",
+      "name": "Kakungulu",
+      "parentId": "3b03e473-7c27-4839-89b4-2f71ab53c566",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3536da1a-3ba0-4553-8c00-80141728cbda",
+      "name": "Kalule",
+      "parentId": "3b03e473-7c27-4839-89b4-2f71ab53c566",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "de5ad43c-f986-4951-83e6-f4fe4024f903",
+      "name": "Keti-falawo",
+      "parentId": "3b03e473-7c27-4839-89b4-2f71ab53c566",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3840e699-ea19-4aab-8c18-f35f60a0a1fa",
+      "name": "Kilokole",
+      "parentId": "3b03e473-7c27-4839-89b4-2f71ab53c566",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "14b03e2f-3a2f-4a24-8bc5-f89520d5ad95",
+      "name": "Kisowera",
+      "parentId": "3b03e473-7c27-4839-89b4-2f71ab53c566",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "53aa39a6-7ef2-4378-8c53-0c70fbdc2350",
+      "name": "Kizza Zone",
+      "parentId": "3b03e473-7c27-4839-89b4-2f71ab53c566",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "747d06c0-1c8d-47df-8efa-d422a3e3718d",
+      "name": "Mbogo",
+      "parentId": "3b03e473-7c27-4839-89b4-2f71ab53c566",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "81e0a6ad-a087-467b-854f-897d67eb32a6",
+      "name": "Kawempe Ii",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "40d8b84d-a5b2-48b1-8ffa-9b1e2b37991f",
+      "name": "Kiganda",
+      "parentId": "81e0a6ad-a087-467b-854f-897d67eb32a6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "360af296-d71e-415e-8ab5-6029941e2f99",
+      "name": "Mugalu",
+      "parentId": "81e0a6ad-a087-467b-854f-897d67eb32a6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f1b6f22e-5f5f-41eb-81c9-0d9cbcfe6ba1",
+      "name": "Namere",
+      "parentId": "81e0a6ad-a087-467b-854f-897d67eb32a6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3ad08119-f404-4b03-8ae5-55c7d4ac0da5",
+      "name": "Sebaggala",
+      "parentId": "81e0a6ad-a087-467b-854f-897d67eb32a6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "318fe885-c2fa-4570-8959-9bea860faf10",
+      "name": "Ttula",
+      "parentId": "81e0a6ad-a087-467b-854f-897d67eb32a6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c8a70374-427b-4642-8c04-7c2dfbade454",
+      "name": "Kazo - Angola",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "5f667686-ab3b-476d-8e84-9029b8fab8d5",
+      "name": "Angola Central",
+      "parentId": "c8a70374-427b-4642-8c04-7c2dfbade454",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "83a1ee78-84c8-4039-84b3-9f0c6466a486",
+      "name": "Corner",
+      "parentId": "c8a70374-427b-4642-8c04-7c2dfbade454",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4a7e2ef0-d29e-469a-82e8-4a6e62832625",
+      "name": "Lugoba",
+      "parentId": "c8a70374-427b-4642-8c04-7c2dfbade454",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a315ac82-6141-4a6a-8c91-d2a3cb722946",
+      "name": "Kikaya",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "5adf4ab0-c548-4db0-8f62-100d9f2c9b36",
+      "name": "Ddungu",
+      "parentId": "a315ac82-6141-4a6a-8c91-d2a3cb722946",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b657ff55-de8c-4d7f-8f53-18bef7e2fe7a",
+      "name": "Kanisa",
+      "parentId": "a315ac82-6141-4a6a-8c91-d2a3cb722946",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c7416a53-1674-4a4c-8e82-aa797ea5fbd2",
+      "name": "Kikaaya A",
+      "parentId": "a315ac82-6141-4a6a-8c91-d2a3cb722946",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6a8537e7-b2b5-4511-89db-baa26f50fa1f",
+      "name": "Kikaaya B",
+      "parentId": "a315ac82-6141-4a6a-8c91-d2a3cb722946",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "325b4ada-dfac-47cf-82a0-ee7f8c2403bd",
+      "name": "Kikulu",
+      "parentId": "a315ac82-6141-4a6a-8c91-d2a3cb722946",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1111f4ed-4b01-4a76-831c-00b4299c4752",
+      "name": "Kisota",
+      "parentId": "a315ac82-6141-4a6a-8c91-d2a3cb722946",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6a357116-fe9d-4213-84d2-1cc90e81ae98",
+      "name": "Kyebando",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "7411e203-42b0-4895-8d18-e7a556087879",
+      "name": "Erisa",
+      "parentId": "6a357116-fe9d-4213-84d2-1cc90e81ae98",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "dfe53637-a2ce-41d0-8653-d259155fe309",
+      "name": "Kanyanya Qr",
+      "parentId": "6a357116-fe9d-4213-84d2-1cc90e81ae98",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c34625d2-4130-435b-8c3c-8a72534ae49b",
+      "name": "Katale",
+      "parentId": "6a357116-fe9d-4213-84d2-1cc90e81ae98",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0e181756-0bba-43ad-8433-d7f79559875a",
+      "name": "Kisalosalo",
+      "parentId": "6a357116-fe9d-4213-84d2-1cc90e81ae98",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "17e9cfe0-6de3-4ec6-884e-a4d29a545d6b",
+      "name": "Kyebando Central",
+      "parentId": "6a357116-fe9d-4213-84d2-1cc90e81ae98",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "744fdc96-01ad-4a7d-8536-f6d76790d030",
+      "name": "Nsooba",
+      "parentId": "6a357116-fe9d-4213-84d2-1cc90e81ae98",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "567dc7f2-3882-4aa6-8158-596747c11871",
+      "name": "Mpererwe",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "e8c5627a-8e2c-44c8-85d0-2057e3dd873a",
+      "name": "Sekanyonyi",
+      "parentId": "567dc7f2-3882-4aa6-8158-596747c11871",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e6f8a660-69ba-4b88-85e0-3338e4a7db9a",
+      "name": "Sekati",
+      "parentId": "567dc7f2-3882-4aa6-8158-596747c11871",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "41f585c6-feb4-4c52-80e6-dc5593de6d7f",
+      "name": "Bwaise Ii",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "0ae81eab-4e03-4e97-88d5-b445066b638f",
+      "name": "Jambula-kimombasa",
+      "parentId": "41f585c6-feb4-4c52-80e6-dc5593de6d7f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bd4a6954-6532-48c2-8fa2-789ca1cc4a42",
+      "name": "Katale",
+      "parentId": "41f585c6-feb4-4c52-80e6-dc5593de6d7f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2e2b5f01-ee06-4fb5-8c05-dc831074dd29",
+      "name": "Lufula",
+      "parentId": "41f585c6-feb4-4c52-80e6-dc5593de6d7f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "110d781d-92a1-477f-8ad1-adcc79c50059",
+      "name": "Mugowa",
+      "parentId": "41f585c6-feb4-4c52-80e6-dc5593de6d7f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "dbe0e5a0-4dd7-467c-8dd2-c06faeace973",
+      "name": "Mukalazi",
+      "parentId": "41f585c6-feb4-4c52-80e6-dc5593de6d7f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4f7820ea-bd34-4740-8862-a9bbbcd7aad2",
+      "name": "Nabukalu",
+      "parentId": "41f585c6-feb4-4c52-80e6-dc5593de6d7f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "612eb796-ce94-427a-849e-543113832a71",
+      "name": "Nakamiro",
+      "parentId": "41f585c6-feb4-4c52-80e6-dc5593de6d7f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "90d41348-9477-49ee-8130-6c96b524d5be",
+      "name": "Tebuyoleka",
+      "parentId": "41f585c6-feb4-4c52-80e6-dc5593de6d7f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f1982fea-af39-4f41-895f-2f7159f8bc50",
+      "name": "Bwaise Iii",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "8bb5c641-fce4-4ff2-8003-d606fd013d0c",
+      "name": "Bokassa",
+      "parentId": "f1982fea-af39-4f41-895f-2f7159f8bc50",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f387a64f-45b1-42d7-8f75-7ee255e1c50f",
+      "name": "Bugalani",
+      "parentId": "f1982fea-af39-4f41-895f-2f7159f8bc50",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "32b785d9-252a-464d-8f56-31dfd18cd37b",
+      "name": "Kalimali",
+      "parentId": "f1982fea-af39-4f41-895f-2f7159f8bc50",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ef056464-fdd8-490c-86c8-aeed4f406b4e",
+      "name": "Katoogo",
+      "parentId": "f1982fea-af39-4f41-895f-2f7159f8bc50",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "042e52a7-189c-4441-8308-551f5c8ee129",
+      "name": "Kawaala",
+      "parentId": "f1982fea-af39-4f41-895f-2f7159f8bc50",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "db0d0c77-49d5-48b2-8bc2-149610c480fd",
+      "name": "St. Francis",
+      "parentId": "f1982fea-af39-4f41-895f-2f7159f8bc50",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f442feb4-e8ae-4e82-817d-1a09c246774f",
+      "name": "Makerere I",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "895adbe6-96fe-43d3-8db0-96efd1b7d8ad",
+      "name": "Banda",
+      "parentId": "f442feb4-e8ae-4e82-817d-1a09c246774f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "db6b9af2-1da6-424a-8af6-c2a47d17fdda",
+      "name": "Bataka",
+      "parentId": "f442feb4-e8ae-4e82-817d-1a09c246774f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b8b96c16-0ec0-4bc6-80d4-ed61f163d062",
+      "name": "Mini-triangle",
+      "parentId": "f442feb4-e8ae-4e82-817d-1a09c246774f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6f083a98-438c-4caa-8707-baa6db8ad19f",
+      "name": "Mukubira",
+      "parentId": "f442feb4-e8ae-4e82-817d-1a09c246774f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "be73588c-a70f-4203-8555-aa15103f2dd4",
+      "name": "Mukwenda",
+      "parentId": "f442feb4-e8ae-4e82-817d-1a09c246774f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a617c76f-a6be-4a38-85fa-0b840588cb40",
+      "name": "Makerere Ii",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "4c01ee1c-47a5-4d11-8fe0-2de54bd7f8f4",
+      "name": "Zone A",
+      "parentId": "a617c76f-a6be-4a38-85fa-0b840588cb40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c6f8149e-eda3-4e38-8964-241b729fa9f0",
+      "name": "Zone B",
+      "parentId": "a617c76f-a6be-4a38-85fa-0b840588cb40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "33766b1b-c0a6-492c-80b2-7ea94305f6be",
+      "name": "Zone D",
+      "parentId": "a617c76f-a6be-4a38-85fa-0b840588cb40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7b3e977a-9f85-4bac-85ec-25de27f7859a",
+      "name": "Zone C",
+      "parentId": "a617c76f-a6be-4a38-85fa-0b840588cb40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e490ca67-0a5d-4ad4-84ec-b27644ee74f4",
+      "name": "Makerere Iii",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "70d14311-c5ac-4a37-8c34-a003f2343f41",
+      "name": "Ddobi",
+      "parentId": "e490ca67-0a5d-4ad4-84ec-b27644ee74f4",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "480236ed-8447-4874-8790-2300641816ab",
+      "name": "Good Hope",
+      "parentId": "e490ca67-0a5d-4ad4-84ec-b27644ee74f4",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1bb79b27-61f2-41aa-861e-0ee591883e30",
+      "name": "Kibe",
+      "parentId": "e490ca67-0a5d-4ad4-84ec-b27644ee74f4",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f747a276-0150-483f-8114-a82f4ad91d34",
+      "name": "Kiggundu",
+      "parentId": "e490ca67-0a5d-4ad4-84ec-b27644ee74f4",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ccaf9749-74f5-4e55-85d1-ce09f8dddb47",
+      "name": "Mayinja",
+      "parentId": "e490ca67-0a5d-4ad4-84ec-b27644ee74f4",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bad9b65d-f6e7-43be-85c0-8883c3316150",
+      "name": "Sebina",
+      "parentId": "e490ca67-0a5d-4ad4-84ec-b27644ee74f4",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "17efe4c3-e639-42f0-8996-f35b4c58c72a",
+      "name": "Mulago I",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "d0b7cf16-2f92-41c5-88e7-a1d8bf6679e1",
+      "name": "Butakabukirwa",
+      "parentId": "17efe4c3-e639-42f0-8996-f35b4c58c72a",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6a871bb4-1e98-4b34-8082-5aaafaca2b41",
+      "name": "Doctor's Village",
+      "parentId": "17efe4c3-e639-42f0-8996-f35b4c58c72a",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "40b75236-5e33-4d23-8158-8d869325d5b5",
+      "name": "Kibawo",
+      "parentId": "17efe4c3-e639-42f0-8996-f35b4c58c72a",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8a2c4cd8-2fcb-4a53-8d73-ce7f0f597804",
+      "name": "Hospital",
+      "parentId": "17efe4c3-e639-42f0-8996-f35b4c58c72a",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0359cfc0-7d25-4ff0-8793-1da2df38b22d",
+      "name": "Nhc & Medical Qtrs",
+      "parentId": "17efe4c3-e639-42f0-8996-f35b4c58c72a",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0cb16c95-fedc-4853-8dc2-8cfc369b8266",
+      "name": "Owen Road",
+      "parentId": "17efe4c3-e639-42f0-8996-f35b4c58c72a",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "21798da0-a6ae-4122-883a-efb358b34391",
+      "name": "Tufnell",
+      "parentId": "17efe4c3-e639-42f0-8996-f35b4c58c72a",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bd82bd4c-8efd-4e15-8778-fa5f2096c06f",
+      "name": "Upper Mawanda",
+      "parentId": "17efe4c3-e639-42f0-8996-f35b4c58c72a",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b6e71749-d76b-4130-8d66-122fdf18ef32",
+      "name": "Mulago Ii",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "9c4b6cff-cdac-4e6d-8559-de762ba07854",
+      "name": "Bakery",
+      "parentId": "b6e71749-d76b-4130-8d66-122fdf18ef32",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8ef66486-3dca-44fb-85ee-c57897331921",
+      "name": "Kafeero",
+      "parentId": "b6e71749-d76b-4130-8d66-122fdf18ef32",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "82de7150-c73f-452a-82a0-22218834e3e8",
+      "name": "Katale",
+      "parentId": "b6e71749-d76b-4130-8d66-122fdf18ef32",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a62e93b7-d5a4-4d8d-8a7d-234fec9d99fb",
+      "name": "Kiwonvu",
+      "parentId": "b6e71749-d76b-4130-8d66-122fdf18ef32",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0897ad2e-7d93-4c28-8ede-45e6175244d9",
+      "name": "Nalwewuba",
+      "parentId": "b6e71749-d76b-4130-8d66-122fdf18ef32",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9fd4adf7-93a9-483e-84ee-3f6fe3415eee",
+      "name": "Triangle",
+      "parentId": "b6e71749-d76b-4130-8d66-122fdf18ef32",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f222e7c2-3807-4dd9-832a-e0379f0e6cca",
+      "name": "U.e.b",
+      "parentId": "b6e71749-d76b-4130-8d66-122fdf18ef32",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "09221774-f28c-426b-8181-335bb1bb0eb7",
+      "name": "Mulago Iii",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "1ef91fdb-2377-4699-803d-fbdcd72cc1e3",
+      "name": "Kalerwe",
+      "parentId": "09221774-f28c-426b-8181-335bb1bb0eb7",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "568052cd-d602-492c-88c5-479f888e886c",
+      "name": "Kifumbira",
+      "parentId": "09221774-f28c-426b-8181-335bb1bb0eb7",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "39e8971c-8e9e-4f33-8630-74869bd265a4",
+      "name": "Lower Nsooba",
+      "parentId": "09221774-f28c-426b-8181-335bb1bb0eb7",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d25b0c60-6855-4c8d-84f0-9b3a16f8515a",
+      "name": "Nsooba East",
+      "parentId": "09221774-f28c-426b-8181-335bb1bb0eb7",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2c7360c1-f829-4520-8de7-7fa20c3a4dc2",
+      "name": "Upper Nsooba",
+      "parentId": "09221774-f28c-426b-8181-335bb1bb0eb7",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ce8fbda0-9f3e-4c90-8be4-6f026e7b0ff5",
+      "name": "Wandegaya",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "74a1ab4b-8657-49b7-8c37-455e1b7bb30d",
+      "name": "Busia",
+      "parentId": "ce8fbda0-9f3e-4c90-8be4-6f026e7b0ff5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e6ffe430-f9af-43e1-8e60-d658a7019698",
+      "name": "Katale",
+      "parentId": "ce8fbda0-9f3e-4c90-8be4-6f026e7b0ff5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1c13ebdf-5807-45d0-8632-23c9d920a838",
+      "name": "Kimwanyi",
+      "parentId": "ce8fbda0-9f3e-4c90-8be4-6f026e7b0ff5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bbdfaa2e-1c46-4378-8677-2784a2bf3506",
+      "name": "Soweto",
+      "parentId": "ce8fbda0-9f3e-4c90-8be4-6f026e7b0ff5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6982698a-52ce-412b-8c88-947e70f1d258",
+      "name": "Muluka I",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "03971cdc-3021-40ce-8ad8-1022bb11fc12",
+      "name": "Complex Hall (cce)",
+      "parentId": "6982698a-52ce-412b-8c88-947e70f1d258",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1bd6fb95-2b6b-4d85-84d8-777bcc8cd47e",
+      "name": "Zone 5",
+      "parentId": "6982698a-52ce-412b-8c88-947e70f1d258",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3ca0b18b-abea-4ff0-8e74-4c4dfacfcf0b",
+      "name": "Zone I",
+      "parentId": "6982698a-52ce-412b-8c88-947e70f1d258",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b3abfe09-ec7e-4872-8ab9-6663d0a9e0e9",
+      "name": "Zone 8",
+      "parentId": "6982698a-52ce-412b-8c88-947e70f1d258",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b67a8980-5a8e-4593-8f4b-00b0f879c91c",
+      "name": "Muluka Ii",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "2975ac58-46d9-4d5b-8a88-c4739f87483d",
+      "name": "Livingstone Hall",
+      "parentId": "b67a8980-5a8e-4593-8f4b-00b0f879c91c",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "44da9fb4-f6b8-4544-897b-d11ec35b862a",
+      "name": "Lumumba Hall",
+      "parentId": "b67a8980-5a8e-4593-8f4b-00b0f879c91c",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "de01ee1c-97e4-4abf-84d1-8ae745b68dfb",
+      "name": "Mary Stuart",
+      "parentId": "b67a8980-5a8e-4593-8f4b-00b0f879c91c",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4035934a-da2c-460e-8f55-df631a1b86fc",
+      "name": "Quarry Flats (zone 3)",
+      "parentId": "b67a8980-5a8e-4593-8f4b-00b0f879c91c",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8f7b3485-dd6d-4b02-8bb1-9edfde6ddbb0",
+      "name": "Quarry Flats (zone 4)",
+      "parentId": "b67a8980-5a8e-4593-8f4b-00b0f879c91c",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "21a71e5e-721f-4e9d-8dbd-2ecbcf7b2f0b",
+      "name": "Zone Ii",
+      "parentId": "b67a8980-5a8e-4593-8f4b-00b0f879c91c",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "fb968ed5-f2de-4ed2-8154-4efe655a358e",
+      "name": "Muluka Iii",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "bf194046-3989-469c-8294-e858c5b6cd86",
+      "name": "Africa Hall",
+      "parentId": "fb968ed5-f2de-4ed2-8154-4efe655a358e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f934b3eb-2c80-42e9-8a77-39796782093c",
+      "name": "Mitchell Hall",
+      "parentId": "fb968ed5-f2de-4ed2-8154-4efe655a358e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "da3340ad-5207-483e-8e05-a015e2b7be44",
+      "name": "Nkrumah Hall",
+      "parentId": "fb968ed5-f2de-4ed2-8154-4efe655a358e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "391abc43-56df-4097-82fe-57848182c77d",
+      "name": "Nsibirwa Hall",
+      "parentId": "fb968ed5-f2de-4ed2-8154-4efe655a358e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a56bb2bf-fda4-46fa-86f8-165557f1a23f",
+      "name": "Muluka Iv",
+      "parentId": "035d3d78-0ce5-4c50-829a-857edc00e50d",
+      "level": "PARISH"
+    },
+    {
+      "id": "72449c96-bd21-4d2e-8e26-2cb05c0747a5",
+      "name": "Dag Hall",
+      "parentId": "a56bb2bf-fda4-46fa-86f8-165557f1a23f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7fd56bf0-fe17-4542-8557-79afea19277f",
+      "name": "Muganzi Flats (zone 6a)",
+      "parentId": "a56bb2bf-fda4-46fa-86f8-165557f1a23f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5fcb895b-9f2a-47dd-8e44-951dd1029991",
+      "name": "University Hall",
+      "parentId": "a56bb2bf-fda4-46fa-86f8-165557f1a23f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7b5f809b-740a-462a-81c7-3bb8b75ce8c1",
+      "name": "Zone 6a",
+      "parentId": "a56bb2bf-fda4-46fa-86f8-165557f1a23f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "36feb3fb-bd38-4fd3-8b10-2f7bfd98609a",
+      "name": "Zone 6b",
+      "parentId": "a56bb2bf-fda4-46fa-86f8-165557f1a23f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "24fe4b02-30bd-40d1-8ab8-bc4ed107f8ff",
+      "name": "Zone 7",
+      "parentId": "a56bb2bf-fda4-46fa-86f8-165557f1a23f",
+      "level": "VILLAGE"
+    },
+    {
       "id": "1739e689-2533-44a1-8566-8b852e54a9e1",
       "name": "Makindye Division",
       "parentId": "6a4ec61c-d428-4a51-8af0-721f7d03d492",
       "level": "SUBCOUNTY"
+    },
+    {
+      "id": "85de783c-9472-4754-80fe-5ab5e5d793a3",
+      "name": "Nsamlya Estate",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "04f56303-431c-4a1e-89f9-03ef68ba364e",
+      "name": "Zone A",
+      "parentId": "85de783c-9472-4754-80fe-5ab5e5d793a3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4faa2f91-ef7b-4b82-8ebb-799b9784ac6c",
+      "name": "Zone B",
+      "parentId": "85de783c-9472-4754-80fe-5ab5e5d793a3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "792d17fb-8b1f-4c1c-8f9a-ebc2684a9bc5",
+      "name": "Zone D",
+      "parentId": "85de783c-9472-4754-80fe-5ab5e5d793a3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "name": "Bukasa",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "307f8d5e-2010-493d-87f3-8a3dcf51aba5",
+      "name": "Bukasa",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ae7938e8-612e-49b6-8731-4d6260b6bf45",
+      "name": "Kanyogoga",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a5ef1a87-c578-4c3d-80e8-4f006ad1eb5b",
+      "name": "Kanyonza",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ae67efd0-d4d8-45a1-8b78-ff29e00da883",
+      "name": "Kayongo",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "31f8b1ef-e6d3-471a-8994-58e7a9e5151b",
+      "name": "Kyeyitabya",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e46304fc-4e97-499d-8fbb-4db05f4b4614",
+      "name": "Muyenga A",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c84730b6-c02b-4188-8406-4bbac5cccea4",
+      "name": "Muyenga B",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d92920e6-441b-48a9-833a-2feefa18bf71",
+      "name": "Namuwongo A",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7662faaf-c861-4b5d-89ad-6d75afb3e153",
+      "name": "Namuwongo B",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "84db149b-41b3-4efd-8ada-2c37a233e4ed",
+      "name": "Mugalu",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b3369d42-71b8-4fd8-86e8-1b38ecbe6b81",
+      "name": "Kijjwa",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "668fb54f-f4f9-46e8-8009-57eba4ccacec",
+      "name": "Yoka",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "166372f4-cea9-4615-8d67-6a6476477d55",
+      "name": "Tebaleka",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "34d3e7a4-089a-4664-8221-a268975d7cb4",
+      "name": "Kyeyitabya Lower",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9cce24b7-5224-445c-89b1-ddd27582cb7d",
+      "name": "Ssekindi",
+      "parentId": "5f1ca785-5f3b-4850-86c9-bdd0f8a68b2e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "name": "Ggaba",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "28f17422-fba4-4966-826c-4b8a7d48f96e",
+      "name": "Bunga Hill",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "507fe10b-c513-4055-8d11-6864cd1bc9c3",
+      "name": "Bunga Trading Centre",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "466efd89-c4fc-49be-8111-49a8b3d58924",
+      "name": "Ggaba Mission",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0a7cecf5-6f80-4b85-89d5-11d25e618555",
+      "name": "Ggaba T/c",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1fe9c759-3689-4b56-8ab3-d5257352f5e4",
+      "name": "Kalungu",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f4a31467-3b45-4159-833d-26b429c8739a",
+      "name": "Kawuku",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "90867793-9931-4e64-8074-a0c3daea3204",
+      "name": "Katoogo",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ccc899f6-bfb3-41d2-8279-9eb29620a7bc",
+      "name": "St. Mbaga",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b46058ad-151c-4941-8882-4f51eac0f67b",
+      "name": "Ggaba Water",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "cca43776-532b-4bfb-80d6-b3fff129a4e1",
+      "name": "Nsubuga Godeos",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3894acf8-5c95-47fa-8503-905bfb1e2fe4",
+      "name": "Ssendawula",
+      "parentId": "2afd6aa3-366a-4c4b-8ee4-b6fa8e659dfe",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "name": "Kabalagala",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "0cd00b22-d5f9-49c0-8742-a4359fc99e0b",
+      "name": "Biyinja",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "deeb23ac-baed-4738-831b-2a0efc253fe4",
+      "name": "Central",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "06b62580-6955-4acc-8751-08ada07c5426",
+      "name": "Kalanzi",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1af7ce63-92ed-49fe-8052-171d01e6ccf9",
+      "name": "Kisasizi",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3f101ad1-3e25-489a-8c94-bdb48d28beda",
+      "name": "Kisementi",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8efc8bf3-f4b5-4a48-89ea-957eae5cf93d",
+      "name": "Kiwafu",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d47413fe-24e6-45f4-8630-9c688b48c38e",
+      "name": "Muzaana",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9a22de97-bc8c-4b2e-85a1-930ff96676c0",
+      "name": "Pantaleo",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "591da2f6-aab4-405c-8028-2789fe82612d",
+      "name": "Muzungu",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "02d2f009-b27c-4c1d-8545-c00e605e1a2a",
+      "name": "Moyor",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a4400fab-2e29-4837-8260-3e02c1660d08",
+      "name": "Okiling",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a22e0bfb-f7e7-4c3e-80f5-1ac10cb7550c",
+      "name": "Kyeyune",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "51c31f14-afbc-4d16-89c7-4cd7b2ccbc36",
+      "name": "Bwire",
+      "parentId": "fc9ea205-c529-4753-8d39-4b2b1c387dc6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "name": "Kansanga",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "d8d39e15-46d5-4fee-80d0-bcd52ef91975",
+      "name": "Church",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "88d652bd-88cd-46db-8bef-ee2c16c3ac75",
+      "name": "Diplomate",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c9d1d4f2-806e-4471-85e0-9014e82e0fbf",
+      "name": "Kataabu",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f475d155-4648-4b72-8068-ed8b5d39d00c",
+      "name": "Kiwafu",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a8315c3f-1d29-43ad-88ad-e54011b0ef15",
+      "name": "Kiwafu Estate",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f7b58d73-9fc2-4635-81dd-d05ad8007e1a",
+      "name": "Masaana",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "86fa23ef-c0df-4f29-8deb-ba64b8dfb846",
+      "name": "Mutesasira",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2b7441fb-fce9-4eb7-89d7-3498cb22dc0c",
+      "name": "Nabutiti",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "fc830c99-6905-4821-858e-210f34cf70ad",
+      "name": "Pepsi Cola",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9f238925-e6a6-440b-8279-b6dddec17454",
+      "name": "Sebuliba",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "493ae7cc-d96e-44a9-8faf-787c12b892bf",
+      "name": "Wheeling",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2c0e2dbc-13cb-494b-8d31-00b542f7a04f",
+      "name": "Heritage",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a693345f-2bde-427f-8b52-25127fdd8921",
+      "name": "Kiggundu",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7f6e89c0-f608-4934-8acd-dd9cd04e79a9",
+      "name": "Ssimbwa",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f69ed687-2651-4ef8-8eb8-61697d4f7e0d",
+      "name": "Ssebagala",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9e1050d2-8549-4a83-8054-7a0c656d390c",
+      "name": "Tebandeke",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b4220060-1c64-49ec-80f5-e9bc6240d655",
+      "name": "Ytk (muyenga)",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a6ec9f67-1b88-47d1-8a71-b4d303c25a67",
+      "name": "Male",
+      "parentId": "05e65724-18a5-424f-8d8e-1bcbbbffb498",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "name": "Kibuli",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "3d4c757c-7d0b-4415-817d-c0256e3a03d6",
+      "name": "Agip",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b21ca0bf-2966-4b2d-89b4-12df0dffb296",
+      "name": "Central",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "acbd4e40-7e14-4c53-893e-a99260a65656",
+      "name": "Institution",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b91cbe41-e866-4f65-8a21-203379d6a175",
+      "name": "Kakungulu",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "caca8d11-ed98-4106-8283-f6ddecbafaf1",
+      "name": "Kanakulya",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5546943d-1895-4ed1-8149-3056be4cada6",
+      "name": "Kisasa",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b283da44-38bb-4140-8c63-68c526ae2f3a",
+      "name": "Kitooro",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c0705cf3-79ba-460d-8f70-7f3af9e9dd78",
+      "name": "Lubowa",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7d7700a3-a6dd-443e-8668-3fe93a7faac7",
+      "name": "Lubuga",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "09d431dd-80d9-4e93-8ab2-b59da4c5e15f",
+      "name": "Market A",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "88a5db46-bfd8-49d8-8ac9-82908ce16e1b",
+      "name": "Market B",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "05617a0a-f845-48eb-8448-e636f1ca453d",
+      "name": "Mosque",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5a8aa468-87c7-4ab7-86a1-00c34f01e401",
+      "name": "Greenhill",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8637dd67-4910-470f-851c-8db2bfca5227",
+      "name": "Kimbugwe",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "789e962c-5354-419e-87d0-896fa5e94a74",
+      "name": "Nakibinge",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "953a614f-6030-41d6-8c0a-cccd91632b26",
+      "name": "Rajab Kyeyune",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4f10435b-d87e-4501-8308-a8ee56670abb",
+      "name": "Kigumba",
+      "parentId": "4a3e855f-c5b3-45f1-8e7e-f37dfda01b40",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "name": "Kisugu",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "5c5c665c-8f75-4eb6-850c-eb33f27789f4",
+      "name": "Central",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a0399c12-9b85-4785-8176-1fba86c59aa3",
+      "name": "Kasanvu",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f27c75c0-59db-4484-8912-631bd11e19d6",
+      "name": "Kisugu B",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f628a105-36c0-42cc-82c6-c179ea971c01",
+      "name": "Lake Side",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e52bd1fe-39f2-4dc4-8a75-1d175a12b3ed",
+      "name": "Mutajazi A",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "33a73580-ee47-4b9a-87c4-e097172772d1",
+      "name": "Mutajazi B",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c5e18439-957e-49f7-82ff-7fb2d87083c8",
+      "name": "Mutajazi C",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b85bce74-7e14-44f3-8a77-6472794fa4f1",
+      "name": "South A",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "793e1129-72de-430d-8945-0130a4a5fc28",
+      "name": "South B",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "fce800fe-c43a-4740-8124-894cfffa0712",
+      "name": "South C",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b5222af3-6a5b-4a3c-8e4d-e5ff18324a08",
+      "name": "Kisugu Upper",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "456f8c31-7c62-4e3a-8db3-6ce2828e1ce9",
+      "name": "Kisugu Lower",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ff256a6c-f0a7-4a51-8b09-6acd2aac766c",
+      "name": "Mugalasi",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "edcf22ab-05e8-491a-8db0-37808ecd9a47",
+      "name": "Godown",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8fb93c06-9ca0-4b5c-8902-03e2fbb9a34b",
+      "name": "Market",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a18f211b-db84-42a2-8738-b674161df652",
+      "name": "Hospital",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "36b525b1-313f-4c05-8060-0a20a2f96696",
+      "name": "Minister's",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f8d7182c-c1ae-49f6-8697-5b55459018b0",
+      "name": "Banana",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8feaee9f-e3bb-427b-8021-4282c07c6cb4",
+      "name": "Nzirebera",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b5b28b41-2bcd-4154-8ae0-01381d2fc4e0",
+      "name": "Upper Lakeside",
+      "parentId": "4afd246b-569e-49d8-8a8c-7c857ac31334",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "name": "Wabigalo",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "bdffa90b-1c3f-44ae-82a4-5aba902093e0",
+      "name": "Centinery",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "46ba6fba-e1b6-4e0e-818f-10eb5291e1c0",
+      "name": "Central",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0343b7b6-7a9a-4970-8804-79745e7966ea",
+      "name": "Church",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "de7554e0-396c-4d1a-899d-9af416dd90b6",
+      "name": "Kalina",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "df849308-2faf-4398-8de9-d8eb8ec55229",
+      "name": "Kelezia",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "52994d30-c13b-4de5-82fc-fa48c7a010b2",
+      "name": "Kitooro",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ae9f2aea-42c0-4fff-878e-be4170e1d7b6",
+      "name": "Lower Zone",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0ad3d707-dff1-4a3d-8625-9277d165bbf7",
+      "name": "Market",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f769f7f9-50d7-4724-816b-b7fec0695299",
+      "name": "Mivule",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "dde53c57-e6a5-4374-8490-6556cdb33014",
+      "name": "Muwafu",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1ff1b122-d6cc-4f1f-873d-a7e445ec1290",
+      "name": "Project",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "62e31532-6c1d-4b90-8c20-488ea4aa14d4",
+      "name": "Upper",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d4b7b20a-a75c-4f6c-8181-3b013024990f",
+      "name": "Railway",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "61b0c8b0-4172-4681-8d28-db7bd6062d3a",
+      "name": "Masijid",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "11475356-8e9f-427b-882d-00fabafdb021",
+      "name": "Industrial View",
+      "parentId": "c7d3ddf0-585d-4ed9-8996-3c1a1b525e6e",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "name": "Buziga",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "1ff84144-29a1-4319-8408-31ad100dd7fe",
+      "name": "Katuuso",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "42e9a93a-a41a-4798-8fcf-2df53c60339c",
+      "name": "Kiruddu",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "eee2f1ff-fac7-44ac-8378-36fe7cb5c4a3",
+      "name": "Mawanga",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "47bee137-0280-43ff-8c36-febd1782f3aa",
+      "name": "Upper Buziga",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "fe864606-088e-4fad-81cc-e1c1bab3afba",
+      "name": "Sserwadda",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "cfe57698-6a2e-46e3-8d87-3b61803fd6d1",
+      "name": "Kakande",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "046044c1-4d3a-4710-8017-a089d02a17da",
+      "name": "Lower Mawanga",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "67626904-22b2-472c-842c-a0cb54cf3cef",
+      "name": "Upper Mawanga",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b211c746-db48-4174-8c2b-a5684dfb0216",
+      "name": "Mudde",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e28ff52e-eac4-4757-8bc3-cd9eda3df926",
+      "name": "Buziga Hill View",
+      "parentId": "3759cc93-6129-4e03-8744-5a834d048c38",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "name": "Katwe I",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "b10b8925-4e72-4e41-8c30-84e6302adab1",
+      "name": "Buligwanga",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c541def0-94aa-444d-8601-a2beb17f5ea5",
+      "name": "Kasule",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "37d9b69f-1c08-4601-8dec-38121c9ba086",
+      "name": "Lufula",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "68a3814c-9340-4c6a-8089-0dabbc09729e",
+      "name": "Musoke",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "926ffbed-f579-434a-841b-015fa8767b57",
+      "name": "Muwanga",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d696aa21-3a36-4c5c-8df8-fbdaa5b48d97",
+      "name": "Nawanku",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4c6f39d5-0b90-4f8d-8acc-7fed83045cf5",
+      "name": "White Nile",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0d2a4b42-dd59-4e1a-8c54-0381e8a5c177",
+      "name": "Bagirinya",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "636fe9f8-b384-4246-8d14-e7135e6f1ee1",
+      "name": "Lubiri Ring Road",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bd9fa03d-cce9-40e8-8085-9cf2d22f20dc",
+      "name": "Muwonge",
+      "parentId": "865ceb14-f9ec-4a4f-851f-899eef4fb001",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c6af33cf-cc6c-48e0-8c6f-3f6e5217fc45",
+      "name": "Katwe Ii",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "ed61c116-f07e-45ff-8b4f-071267ea276d",
+      "name": "Base",
+      "parentId": "c6af33cf-cc6c-48e0-8c6f-3f6e5217fc45",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5c72fbdf-b487-4802-8891-94e593441cca",
+      "name": "Central",
+      "parentId": "c6af33cf-cc6c-48e0-8c6f-3f6e5217fc45",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b73315ea-700e-4289-8f37-adc687cf620e",
+      "name": "Kevina",
+      "parentId": "c6af33cf-cc6c-48e0-8c6f-3f6e5217fc45",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bdfb06c3-be1f-43fa-86da-58936dadead1",
+      "name": "Kiganda",
+      "parentId": "c6af33cf-cc6c-48e0-8c6f-3f6e5217fc45",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9f9cef50-de15-4479-85af-542b7da7b3b9",
+      "name": "Taawo",
+      "parentId": "c6af33cf-cc6c-48e0-8c6f-3f6e5217fc45",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "51532838-1488-47cf-8799-6a88e3464ddc",
+      "name": "West",
+      "parentId": "c6af33cf-cc6c-48e0-8c6f-3f6e5217fc45",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f6c3cc56-35c9-42cd-88cb-5357e2525b82",
+      "name": "Byuma",
+      "parentId": "c6af33cf-cc6c-48e0-8c6f-3f6e5217fc45",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3e7e8513-83bf-4475-8e82-4a0b051a11ac",
+      "name": "Katenda",
+      "parentId": "c6af33cf-cc6c-48e0-8c6f-3f6e5217fc45",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "name": "Kibuye I",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "4e7d4c55-3f96-4648-840f-9a56cf9aa17b",
+      "name": "Barracks",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bb941bb8-d5e8-4f56-8f94-72b8a7ffea00",
+      "name": "Juuko",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "15525c52-d375-4878-8bd3-4d7ea2eae917",
+      "name": "Nabisalu",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "32e0ee26-f2a1-4e35-8790-853be5f53a32",
+      "name": "Nkere",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "72565b21-c11a-4380-873b-65ea368a92f9",
+      "name": "Wasswa",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "51929cfe-e5e0-4d83-8723-f09acaeb30bf",
+      "name": "St. Bendect",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "dd066d62-dc03-4263-8492-404ff1e9f2c0",
+      "name": "Kanakulya",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b153328b-d719-471d-810d-54c0feba618e",
+      "name": "Nsuwa",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0e3c4015-de96-4e37-8bf1-3772c3cd200d",
+      "name": "Kapeke",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "abd4d453-39f3-42b0-8cf0-fb123c4ec150",
+      "name": "Masaku",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1c3b5aee-2370-4173-896b-e822a88fb319",
+      "name": "Wanyana",
+      "parentId": "cb99ef91-45d3-465a-8970-b9ce7dc21643",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "be37d57a-c357-48fc-8a0a-a088ff775ac5",
+      "name": "Kibuye Ii",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "09a3db40-1af7-4a25-85ff-613068be697d",
+      "name": "Kategula",
+      "parentId": "be37d57a-c357-48fc-8a0a-a088ff775ac5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "37e45aa1-2bb4-4f9a-8611-cfa09e84b92a",
+      "name": "Kavule",
+      "parentId": "be37d57a-c357-48fc-8a0a-a088ff775ac5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b9aea844-c3a0-42aa-8392-95b4ab978298",
+      "name": "Kirundu",
+      "parentId": "be37d57a-c357-48fc-8a0a-a088ff775ac5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3ef56838-7327-40a2-8619-339199c0f469",
+      "name": "Wansanso",
+      "parentId": "be37d57a-c357-48fc-8a0a-a088ff775ac5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3526c862-cda4-4f91-8fbd-81ac2878ea35",
+      "name": "Lubiri",
+      "parentId": "be37d57a-c357-48fc-8a0a-a088ff775ac5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2f35fb4a-48b6-4c37-8ac6-332c29dc1c03",
+      "name": "Lwanga",
+      "parentId": "be37d57a-c357-48fc-8a0a-a088ff775ac5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bcfad21a-c3bd-47ff-8d4a-a78df2f3841b",
+      "name": "Nyago",
+      "parentId": "be37d57a-c357-48fc-8a0a-a088ff775ac5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a52c4f70-664a-4911-84cd-dd5a969080d7",
+      "name": "Kiyembe",
+      "parentId": "be37d57a-c357-48fc-8a0a-a088ff775ac5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "name": "Lukuli",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "2228fcb4-2841-4df0-89a3-75ea30577ada",
+      "name": "Kalule",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b97bb1b3-87d2-4cfe-82e0-c65f1e0a5706",
+      "name": "Katimbo",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c60511a5-74a2-46d8-80a1-226bf2767933",
+      "name": "Kizungu",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "df2bc9c8-c601-4a82-806f-0fe1c2746ee8",
+      "name": "Lower Konge",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ea1dcc74-2686-4aa0-8caa-e47b456d2130",
+      "name": "Tyaaba",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2fc88d74-97dc-495e-82f5-1fbe9495e5bc",
+      "name": "Upper Konge",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ee372ae8-9d26-4ff3-8f37-748d0705b381",
+      "name": "Zone 5",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "20ff49e4-3197-476d-8762-27a62ee75bf1",
+      "name": "Kintu",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "cc627445-d2b1-4e71-80d7-30800927eccc",
+      "name": "Nsereko",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f50b4677-4336-44bf-81a1-d20ed3dac855",
+      "name": "Mponye",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c4594176-e5d8-4084-879a-5b11efc7f5f7",
+      "name": "Kasule",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5afa0a01-c9df-419e-83c2-4f0b35df41ce",
+      "name": "Yoram",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e9f3b9a9-af4d-4c6c-808f-0bce9e5e912b",
+      "name": "Bruno",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "053cf172-ab13-4efb-838f-e7781b62c9fc",
+      "name": "Kagoda",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "16e1e4a3-dbf0-41ff-8351-12179b2849e2",
+      "name": "Kanisa",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "07d89a58-fcf6-4175-80df-734511b1ecd4",
+      "name": "Kibalama",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f642ff9d-6f1d-41b7-8042-6b2bfb7f521c",
+      "name": "Kiwempe",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c496dd25-6373-4fd2-8ea5-e32e5fda8d0c",
+      "name": "Sankara",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "62869fae-1a03-41cd-8393-9afcc21bd44c",
+      "name": "Seruwagi",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "167d0215-4e86-4cd2-8aba-12407fc4901a",
+      "name": "Upper Konge Ii",
+      "parentId": "808579ac-349f-4de1-8cf2-c7d217294ac3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "name": "Luwafu",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "f7bb118b-87cb-484b-8ab5-1650cfae1ae0",
+      "name": "Bukejje",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8657658d-7c61-4f40-8ac3-875a304445d8",
+      "name": "Kirundu",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6c8dc076-9cc6-48ec-86be-0f3d350a14af",
+      "name": "Nakinyuguzi",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a9e1cacb-e0cc-44ad-877a-c9e66d06bf4e",
+      "name": "Amazon",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e2b075da-3a0e-4042-8e1b-c42400fc5c74",
+      "name": "Luwafu-kizungu",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5d5abbcf-9106-4c43-81f2-b8e2226627a9",
+      "name": "Abas",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2cefabd0-8aa6-4faa-8eae-97fedb1b76ac",
+      "name": "Sempa",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c791b44d-7569-4750-8363-e3de58917509",
+      "name": "Ssendagala",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b2bb077a-8ccf-402c-8c58-c9732517c0a5",
+      "name": "Diplomat",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "aefa2a7c-3b00-4cff-8a41-513549c289cc",
+      "name": "Nakinyuguzi Lower",
+      "parentId": "bb8e1e27-4a95-4715-89f9-1267c0b22337",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "name": "Makindye I",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "65ac7a49-ce1c-40ae-8159-657bff5dc2c4",
+      "name": "Kirombe",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1f4adc01-6c03-46cf-887f-65b32eeae11f",
+      "name": "Kizungu",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2676404a-26df-4816-881f-093f42662896",
+      "name": "Lusaka",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c365e7b0-7303-4168-8ea8-2e5569cf92cf",
+      "name": "Luvuma",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "28db1878-79aa-43f6-8dce-b2e8333a90af",
+      "name": "Military Barracks",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "580894af-5bf9-4660-80b5-f5edaa62c752",
+      "name": "Mubarrak",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9ebfedf3-8b3f-4ffa-8f1f-23c6511ebf56",
+      "name": "Water Pump",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c6f5f08d-c70c-4cfb-85cb-8e33f3a9f010",
+      "name": "Katale Zone",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4e1a8d17-3bad-4e9f-8951-26d42d1afb20",
+      "name": "Ismael Matovu",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "cf76ac61-e044-4e79-8d31-044884cc02e2",
+      "name": "Kazinga Close",
+      "parentId": "51b81473-c876-4b8b-84d2-d9adb176aaa2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6008055e-363a-4b2f-81b1-90caa2794ef1",
+      "name": "Makindye Ii",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "69cbbd4c-d968-4ec7-8c17-eb28ec0f6cfa",
+      "name": "Dubai",
+      "parentId": "6008055e-363a-4b2f-81b1-90caa2794ef1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8a52ed2e-f9c8-46a5-8e6f-c8a8203409ef",
+      "name": "Kanisa",
+      "parentId": "6008055e-363a-4b2f-81b1-90caa2794ef1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5221dceb-1938-42b6-8b0e-3fda74c7bd71",
+      "name": "Kerezia",
+      "parentId": "6008055e-363a-4b2f-81b1-90caa2794ef1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7e3a7428-3766-4067-87e6-35cb158b41b5",
+      "name": "Kipamba",
+      "parentId": "6008055e-363a-4b2f-81b1-90caa2794ef1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8e2d95b1-4a05-4b71-88f9-a60a4776d03b",
+      "name": "Madirisa",
+      "parentId": "6008055e-363a-4b2f-81b1-90caa2794ef1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "21253248-74b2-4af3-8831-b731658843bd",
+      "name": "Muswangali",
+      "parentId": "6008055e-363a-4b2f-81b1-90caa2794ef1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "395fd75e-792a-49ce-8940-f539d058f101",
+      "name": "Nsambya Central",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "e391ba0b-13af-443c-8730-26f499b4bb00",
+      "name": "Central",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "08d530a4-a7f4-42f6-8964-8f65a50bd618",
+      "name": "Gogonya I",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4b4cda3d-e79a-4f7b-8308-aa02d3ca4da4",
+      "name": "Gogonya Ii",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "68f4c0b7-8e24-42b7-8374-a5e4a9c5c04b",
+      "name": "Hospital",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a2bd1bc8-a2bf-453b-8db7-a6f3e0b7776d",
+      "name": "Kamwanyi",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3a7744c9-a497-4dc7-85db-12272502a23d",
+      "name": "Nsambya Estate",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "739500f4-1c4d-4424-82c6-1cfad596a127",
+      "name": "Nsambya West",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5151545e-f033-473c-8efe-0c5b474026ba",
+      "name": "Katabira",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4b06bac1-8ca4-45d9-8765-8a40cbb5113e",
+      "name": "St Paul",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6098f90e-876b-4eb2-85c3-8f33665c305f",
+      "name": "Mugwanya",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "05f96b4c-e5d9-4ede-83cf-7135f6d3efed",
+      "name": "Buyondo",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2f665392-894f-406a-85d6-c95963fc659c",
+      "name": "Ntuuse",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2b5656ed-6657-4a64-8bf7-a61a4128a101",
+      "name": "Convent",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c73352c1-eccd-49e8-8f88-7f9fbe25dc6d",
+      "name": "Embassy",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "43008e74-6e58-4ac8-8dd9-56233ef79e17",
+      "name": "Nsubuga",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "06b4d825-2f7d-4ac7-8e01-1cc2e1d02c12",
+      "name": "Mubiru",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c2e19eee-39c1-4315-816b-09975bbe314b",
+      "name": "Goodwill",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a2dc6dee-d865-4420-801f-2f44969379b2",
+      "name": "St Augustine",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f16678d5-2747-41a7-8420-250d818e3fc2",
+      "name": "Kitawuluzi",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7b144efe-42fc-42f7-8faa-465145e57488",
+      "name": "Institution",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7abe334b-ecea-4e48-8101-a69b8786c632",
+      "name": "Church",
+      "parentId": "395fd75e-792a-49ce-8940-f539d058f101",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c9946d71-ac60-4d49-8154-fdb7c29979bc",
+      "name": "Nsambya Railways",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "9e75b31f-8b90-4923-8ec5-8b2939e46e0b",
+      "name": "Zone A",
+      "parentId": "c9946d71-ac60-4d49-8154-fdb7c29979bc",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "042e6ff9-57ad-4a4d-8351-86bf59cacf37",
+      "name": "Zone B",
+      "parentId": "c9946d71-ac60-4d49-8154-fdb7c29979bc",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d1b302e6-e944-48f9-8836-008410b6d0f0",
+      "name": "Zone C",
+      "parentId": "c9946d71-ac60-4d49-8154-fdb7c29979bc",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a6b89d14-ec87-46ad-8735-6839e5ba4db3",
+      "name": "Zone D",
+      "parentId": "c9946d71-ac60-4d49-8154-fdb7c29979bc",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "name": "Salaama",
+      "parentId": "1739e689-2533-44a1-8566-8b852e54a9e1",
+      "level": "PARISH"
+    },
+    {
+      "id": "bede803c-d0c2-4a17-8282-ccadaf3c29e8",
+      "name": "Buziga",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5afccb7c-1fab-4522-8477-b1ab298c5853",
+      "name": "Kyamula",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f9307119-0b30-4560-87de-0110184d7228",
+      "name": "Mulungu",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a49eeeaf-daa5-4338-846c-b916528d5356",
+      "name": "Nakinyuguzi",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "98b4c2ff-e1c8-4e8d-8986-168b49c8bd75",
+      "name": "Kalani",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "717bc4a2-0ea9-4466-88c3-4550e8bfb76c",
+      "name": "Kosovo",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "89328fe2-7c9a-4871-81a8-ff345d074022",
+      "name": "Kigaga",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "aa62cdce-657b-42de-8e4c-00ba4f54bc8c",
+      "name": "Boston",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1207edaa-0d3d-4f45-84f1-8caa0f9a7e16",
+      "name": "Badongo",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8fb4d08a-4d9c-462b-8875-d1559681ebc6",
+      "name": "Zikusoka",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f83a3062-af89-4f6e-86b4-fa577f833e5c",
+      "name": "Valley",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7c7cb40b-9262-496f-8048-ecfaf00a0f2b",
+      "name": "Munyonyo",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c2cda1cd-4565-4819-8ab1-bd09ce151100",
+      "name": "Salama Central",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f08d5f90-2d5d-459f-8e6c-b0379b54f7e2",
+      "name": "Takajunge",
+      "parentId": "b9d9a1e7-6b67-43ed-84bd-f79efb2aa6e1",
+      "level": "VILLAGE"
     },
     {
       "id": "5cec4a48-7e91-4425-841c-154a2803ca60",
@@ -2771,6 +5207,882 @@
       "name": "Rubaga Division",
       "parentId": "6a4ec61c-d428-4a51-8af0-721f7d03d492",
       "level": "SUBCOUNTY"
+    },
+    {
+      "id": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "name": "Kasubi",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "9ddb8e51-a221-4886-859d-a07d981aabf3",
+      "name": "Kasubi I",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e401e303-38e8-4d73-8fe3-3022dd7112bf",
+      "name": "Kasubi Ii",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "567d1d0e-a818-474c-8f8c-5b64eed0dc34",
+      "name": "Kasubi Iii",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "308281c0-2e15-4e67-8c08-041e6e0ca245",
+      "name": "Kasubi Iv",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7edd8f95-f430-481b-8d80-bf5f9d97eff4",
+      "name": "Kawaala I",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a92b8c3d-0824-42b5-8db1-6c5a18f231c8",
+      "name": "Kawaala Ii",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1903a761-6773-4750-8943-6c38c7ec42b8",
+      "name": "Kawaala Central",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9fbd5a83-0976-4a31-8b20-504dee20c447",
+      "name": "Kawaala Iii",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "08df41eb-8998-47f9-8607-6c3f818cdb75",
+      "name": "Mugema",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "00d598ea-6fb0-4370-8a7f-659b5e5fc905",
+      "name": "Namungoona/kasubi",
+      "parentId": "116e027d-520a-43be-8719-ae9300dfbfce",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "abe57d93-71ce-4578-89e3-959023ada090",
+      "name": "Lubya",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "bd658fb6-3b19-41ef-8b74-0f9ec05f6246",
+      "name": "Bukulugi",
+      "parentId": "abe57d93-71ce-4578-89e3-959023ada090",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e61c318c-8744-49a0-8124-3b7f868c35dd",
+      "name": "Kinonya",
+      "parentId": "abe57d93-71ce-4578-89e3-959023ada090",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "999528bb-03cf-457d-8a3f-9c3e8de97a84",
+      "name": "Lubya",
+      "parentId": "abe57d93-71ce-4578-89e3-959023ada090",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a9501f6c-85b7-4c2e-85d3-43e68f53432f",
+      "name": "Lugala",
+      "parentId": "abe57d93-71ce-4578-89e3-959023ada090",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "27c534dd-540d-428d-8e0f-67c8ce70cc41",
+      "name": "Lusaze",
+      "parentId": "abe57d93-71ce-4578-89e3-959023ada090",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f8449f8c-db7a-4de1-81e0-a93cce5469b1",
+      "name": "Mapeera",
+      "parentId": "abe57d93-71ce-4578-89e3-959023ada090",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "028df476-2600-4da9-89bd-cfaf0aa1ed89",
+      "name": "Nabulagala I",
+      "parentId": "abe57d93-71ce-4578-89e3-959023ada090",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "54bc3af2-4a22-40cc-8cf3-36c0aecf5433",
+      "name": "Namungoona I",
+      "parentId": "abe57d93-71ce-4578-89e3-959023ada090",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "3ff73b62-a480-4bfc-808d-5227695bb1c8",
+      "name": "Namungoona Ii",
+      "parentId": "abe57d93-71ce-4578-89e3-959023ada090",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "name": "Lungujja",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "3c45d2fc-dbe2-4691-80fc-794033eab996",
+      "name": "Bulange A",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "76c0dc8b-be1d-45fb-8c6d-c160f7a8387b",
+      "name": "Bulange B",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "40792add-b273-457b-8654-bbd750987189",
+      "name": "Kikandwa",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d1a565c4-c5d8-49b8-8a01-f6794c607b22",
+      "name": "Kitunzi",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1ff6cd42-c1df-4520-8d1f-56467e84ef63",
+      "name": "Kyobe",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "25ff1757-773c-46d5-86a1-a6f68b44dc6f",
+      "name": "Makamba",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5fff8bed-92d4-43cf-8ad0-75eb5816405b",
+      "name": "Mbuubi",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9c79c797-95ed-4c36-8328-e222a5bd0754",
+      "name": "Sendawula",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c7dc41ad-89bc-46fb-8368-2f6fad2f7b5d",
+      "name": "Wakaliga",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "54f0985a-555f-48a8-85f4-a4eb44b733af",
+      "name": "Zone 8",
+      "parentId": "ad16f9fd-f476-4f44-811d-61ce1daaa08f",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "name": "Nakulabye",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "5fe86e8f-c807-42f5-8db3-c0552af5841f",
+      "name": "Baliruno",
+      "parentId": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "251a1a79-bb2b-470d-8b15-879210a9dc1e",
+      "name": "Masiro",
+      "parentId": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5d68b9ff-6bbf-4fff-8eb8-84ba171b78a4",
+      "name": "Mujomba",
+      "parentId": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e4b9de97-a2e7-40dc-8cde-e16c76607d83",
+      "name": "Nakulabye West Church",
+      "parentId": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "11d15c96-10e1-4300-8bce-050e92ded9f1",
+      "name": "Seventh Day",
+      "parentId": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e0b0b711-55e2-4be3-86bd-ff525a5d801d",
+      "name": "Suzana",
+      "parentId": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ddc7c6ee-39f1-4bc4-8e1b-74dd3922b1bc",
+      "name": "Terrace",
+      "parentId": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "20e15f7d-8ba9-4671-8306-bab8540750c9",
+      "name": "Tree Shadow",
+      "parentId": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a6a442eb-c3eb-402e-8a9b-b4d7dae7ecc0",
+      "name": "Zone 7",
+      "parentId": "b28bd2b6-5952-4556-80c2-d586d6fb5c73",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "name": "Namirembe",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "0202fc7f-3672-4e4b-8134-ff32a1f4a673",
+      "name": "Bakuli",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a787150a-c71f-4ffe-8910-bee3b01f3bec",
+      "name": "Bakuli Market",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5c2c07f3-93f1-4ef7-8a69-cdb8a52fe1e9",
+      "name": "Butikiro",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9f357989-4e5c-4fd5-84ba-da33806ec22b",
+      "name": "Church",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a47d52c8-f496-4d37-8c4e-8451994bee47",
+      "name": "Ham Mukasa",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e6b7c110-7e68-4083-8fd1-aba1cbd6585b",
+      "name": "Kayiwa",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5f819140-c6e4-42aa-89fc-c329f8564407",
+      "name": "Kisingiri",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "76de4b5a-6050-4798-8ded-5990e1979849",
+      "name": "Kitala",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "4bb844cd-a553-4e2d-8339-076b3377936f",
+      "name": "Mackay",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e5cdf963-fb78-4148-86fb-53e4f510d904",
+      "name": "Masiki",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2edd79a5-4743-4ae0-8398-033bf2e734d4",
+      "name": "Mengo Hospital",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7fbaaaf7-82b8-4ac5-8f9b-4ccfc2d32a6d",
+      "name": "Mengo Market",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "62c049a1-f75e-440d-83ca-30e65c7a3530",
+      "name": "Mengo Town",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8b68a9be-1077-48ad-8a07-3108054b2571",
+      "name": "Mulira",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6db92701-a6ab-4462-816e-1aae6d796e2c",
+      "name": "Ntulume",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "52b27e3e-9ee7-41b9-843f-78ab85cc8e56",
+      "name": "Senkatuuka",
+      "parentId": "1cb70c52-7656-43c7-8171-a03f6a2b1430",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "name": "Busega",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "9f06fd34-f196-4343-850b-0c4238e28e57",
+      "name": "Central A",
+      "parentId": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "36dda1ce-d609-4f38-8372-115c83b1c696",
+      "name": "Central B",
+      "parentId": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d6de311d-6acc-466c-88f9-1b7af2b05c6c",
+      "name": "Central C",
+      "parentId": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "227784af-d358-42ac-8940-5ab5523ac109",
+      "name": "Kabaale",
+      "parentId": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "09ef7be7-792c-4402-858d-2411feaf1096",
+      "name": "Kibumbiro A",
+      "parentId": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6fe7558e-c1e4-4d47-8ef7-8dbe1fdf0f65",
+      "name": "Kibumbiro B",
+      "parentId": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "39350822-6c48-4900-8c9c-018ccbf68657",
+      "name": "Kigwanya",
+      "parentId": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "06f3efb3-3162-4afb-8811-e2dd6b7db17d",
+      "name": "Kitaka",
+      "parentId": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "44649d18-bd76-40ac-8d43-bc3901e0b2e2",
+      "name": "Nabisasiro",
+      "parentId": "0ad3d62b-98c3-4d63-8d67-43852d725214",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "name": "Kabowa",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "95e0897a-08df-4350-848c-d3f00fd3c5ba",
+      "name": "Church",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e898c8a5-1009-47d0-8f84-b68eabc4afc3",
+      "name": "Kabowa Central",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c5ec23b9-6d91-4fd2-82c7-62852947e711",
+      "name": "Kironde",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "86640898-734f-4f77-8696-0fe398feaa6b",
+      "name": "Sembule A",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "74b02e4e-40b7-4791-835a-f88ac054eee9",
+      "name": "Sembule B",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a8c183fb-ca73-4c37-8663-181f345b7207",
+      "name": "Serwadda",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "efd36917-dcd1-4c06-8e6d-739ff572199d",
+      "name": "Simbwa",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "c6a72d17-fcee-4389-8a7a-b6207c2c3938",
+      "name": "Ssuuna",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "89a4c693-c39e-458f-8176-56235ccf91fe",
+      "name": "St. Anne",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a2654584-bcf6-4771-8755-6422863a3c21",
+      "name": "Wankulukuku",
+      "parentId": "78ddbcc0-163c-4d60-8417-99bedc853d69",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "name": "Mutundwe",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "e760c5a3-9f77-47ec-8072-cdbbfe34e5e3",
+      "name": "Kabaawo",
+      "parentId": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "f153905a-5067-41d6-8a91-073986ec3973",
+      "name": "Kiggagga",
+      "parentId": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ff0c19cf-c00b-4537-8b1b-0b00aaa961ab",
+      "name": "Kitawuluzi",
+      "parentId": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5d88d05e-dbce-479d-85bc-57811df84c6c",
+      "name": "Kitebi",
+      "parentId": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "870f7a24-243b-41a8-8439-abe4e0722c00",
+      "name": "Kweeba",
+      "parentId": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "7f011126-cb15-4c1f-8458-402e8afcfd42",
+      "name": "Mbaawo",
+      "parentId": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "fa7f8c4f-d1ac-49f6-8012-483ae4bc0323",
+      "name": "Mutindwe I",
+      "parentId": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0e208d09-8dfd-478f-8bcb-9e036e08ae02",
+      "name": "Mutundwe Ii",
+      "parentId": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "05a15653-5b2a-4d72-8bb2-1be1f327f7ba",
+      "name": "Nyanama",
+      "parentId": "0bef288e-129c-4059-8cae-182eec1e17d3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a113fd3a-7bc9-4393-8330-285c723e7ae3",
+      "name": "Najjanankumbi Ii",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "c008f420-2e96-43d9-87b4-931de1da71c2",
+      "name": "Kizito Block",
+      "parentId": "a113fd3a-7bc9-4393-8330-285c723e7ae3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "8da52ff4-eb7f-41eb-8a69-322e3838214f",
+      "name": "Masanyalaze",
+      "parentId": "a113fd3a-7bc9-4393-8330-285c723e7ae3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9dcf938a-d203-41d1-8156-ac972a3d7b67",
+      "name": "Quarter",
+      "parentId": "a113fd3a-7bc9-4393-8330-285c723e7ae3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "2e8b03d7-6cae-4026-8958-8cb35a541d99",
+      "name": "Stella",
+      "parentId": "a113fd3a-7bc9-4393-8330-285c723e7ae3",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "212d1c51-9bc9-4d53-85ce-465c35a60db2",
+      "name": "Najjanankumbi I",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "80c4f69a-d2c2-485e-85bc-3d1e104c9b32",
+      "name": "Busabala Road",
+      "parentId": "212d1c51-9bc9-4d53-85ce-465c35a60db2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a3993153-7eac-411e-8af7-54c4cec91f7b",
+      "name": "Central",
+      "parentId": "212d1c51-9bc9-4d53-85ce-465c35a60db2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ac70dc37-048e-44a4-8b60-ff30392b0f56",
+      "name": "Church",
+      "parentId": "212d1c51-9bc9-4d53-85ce-465c35a60db2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "661cd228-5e54-40b2-8974-da2db2ed5356",
+      "name": "Namuli",
+      "parentId": "212d1c51-9bc9-4d53-85ce-465c35a60db2",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "name": "Nateete",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "0579ce2b-25a1-4f73-87bd-440c5914a245",
+      "name": "Central A",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "dbcb7bd8-4581-47b2-823c-5fc1ece7b495",
+      "name": "Central B",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "31da436d-c962-43dd-83e1-71e0dade88ef",
+      "name": "Central C",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5b27ebbe-b44a-4867-8797-302e72514dc1",
+      "name": "Central D",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "52de6b68-a441-4566-8e2d-a7672cdbfa42",
+      "name": "Church",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9942e499-b7a2-4a2e-8a06-348c5d4aedd1",
+      "name": "Factory",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0184fa94-d896-46c9-8e1d-5fd1d6246602",
+      "name": "Kajumbi",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "44e0d5df-e724-4503-81ab-39d6e1a72a09",
+      "name": "Kiggaga",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "dd1df667-85f1-4117-80d2-18c1fdeefdcc",
+      "name": "Kitooro",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d433654c-1587-41ba-814b-4dd637723d67",
+      "name": "Kivumbi",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e8a005f7-2304-4728-8f8a-0db1176e511a",
+      "name": "Musoke",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "bed7f2cb-5245-40a3-8340-5b3ba5ee8b4c",
+      "name": "Nanfuka",
+      "parentId": "52e35461-4e7b-4af8-8766-c7728fc8dbd0",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "name": "Ndeeba",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "993b936d-13ae-413e-8ea9-430943ad888c",
+      "name": "Aggrey",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "25cffb77-cff9-4917-8224-ede7382c9906",
+      "name": "Betania",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d7579fe7-e52e-44a8-89f5-47b9faeb23fc",
+      "name": "Central",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ea7828cb-25b4-4655-80b2-0090aee44b75",
+      "name": "Kajubi",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "eeae4d63-7d28-4534-81eb-4774cca5706c",
+      "name": "Kasumba",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "567d88a0-13f0-48b3-8bcc-d38af7f9d1c5",
+      "name": "Kayanja",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "36490caa-0fae-4bf8-8d66-d24783be2979",
+      "name": "Kidoomoole",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5a0524c8-a87a-4705-8701-69261bcadaad",
+      "name": "Mpomba",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "242559f1-cf13-40ae-8975-57ffe3bbd1a0",
+      "name": "Mutaawe",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "6fa6781b-1ce2-4992-8d52-a3519ffce97a",
+      "name": "Mutebi",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "d8ab2590-d59e-41e4-88ba-0ceeac1a525a",
+      "name": "Nsiike I",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5d136a28-1ff9-44d3-8b7e-51547e65560b",
+      "name": "Nsiike Ii",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "142818e9-3c43-489c-8295-667ce881e563",
+      "name": "Spire",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "97cbd397-6128-4103-84c7-16da27c7021b",
+      "name": "Tomusange",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "fbc23e90-ce7e-456d-8b3b-e922f0ecd619",
+      "name": "Wilson",
+      "parentId": "86919fc0-234d-45f0-8654-5260bb8d5ff6",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "name": "Rubaga",
+      "parentId": "cc1786a1-86c6-4380-81d1-c248bbd9f8d8",
+      "level": "PARISH"
+    },
+    {
+      "id": "c87e882a-2910-44aa-8866-91f905612bf8",
+      "name": "Ben Kiwanuka",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "e22238b8-c571-414d-8cc9-925e0d822d35",
+      "name": "Bulwa",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1f2624f7-0185-4ee6-8300-ed03d4a60aad",
+      "name": "Church",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "5dffe80e-8589-4797-81ae-73b4e71121a2",
+      "name": "Hospital",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "50f69e16-0de8-42ce-8057-512be96fff6b",
+      "name": "Kabuusu",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "37f2b235-2453-4071-897a-4b3f08688ac9",
+      "name": "Kakeeka",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b2cdb8df-d073-445a-81a2-56988746bb1d",
+      "name": "Kayanja",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "826858c0-2a82-491a-8354-e9687a79a171",
+      "name": "Lubiri",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "08d09f87-c167-4c4e-8c0f-ba33665a9590",
+      "name": "Lule",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "64c10e37-09c3-4ae6-86b0-e9f6d51c4210",
+      "name": "Musigula",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "b1e4eeb2-6dc8-4453-8780-5ac5b704ebf1",
+      "name": "Nabunya",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "0cc862ed-cb48-406b-8f47-60fbe7c93c37",
+      "name": "Nalukolongo",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "70d10ce3-3432-4ff4-812a-33f2256fd88a",
+      "name": "Pope Paul",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "9d5ed7ce-d029-44d2-8ad2-7243ee1021e4",
+      "name": "Wagaba",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "1ec33921-93ba-48e3-8b39-ceeb8d7af9db",
+      "name": "Wakaliga A",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
+    },
+    {
+      "id": "ae0ad459-1e4b-4c67-8a4f-cc75c695e850",
+      "name": "Wakaliga B",
+      "parentId": "a909b53b-7cef-4c0f-84ec-82590d6090e5",
+      "level": "VILLAGE"
     },
     {
       "id": "699711bf-2a18-46d7-8011-df048a4ae509",
