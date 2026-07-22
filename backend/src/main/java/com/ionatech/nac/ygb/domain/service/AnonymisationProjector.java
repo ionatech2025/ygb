@@ -52,6 +52,17 @@ public final class AnonymisationProjector {
         }
     }
 
+    public void assertExportHeadersSafe() {
+        assertNoPiiJsonKeys(PublicAnonymisedRecord.exportHeaderKeys());
+    }
+
+    public PublicAnonymisedRecord assertExportRecord(PublicAnonymisedRecord record) {
+        if (record == null) {
+            throw new IllegalArgumentException("PublicAnonymisedRecord must not be null.");
+        }
+        return record;
+    }
+
     public PublicDashboardSummary assertAnonymisedSummary(PublicDashboardSummary summary) {
         if (summary == null) {
             throw new IllegalArgumentException("PublicDashboardSummary must not be null.");

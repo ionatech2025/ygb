@@ -6,6 +6,7 @@ import com.ionatech.nac.ygb.adapters.in.rest.mapper.PublicDashboardFilterRequest
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.PublicDashboardRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.security.JwtAuthenticationFilter;
 import com.ionatech.nac.ygb.adapters.in.rest.security.SecurityConfig;
+import com.ionatech.nac.ygb.application.ports.api.ExportPublicDatasetQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetPublicDashboardChartQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetPublicDashboardFilterOptionsQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetPublicDashboardHeatmapQuery;
@@ -25,6 +26,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -32,9 +37,13 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PublicDashboardController.class)
@@ -61,6 +70,9 @@ class PublicDashboardControllerTest {
 
     @MockBean
     private GetPublicDashboardHeatmapQuery getPublicDashboardHeatmapQuery;
+
+    @MockBean
+    private ExportPublicDatasetQuery exportPublicDatasetQuery;
 
     @MockBean
     private PublicDashboardFilterOptionsRestMapper filterOptionsRestMapper;
@@ -193,6 +205,51 @@ class PublicDashboardControllerTest {
                 .andExpect(jsonPath("$.entries[0].count").value(3))
                 .andExpect(jsonPath("$.entries[0].respondentName").doesNotExist())
                 .andExpect(jsonPath("$.entries[0].phone").doesNotExist());
+    }
+
+    @Test
+    void shouldReturnCsvDownloadWithoutAuthentication() throws Exception {
+        stubExport(ExportFormat.CSV, "ID,Form Type\n");
+
+        MvcResult asyncResult = mockMvc.perform(get("/api/v1/public/dashboard/download/csv"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(asyncResult))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("text/csv")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString("attachment")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".csv")));
+    }
+
+    @Test
+    void shouldReturnExcelDownloadWithoutAuthentication() throws Exception {
+        stubExport(ExportFormat.XLSX, new byte[]{1, 2, 3});
+
+        MvcResult asyncResult = mockMvc.perform(get("/api/v1/public/dashboard/download/excel"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(asyncResult))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("spreadsheetml.sheet")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".xlsx")));
+    }
+
+    private void stubExport(ExportFormat format, String content) throws Exception {
+        doAnswer(invocation -> {
+            OutputStream output = invocation.getArgument(2);
+            output.write(content.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return null;
+        }).when(exportPublicDatasetQuery).export(any(PublicDashboardFilter.class), eq(format), any(OutputStream.class));
+    }
+
+    private void stubExport(ExportFormat format, byte[] content) throws Exception {
+        doAnswer(invocation -> {
+            OutputStream output = invocation.getArgument(2);
+            output.write(content);
+            return null;
+        }).when(exportPublicDatasetQuery).export(any(PublicDashboardFilter.class), eq(format), any(OutputStream.class));
     }
 
     private void stubChart(PublicChartType chartType, PublicChartSeries series, String pathSegment) {

@@ -224,4 +224,19 @@ public class UseCaseConfig {
     ) {
         return publicDashboardService;
     }
+
+    @Bean
+    public ExportPublicDatasetQuery exportPublicDatasetQuery(
+            PublicAnonymisedExportRepositoryPort publicAnonymisedExportRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            PublicExportGeneratorPort publicExportGeneratorPort,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new ExportPublicDatasetService(
+                publicAnonymisedExportRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                publicExportGeneratorPort,
+                anonymisationProjector
+        );
+    }
 }
