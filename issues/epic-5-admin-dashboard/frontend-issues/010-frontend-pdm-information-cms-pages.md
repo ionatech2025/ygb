@@ -1,36 +1,23 @@
 ## Objective
 
-Implement **PDM Information / Resources** pages (US-DASH-09): public read-only pages and Admin CMS editor for programme content without code deployment.
+~~Implement **PDM Information / Resources** pages (US-DASH-09): public read-only pages and Admin CMS editor for programme content without code deployment.~~
 
-## Architectural Context
+**Status: CANCELLED — superseded by Epic 6**
 
-- **Public routes** (no auth):
-  - `/resources` — index of published pages.
-  - `/resources/:slug` — rendered Markdown content.
+Public PDM information is implemented as **static Markdown** on the public dashboard, not as an admin CMS. See:
 
-- **Admin routes**:
-  - `/admin/content` — list pages, edit Markdown, publish.
+- [epic-6-public-dashboard/frontend-issues/001-frontend-pdm-information-resources-pages.md](../../epic-6-public-dashboard/frontend-issues/001-frontend-pdm-information-resources-pages.md)
+- Source: [`docs/pdm_public_info.md`](../../../docs/pdm_public_info.md)
 
-- **Components**:
-  - `PdmResourcesPage.tsx`, `PdmResourceDetailPage.tsx` (public).
-  - `ContentEditorPage.tsx` (admin) — Markdown textarea + preview.
-
-- **Ports**:
-  - `IContentApiPort` — public GET + admin CRUD/publish.
-
-## Technical Constraints & Clean Code
-
-- Sanitize rendered Markdown (XSS-safe).
-- Public pages accessible without login (TC-DASH-09-01).
-- Publish updates live content immediately (TC-DASH-09-02).
+Backend CMS API ([008-backend-pdm-content-cms-api.md](../backend-issues/008-backend-pdm-content-cms-api.md)) is **deferred**.
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: public page renders without auth wrapper.
-- [ ] Component test: admin editor save + publish calls correct API sequence.
-- [ ] Route test: `/resources/programme-overview` loads published body.
-- [ ] Implement public + admin pages, adapter, routes in `AppRouter`.
+- [ ] ~~Component test: public page renders without auth wrapper.~~ *(moved to Epic 6 001)*
+- [ ] ~~Component test: admin editor save + publish calls correct API sequence.~~ *(deferred with backend 008)*
+- [ ] ~~Route test: `/resources/programme-overview` loads published body.~~ *(moved to Epic 6 001)*
+- [ ] ~~Implement public + admin pages, adapter, routes in `AppRouter`.~~ *(cancelled)*
 
 ## Blocked by
 
-- Blocked by [epic-5-admin-dashboard/backend-issues/008-backend-pdm-content-cms-api.md](../backend-issues/008-backend-pdm-content-cms-api.md)
+~~Blocked by [008-backend-pdm-content-cms-api.md](../backend-issues/008-backend-pdm-content-cms-api.md)~~ — no longer applicable.
