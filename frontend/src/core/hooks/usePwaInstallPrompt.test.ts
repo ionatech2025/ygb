@@ -123,6 +123,36 @@ describe('usePwaInstallPrompt', () => {
     expect(storage.get(PWA_INSTALL_DISMISS_STORAGE_KEY)).toBeTruthy();
   });
 
+  it('falls back to the install guide when native prompt fails', async () => {
+    const deferredPrompt = createDeferredPrompt();
+    deferredPrompt.prompt.mockRejectedValueOnce(new Error('prompt unavailable'));
+
+    const { result } = renderHook(() =>
+      usePwaInstallPrompt({
+        storage: {
+          getItem: (key) => storage.get(key) ?? null,
+          setItem: (key, value) => storage.set(key, value),
+        },
+      })
+    );
+
+    act(() => {
+      window.dispatchEvent(
+        Object.assign(new Event('beforeinstallprompt'), deferredPrompt)
+      );
+    });
+
+    await waitFor(() => expect(result.current.canNativeInstall).toBe(true));
+
+    await act(async () => {
+      await result.current.promptInstall();
+    });
+
+    expect(deferredPrompt.prompt).toHaveBeenCalledTimes(1);
+    expect(result.current.browserHelpOpen).toBe(true);
+    expect(result.current.canNativeInstall).toBe(false);
+  });
+
   it('calls deferred prompt when install is requested', async () => {
     const deferredPrompt = createDeferredPrompt('accepted');
 
@@ -141,7 +171,7 @@ describe('usePwaInstallPrompt', () => {
       );
     });
 
-    await waitFor(() => expect(result.current.canInstall).toBe(true));
+    await waitFor(() => expect(result.current.canNativeInstall).toBe(true));
 
     await act(async () => {
       await result.current.promptInstall();
