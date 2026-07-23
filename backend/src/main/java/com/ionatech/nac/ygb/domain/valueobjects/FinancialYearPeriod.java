@@ -21,6 +21,22 @@ public class FinancialYearPeriod {
         return new FinancialYearPeriod(period, year);
     }
 
+    public static FinancialYearPeriod fromPersistedString(String persisted) {
+        if (persisted == null || persisted.isBlank()) {
+            throw new IllegalArgumentException("Financial year period cannot be null or blank");
+        }
+        int separator = persisted.lastIndexOf('_');
+        if (separator <= 0 || separator == persisted.length() - 1) {
+            throw new IllegalArgumentException("Invalid financial year period: " + persisted);
+        }
+        String period = persisted.substring(0, separator);
+        int year = Integer.parseInt(persisted.substring(separator + 1));
+        if (!period.equals("JAN_JUN") && !period.equals("JUL_DEC")) {
+            throw new IllegalArgumentException("Invalid financial year period: " + persisted);
+        }
+        return new FinancialYearPeriod(period, year);
+    }
+
     public String getPeriod() {
         return period;
     }
