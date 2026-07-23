@@ -36,6 +36,12 @@ class SecurityConfigTest {
     }
 
     @Test
+    void publicBudgetPriorityEndpointShouldBeAccessibleWithoutToken() throws Exception {
+        mockMvc.perform(get("/api/v1/public/budget-priorities/test"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void protectedEndpointShouldReturnUnauthorizedWithoutToken() throws Exception {
         mockMvc.perform(get("/api/v1/protected/test"))
                 .andExpect(status().isForbidden()); // By default Spring Security 6 without auth is 403 or 401. With HTTP Basic disabled it's 403.
@@ -51,6 +57,11 @@ class SecurityConfigTest {
         @GetMapping("/api/v1/public/dashboard/test")
         public String publicDashboardEndpoint() {
             return "Public Dashboard";
+        }
+
+        @GetMapping("/api/v1/public/budget-priorities/test")
+        public String publicBudgetPriorityEndpoint() {
+            return "Public Budget Priorities";
         }
 
         @GetMapping("/api/v1/protected/test")

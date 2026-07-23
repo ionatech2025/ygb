@@ -4,9 +4,12 @@ import com.ionatech.nac.ygb.application.ports.api.*;
 import com.ionatech.nac.ygb.application.ports.spi.*;
 import com.ionatech.nac.ygb.application.services.*;
 import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
+import com.ionatech.nac.ygb.domain.service.FinancialYearPeriodCalculator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Clock;
 
 @Configuration
 public class UseCaseConfig {
@@ -236,6 +239,81 @@ public class UseCaseConfig {
                 publicAnonymisedExportRepositoryPort,
                 dashboardFilterHierarchyValidator,
                 publicExportGeneratorPort,
+                anonymisationProjector
+        );
+    }
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
+    }
+
+    @Bean
+    public FinancialYearPeriodCalculator financialYearPeriodCalculator() {
+        return new FinancialYearPeriodCalculator();
+    }
+
+    @Bean
+    @Transactional
+    public SubmitBudgetPriorityUseCase submitBudgetPriorityUseCase(
+            BudgetPrioritySubmissionRepositoryPort budgetPrioritySubmissionRepositoryPort,
+            FinancialYearPeriodCalculator financialYearPeriodCalculator,
+            Clock clock
+    ) {
+        return new SubmitBudgetPriorityService(
+                new SaveBudgetPrioritySubmissionService(budgetPrioritySubmissionRepositoryPort),
+                financialYearPeriodCalculator,
+                clock
+        );
+    }
+
+    @Bean
+    public BudgetPriorityDashboardService budgetPriorityDashboardService(
+            BudgetPriorityDashboardReadPort budgetPriorityDashboardReadPort,
+            DashboardFilterOptionsRepositoryPort dashboardFilterOptionsRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new BudgetPriorityDashboardService(
+                budgetPriorityDashboardReadPort,
+                dashboardFilterOptionsRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                anonymisationProjector
+        );
+    }
+
+    @Bean
+    public GetBudgetPrioritySummaryQuery getBudgetPrioritySummaryQuery(
+            BudgetPriorityDashboardService budgetPriorityDashboardService
+    ) {
+        return budgetPriorityDashboardService;
+    }
+
+    @Bean
+    public GetBudgetPriorityChartsQuery getBudgetPriorityChartsQuery(
+            BudgetPriorityDashboardService budgetPriorityDashboardService
+    ) {
+        return budgetPriorityDashboardService;
+    }
+
+    @Bean
+    public GetBudgetPriorityFilterOptionsQuery getBudgetPriorityFilterOptionsQuery(
+            BudgetPriorityDashboardService budgetPriorityDashboardService
+    ) {
+        return budgetPriorityDashboardService;
+    }
+
+    @Bean
+    public ExportBudgetPriorityDatasetQuery exportBudgetPriorityDatasetQuery(
+            BudgetPriorityDashboardReadPort budgetPriorityDashboardReadPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            BudgetPriorityExportGeneratorPort budgetPriorityExportGeneratorPort,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new ExportBudgetPriorityDatasetService(
+                budgetPriorityDashboardReadPort,
+                dashboardFilterHierarchyValidator,
+                budgetPriorityExportGeneratorPort,
                 anonymisationProjector
         );
     }

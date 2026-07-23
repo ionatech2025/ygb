@@ -37,17 +37,17 @@ Deliver the **Budget Priorities submission REST API** (US-BP-01 / BP-01, BP-03):
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Domain Tests** for submission validation (missing demographics, empty priority areas, invalid phone).
-- [ ] Write **Application Tests** with mocked SPI:
+- [x] Write **Domain Tests** for submission validation (missing demographics, empty priority areas, invalid phone).
+- [x] Write **Application Tests** with mocked SPI:
   - Happy path → saved, event emitted.
   - Duplicate phone+section+period → `DuplicateBudgetPrioritySubmissionException` (TC-BP-01-02).
   - Same phone, different section → success (TC-BP-01-03).
-- [ ] Write **Controller Tests**:
+- [x] Write **Controller Tests**:
   - Valid payload → `201 Created` with `bpId`.
   - Duplicate → `409` with clear problem detail.
   - Invalid phone → `400`.
-- [ ] Write **Integration Test** (Testcontainers): submit → second submit with same phone+section blocked.
-- [ ] Implement use case, controller, mappers, exception handling, security permit-all.
+- [x] Write **Integration Test** (Testcontainers): submit → second submit with same phone+section blocked.
+- [x] Implement use case, controller, mappers, exception handling, security permit-all.
 
 ## Blocked by
 
