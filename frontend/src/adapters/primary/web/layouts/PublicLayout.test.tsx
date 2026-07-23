@@ -22,11 +22,15 @@ function renderPublicLayout(initialPath = '/dashboard') {
 }
 
 describe('PublicLayout', () => {
-  it('renders Dashboard and Resources links without auth context', () => {
+  it('renders Dashboard, Budget Priorities, and Resources links without auth context', () => {
     renderPublicLayout();
 
     expect(screen.getByRole('navigation', { name: 'Public sections' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
+    expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveAttribute(
+      'href',
+      '/budget-priorities'
+    );
     expect(screen.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources');
     expect(screen.getByRole('link', { name: 'Staff sign in' })).toHaveAttribute('href', '/login');
     expect(screen.queryByRole('button', { name: /log out/i })).not.toBeInTheDocument();

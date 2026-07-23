@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom';
-import { BookOpen, LayoutDashboard } from 'lucide-react';
+import { BookOpen, ClipboardList, LayoutDashboard } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/budget-priorities', label: 'Budget Priorities', icon: ClipboardList, end: false },
   { to: '/resources', label: 'Resources', icon: BookOpen, end: true },
 ] as const;
 
