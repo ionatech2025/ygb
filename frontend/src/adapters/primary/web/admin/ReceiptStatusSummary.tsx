@@ -1,7 +1,6 @@
 import { AlertCircle } from 'lucide-react';
 import { DEVICE_PENDING_INFO_MESSAGE } from '../../../../core/domain/admin-receipt-status.model';
 import type { AdminReceiptStatus } from '../../../../core/domain/admin-receipt-status.model';
-import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import { StatCard } from './StatCard';
 import type { StatCardViewModel } from '../../../../core/domain/dashboard-summary.model';
 
