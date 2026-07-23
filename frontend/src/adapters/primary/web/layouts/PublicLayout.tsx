@@ -3,6 +3,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { LogIn, Menu, X } from 'lucide-react';
 import { usePublicDashboardFilterUrlSync } from '../../../../core/hooks/usePublicDashboardFilterUrlSync';
 import { useBudgetPriorityDashboardFilterUrlSync } from '../../../../core/hooks/useBudgetPriorityDashboardFilterUrlSync';
+import { useLgoBudgetAllocationDashboardFilterUrlSync } from '../../../../core/hooks/useLgoBudgetAllocationDashboardFilterUrlSync';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { publicLayoutClasses } from '../../../../core/domain/public-dashboard.theme';
 import { PublicNav } from './PublicNav';
@@ -23,6 +24,7 @@ function StaffSignInLink({ onNavigate, className = '' }: { onNavigate?: () => vo
 export function PublicLayout() {
   usePublicDashboardFilterUrlSync();
   useBudgetPriorityDashboardFilterUrlSync();
+  useLgoBudgetAllocationDashboardFilterUrlSync();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);

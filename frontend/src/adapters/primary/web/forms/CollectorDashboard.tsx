@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
-import { CloudUpload, Hash, RefreshCw } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, CloudUpload, Hash, Landmark, RefreshCw } from 'lucide-react';
+import { LGO_BUDGET_ALLOCATION_ROUTES } from '../../../../core/domain/lgo-budget-allocation.routes';
+import { lgoBudgetAllocationClasses } from '../../../../core/domain/lgo-budget-allocation.theme';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { useSubmissionCountStore } from '../../../../core/store/useSubmissionCountStore';
 import { useSyncStore } from '../../../../core/store/useSyncStore';
@@ -102,6 +105,26 @@ export function CollectorDashboard() {
       <FormSection title="PDM Survey" description="Start a new household survey submission">
         <PDMSurveyView />
       </FormSection>
+
+      <section aria-label="Other collector forms" className="space-y-3">
+        <h3 className={lgoBudgetAllocationClasses.otherInterviewsHeading}>Other interviews</h3>
+        <Link
+          to={LGO_BUDGET_ALLOCATION_ROUTES.index}
+          data-testid="lgo-budget-allocation-entry"
+          className={lgoBudgetAllocationClasses.dashboardEntryCard}
+        >
+          <div className={lgoBudgetAllocationClasses.dashboardEntryIcon}>
+            <Landmark className="h-5 w-5" aria-hidden="true" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className={lgoBudgetAllocationClasses.dashboardEntryTitle}>LGO Budget Allocation</p>
+            <p className={lgoBudgetAllocationClasses.dashboardEntrySummary}>
+              Prior-FY sector allocations, rationale, and recommendations — not the LGO Questionnaire.
+            </p>
+          </div>
+          <ArrowRight className={lgoBudgetAllocationClasses.dashboardEntryArrow} aria-hidden="true" />
+        </Link>
+      </section>
     </div>
   );
 }

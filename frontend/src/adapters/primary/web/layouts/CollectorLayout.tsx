@@ -3,6 +3,7 @@ import { ClipboardList, LogOut } from 'lucide-react';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { SubmissionCountBadge } from '../components/SubmissionCountBadge';
+import { PwaInstallBanner } from '../components/PwaInstallBanner';
 import { SyncFailedToast } from '../components/SyncFailedToast';
 import { SyncStatusBar } from '../components/SyncStatusBar';
 
@@ -44,6 +45,7 @@ export function CollectorLayout() {
         </div>
       </header>
       <SyncStatusBar />
+      <PwaInstallBanner />
       <SyncFailedToast />
       <main className="flex-1 px-4 py-5">
         <div className="mx-auto max-w-lg">

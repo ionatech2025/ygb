@@ -39,17 +39,24 @@ This issue delivers a user-visible install experience that surfaces when the bro
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit test: hook returns `canInstall: false` when running in standalone mode (mock `matchMedia`).
-- [ ] Unit test: hook stores dismiss flag and suppresses banner when dismissed.
-- [ ] Component test: banner renders Install + Not now when `canInstall` true.
-- [ ] Component test: Install click calls deferred `prompt()` mock; success hides banner.
-- [ ] Component test: iOS user agent shows help content instead of install button (or secondary “How to install” link).
-- [ ] Component test: banner not rendered for authenticated collector when already standalone.
-- [ ] Manual test checklist (document in PR):
+- [x] Unit test: hook returns `canInstall: false` when running in standalone mode (mock `matchMedia`).
+- [x] Unit test: hook stores dismiss flag and suppresses banner when dismissed.
+- [x] Component test: banner renders Install + Not now when `canInstall` true.
+- [x] Component test: Install click calls deferred `prompt()` mock; success hides banner.
+- [x] Component test: iOS user agent shows help content instead of install button (or secondary “How to install” link).
+- [x] Component test: banner not rendered for authenticated collector when already standalone.
+- [x] Manual test checklist (document in PR):
   - Chrome Android / desktop: `beforeinstallprompt` → Install works.
   - Safari iOS: instructions shown; no console errors.
   - Already installed PWA: no banner.
-- [ ] Integrate banner into `CollectorLayout`; verify no layout shift blocking sync status bar.
+- [x] Integrate banner into `CollectorLayout`; verify no layout shift blocking sync status bar.
+
+## Implementation notes
+
+- Delivered in commit `106f97d`: `usePwaInstallPrompt`, `pwa-install-prompt.model`, `PwaInstallBanner`, `PwaInstallIosHelp`, mounted in `CollectorLayout` below `SyncStatusBar`.
+- **PortalLogin:** not mounted — collectors reach the banner after login via `CollectorLayout` (primary audience).
+- **Manifest icons:** existing `favicon.svg` retained; PNG 192/512 not added (no install-dialog issues observed in dev; add under `public/` if Android QA requires).
+- **Dismiss window:** 7 days via `ygb-pwa-install-dismissed` in `localStorage`.
 
 ## Blocked by
 

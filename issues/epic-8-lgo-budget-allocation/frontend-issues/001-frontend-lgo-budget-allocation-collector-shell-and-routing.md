@@ -31,12 +31,12 @@ Build the **LGO Budget Allocation collector shell** (US-LGOB-01 foundation): aut
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: page renders title and intro copy for collectors.
-- [ ] Route test: unauthenticated visitor → redirect to login (TC-LGOB-01-01).
-- [ ] Route test: authenticated `DATA_COLLECTOR` loads page shell.
-- [ ] Route test: `ADMIN` without collector role cannot access (if role separation applies).
-- [ ] Component test: collector dashboard includes LGO Budget Allocation entry point.
-- [ ] Implement routes, page shell, and navigation entry.
+- [x] Component test: page renders title and intro copy for collectors.
+- [x] Route test: unauthenticated visitor → redirect to login (TC-LGOB-01-01).
+- [x] Route test: authenticated `DATA_COLLECTOR` loads page shell.
+- [x] Route test: `ADMIN` without collector role cannot access (if role separation applies).
+- [x] Component test: collector dashboard includes LGO Budget Allocation entry point.
+- [x] Implement routes, page shell, and navigation entry.
 
 ## Blocked by
 

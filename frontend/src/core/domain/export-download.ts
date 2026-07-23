@@ -2,6 +2,8 @@ import type { DashboardFilter } from './dashboard-filter.model';
 import { buildDashboardFilterQueryString } from './dashboard-filter.model';
 import type { ExportFormat } from './export.model';
 import type { PublicExportFormat } from './public-export.model';
+import type { LgoBudgetAllocationDashboardFilter } from './lgo-budget-allocation-dashboard-filter.model';
+import { buildLgoBudgetAllocationDashboardFilterQueryString } from './lgo-budget-allocation-dashboard-filter.model';
 
 /** Short stable hash for export filenames when the server omits Content-Disposition. */
 export function shortFilterHash(filter: DashboardFilter): string {
@@ -32,6 +34,31 @@ export function buildBudgetPriorityExportFallbackFilename(
   const timestamp = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(0, 14);
   const sectionPart = filter.section?.trim() ? filter.section : 'all-sectors';
   return `ygb-budget-priorities-${sectionPart}-${timestamp}.${extension}`;
+}
+
+function lgoBudgetAllocationExportFilterHint(filter: LgoBudgetAllocationDashboardFilter): string {
+  if (filter.districtId.trim()) {
+    return `district-${filter.districtId.slice(0, 8)}`;
+  }
+  if (filter.financialYearPeriod.trim()) {
+    return filter.financialYearPeriod.toLowerCase().replace(/_/g, '-');
+  }
+  const query = buildLgoBudgetAllocationDashboardFilterQueryString(filter).replace(/^\?/, '');
+  if (!query) {
+    return 'all-filters';
+  }
+  let hash = 5381;
+  for (let index = 0; index < query.length; index += 1) {
+    hash = (hash * 33) ^ query.charCodeAt(index);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+export function buildLgoBudgetAllocationExportFallbackFilename(
+  filter: LgoBudgetAllocationDashboardFilter
+): string {
+  const timestamp = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(0, 14);
+  return `ygb-lgo-budget-allocation-${lgoBudgetAllocationExportFilterHint(filter)}-${timestamp}.csv`;
 }
 
 export function parseContentDispositionFilename(header: string | null): string | null {

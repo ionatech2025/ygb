@@ -31,13 +31,13 @@ Implement the **LGO Budget Allocation form UI** (US-LGOB-01 / LGO-02, TC-LGOB-01
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit tests for validation — empty rationale, empty recommendations, no allocation rows → errors.
-- [ ] Unit tests for payload builder — maps form state to API request shape.
-- [ ] Adapter test: mocked fetch sends auth header and correct JSON body.
-- [ ] Component test: form renders allocation, rationale, and recommendation sections.
-- [ ] Component test: submit with valid data calls port `submit`.
-- [ ] Component test: validation errors shown inline; submit blocked when invalid.
-- [ ] Implement domain model, validation, port, adapter, and form sections.
+- [x] Unit tests for validation — empty rationale, empty recommendations, no allocation rows → errors.
+- [x] Unit tests for payload builder — maps form state to API request shape.
+- [x] Adapter test: mocked fetch sends auth header and correct JSON body.
+- [x] Component test: form renders allocation, rationale, and recommendation sections.
+- [x] Component test: submit with valid data calls port `submit`.
+- [x] Component test: validation errors shown inline; submit blocked when invalid.
+- [x] Implement domain model, validation, port, adapter, and form sections.
 
 ## Blocked by
 
