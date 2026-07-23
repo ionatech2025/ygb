@@ -6,6 +6,7 @@ import com.ionatech.nac.ygb.adapters.in.rest.mapper.BudgetPriorityDashboardFilte
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.BudgetPriorityDashboardRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.security.JwtAuthenticationFilter;
 import com.ionatech.nac.ygb.adapters.in.rest.security.SecurityConfig;
+import com.ionatech.nac.ygb.application.ports.api.ExportBudgetPriorityDatasetQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetBudgetPriorityChartsQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetBudgetPriorityFilterOptionsQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetBudgetPrioritySummaryQuery;
@@ -18,8 +19,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.io.OutputStream;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,9 +32,13 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BudgetPriorityDashboardController.class)
@@ -53,6 +62,9 @@ class BudgetPriorityDashboardControllerTest {
 
     @MockBean
     private GetBudgetPriorityChartsQuery getBudgetPriorityChartsQuery;
+
+    @MockBean
+    private ExportBudgetPriorityDatasetQuery exportBudgetPriorityDatasetQuery;
 
     @MockBean
     private BudgetPriorityDashboardFilterOptionsRestMapper filterOptionsRestMapper;
@@ -165,6 +177,53 @@ class BudgetPriorityDashboardControllerTest {
                 .andExpect(jsonPath("$.districts[0].name").value("Kampala"))
                 .andExpect(jsonPath("$.phoneNumber").doesNotExist())
                 .andExpect(jsonPath("$.fullName").doesNotExist());
+    }
+
+    @Test
+    void shouldReturnCsvDownloadWithoutAuthentication() throws Exception {
+        stubExport(ExportFormat.CSV, "ID,Section\n");
+
+        MvcResult asyncResult = mockMvc.perform(get("/api/v1/public/dashboard/budget-priorities/download/csv"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(asyncResult))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("text/csv")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString("attachment")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".csv")));
+    }
+
+    @Test
+    void shouldReturnExcelDownloadWithoutAuthentication() throws Exception {
+        stubExport(ExportFormat.XLSX, new byte[]{1, 2, 3});
+
+        MvcResult asyncResult = mockMvc.perform(get("/api/v1/public/dashboard/budget-priorities/download/excel"))
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        mockMvc.perform(asyncDispatch(asyncResult))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("spreadsheetml.sheet")))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".xlsx")));
+    }
+
+    private void stubExport(ExportFormat format, String content) throws Exception {
+        doAnswer(invocation -> {
+            OutputStream output = invocation.getArgument(2);
+            output.write(content.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return null;
+        }).when(exportBudgetPriorityDatasetQuery).export(
+                any(BudgetPriorityDashboardFilter.class), eq(format), any(OutputStream.class));
+    }
+
+    private void stubExport(ExportFormat format, byte[] content) throws Exception {
+        doAnswer(invocation -> {
+            OutputStream output = invocation.getArgument(2);
+            output.write(content);
+            return null;
+        }).when(exportBudgetPriorityDatasetQuery).export(
+                any(BudgetPriorityDashboardFilter.class), eq(format), any(OutputStream.class));
     }
 
     private void stubChart(BudgetPriorityChartType chartType, String pathSegment, String label) {

@@ -302,4 +302,19 @@ public class UseCaseConfig {
     ) {
         return budgetPriorityDashboardService;
     }
+
+    @Bean
+    public ExportBudgetPriorityDatasetQuery exportBudgetPriorityDatasetQuery(
+            BudgetPriorityDashboardReadPort budgetPriorityDashboardReadPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            BudgetPriorityExportGeneratorPort budgetPriorityExportGeneratorPort,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new ExportBudgetPriorityDatasetService(
+                budgetPriorityDashboardReadPort,
+                dashboardFilterHierarchyValidator,
+                budgetPriorityExportGeneratorPort,
+                anonymisationProjector
+        );
+    }
 }

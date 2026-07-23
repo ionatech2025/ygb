@@ -62,4 +62,12 @@ public class BudgetPriorityDashboardReadAdapter implements BudgetPriorityDashboa
     public List<String> findDistinctFinancialYearPeriods() {
         return jpaRepository.findDistinctFinancialYearPeriods();
     }
+
+    @Override
+    public BudgetPriorityAnonymisedRecordPage findExportRecordsByFilter(
+            BudgetPriorityDashboardFilter filter,
+            PageRequest pageRequest
+    ) {
+        return jpaRepository.findExportRecords(filter, pageRequest);
+    }
 }

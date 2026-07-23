@@ -6,7 +6,12 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,6 +139,65 @@ class BudgetPriorityDashboardJpaRepository {
                 """);
     }
 
+    BudgetPriorityAnonymisedRecordPage findExportRecords(
+            BudgetPriorityDashboardFilter filter,
+            PageRequest pageRequest
+    ) {
+        Map<String, Object> params = new HashMap<>();
+        String whereClause = BudgetPriorityFilterSqlSupport.whereClause(filter, params);
+        long totalElements = countExportRecords(whereClause, params);
+
+        String sql = """
+                SELECT bps.bp_id,
+                       bps.section,
+                       bps.financial_year_period,
+                       (bps.demographic_data->>'districtId')::uuid,
+                       l.name,
+                       bps.demographic_data->>'gender',
+                       bps.demographic_data->>'ageGroup',
+                       (
+                           SELECT string_agg(value, ', ' ORDER BY ord)
+                           FROM jsonb_array_elements_text(bps.priority_areas->'rankedAreas')
+                                WITH ORDINALITY AS arr(value, ord)
+                       ),
+                       bps.submitted_at
+                FROM budget_priority_submissions bps
+                JOIN locations l ON l.id = (bps.demographic_data->>'districtId')::uuid
+                """ + whereClause + """
+                 ORDER BY bps.submitted_at DESC, bps.bp_id DESC
+                 LIMIT :pageSize OFFSET :pageOffset
+                """;
+        params.put("pageSize", pageRequest.size());
+        params.put("pageOffset", pageRequest.offset());
+
+        List<BudgetPriorityAnonymisedRecord> items = runQuery(sql, params).stream()
+                .map(this::mapExportRecordRow)
+                .toList();
+        return new BudgetPriorityAnonymisedRecordPage(items, totalElements, pageRequest.page(), pageRequest.size());
+    }
+
+    private long countExportRecords(String whereClause, Map<String, Object> params) {
+        Map<String, Object> countParams = new HashMap<>(params);
+        String sql = "SELECT COUNT(*) FROM budget_priority_submissions bps" + whereClause;
+        var query = entityManager.createNativeQuery(sql);
+        bindParams(query, countParams);
+        return ((Number) query.getSingleResult()).longValue();
+    }
+
+    private BudgetPriorityAnonymisedRecord mapExportRecordRow(Object[] row) {
+        return new BudgetPriorityAnonymisedRecord(
+                toUuid(row[0]),
+                BudgetPriorityFilterSqlSupport.toApiSection((String) row[1]),
+                (String) row[2],
+                toUuid(row[3]),
+                (String) row[4],
+                (String) row[5],
+                (String) row[6],
+                row[7] == null ? "" : (String) row[7],
+                toLocalDateTime(row[8])
+        );
+    }
+
     private List<BudgetPriorityAreaCount> mapPriorityAreaRows(List<Object[]> rows) {
         return rows.stream()
                 .map(row -> new BudgetPriorityAreaCount((String) row[0], ((Number) row[1]).longValue()))
@@ -174,5 +238,25 @@ class BudgetPriorityDashboardJpaRepository {
             return timestamp.toLocalDateTime().toLocalDate();
         }
         return LocalDate.parse(value.toString());
+    }
+
+    private static LocalDateTime toLocalDateTime(Object value) {
+        if (value instanceof LocalDateTime localDateTime) {
+            return localDateTime;
+        }
+        if (value instanceof Timestamp timestamp) {
+            return timestamp.toLocalDateTime();
+        }
+        if (value instanceof OffsetDateTime offsetDateTime) {
+            return offsetDateTime.toLocalDateTime();
+        }
+        if (value instanceof Instant instant) {
+            return LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+        }
+        String text = value.toString();
+        if (text.endsWith("Z")) {
+            return LocalDateTime.ofInstant(Instant.parse(text), ZoneOffset.UTC);
+        }
+        return LocalDateTime.parse(text);
     }
 }

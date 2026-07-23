@@ -22,4 +22,9 @@ public interface BudgetPriorityDashboardReadPort {
     List<String> findDistinctAgeGroups();
 
     List<String> findDistinctFinancialYearPeriods();
+
+    BudgetPriorityAnonymisedRecordPage findExportRecordsByFilter(
+            BudgetPriorityDashboardFilter filter,
+            PageRequest pageRequest
+    );
 }

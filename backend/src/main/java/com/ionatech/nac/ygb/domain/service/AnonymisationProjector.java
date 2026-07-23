@@ -1,6 +1,7 @@
 package com.ionatech.nac.ygb.domain.service;
 
 import com.ionatech.nac.ygb.domain.exceptions.PublicPiiExposureException;
+import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityAnonymisedRecord;
 import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityAreaCount;
 import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityChartDataPoint;
 import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityChartSeries;
@@ -62,9 +63,20 @@ public final class AnonymisationProjector {
         assertNoPiiJsonKeys(PublicAnonymisedRecord.exportHeaderKeys());
     }
 
+    public void assertBudgetPriorityExportHeadersSafe() {
+        assertNoPiiJsonKeys(BudgetPriorityAnonymisedRecord.exportHeaderKeys());
+    }
+
     public PublicAnonymisedRecord assertExportRecord(PublicAnonymisedRecord record) {
         if (record == null) {
             throw new IllegalArgumentException("PublicAnonymisedRecord must not be null.");
+        }
+        return record;
+    }
+
+    public BudgetPriorityAnonymisedRecord assertBudgetPriorityExportRecord(BudgetPriorityAnonymisedRecord record) {
+        if (record == null) {
+            throw new IllegalArgumentException("BudgetPriorityAnonymisedRecord must not be null.");
         }
         return record;
     }

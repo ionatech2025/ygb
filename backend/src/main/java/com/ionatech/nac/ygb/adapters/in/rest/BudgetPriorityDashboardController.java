@@ -7,10 +7,12 @@ import com.ionatech.nac.ygb.adapters.in.rest.dto.BudgetPrioritySummaryResponseDt
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.BudgetPriorityDashboardFilterOptionsRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.BudgetPriorityDashboardFilterRequestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.BudgetPriorityDashboardRestMapper;
+import com.ionatech.nac.ygb.application.ports.api.ExportBudgetPriorityDatasetQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetBudgetPriorityChartsQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetBudgetPriorityFilterOptionsQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetBudgetPrioritySummaryQuery;
-import com.ionatech.nac.ygb.domain.exceptions.InvalidDashboardFilterException;
+import com.ionatech.nac.ygb.adapters.out.export.BudgetPriorityExportFilenameBuilder;
+import com.ionatech.nac.ygb.domain.valueobjects.ExportFormat;
 import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
 import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityChartSeries;
 import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityChartType;
@@ -19,7 +21,11 @@ import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityFilterOptions;
 import com.ionatech.nac.ygb.domain.valueobjects.BudgetPrioritySummary;
 import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesGranularity;
 import org.springframework.format.annotation.DateTimeFormat;
+import com.ionatech.nac.ygb.domain.exceptions.InvalidDashboardFilterException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +46,7 @@ public class BudgetPriorityDashboardController {
     private final GetBudgetPriorityFilterOptionsQuery getBudgetPriorityFilterOptionsQuery;
     private final GetBudgetPrioritySummaryQuery getBudgetPrioritySummaryQuery;
     private final GetBudgetPriorityChartsQuery getBudgetPriorityChartsQuery;
+    private final ExportBudgetPriorityDatasetQuery exportBudgetPriorityDatasetQuery;
     private final BudgetPriorityDashboardFilterRequestMapper filterRequestMapper;
     private final BudgetPriorityDashboardFilterOptionsRestMapper filterOptionsRestMapper;
     private final BudgetPriorityDashboardRestMapper restMapper;
@@ -49,6 +56,7 @@ public class BudgetPriorityDashboardController {
             GetBudgetPriorityFilterOptionsQuery getBudgetPriorityFilterOptionsQuery,
             GetBudgetPrioritySummaryQuery getBudgetPrioritySummaryQuery,
             GetBudgetPriorityChartsQuery getBudgetPriorityChartsQuery,
+            ExportBudgetPriorityDatasetQuery exportBudgetPriorityDatasetQuery,
             BudgetPriorityDashboardFilterRequestMapper filterRequestMapper,
             BudgetPriorityDashboardFilterOptionsRestMapper filterOptionsRestMapper,
             BudgetPriorityDashboardRestMapper restMapper,
@@ -57,6 +65,7 @@ public class BudgetPriorityDashboardController {
         this.getBudgetPriorityFilterOptionsQuery = getBudgetPriorityFilterOptionsQuery;
         this.getBudgetPrioritySummaryQuery = getBudgetPrioritySummaryQuery;
         this.getBudgetPriorityChartsQuery = getBudgetPriorityChartsQuery;
+        this.exportBudgetPriorityDatasetQuery = exportBudgetPriorityDatasetQuery;
         this.filterRequestMapper = filterRequestMapper;
         this.filterOptionsRestMapper = filterOptionsRestMapper;
         this.restMapper = restMapper;
@@ -125,6 +134,48 @@ public class BudgetPriorityDashboardController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/download/csv")
+    public ResponseEntity<StreamingResponseBody> downloadCsv(
+            @RequestParam(value = "section", required = false) String section,
+            @RequestParam(value = "districtId", required = false) UUID districtId,
+            @RequestParam(value = "subcountyId", required = false) UUID subcountyId,
+            @RequestParam(value = "parishId", required = false) UUID parishId,
+            @RequestParam(value = "dateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+            @RequestParam(value = "dateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "ageGroup", required = false) String ageGroup,
+            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
+    ) {
+        return exportDownload(
+                filterRequestMapper.toFilter(
+                        section, districtId, subcountyId, parishId, dateFrom, dateTo,
+                        gender, ageGroup, financialYearPeriod
+                ),
+                ExportFormat.CSV
+        );
+    }
+
+    @GetMapping("/download/excel")
+    public ResponseEntity<StreamingResponseBody> downloadExcel(
+            @RequestParam(value = "section", required = false) String section,
+            @RequestParam(value = "districtId", required = false) UUID districtId,
+            @RequestParam(value = "subcountyId", required = false) UUID subcountyId,
+            @RequestParam(value = "parishId", required = false) UUID parishId,
+            @RequestParam(value = "dateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+            @RequestParam(value = "dateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "ageGroup", required = false) String ageGroup,
+            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
+    ) {
+        return exportDownload(
+                filterRequestMapper.toFilter(
+                        section, districtId, subcountyId, parishId, dateFrom, dateTo,
+                        gender, ageGroup, financialYearPeriod
+                ),
+                ExportFormat.XLSX
+        );
+    }
+
     @ExceptionHandler(InvalidDashboardFilterException.class)
     public ResponseEntity<Map<String, String>> handleInvalidDashboardFilter(InvalidDashboardFilterException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
@@ -139,5 +190,18 @@ public class BudgetPriorityDashboardController {
         anonymisationProjector.assertNoPiiJsonKeys(Arrays.stream(dtoClass.getRecordComponents())
                 .map(java.lang.reflect.RecordComponent::getName)
                 .toList());
+    }
+
+    private ResponseEntity<StreamingResponseBody> exportDownload(
+            BudgetPriorityDashboardFilter filter,
+            ExportFormat format
+    ) {
+        anonymisationProjector.assertBudgetPriorityExportHeadersSafe();
+        StreamingResponseBody body = output -> exportBudgetPriorityDatasetQuery.export(filter, format, output);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
+                        + BudgetPriorityExportFilenameBuilder.build(format) + "\"")
+                .contentType(MediaType.parseMediaType(format.contentType()))
+                .body(body);
     }
 }
