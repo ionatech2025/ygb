@@ -32,4 +32,9 @@ public class LgoBudgetAllocationRepositoryAdapter implements LgoBudgetAllocation
     public Optional<LgoBudgetAllocation> findById(UUID lbaId) {
         return jpaRepository.findById(lbaId).map(mapper::toDomain);
     }
+
+    @Override
+    public Optional<LgoBudgetAllocation> findBySubmissionId(UUID submissionId) {
+        return jpaRepository.findBySubmissionId(submissionId).map(mapper::toDomain);
+    }
 }

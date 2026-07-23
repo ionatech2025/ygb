@@ -10,4 +10,6 @@ public interface LgoBudgetAllocationRepositoryPort {
     LgoBudgetAllocation save(LgoBudgetAllocation allocation);
 
     Optional<LgoBudgetAllocation> findById(UUID lbaId);
+
+    Optional<LgoBudgetAllocation> findBySubmissionId(UUID submissionId);
 }

@@ -111,4 +111,9 @@ public class SubmissionRepositoryAdapter implements SubmissionRepositoryPort {
                         entity.getFinancialYearPeriod()
                 ));
     }
+
+    @Override
+    public Optional<Submission> findByDeviceSubmissionId(UUID deviceSubmissionId) {
+        return jpaRepository.findByDeviceSubmissionId(deviceSubmissionId).map(mapper::toDomain);
+    }
 }

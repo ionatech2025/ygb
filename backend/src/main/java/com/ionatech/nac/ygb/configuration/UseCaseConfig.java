@@ -317,4 +317,25 @@ public class UseCaseConfig {
                 anonymisationProjector
         );
     }
+
+    @Bean
+    public SaveLgoBudgetAllocationService saveLgoBudgetAllocationService(
+            LgoBudgetAllocationRepositoryPort lgoBudgetAllocationRepositoryPort
+    ) {
+        return new SaveLgoBudgetAllocationService(lgoBudgetAllocationRepositoryPort);
+    }
+
+    @Bean
+    @Transactional
+    public RecordLgoBudgetAllocationUseCase recordLgoBudgetAllocationUseCase(
+            UserRepositoryPort userRepositoryPort,
+            SubmissionRepositoryPort submissionRepositoryPort,
+            SaveLgoBudgetAllocationService saveLgoBudgetAllocationService
+    ) {
+        return new RecordLgoBudgetAllocationService(
+                userRepositoryPort,
+                submissionRepositoryPort,
+                saveLgoBudgetAllocationService
+        );
+    }
 }

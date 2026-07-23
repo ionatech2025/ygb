@@ -28,4 +28,6 @@ public interface SubmissionRepositoryPort {
     SubmissionPage findSummariesByFilter(DashboardFilter filter, PageRequest pageRequest);
 
     Optional<AdminSubmissionDetail> findDetailById(UUID id);
+
+    Optional<Submission> findByDeviceSubmissionId(UUID deviceSubmissionId);
 }
