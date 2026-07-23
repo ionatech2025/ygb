@@ -28,12 +28,12 @@ Add **CSV export** for the LGO Budget Allocation public dashboard view (US-LGOB-
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit test: fallback filename builder produces expected pattern.
-- [ ] Adapter test: passes query params from active filters; handles `Content-Disposition`.
-- [ ] Component test: toolbar renders Download CSV control.
-- [ ] Component test: click triggers adapter and initiates browser download (mock `URL.createObjectURL`).
-- [ ] Component test: export disabled while loading; error message on failure.
-- [ ] Implement port, adapter, toolbar, and page integration.
+- [x] Unit test: fallback filename builder produces expected pattern.
+- [x] Adapter test: passes query params from active filters; handles `Content-Disposition`.
+- [x] Component test: toolbar renders Download CSV control.
+- [x] Component test: click triggers adapter and initiates browser download (mock `URL.createObjectURL`).
+- [x] Component test: export disabled while loading; error message on failure.
+- [x] Implement port, adapter, toolbar, and page integration.
 
 ## Blocked by
 

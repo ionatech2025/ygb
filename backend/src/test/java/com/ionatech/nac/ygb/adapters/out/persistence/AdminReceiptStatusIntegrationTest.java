@@ -54,7 +54,7 @@ class AdminReceiptStatusIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        jdbcTemplate.update("DELETE FROM submissions");
+        TestLocationFixtures.clearAllSubmissions(jdbcTemplate);
         SubmissionMapper submissionMapper = Mappers.getMapper(SubmissionMapper.class);
         SubmissionRepositoryAdapter submissionRepository = new SubmissionRepositoryAdapter(
                 submissionJpaRepository,
