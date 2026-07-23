@@ -23,29 +23,18 @@ describe('pwa-install-prompt.model', () => {
   it('records dismiss expiry for seven days', () => {
     const storage = new Map<string, string>();
     const now = new Date('2026-03-15T10:00:00Z');
+    const storageLike = {
+      getItem: (key: string) => storage.get(key) ?? null,
+      setItem: (key: string, value: string) => storage.set(key, value),
+    };
 
-    recordDismiss(
-      {
-        getItem: (key) => storage.get(key) ?? null,
-        setItem: (key, value) => storage.set(key, value),
-      },
-      now
-    );
+    recordDismiss(storageLike, now);
 
     const stored = storage.get(PWA_INSTALL_DISMISS_STORAGE_KEY);
     expect(stored).toBeTruthy();
-    expect(isDismissed(
-      { getItem: (key) => storage.get(key) ?? null },
-      now
-    )).toBe(true);
-    expect(isDismissed(
-      { getItem: (key) => storage.get(key) ?? null },
-      new Date('2026-03-22T09:59:59Z')
-    )).toBe(true);
-    expect(isDismissed(
-      { getItem: (key) => storage.get(key) ?? null },
-      new Date('2026-03-22T10:00:00Z')
-    )).toBe(false);
+    expect(isDismissed(storageLike, now)).toBe(true);
+    expect(isDismissed(storageLike, new Date('2026-03-22T09:59:59Z'))).toBe(true);
+    expect(isDismissed(storageLike, new Date('2026-03-22T10:00:00Z'))).toBe(false);
     expect(PWA_INSTALL_DISMISS_DAYS).toBe(7);
   });
 });

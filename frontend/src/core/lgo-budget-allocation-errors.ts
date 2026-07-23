@@ -1,4 +1,4 @@
-import { ApiError } from './api-client';
+import { ApiError } from './api/api-client';
 
 export interface MappedLgoBudgetAllocationError {
   title: string;
