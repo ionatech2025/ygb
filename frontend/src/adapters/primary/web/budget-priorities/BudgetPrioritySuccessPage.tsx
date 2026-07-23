@@ -8,7 +8,7 @@ import {
 import { BUDGET_PRIORITY_ROUTES } from '../../../../core/domain/budget-priority.routes';
 import type { BudgetPrioritySuccessNavigationState } from '../../../../core/domain/budget-priority-submission.model';
 import { formatBudgetPriorityFinancialYearLabel } from '../../../../core/budget-priority-errors';
-import { publicDashboardClasses, publicResourcesClasses } from '../../../../core/domain/public-dashboard.theme';
+import { budgetPrioritiesClasses } from '../../../../core/domain/budget-priorities.theme';
 
 function getOtherBudgetPrioritySections(current: BudgetPrioritySection) {
   return BUDGET_PRIORITY_SECTIONS.filter((section) => section.id !== current);
@@ -28,22 +28,24 @@ export function BudgetPrioritySuccessPage() {
   const financialYearLabel = formatBudgetPriorityFinancialYearLabel(state.result.financialYearPeriod);
 
   return (
-    <div className={publicResourcesClasses.page} data-testid="budget-priority-success-page">
-      <Link to={BUDGET_PRIORITY_ROUTES.index} className={publicResourcesClasses.backLink}>
+    <div className={budgetPrioritiesClasses.page} data-testid="budget-priority-success-page">
+      <Link to={BUDGET_PRIORITY_ROUTES.index} className={budgetPrioritiesClasses.backLink}>
         <ArrowLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
         All sectors
       </Link>
 
       <section
-        className={`${publicDashboardClasses.panel} mt-4 space-y-6 p-6 sm:p-8`}
+        className={budgetPrioritiesClasses.successPanel}
         role="status"
         aria-live="polite"
       >
         <div className="flex items-start gap-3">
-          <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+          <div className={budgetPrioritiesClasses.successIconWrap} aria-hidden="true">
+            <CheckCircle2 className="h-6 w-6" />
+          </div>
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Submission received</p>
-            <h1 className="text-xl font-bold text-text sm:text-2xl">Thank you for sharing your priorities</h1>
+            <p className={budgetPrioritiesClasses.successEyebrow}>Submission received</p>
+            <h1 className={budgetPrioritiesClasses.successTitle}>Thank you for sharing your priorities</h1>
             <p className="text-sm text-text-muted">
               Your <span className="font-semibold text-text">{section.label}</span> submission for{' '}
               <span className="font-semibold text-text">{financialYearLabel}</span> has been recorded.
@@ -63,7 +65,7 @@ export function BudgetPrioritySuccessPage() {
                   <Link
                     to={BUDGET_PRIORITY_ROUTES.section(other.id)}
                     data-testid={`budget-priority-success-link-${other.id}`}
-                    className="flex min-h-11 items-center justify-between gap-3 rounded-xl border border-border bg-surface-muted px-4 py-3 text-sm font-semibold text-text transition hover:border-brand/40 hover:bg-brand-light/40"
+                    className={budgetPrioritiesClasses.successSectorLink}
                   >
                     Submit {other.shortLabel} priorities
                     <ArrowRight className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
@@ -75,17 +77,11 @@ export function BudgetPrioritySuccessPage() {
         )}
 
         <div className="flex flex-wrap gap-3 border-t border-border/60 pt-5">
-          <Link
-            to="/dashboard"
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand px-4 text-sm font-bold text-white transition hover:bg-brand-hover"
-          >
+          <Link to="/dashboard" className={budgetPrioritiesClasses.successPrimaryAction}>
             <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
             View public dashboard
           </Link>
-          <Link
-            to={BUDGET_PRIORITY_ROUTES.index}
-            className="inline-flex min-h-11 items-center rounded-xl border border-border px-4 text-sm font-semibold text-text transition hover:bg-surface-muted"
-          >
+          <Link to={BUDGET_PRIORITY_ROUTES.index} className={budgetPrioritiesClasses.successSecondaryAction}>
             Back to all sectors
           </Link>
         </div>

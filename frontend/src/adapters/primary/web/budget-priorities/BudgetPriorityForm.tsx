@@ -23,6 +23,7 @@ import { HttpBudgetPriorityAdapter } from '../../../secondary/api/budget-priorit
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
 import { BudgetPriorityDemographicsSection } from './BudgetPriorityDemographicsSection';
 import { BudgetPriorityAreasSection } from './BudgetPriorityAreasSection';
+import { budgetPrioritiesClasses } from '../../../../core/domain/budget-priorities.theme';
 import { BudgetPriorityDuplicateBlock } from './BudgetPriorityDuplicateBlock';
 import { BudgetPriorityErrorAlert } from './BudgetPriorityErrorAlert';
 
@@ -100,7 +101,7 @@ export function BudgetPriorityForm({
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="space-y-5"
+      className={budgetPrioritiesClasses.formShell}
       data-testid="budget-priority-form"
       noValidate
     >
@@ -133,7 +134,8 @@ export function BudgetPriorityForm({
       <button
         type="submit"
         disabled={submitting}
-        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand text-sm font-bold text-white transition hover:bg-brand-hover active:scale-[0.98] disabled:bg-slate-400"
+        className={budgetPrioritiesClasses.submitButton}
+        data-testid="budget-priority-submit-button"
       >
         {submitting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
         {submitting ? 'Submitting…' : 'Submit priorities'}

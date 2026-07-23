@@ -32,8 +32,25 @@ export const PUBLIC_STAT_CARD_ACCENTS = [
   { ring: 'ring-violet-500/15', icon: 'bg-violet-500/10 text-violet-600 dark:text-violet-300' },
 ] as const;
 
+/** Analytics dashboards need slightly more room for charts and filter grids. */
+export const PUBLIC_DASHBOARD_MAX_WIDTH = 'max-w-5xl';
+
+/** Participation and reading pages (forms, resources, success states). */
+export const PUBLIC_CONTENT_MAX_WIDTH = 'max-w-4xl';
+
+export const publicLayoutClasses = {
+  shell: [
+    'mx-auto flex w-full items-center justify-between gap-3',
+    PUBLIC_DASHBOARD_MAX_WIDTH,
+    'px-4 py-3 sm:px-6',
+  ].join(' '),
+  main: 'flex-1 px-4 py-8 sm:px-6 sm:py-10',
+  footerShell: ['mx-auto w-full', PUBLIC_CONTENT_MAX_WIDTH, 'px-4 sm:px-6'].join(' '),
+  footerCopy: 'mx-auto max-w-md text-center',
+} as const;
+
 export const publicDashboardClasses = {
-  page: 'mx-auto max-w-6xl space-y-8 xl:max-w-7xl',
+  page: `mx-auto w-full ${PUBLIC_DASHBOARD_MAX_WIDTH} space-y-8`,
   hero: [
     'relative overflow-hidden rounded-2xl border border-border/80 bg-surface',
     'p-6 shadow-sm ring-1 ring-black/[0.03] sm:p-8',
@@ -46,7 +63,7 @@ export const publicDashboardClasses = {
   heroEyebrow:
     'inline-flex items-center rounded-full border border-brand/20 bg-brand-light px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand',
   heroTitle: 'mt-3 text-2xl font-semibold tracking-tight text-text sm:text-3xl xl:text-[2rem] xl:leading-tight',
-  heroLead: 'mt-3 max-w-2xl text-sm leading-relaxed text-text-muted sm:text-[0.9375rem]',
+  heroLead: 'mt-3 max-w-xl text-sm leading-relaxed text-text-muted sm:text-[0.9375rem]',
   heroBadges: 'mt-4 flex flex-wrap gap-2',
   heroBadge:
     'inline-flex items-center rounded-full border border-border bg-surface-muted/80 px-2.5 py-1 text-[11px] font-medium text-text-muted',
@@ -91,7 +108,7 @@ export const publicDashboardClasses = {
 
 /** Shared presentation tokens for public Resources pages (US-DASH-09). */
 export const publicResourcesClasses = {
-  page: publicDashboardClasses.page,
+  page: `mx-auto w-full ${PUBLIC_CONTENT_MAX_WIDTH} space-y-8`,
   hero: publicDashboardClasses.hero,
   heroAccent: publicDashboardClasses.heroAccent,
   heroGlow: publicDashboardClasses.heroGlow,
@@ -99,7 +116,7 @@ export const publicResourcesClasses = {
   heroEyebrow: publicDashboardClasses.heroEyebrow,
   heroTitle: publicDashboardClasses.heroTitle,
   heroLead: publicDashboardClasses.heroLead,
-  resourceGrid: 'grid gap-5 sm:grid-cols-2 xl:grid-cols-3',
+  resourceGrid: 'grid gap-5 sm:grid-cols-2',
   resourceCard: [
     'group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-surface p-6',
     'shadow-sm ring-1 ring-black/[0.03] transition duration-200',
@@ -121,8 +138,8 @@ export const publicResourcesClasses = {
   backLink:
     'inline-flex min-h-10 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-brand transition hover:bg-brand-light/50 hover:text-brand-hover',
   articleTitle: 'mt-4 text-2xl font-semibold tracking-tight text-text sm:text-3xl',
-  articleSummary: 'mt-3 max-w-3xl text-sm leading-relaxed text-text-muted sm:text-[0.9375rem]',
-  articleBody: 'mt-8',
+  articleSummary: 'mt-3 max-w-2xl text-sm leading-relaxed text-text-muted sm:text-[0.9375rem]',
+  articleBody: 'mt-8 max-w-3xl',
   tocNav: [
     'sticky top-24 rounded-2xl border border-border/80 bg-surface/95 p-5',
     'shadow-sm ring-1 ring-black/[0.03] backdrop-blur-sm lg:w-72 dark:ring-white/[0.04]',

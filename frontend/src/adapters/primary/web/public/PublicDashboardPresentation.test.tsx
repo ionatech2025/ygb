@@ -108,7 +108,7 @@ describe('PublicDashboardHome presentation (US-PUB-06)', () => {
     const { container } = render(<PublicDashboardHome />);
     const html = container.innerHTML;
 
-    expect(html).toMatch(/xl:max-w-7xl|max-w-6xl/);
+    expect(html).toMatch(/max-w-5xl/);
     expect(html).toMatch(/sm:p-8/);
     expect(html).toMatch(/sm:text-3xl|text-2xl/);
   });

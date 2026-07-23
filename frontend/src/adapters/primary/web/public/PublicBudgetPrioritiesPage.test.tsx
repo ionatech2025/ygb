@@ -15,6 +15,10 @@ vi.mock('./BudgetPriorityCharts', () => ({
   BudgetPriorityCharts: () => <div data-testid="budget-priority-charts-section" />,
 }));
 
+vi.mock('./BudgetPriorityExportToolbar', () => ({
+  BudgetPriorityExportToolbar: () => <div data-testid="budget-priority-export-toolbar" />,
+}));
+
 describe('PublicBudgetPrioritiesPage', () => {
   it('renders sector selector region and summary section (TC-BP-02-01)', () => {
     render(
@@ -30,5 +34,7 @@ describe('PublicBudgetPrioritiesPage', () => {
     expect(screen.getByTestId('budget-priority-dashboard-filter-panel')).toBeInTheDocument();
     expect(screen.getByTestId('budget-priority-summary-cards')).toBeInTheDocument();
     expect(screen.getByTestId('budget-priority-charts-section')).toBeInTheDocument();
+    expect(screen.getByTestId('bp-dashboard-export-section')).toBeInTheDocument();
+    expect(screen.getByTestId('budget-priority-export-toolbar')).toBeInTheDocument();
   });
 });

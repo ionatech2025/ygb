@@ -1,4 +1,5 @@
 import { AlertTriangle } from 'lucide-react';
+import { budgetPrioritiesClasses } from '../../../../core/domain/budget-priorities.theme';
 
 export interface BudgetPriorityErrorAlertProps {
   title?: string;
@@ -8,7 +9,7 @@ export interface BudgetPriorityErrorAlertProps {
 export function BudgetPriorityErrorAlert({ title, message }: BudgetPriorityErrorAlertProps) {
   return (
     <div
-      className="flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-sm text-rose-900 dark:border-rose-900/40 dark:bg-rose-950/40 dark:text-rose-200"
+      className={budgetPrioritiesClasses.errorAlert}
       role="alert"
       data-testid="budget-priority-error-alert"
     >

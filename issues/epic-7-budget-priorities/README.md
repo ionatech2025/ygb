@@ -61,7 +61,7 @@ API contract reference: [`backend/backend_docs/domain_arch_apis`](../../backend/
 ## Out of scope (deferred / other epics)
 
 - **SMS/OTP phone verification** — [future-features.md FF-01](../future-features.md#ff-01--budget-priorities-sms--otp-phone-verification)
-- LGO Budget Allocation form and dashboard views (US-LGOB-* / Epic 8)
+- LGO Budget Allocation form and dashboard views (US-LGOB-* / [Epic 8](../epic-8-lgo-budget-allocation/README.md))
 - Admin management of Budget Priorities submissions
 - **Detailed sector-specific priority-area question lists** — if not finalised by product, implement as JSONB config with placeholder options; final copy tracked in [require-polishing.md](../require-polishing.md)
 
