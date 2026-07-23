@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  type PwaInstallMode,
   type StorageLike,
+  canOfferPwaInstall,
   isDismissed,
-  isIosDevice,
+  isAndroidDevice,
+  isIosLikeDevice,
   isStandaloneMode,
   recordDismiss,
+  resolvePwaInstallMode,
 } from '../domain/pwa-install-prompt.model';
 
 export interface BeforeInstallPromptEvent extends Event {
@@ -47,12 +51,21 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
     storage ? isDismissed(storage, now()) : false
   );
   const [iosHelpOpen, setIosHelpOpen] = useState(false);
+  const [browserHelpOpen, setBrowserHelpOpen] = useState(false);
 
   const standalone = useMemo(() => detectStandalone(), []);
-  const isIos = useMemo(
-    () => (typeof navigator !== 'undefined' ? isIosDevice(navigator.userAgent) : false),
+  const isIosLike = useMemo(
+    () =>
+      typeof navigator !== 'undefined'
+        ? isIosLikeDevice(navigator.userAgent, navigator.platform, navigator.maxTouchPoints)
+        : false,
     []
   );
+  const isAndroid = useMemo(
+    () => (typeof navigator !== 'undefined' ? isAndroidDevice(navigator.userAgent) : false),
+    []
+  );
+  const isSecureContext = typeof window !== 'undefined' && window.isSecureContext;
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -68,6 +81,7 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
       setInstalled(true);
       setDeferredPrompt(null);
       setIosHelpOpen(false);
+      setBrowserHelpOpen(false);
     };
 
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
@@ -79,7 +93,18 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
     };
   }, []);
 
-  const canInstall = !standalone && !installed && (Boolean(deferredPrompt) || isIos);
+  const installMode: PwaInstallMode = resolvePwaInstallMode({
+    hasDeferredPrompt: Boolean(deferredPrompt),
+    isIosLike,
+  });
+
+  const canInstall = canOfferPwaInstall({
+    standalone,
+    installed,
+    hasDeferredPrompt: Boolean(deferredPrompt),
+    isIosLike,
+    isSecureContext,
+  });
   const shouldShow = canInstall && !dismissed;
 
   const dismiss = useCallback(() => {
@@ -88,11 +113,17 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
     }
     setDismissed(true);
     setIosHelpOpen(false);
+    setBrowserHelpOpen(false);
   }, [now, storage]);
 
   const promptInstall = useCallback(async () => {
-    if (isIos) {
+    if (installMode === 'ios') {
       setIosHelpOpen(true);
+      return;
+    }
+
+    if (installMode === 'browser') {
+      setBrowserHelpOpen(true);
       return;
     }
 
@@ -107,14 +138,19 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
     }
     setDeferredPrompt(null);
     setIosHelpOpen(false);
-  }, [deferredPrompt, isIos]);
+    setBrowserHelpOpen(false);
+  }, [deferredPrompt, installMode]);
 
   return {
     canInstall,
     shouldShow,
-    isIos,
+    installMode,
+    isIos: isIosLike,
+    isAndroid,
     iosHelpOpen,
     setIosHelpOpen,
+    browserHelpOpen,
+    setBrowserHelpOpen,
     promptInstall,
     dismiss,
   };

@@ -12,9 +12,13 @@ function mockHook(overrides: Partial<ReturnType<typeof usePwaInstallPrompt>> = {
   vi.mocked(usePwaInstallPrompt).mockReturnValue({
     canInstall: true,
     shouldShow: true,
+    installMode: 'deferred',
     isIos: false,
+    isAndroid: false,
     iosHelpOpen: false,
     setIosHelpOpen: vi.fn(),
+    browserHelpOpen: false,
+    setBrowserHelpOpen: vi.fn(),
     promptInstall: vi.fn().mockResolvedValue(undefined),
     dismiss: vi.fn(),
     ...overrides,
@@ -52,12 +56,20 @@ describe('PwaInstallBanner', () => {
 
   it('shows iOS help content when primary action is clicked on iOS', async () => {
     const promptInstall = vi.fn();
-    mockHook({ isIos: true, promptInstall, iosHelpOpen: true });
+    mockHook({ isIos: true, installMode: 'ios', promptInstall, iosHelpOpen: true });
     render(<PwaInstallBanner />);
 
     expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();
     expect(screen.getByTestId('pwa-ios-help')).toBeInTheDocument();
     expect(screen.getByText(/Add to Home Screen/i)).toBeInTheDocument();
+  });
+
+  it('shows browser install help when using manual install mode', () => {
+    mockHook({ installMode: 'browser', browserHelpOpen: true, isAndroid: true });
+    render(<PwaInstallBanner />);
+
+    expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();
+    expect(screen.getByTestId('pwa-browser-help')).toBeInTheDocument();
   });
 
   it('dismisses when Not now is clicked', async () => {

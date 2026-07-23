@@ -7,6 +7,7 @@ import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { isValidUgandaPhoneLocal } from '../../../../core/utils/phone-utils';
 import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
 import { FormField, formControlClassName } from '../components/forms';
+import { PwaInstallBanner } from '../components/PwaInstallBanner';
 import { ThemeToggle } from '../components/ThemeToggle';
 
 const FEATURES: { icon: LucideIcon; title: string; detail: string }[] = [
@@ -219,6 +220,7 @@ export function PortalLogin() {
           &copy; {new Date().getFullYear()} Youth Go Budget App
         </p>
       </div>
+      <PwaInstallBanner placement="fixed" />
     </div>
   );
 }

@@ -13,6 +13,8 @@ describe('workbox-config', () => {
     expect(pwaManifest.display).toBe('standalone');
     expect(pwaManifest.name).toBe('Youth Go Budget App');
     expect(pwaManifest.short_name).toBe('YGB');
-    expect(pwaManifest.icons.length).toBeGreaterThanOrEqual(1);
+    expect(pwaManifest.icons.length).toBeGreaterThanOrEqual(4);
+    expect(pwaManifest.icons.some((icon) => icon.sizes === '192x192')).toBe(true);
+    expect(pwaManifest.icons.some((icon) => icon.sizes === '512x512')).toBe(true);
   });
 });
