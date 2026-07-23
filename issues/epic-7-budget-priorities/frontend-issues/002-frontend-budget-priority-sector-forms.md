@@ -35,13 +35,13 @@ Build the **four sectoral Budget Priorities forms** (US-BP-01 / BP-01, BP-03): s
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit tests for validation — empty priority areas fails; invalid phone fails; valid payload passes.
-- [ ] Unit tests for form config — four sections each have distinct priority area options.
-- [ ] Component test: Health form renders demographics (including phone) + priority fields on load.
-- [ ] Component test: submit calls adapter with correct section path and demographics.phoneNumber.
-- [ ] Component test: all four section routes render correct titles/descriptions.
-- [ ] Adapter test: POST body matches backend DTO field names (no verificationToken).
-- [ ] Implement port, adapter, shared form components, and four section routes.
+- [x] Unit tests for validation — empty priority areas fails; invalid phone fails; valid payload passes.
+- [x] Unit tests for form config — four sections each have distinct priority area options.
+- [x] Component test: Health form renders demographics (including phone) + priority fields on load.
+- [x] Component test: submit calls adapter with correct section path and demographics.phoneNumber.
+- [x] Component test: all four section routes render correct titles/descriptions.
+- [x] Adapter test: POST body matches backend DTO field names (no verificationToken).
+- [x] Implement port, adapter, shared form components, and four section routes.
 
 ## Blocked by
 

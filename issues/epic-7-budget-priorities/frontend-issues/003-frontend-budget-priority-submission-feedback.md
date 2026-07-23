@@ -24,11 +24,11 @@ Implement **submission outcome UX** for Budget Priorities (US-BP-01): success co
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit tests for error mapper — `409` → duplicate copy; `400` → validation copy.
-- [ ] Component test: successful submit navigates to success view with section name.
-- [ ] Component test: duplicate submit shows block UI without success message (TC-BP-01-02).
-- [ ] Component test: success page lists other sectors as links (TC-BP-01-03).
-- [ ] Implement success, duplicate, and error flows wired from form submit.
+- [x] Unit tests for error mapper — `409` → duplicate copy; `400` → validation copy.
+- [x] Component test: successful submit navigates to success view with section name.
+- [x] Component test: duplicate submit shows block UI without success message (TC-BP-01-02).
+- [x] Component test: success page lists other sectors as links (TC-BP-01-03).
+- [x] Implement success, duplicate, and error flows wired from form submit.
 
 ## Blocked by
 

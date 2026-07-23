@@ -24,6 +24,16 @@ export function buildPublicExportFallbackFilename(format: PublicExportFormat): s
   return `ygb-public-export-${timestamp}.${extension}`;
 }
 
+export function buildBudgetPriorityExportFallbackFilename(
+  format: PublicExportFormat,
+  filter: { section?: string }
+): string {
+  const extension = format === 'csv' ? 'csv' : 'xlsx';
+  const timestamp = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(0, 14);
+  const sectionPart = filter.section?.trim() ? filter.section : 'all-sectors';
+  return `ygb-budget-priorities-${sectionPart}-${timestamp}.${extension}`;
+}
+
 export function parseContentDispositionFilename(header: string | null): string | null {
   if (!header) {
     return null;

@@ -23,12 +23,12 @@ Add **CSV and Excel export** for the public Budget Priorities dashboard view (US
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Adapter test: builds correct query string from filter; handles blob response.
-- [ ] Component test: CSV button calls adapter with `csv` format (TC-BP-02-02).
-- [ ] Component test: Excel button calls adapter with `xlsx` format.
-- [ ] Component test: shows error alert when adapter rejects.
-- [ ] Component test: buttons disabled while export in progress.
-- [ ] Implement export port, adapter, and toolbar integrated into BP dashboard page.
+- [x] Adapter test: builds correct query string from filter; handles blob response.
+- [x] Component test: CSV button calls adapter with `csv` format (TC-BP-02-02).
+- [x] Component test: Excel button calls adapter with `xlsx` format.
+- [x] Component test: shows error alert when adapter rejects.
+- [x] Component test: buttons disabled while export in progress.
+- [x] Implement export port, adapter, and toolbar integrated into BP dashboard page.
 
 ## Blocked by
 

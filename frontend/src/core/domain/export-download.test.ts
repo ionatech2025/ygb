@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildBudgetPriorityExportFallbackFilename,
   buildExportFallbackFilename,
   parseContentDispositionFilename,
   shortFilterHash,
@@ -23,6 +24,15 @@ describe('export download helpers', () => {
     expect(filename).toMatch(/^ygb-export-[0-9a-f]{8}-\d{14}\.csv$/);
     expect(shortFilterHash({ ...EMPTY_DASHBOARD_FILTER, districtId: KAMPALA_DISTRICT_ID })).not.toBe(
       shortFilterHash(EMPTY_DASHBOARD_FILTER)
+    );
+  });
+
+  it('builds budget priority fallback filename with section and timestamp', () => {
+    expect(buildBudgetPriorityExportFallbackFilename('csv', { section: 'health' })).toMatch(
+      /^ygb-budget-priorities-health-\d{14}\.csv$/
+    );
+    expect(buildBudgetPriorityExportFallbackFilename('xlsx', { section: '' })).toMatch(
+      /^ygb-budget-priorities-all-sectors-\d{14}\.xlsx$/
     );
   });
 });
