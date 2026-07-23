@@ -19,11 +19,11 @@ Implement **public dashboard summary stat cards** (US-PUB-03): prominently displ
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: renders totals from mock API response.
-- [ ] Component test: filter change triggers re-fetch with updated query params.
-- [ ] Component test: no text matching phone/name patterns in rendered output.
-- [ ] Adapter test: maps API JSON to domain summary model.
-- [ ] Implement summary cards and wire to public dashboard service.
+- [x] Component test: renders totals from mock API response.
+- [x] Component test: filter change triggers re-fetch with updated query params.
+- [x] Component test: no text matching phone/name patterns in rendered output.
+- [x] Adapter test: maps API JSON to domain summary model.
+- [x] Implement summary cards and wire to public dashboard service.
 
 ## Blocked by
 

@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { CollectorLeaderboardEntry, LeaderboardSortDirection, LeaderboardSortKey } from '../../../../core/domain/collector-tracker.model';
+import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 
 export interface CollectorLeaderboardTableProps {
   rows: CollectorLeaderboardEntry[];
@@ -40,7 +41,7 @@ export function CollectorLeaderboardTable({
   const showSkeleton = loading && rows.length === 0;
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border bg-surface shadow-sm">
+    <div className={`overflow-x-auto ${adminDashboardClasses.panel}`}>
       <table className="min-w-full text-left text-sm" data-testid="collector-leaderboard-table">
         <thead className="border-b border-border bg-surface-muted text-xs uppercase tracking-wide text-text-muted">
           <tr>

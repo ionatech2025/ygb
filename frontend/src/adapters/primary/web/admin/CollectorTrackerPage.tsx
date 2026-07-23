@@ -15,6 +15,8 @@ import { HttpDashboardAdapter } from '../../../secondary/api/dashboard-api.adapt
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import type { ICollectorTrackerApiPort } from '../../../../ports/collector-tracker-api.port';
 import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
+import { AdminPageHeader } from './AdminPageHeader';
+import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import { CollectorBreakdownPanel } from './CollectorBreakdownPanel';
 import { CollectorLeaderboardTable } from './CollectorLeaderboardTable';
 import { DashboardFilterPanel } from './DashboardFilterPanel';
@@ -140,21 +142,21 @@ export function CollectorTrackerPage({
   const expandedCollector = rows.find((row) => row.collectorId === expandedCollectorId);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6" data-testid="collector-tracker-page">
-      <div>
-        <h2 className="flex items-center gap-2 text-lg font-bold text-text sm:text-xl">
-          <TrendingUp className="h-5 w-5 text-brand" aria-hidden="true" />
-          Data Collector Tracker
-        </h2>
-        <p className="text-sm text-text-muted">
-          Leaderboard of submission counts by collector. Filters recalculate totals across matching submissions.
-        </p>
-      </div>
+    <div className={adminDashboardClasses.page} data-testid="collector-tracker-page">
+      <AdminPageHeader
+        eyebrow="Performance"
+        title="Data Collector Tracker"
+        description="Leaderboard of submission counts by collector. Filters recalculate totals across matching submissions."
+        icon={<TrendingUp className="h-7 w-7" aria-hidden="true" />}
+      />
 
       <DashboardFilterPanel dashboardApi={dashboardApi} compact />
 
       {error && (
-        <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+        <div
+          role="alert"
+          className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-900/60 dark:bg-rose-950/50 dark:text-rose-300"
+        >
           {error}
         </div>
       )}

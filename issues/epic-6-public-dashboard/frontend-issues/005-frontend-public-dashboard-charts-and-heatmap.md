@@ -24,11 +24,11 @@ Charts consume public aggregation APIs and respect active filters — no client-
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: bar, pie(s), line, and heat map render with mock data (TC-PUB-03-01).
-- [ ] Component test: filter change updates chart data props / re-fetch (TC-PUB-03-02).
-- [ ] Component test: heat map tooltip shows count for a region (TC-PUB-03-03).
-- [ ] Adapter test: maps `bucketStart` → `date` for trend series if backend uses admin naming.
-- [ ] Implement charts, heat map, and API wiring.
+- [x] Component test: bar, pie(s), line, and heat map render with mock data (TC-PUB-03-01).
+- [x] Component test: filter change updates chart data props / re-fetch (TC-PUB-03-02).
+- [x] Component test: heat map tooltip shows count for a region (TC-PUB-03-03).
+- [x] Adapter test: maps `bucketStart` → `date` for trend series if backend uses admin naming.
+- [x] Implement charts, heat map, and API wiring.
 
 ## Blocked by
 

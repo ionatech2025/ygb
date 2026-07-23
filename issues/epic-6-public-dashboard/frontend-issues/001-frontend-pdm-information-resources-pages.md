@@ -32,11 +32,11 @@ Content is sourced from the single Markdown file [`docs/pdm_public_info.md`](../
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: resource index renders three links without auth wrapper.
-- [ ] Component test: `/resources/programme-overview` renders expected heading and body excerpt from source doc.
-- [ ] Component test: Markdown renderer strips/neutralizes unsafe HTML/script content.
-- [ ] Route test: unauthenticated visitor can load all `/resources/*` routes.
-- [ ] Implement index + detail pages, section split config, routes in `AppRouter`.
+- [x] Component test: resource index renders three links without auth wrapper.
+- [x] Component test: `/resources/programme-overview` renders expected heading and body excerpt from source doc.
+- [x] Component test: Markdown renderer strips/neutralizes unsafe HTML/script content.
+- [x] Route test: unauthenticated visitor can load all `/resources/*` routes.
+- [x] Implement index + detail pages, section split config, routes in `AppRouter`.
 
 ## Supersedes
 

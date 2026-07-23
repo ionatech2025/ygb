@@ -45,6 +45,14 @@ Server only sees **SYNCED** submissions. Device **PENDING** queue depth is clien
 
 Public programme content ships as **static Markdown** on the Epic 6 public dashboard ([`docs/pdm_public_info.md`](../docs/pdm_public_info.md), [epic-6-public-dashboard/frontend-issues/001-frontend-pdm-information-resources-pages.md](epic-6-public-dashboard/frontend-issues/001-frontend-pdm-information-resources-pages.md)). Admin in-app editing without deploy ([epic-5-admin-dashboard/backend-issues/008-backend-pdm-content-cms-api.md](epic-5-admin-dashboard/backend-issues/008-backend-pdm-content-cms-api.md)) is deferred until the client requests it.
 
+### Public dashboard Programme Area filter (SRS PUB-03) — deferred
+
+The SRS originally listed **Programme Area** alongside the other public dashboard filters. There is no persisted submission column for programme area yet (mapping TBD — e.g. PDM pillar or enterprise category). The filter was removed from Epic 6 MVP on both backend and frontend.
+
+**When implemented:** add `programmeArea` to `PublicDashboardFilter`, filter-options endpoint, public filter panel, URL sync, and aggregation SQL once product confirms the data source.
+
+**Related:** [epic-6-public-dashboard/backend-issues/001-backend-public-dashboard-security-and-filter-model.md](epic-6-public-dashboard/backend-issues/001-backend-public-dashboard-security-and-filter-model.md), [epic-6-public-dashboard/frontend-issues/003-frontend-public-dashboard-filter-panel.md](epic-6-public-dashboard/frontend-issues/003-frontend-public-dashboard-filter-panel.md), `docs/ygb_srs_v1.1.md` (PUB-03).
+
 ---
 
 ## P3 — Low (nice-to-have / future)

@@ -770,7 +770,7 @@ com.nac.ygb
 
 | **Method** | **Path** | **Description** | **Request** | **Response** |
 |------------|----------|-----------------|-------------|--------------|
-| GET | /api/v1/public/dashboard/summary | Anonymised summary stats (PUB-01/02/03). | query params: district, subCounty, parish, ageGroup, gender, formType, fyPeriod, dateFrom, dateTo, programmeArea | PublicSummaryResponse (no PII) |
+| GET | /api/v1/public/dashboard/summary | Anonymised summary stats (PUB-01/02/03). | query params: district, subCounty, parish, ageGroup, gender, formType, fyPeriod, dateFrom, dateTo | PublicSummaryResponse (no PII) |
 | GET | /api/v1/public/dashboard/charts/{chartType} | Anonymised chart series; chartType ∈ {by-district, by-gender, by-age-group, trend} (PUB-04). | query params: filter set + chartType | ChartSeriesResponse |
 | GET | /api/v1/public/dashboard/heatmap | Geographic heat-map data (PUB-04). | query params: filter set | HeatmapResponse |
 | GET | /api/v1/public/dashboard/download/csv | Download anonymised filtered/full dataset as CSV (PUB-05). | query params: filter set | text/csv file stream |
