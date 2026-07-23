@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
+  BarChart3,
   CloudSun,
   GraduationCap,
   HeartPulse,
@@ -44,6 +45,25 @@ export function BudgetPrioritiesIndexPage() {
           </p>
         </div>
       </header>
+
+      <section aria-label="Budget priorities dashboard" className="space-y-3">
+        <Link
+          to={BUDGET_PRIORITY_ROUTES.dashboard}
+          data-testid="budget-priorities-dashboard-link"
+          className={`${publicResourcesClasses.resourceCard} flex min-h-[5.5rem] flex-row items-center gap-4 p-5 sm:p-6`}
+        >
+          <div className={`${publicResourcesClasses.resourceCardIcon} ring-1 ring-brand/20`}>
+            <BarChart3 className="h-5 w-5" aria-hidden="true" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className={publicResourcesClasses.resourceCardTitle}>View aggregated dashboard</h2>
+            <p className={publicResourcesClasses.resourceCardSummary}>
+              Explore anonymised priority trends by sector, location, and theme — no personal data shown.
+            </p>
+          </div>
+          <ArrowRight className="h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+        </Link>
+      </section>
 
       <section aria-label="Budget priority sectors" className="space-y-4">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-text-muted">Choose a sector</h2>

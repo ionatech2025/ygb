@@ -25,6 +25,10 @@ describe('BudgetPrioritiesIndexPage', () => {
       'href',
       '/budget-priorities/climate'
     );
+    expect(screen.getByRole('link', { name: /View aggregated dashboard/i })).toHaveAttribute(
+      'href',
+      '/dashboard/budget-priorities'
+    );
     expect(screen.queryByRole('link', { name: /sign in/i })).not.toBeInTheDocument();
   });
 });

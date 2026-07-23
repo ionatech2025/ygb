@@ -47,3 +47,13 @@ export const BUDGET_PRIORITY_FORM_CONFIG: Record<BudgetPrioritySection, BudgetPr
 export function getBudgetPriorityFormConfig(section: BudgetPrioritySection): BudgetPrioritySectionFormConfig {
   return BUDGET_PRIORITY_FORM_CONFIG[section];
 }
+
+const ALL_PRIORITY_AREA_LABELS = Object.fromEntries(
+  Object.values(BUDGET_PRIORITY_FORM_CONFIG).flatMap((config) =>
+    config.priorityAreas.map((option) => [option.value, option.label])
+  )
+);
+
+export function getBudgetPriorityAreaLabel(code: string): string {
+  return ALL_PRIORITY_AREA_LABELS[code] ?? code.replaceAll('_', ' ').toLowerCase();
+}

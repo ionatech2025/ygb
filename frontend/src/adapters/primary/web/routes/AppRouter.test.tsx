@@ -80,6 +80,24 @@ vi.mock('../../../secondary/api/submission-admin-api.adapter', () => ({
   })),
 }));
 
+vi.mock('../../../secondary/api/budget-priority-dashboard-api.adapter', () => ({
+  HttpBudgetPriorityDashboardAdapter: vi.fn().mockImplementation(() => ({
+    buildFilterQueryString: vi.fn().mockReturnValue(''),
+    fetchFilterOptions: vi.fn().mockResolvedValue({
+      sections: ['health'],
+      genders: [],
+      ageGroups: [],
+      financialYearPeriods: [],
+    }),
+    fetchSummary: vi.fn().mockResolvedValue({
+      totalSubmissions: 0,
+      bySection: [],
+      topPriorityAreas: [],
+    }),
+    fetchChart: vi.fn().mockResolvedValue({ chartType: 'by-sector', data: [] }),
+  })),
+}));
+
 vi.mock('../../../secondary/api/http-user.adapter', () => ({
   HttpUserAdapter: vi.fn().mockImplementation(() => ({
     fetchActiveCollectors: vi.fn().mockResolvedValue([]),
@@ -226,6 +244,16 @@ describe('AppRouter budget priorities routes', () => {
     await waitFor(() => {
       expect(screen.getByTestId('budget-priorities-index')).toBeInTheDocument();
     });
+  });
+
+  it('loads /dashboard/budget-priorities without redirecting to login', async () => {
+    window.history.pushState({}, '', '/dashboard/budget-priorities');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('public-budget-priorities-dashboard')).toBeInTheDocument();
+    });
+    expect(window.location.pathname).toBe('/dashboard/budget-priorities');
   });
 });
 
