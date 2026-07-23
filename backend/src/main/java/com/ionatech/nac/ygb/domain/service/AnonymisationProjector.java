@@ -1,17 +1,7 @@
 package com.ionatech.nac.ygb.domain.service;
 
 import com.ionatech.nac.ygb.domain.exceptions.PublicPiiExposureException;
-import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityAnonymisedRecord;
-import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityAreaCount;
-import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityChartDataPoint;
-import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityChartSeries;
-import com.ionatech.nac.ygb.domain.valueobjects.BudgetPrioritySummary;
-import com.ionatech.nac.ygb.domain.valueobjects.HeatmapEntry;
-import com.ionatech.nac.ygb.domain.valueobjects.PublicAnonymisedRecord;
-import com.ionatech.nac.ygb.domain.valueobjects.PublicChartSeries;
-import com.ionatech.nac.ygb.domain.valueobjects.PublicDashboardSummary;
-import com.ionatech.nac.ygb.domain.valueobjects.PublicHeatmap;
-import com.ionatech.nac.ygb.domain.valueobjects.SubmissionSummary;
+import com.ionatech.nac.ygb.domain.valueobjects.*;
 
 import java.util.Locale;
 import java.util.Set;
@@ -31,7 +21,13 @@ public final class AnonymisationProjector {
             "collector",
             "devicesubmissionid",
             "demographicdata",
-            "demographic_data"
+            "demographic_data",
+            "rationale",
+            "recommendations",
+            "recommendation",
+            "submissionid",
+            "lbaid",
+            "collectoruserid"
     );
 
     public PublicAnonymisedRecord fromSubmissionSummary(SubmissionSummary summary) {
@@ -114,6 +110,37 @@ public final class AnonymisationProjector {
         for (BudgetPriorityChartDataPoint point : series.data()) {
             if (looksLikePhoneNumber(point.label())) {
                 throw new PublicPiiExposureException("Public budget priority chart must not expose phone-like labels.");
+            }
+        }
+        return series;
+    }
+
+    public LgoBudgetAllocationSummary assertAnonymisedLgoBudgetAllocationSummary(LgoBudgetAllocationSummary summary) {
+        if (summary == null) {
+            throw new IllegalArgumentException("LgoBudgetAllocationSummary must not be null.");
+        }
+        for (LgoBudgetAllocationDistrictCount district : summary.byDistrict()) {
+            if (looksLikePhoneNumber(district.districtLabel())) {
+                throw new PublicPiiExposureException("Public LGO budget allocation summary must not expose phone-like labels.");
+            }
+        }
+        for (LgoBudgetAllocationSectorCount sector : summary.topSectors()) {
+            if (looksLikePhoneNumber(sector.sector())) {
+                throw new PublicPiiExposureException("Public LGO budget allocation summary must not expose phone-like labels.");
+            }
+        }
+        return summary;
+    }
+
+    public LgoBudgetAllocationChartSeries assertAnonymisedLgoBudgetAllocationChartSeries(
+            LgoBudgetAllocationChartSeries series
+    ) {
+        if (series == null) {
+            throw new IllegalArgumentException("LgoBudgetAllocationChartSeries must not be null.");
+        }
+        for (BudgetPriorityChartDataPoint point : series.data()) {
+            if (looksLikePhoneNumber(point.label())) {
+                throw new PublicPiiExposureException("Public LGO budget allocation chart must not expose phone-like labels.");
             }
         }
         return series;

@@ -338,4 +338,40 @@ public class UseCaseConfig {
                 saveLgoBudgetAllocationService
         );
     }
+
+    @Bean
+    public LgoBudgetAllocationDashboardService lgoBudgetAllocationDashboardService(
+            LgoBudgetAllocationReadRepositoryPort lgoBudgetAllocationReadRepositoryPort,
+            DashboardFilterOptionsRepositoryPort dashboardFilterOptionsRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new LgoBudgetAllocationDashboardService(
+                lgoBudgetAllocationReadRepositoryPort,
+                dashboardFilterOptionsRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                anonymisationProjector
+        );
+    }
+
+    @Bean
+    public GetLgoBudgetAllocationDashboardSummaryQuery getLgoBudgetAllocationDashboardSummaryQuery(
+            LgoBudgetAllocationDashboardService lgoBudgetAllocationDashboardService
+    ) {
+        return lgoBudgetAllocationDashboardService;
+    }
+
+    @Bean
+    public GetLgoBudgetAllocationChartDataQuery getLgoBudgetAllocationChartDataQuery(
+            LgoBudgetAllocationDashboardService lgoBudgetAllocationDashboardService
+    ) {
+        return lgoBudgetAllocationDashboardService;
+    }
+
+    @Bean
+    public GetLgoBudgetAllocationFilterOptionsQuery getLgoBudgetAllocationFilterOptionsQuery(
+            LgoBudgetAllocationDashboardService lgoBudgetAllocationDashboardService
+    ) {
+        return lgoBudgetAllocationDashboardService;
+    }
 }
