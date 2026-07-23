@@ -63,8 +63,8 @@ export function DashboardFilterPanel({ dashboardApi, compact = false }: Dashboar
           setLocationFilterError(sanitized.message ?? 'Outdated location filters were cleared.');
         }
 
-        setCollectors(options.collectors);
-        setFinancialYearPeriods(options.financialYearPeriods);
+        setCollectors(options.collectors ?? []);
+        setFinancialYearPeriods(options.financialYearPeriods ?? []);
       })
       .catch(() => {
         if (!cancelled) {

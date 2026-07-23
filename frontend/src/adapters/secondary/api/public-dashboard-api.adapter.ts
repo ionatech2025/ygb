@@ -56,19 +56,19 @@ interface BackendPublicHeatmapResponse {
 
 function mapFilterOptions(response: BackendPublicFilterOptionsResponse): PublicDashboardFilterOptions {
   return {
-    formTypes: response.formTypes,
-    genders: response.genders,
-    ageGroups: response.ageGroups,
-    financialYearPeriods: response.financialYearPeriods,
+    formTypes: response.formTypes ?? [],
+    genders: response.genders ?? [],
+    ageGroups: response.ageGroups ?? [],
+    financialYearPeriods: response.financialYearPeriods ?? [],
   };
 }
 
 export function mapPublicSummaryResponse(response: BackendPublicSummaryResponse): PublicDashboardSummary {
   return {
-    totalSubmissions: response.totalSubmissions,
-    byFormType: response.byFormType,
-    byGender: response.byGender,
-    byFinancialYearPeriod: response.byFinancialYearPeriod,
+    totalSubmissions: response.totalSubmissions ?? 0,
+    byFormType: response.byFormType ?? [],
+    byGender: response.byGender ?? [],
+    byFinancialYearPeriod: response.byFinancialYearPeriod ?? [],
   };
 }
 
@@ -85,12 +85,12 @@ export function mapPublicChartDataPoint(point: BackendPublicChartDataPoint): Pub
 export function mapPublicChartSeriesResponse(response: BackendPublicChartSeriesResponse): PublicChartSeries {
   return {
     chartType: response.chartType,
-    data: response.data.map(mapPublicChartDataPoint),
+    data: (response.data ?? []).map(mapPublicChartDataPoint),
   };
 }
 
 export function mapPublicHeatmapResponse(response: BackendPublicHeatmapResponse): PublicHeatmapEntry[] {
-  return response.entries.map((entry) => ({
+  return (response.entries ?? []).map((entry) => ({
     districtId: entry.districtId,
     parishId: entry.parishId,
     label: entry.label,
