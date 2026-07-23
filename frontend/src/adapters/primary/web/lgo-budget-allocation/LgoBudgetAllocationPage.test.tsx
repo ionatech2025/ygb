@@ -10,10 +10,12 @@ vi.mock('../../../../core/LocationService', () => ({
   },
 }));
 
+vi.mock('../../../../core/lgo-budget-allocation-submit.service', () => ({
+  submitLgoBudgetAllocation: vi.fn().mockResolvedValue(1),
+}));
+
 vi.mock('../../../secondary/api/lgo-budget-allocation-api.adapter', () => ({
-  HttpLgoBudgetAllocationAdapter: vi.fn().mockImplementation(() => ({
-    submit: vi.fn(),
-  })),
+  HttpLgoBudgetAllocationAdapter: vi.fn(),
 }));
 
 describe('LgoBudgetAllocationPage', () => {

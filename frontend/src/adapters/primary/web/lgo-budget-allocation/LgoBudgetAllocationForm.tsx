@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react';
-import { CheckCircle2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import {
   buildLgoBudgetAllocationSubmissionPayload,
   EMPTY_LGO_BUDGET_ALLOCATION_FORM_STATE,
-  type LgoBudgetAllocationSubmissionResult,
 } from '../../../../core/domain/lgo-budget-allocation-form.model';
 import {
   hasLgoBudgetAllocationFormErrors,
@@ -11,37 +10,40 @@ import {
   type LgoBudgetAllocationFormErrors,
 } from '../../../../core/domain/lgo-budget-allocation-validation';
 import { lgoBudgetAllocationClasses } from '../../../../core/domain/lgo-budget-allocation.theme';
+import { applyDuplicateRespondentError } from '../../../../core/apply-form-submit-error';
+import { isDuplicateRespondentMessage } from '../../../../core/duplicate-respondent.error';
+import { submitLgoBudgetAllocation } from '../../../../core/lgo-budget-allocation-submit.service';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
-import type { ILgoBudgetAllocationApiPort } from '../../../../ports/lgo-budget-allocation-api.port';
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
-import { HttpLgoBudgetAllocationAdapter } from '../../../secondary/api/lgo-budget-allocation-api.adapter';
 import {
   buildAuthProvenanceSnapshot,
   buildSubmissionProvenance,
+  DuplicateRespondentAlert,
   RespondentSection,
 } from '../components/forms';
 import { LgoPriorYearAllocationsSection } from './LgoPriorYearAllocationsSection';
 import { LgoRationaleSection } from './LgoRationaleSection';
 import { LgoRecommendationsSection } from './LgoRecommendationsSection';
+import { LgoBudgetAllocationSuccessBanner } from './LgoBudgetAllocationSuccessBanner';
 
 export interface LgoBudgetAllocationFormProps {
-  api?: ILgoBudgetAllocationApiPort;
   locationRepository?: ILocationRepositoryPort;
-  onSubmitted?: (result: LgoBudgetAllocationSubmissionResult) => void;
+  submitAllocation?: typeof submitLgoBudgetAllocation;
+  onSubmitted?: () => void;
 }
 
 export function LgoBudgetAllocationForm({
-  api = new HttpLgoBudgetAllocationAdapter(),
   locationRepository,
+  submitAllocation = submitLgoBudgetAllocation,
   onSubmitted,
 }: LgoBudgetAllocationFormProps) {
   const user = useAuthStore((state) => state.user);
+  const isOnline = useAuthStore((state) => state.isOnline);
   const formRef = useRef<HTMLFormElement>(null);
   const [formState, setFormState] = useState(EMPTY_LGO_BUDGET_ALLOCATION_FORM_STATE);
   const [errors, setErrors] = useState<LgoBudgetAllocationFormErrors>({});
   const [submitting, setSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [showSuccessBanner, setShowSuccessBanner] = useState(false);
 
   const scrollToFirstError = (nextErrors: LgoBudgetAllocationFormErrors) => {
     const fieldIdMap: Record<string, string> = {
@@ -60,8 +62,7 @@ export function LgoBudgetAllocationForm({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setSubmitError(null);
-    setSuccessMessage('');
+    setShowSuccessBanner(false);
 
     const nextErrors = validateLgoBudgetAllocationForm(formState);
     setErrors(nextErrors);
@@ -74,16 +75,21 @@ export function LgoBudgetAllocationForm({
     try {
       const provenance = buildSubmissionProvenance(buildAuthProvenanceSnapshot(user?.id));
       const payload = buildLgoBudgetAllocationSubmissionPayload(formState, provenance);
-      const result = await api.submit(payload);
 
-      setSuccessMessage('LGO budget allocation recorded successfully.');
-      onSubmitted?.(result);
+      await submitAllocation(payload, provenance.collectorId);
+
+      setShowSuccessBanner(true);
+      onSubmitted?.();
       window.setTimeout(() => {
         setFormState(EMPTY_LGO_BUDGET_ALLOCATION_FORM_STATE);
         setErrors({});
+        setShowSuccessBanner(false);
       }, 1200);
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Submission failed. Please try again.');
+      if (applyDuplicateRespondentError(error, setErrors, scrollToFirstError)) {
+        return;
+      }
+      throw error;
     } finally {
       setSubmitting(false);
     }
@@ -97,23 +103,10 @@ export function LgoBudgetAllocationForm({
       data-testid="lgo-budget-allocation-form"
       noValidate
     >
-      {successMessage && (
-        <p
-          className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-200"
-          role="status"
-        >
-          <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-          {successMessage}
-        </p>
-      )}
+      {showSuccessBanner && <LgoBudgetAllocationSuccessBanner isOnline={isOnline} />}
 
-      {submitError && (
-        <p
-          className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900 dark:border-rose-900/40 dark:bg-rose-950/40 dark:text-rose-200"
-          role="alert"
-        >
-          {submitError}
-        </p>
+      {isDuplicateRespondentMessage(errors.respondentPhone ?? '') && (
+        <DuplicateRespondentAlert message={errors.respondentPhone!} />
       )}
 
       <RespondentSection
@@ -150,7 +143,7 @@ export function LgoBudgetAllocationForm({
         {submitting ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-            Submitting…
+            Saving…
           </>
         ) : (
           'Submit budget allocation interview'

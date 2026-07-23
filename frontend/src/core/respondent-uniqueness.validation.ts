@@ -1,4 +1,5 @@
 import type { FormType } from './domain/form-type.model';
+import { FORM_TYPE_LABELS } from './domain/form-type.model';
 import type { FinancialYearPeriod, FinancialYearPeriodHalf } from './domain/financial-year-period.model';
 import type { IRespondentUniquenessPort } from '../ports/respondent-uniqueness.port';
 import { respondentUniqueness } from '../adapters/secondary/submission/respondent-uniqueness.adapter';
@@ -36,7 +37,7 @@ export function buildDuplicateRespondentMessage(
   financialYearPeriodKey: string
 ): string {
   const label = formatFinancialYearPeriodLabel(financialYearPeriodFromKey(financialYearPeriodKey));
-  return `${formType} form already submitted for this respondent in ${label}.`;
+  return `${FORM_TYPE_LABELS[formType]} form already submitted for this respondent in ${label}.`;
 }
 
 export async function validateRespondentUniqueness(
