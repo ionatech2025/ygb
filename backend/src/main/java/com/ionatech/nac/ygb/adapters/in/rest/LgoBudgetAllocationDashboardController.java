@@ -37,17 +37,17 @@ public class LgoBudgetAllocationDashboardController {
     private final AnonymisationProjector anonymisationProjector;
 
     public LgoBudgetAllocationDashboardController(
-            GetLgoBudgetAllocationFilterOptionsQuery getFilterOptionsQuery,
-            GetLgoBudgetAllocationDashboardSummaryQuery getSummaryQuery,
-            GetLgoBudgetAllocationChartDataQuery getChartDataQuery,
+            GetLgoBudgetAllocationFilterOptionsQuery getLgoBudgetAllocationFilterOptionsQuery,
+            GetLgoBudgetAllocationDashboardSummaryQuery getLgoBudgetAllocationDashboardSummaryQuery,
+            GetLgoBudgetAllocationChartDataQuery getLgoBudgetAllocationChartDataQuery,
             ExportLgoBudgetAllocationDatasetUseCase exportLgoBudgetAllocationDatasetUseCase,
             LgoBudgetAllocationDashboardFilterRequestMapper filterRequestMapper,
             LgoBudgetAllocationDashboardRestMapper restMapper,
             AnonymisationProjector anonymisationProjector
     ) {
-        this.getFilterOptionsQuery = getFilterOptionsQuery;
-        this.getSummaryQuery = getSummaryQuery;
-        this.getChartDataQuery = getChartDataQuery;
+        this.getFilterOptionsQuery = getLgoBudgetAllocationFilterOptionsQuery;
+        this.getSummaryQuery = getLgoBudgetAllocationDashboardSummaryQuery;
+        this.getChartDataQuery = getLgoBudgetAllocationChartDataQuery;
         this.exportLgoBudgetAllocationDatasetUseCase = exportLgoBudgetAllocationDatasetUseCase;
         this.filterRequestMapper = filterRequestMapper;
         this.restMapper = restMapper;
