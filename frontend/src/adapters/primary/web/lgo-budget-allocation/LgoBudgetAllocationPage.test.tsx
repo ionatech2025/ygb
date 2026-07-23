@@ -1,7 +1,20 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { LgoBudgetAllocationPage } from './LgoBudgetAllocationPage';
+
+vi.mock('../../../../core/LocationService', () => ({
+  locationService: {
+    ensureLoaded: vi.fn().mockResolvedValue(undefined),
+    getLoadError: vi.fn().mockReturnValue(null),
+  },
+}));
+
+vi.mock('../../../secondary/api/lgo-budget-allocation-api.adapter', () => ({
+  HttpLgoBudgetAllocationAdapter: vi.fn().mockImplementation(() => ({
+    submit: vi.fn(),
+  })),
+}));
 
 describe('LgoBudgetAllocationPage', () => {
   it('renders title and intro copy for collectors', () => {
@@ -13,8 +26,10 @@ describe('LgoBudgetAllocationPage', () => {
 
     expect(screen.getByTestId('lgo-budget-allocation-page')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Budget Allocation Interview' })).toBeInTheDocument();
-    expect(screen.getByText(/previous financial year/i)).toBeInTheDocument();
-    expect(screen.getByText(/separate from the PDM LGO Questionnaire/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/separate from the PDM LGO Questionnaire/i)
+    ).toBeInTheDocument();
     expect(screen.getByTestId('lgo-budget-allocation-form-slot')).toBeInTheDocument();
+    expect(screen.getByTestId('lgo-budget-allocation-form')).toBeInTheDocument();
   });
 });

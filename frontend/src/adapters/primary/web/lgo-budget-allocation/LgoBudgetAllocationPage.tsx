@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Landmark } from 'lucide-react';
 import { LGO_BUDGET_ALLOCATION_ROUTES } from '../../../../core/domain/lgo-budget-allocation.routes';
 import { lgoBudgetAllocationClasses } from '../../../../core/domain/lgo-budget-allocation.theme';
+import { LgoBudgetAllocationForm } from './LgoBudgetAllocationForm';
 
 export function LgoBudgetAllocationPage() {
   return (
@@ -40,12 +41,7 @@ export function LgoBudgetAllocationPage() {
         aria-label="LGO budget allocation form"
       >
         <span className={lgoBudgetAllocationClasses.formPanelAccent} aria-hidden="true" />
-        <div className={lgoBudgetAllocationClasses.formPlaceholder}>
-          <p className="text-sm font-semibold text-text">Form coming in the next release</p>
-          <p className="max-w-sm text-xs text-text-muted">
-            Prior-FY sector allocations, rationale, and recommendations will be captured here.
-          </p>
-        </div>
+        <LgoBudgetAllocationForm />
       </section>
     </div>
   );

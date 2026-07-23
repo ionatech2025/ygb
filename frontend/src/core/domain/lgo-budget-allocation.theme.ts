@@ -16,6 +16,7 @@ export const lgoBudgetAllocationClasses = {
     'overflow-x-hidden p-6 sm:p-8',
   ].join(' '),
   formPanelAccent: 'pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-nac-orange via-orange-400/80 to-amber-400/40',
+  formShell: 'relative space-y-5',
   formPlaceholder: [
     'flex min-h-[12rem] flex-col items-center justify-center gap-2 rounded-xl',
     'border border-dashed border-border bg-surface-muted/60 px-4 py-8 text-center',
