@@ -20,6 +20,7 @@ class BudgetPrioritySubmissionTest {
 
     private static final Map<String, Object> SAMPLE_DEMOGRAPHICS = Map.of(
             "fullName", "Jane Nakato",
+            "phoneNumber", "0772123456",
             "gender", "FEMALE",
             "ageGroup", "AGE_20_24",
             "districtId", UUID.randomUUID().toString()
@@ -76,5 +77,24 @@ class BudgetPrioritySubmissionTest {
                 LocalDateTime.of(2026, 3, 15, 10, 0)
         )).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Demographic data");
+    }
+
+    @Test
+    void shouldRejectMissingRequiredDemographicField() {
+        Map<String, Object> incompleteDemographics = Map.of(
+                "fullName", "Jane Nakato",
+                "phoneNumber", "0772123456",
+                "gender", "FEMALE",
+                "ageGroup", "AGE_20_24"
+        );
+
+        assertThatThrownBy(() -> BudgetPrioritySubmission.recordNew(
+                BudgetPrioritySection.HEALTH,
+                PhoneNumber.of("0772123456"),
+                SAMPLE_PRIORITY_AREAS,
+                incompleteDemographics,
+                LocalDateTime.of(2026, 3, 15, 10, 0)
+        )).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("districtId");
     }
 }

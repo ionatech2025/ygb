@@ -50,6 +50,7 @@ class BudgetPrioritySubmissionRepositoryAdapterTest {
 
     private static final Map<String, Object> DEMOGRAPHICS = Map.of(
             "fullName", "Jane Nakato",
+            "phoneNumber", "0772123456",
             "gender", "FEMALE",
             "ageGroup", "AGE_20_24",
             "districtId", UUID.randomUUID().toString()

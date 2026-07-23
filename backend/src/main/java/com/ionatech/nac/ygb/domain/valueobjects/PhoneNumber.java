@@ -24,7 +24,7 @@ public final class PhoneNumber {
         return value;
     }
 
-    static String normalize(String input) {
+    public static String normalize(String input) {
         if (input == null) {
             return "";
         }

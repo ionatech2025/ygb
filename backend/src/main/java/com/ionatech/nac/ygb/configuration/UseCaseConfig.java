@@ -4,9 +4,12 @@ import com.ionatech.nac.ygb.application.ports.api.*;
 import com.ionatech.nac.ygb.application.ports.spi.*;
 import com.ionatech.nac.ygb.application.services.*;
 import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
+import com.ionatech.nac.ygb.domain.service.FinancialYearPeriodCalculator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Clock;
 
 @Configuration
 public class UseCaseConfig {
@@ -237,6 +240,30 @@ public class UseCaseConfig {
                 dashboardFilterHierarchyValidator,
                 publicExportGeneratorPort,
                 anonymisationProjector
+        );
+    }
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
+    }
+
+    @Bean
+    public FinancialYearPeriodCalculator financialYearPeriodCalculator() {
+        return new FinancialYearPeriodCalculator();
+    }
+
+    @Bean
+    @Transactional
+    public SubmitBudgetPriorityUseCase submitBudgetPriorityUseCase(
+            BudgetPrioritySubmissionRepositoryPort budgetPrioritySubmissionRepositoryPort,
+            FinancialYearPeriodCalculator financialYearPeriodCalculator,
+            Clock clock
+    ) {
+        return new SubmitBudgetPriorityService(
+                new SaveBudgetPrioritySubmissionService(budgetPrioritySubmissionRepositoryPort),
+                financialYearPeriodCalculator,
+                clock
         );
     }
 }

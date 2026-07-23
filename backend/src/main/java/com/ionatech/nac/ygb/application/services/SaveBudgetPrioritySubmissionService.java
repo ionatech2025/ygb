@@ -3,9 +3,7 @@ package com.ionatech.nac.ygb.application.services;
 import com.ionatech.nac.ygb.application.ports.spi.BudgetPrioritySubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.BudgetPrioritySubmission;
 import com.ionatech.nac.ygb.domain.service.BudgetPriorityUniquenessPolicy;
-import org.springframework.stereotype.Service;
 
-@Service
 public class SaveBudgetPrioritySubmissionService {
 
     private final BudgetPrioritySubmissionRepositoryPort repositoryPort;

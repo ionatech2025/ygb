@@ -33,15 +33,15 @@ This issue does **not** deliver REST endpoints (issues `002`–`004`).
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Domain Tests** for `BudgetPrioritySubmission` creation and section enum parsing.
-- [ ] Write **Domain Tests** verifying uniqueness invariant — same phone + same section + same FY period → rejected.
-- [ ] Write **Domain Tests** verifying different section with same phone + same FY period → allowed (TC-BP-01-03 at domain level).
-- [ ] Write **Application Tests** with mocked SPI for repository `existsByPhoneSectionAndPeriod` behaviour.
-- [ ] Write **Persistence Tests** (`@DataJpaTest` or Testcontainers):
+- [x] Write **Domain Tests** for `BudgetPrioritySubmission` creation and section enum parsing.
+- [x] Write **Domain Tests** verifying uniqueness invariant — same phone + same section + same FY period → rejected.
+- [x] Write **Domain Tests** verifying different section with same phone + same FY period → allowed (TC-BP-01-03 at domain level).
+- [x] Write **Application Tests** with mocked SPI for repository `existsByPhoneSectionAndPeriod` behaviour.
+- [x] Write **Persistence Tests** (`@DataJpaTest` or Testcontainers):
   - Insert succeeds for valid row.
   - Second insert with same `(phone, section, period)` violates unique index → translated to `DuplicateBudgetPrioritySubmissionException`.
-- [ ] Flyway migration applies cleanly on empty and existing databases.
-- [ ] Implement aggregate, port, entity, adapter, and migration.
+- [x] Flyway migration applies cleanly on empty and existing databases.
+- [x] Implement aggregate, port, entity, adapter, and migration.
 
 ## Blocked by
 

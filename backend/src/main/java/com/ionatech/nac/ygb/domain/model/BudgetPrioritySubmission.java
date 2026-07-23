@@ -1,6 +1,7 @@
 package com.ionatech.nac.ygb.domain.model;
 
 import com.ionatech.nac.ygb.domain.event.BudgetPrioritySubmitted;
+import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityDemographics;
 import com.ionatech.nac.ygb.domain.valueobjects.FinancialYearPeriod;
 import com.ionatech.nac.ygb.domain.valueobjects.PhoneNumber;
 
@@ -56,6 +57,7 @@ public class BudgetPrioritySubmission {
         if (demographicData == null || demographicData.isEmpty()) {
             throw new IllegalArgumentException("Demographic data cannot be null or empty");
         }
+        BudgetPriorityDemographics.validateRequiredFields(demographicData);
 
         FinancialYearPeriod financialYearPeriod = FinancialYearPeriod.from(submittedAt);
         UUID bpId = UUID.randomUUID();
