@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   AGE_GROUP_LABELS,
   AGE_GROUP_VALUES,
   GENDER_OPTIONS,
   type AgeGroup,
+  type Gender,
 } from '../../../../core/domain/form-validation.model';
 import type { BudgetPriorityDemographicsFields } from '../../../../core/domain/budget-priority-submission.model';
 import { EMPTY_LOCATION_FIELDS } from '../../../../core/domain/admin-location.model';
@@ -92,7 +93,7 @@ export function BudgetPriorityDemographicsSection({
           <select
             id="bpGender"
             value={value.gender}
-            onChange={(e) => patch({ gender: e.target.value })}
+            onChange={(e) => patch({ gender: e.target.value as Gender | '' })}
             className={formControlClassName}
             required
           >
