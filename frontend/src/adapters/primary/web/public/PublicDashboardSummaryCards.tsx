@@ -10,7 +10,8 @@ import type { StatCardViewModel } from '../../../../core/domain/dashboard-summar
 import { buildPublicDashboardFilterQueryString } from '../../../../core/domain/public-dashboard-filter.model';
 import { usePublicDashboardFilterStore } from '../../../../core/store/usePublicDashboardFilterStore';
 import type { IPublicDashboardApiPort } from '../../../../ports/public-dashboard-api.port';
-import { StatCard } from '../admin/StatCard';
+import { publicDashboardClasses } from '../../../../core/domain/public-dashboard.theme';
+import { PublicStatCard } from './PublicStatCard';
 
 export interface PublicDashboardSummaryCardsProps {
   dashboardApi: IPublicDashboardApiPort;
@@ -27,7 +28,7 @@ function SummaryCardsSkeleton() {
       {Array.from({ length: 4 }).map((_, index) => (
         <div
           key={index}
-          className="animate-pulse rounded-2xl border border-border bg-surface p-5 shadow-sm"
+          className={`animate-pulse ${publicDashboardClasses.statCard}`}
         >
           <div className="h-3 w-24 rounded bg-surface-muted" />
           <div className="mt-4 h-8 w-16 rounded bg-surface-muted" />
@@ -106,8 +107,8 @@ export function PublicDashboardSummaryCards({ dashboardApi }: PublicDashboardSum
       )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {cards.map((card) => (
-          <StatCard key={card.id} card={card} />
+        {cards.map((card, index) => (
+          <PublicStatCard key={card.id} card={card} accentIndex={index} />
         ))}
       </div>
     </section>

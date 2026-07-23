@@ -8,9 +8,9 @@ const NAV_ITEMS = [
 
 function navLinkClassName(isActive: boolean) {
   const base =
-    'inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition min-h-11';
+    'inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition min-h-11 min-w-[5.5rem] justify-center sm:justify-start';
   return isActive
-    ? `${base} bg-brand-light text-brand`
+    ? `${base} bg-brand-light text-brand shadow-sm ring-1 ring-brand/20`
     : `${base} text-text-muted hover:bg-surface-muted hover:text-text`;
 }
 

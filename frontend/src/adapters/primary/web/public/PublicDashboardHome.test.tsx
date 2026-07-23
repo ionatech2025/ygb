@@ -15,17 +15,21 @@ vi.mock('./PublicDashboardSummaryCards', () => ({
 }));
 
 vi.mock('./PublicDashboardCharts', () => ({
-  PublicDashboardCharts: () => <div data-testid="public-dashboard-charts" />,
+  PublicDashboardCharts: () => <div data-testid="public-dashboard-charts-section" />,
 }));
 
 describe('PublicDashboardHome', () => {
-  it('renders placeholder regions for filters, summary cards, and charts', () => {
+  it('renders hero and section regions for filters, export, summary, and charts', () => {
     render(<PublicDashboardHome />);
 
     expect(screen.getByTestId('public-dashboard-home')).toBeInTheDocument();
+    expect(screen.getByTestId('public-dashboard-hero')).toBeInTheDocument();
+    expect(screen.getByTestId('public-dashboard-filters-section')).toBeInTheDocument();
+    expect(screen.getByTestId('public-dashboard-export-section')).toBeInTheDocument();
+    expect(screen.getByTestId('public-dashboard-summary-section')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-filter-panel')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-export-toolbar')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-summary-cards')).toBeInTheDocument();
-    expect(screen.getByTestId('public-dashboard-charts')).toBeInTheDocument();
+    expect(screen.getByTestId('public-dashboard-charts-section')).toBeInTheDocument();
   });
 });

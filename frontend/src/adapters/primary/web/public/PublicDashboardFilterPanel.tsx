@@ -5,6 +5,7 @@ import type { LocationFields } from '../../../../core/domain/admin-location.mode
 import { EMPTY_DASHBOARD_FILTER } from '../../../../core/domain/dashboard-filter.model';
 import { sanitizeDashboardLocationFilter } from '../../../../core/domain/dashboard-filter-location.validation';
 import { hasActivePublicDashboardFilters } from '../../../../core/domain/public-dashboard-filter.model';
+import { publicDashboardClasses } from '../../../../core/domain/public-dashboard.theme';
 import { usePublicDashboardFilterStore } from '../../../../core/store/usePublicDashboardFilterStore';
 import type { IPublicDashboardApiPort } from '../../../../ports/public-dashboard-api.port';
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
@@ -92,14 +93,14 @@ export function PublicDashboardFilterPanel({
     <section
       aria-label="Dashboard filters"
       data-testid="public-dashboard-filter-panel"
-      className="rounded-2xl border border-border bg-surface shadow-sm"
+      className={`${publicDashboardClasses.panel} overflow-hidden`}
     >
-      <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">
+      <div className={publicDashboardClasses.panelHeader}>
         <button
           type="button"
           onClick={() => setExpanded((value) => !value)}
           aria-expanded={expanded}
-          className="inline-flex min-h-11 flex-1 items-center gap-2 text-left text-sm font-bold text-text"
+          className={publicDashboardClasses.panelHeaderTitle}
         >
           <Filter className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
           Filters
@@ -122,7 +123,7 @@ export function PublicDashboardFilterPanel({
       </div>
 
       {expanded && (
-        <div className="space-y-5 px-4 py-4 sm:px-5 sm:py-5">
+        <div className={`space-y-5 ${publicDashboardClasses.panelInset}`}>
           {locationFilterError && (
             <div
               role="alert"

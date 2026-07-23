@@ -1,10 +1,11 @@
 import type { EChartsOption } from 'echarts';
 import type { PublicDistrictBarItem } from '../../../../core/domain/public-dashboard-charts.model';
+import {
+  PUBLIC_CHART_AXIS,
+  PUBLIC_CHART_COLORS,
+  publicDashboardClasses,
+} from '../../../../core/domain/public-dashboard.theme';
 import { EChart } from '../components/EChart';
-
-const BAR_COLOR = '#359966';
-const AXIS_COLOR = '#64748b';
-const GRID_COLOR = '#e2e8f0';
 
 export interface PublicSubmissionsByDistrictChartProps {
   data: PublicDistrictBarItem[];
@@ -18,19 +19,19 @@ function buildOption(data: PublicDistrictBarItem[]): EChartsOption {
     xAxis: {
       type: 'category',
       data: data.map((entry) => entry.districtName),
-      axisLabel: { color: AXIS_COLOR, rotate: data.length > 4 ? 30 : 0 },
-      axisLine: { lineStyle: { color: GRID_COLOR } },
+      axisLabel: { color: PUBLIC_CHART_AXIS.label, rotate: data.length > 4 ? 30 : 0 },
+      axisLine: { lineStyle: { color: PUBLIC_CHART_AXIS.grid } },
     },
     yAxis: {
       type: 'value',
-      axisLabel: { color: AXIS_COLOR },
-      splitLine: { lineStyle: { color: GRID_COLOR } },
+      axisLabel: { color: PUBLIC_CHART_AXIS.label },
+      splitLine: { lineStyle: { color: PUBLIC_CHART_AXIS.grid } },
     },
     series: [
       {
         type: 'bar',
         data: data.map((entry) => entry.count),
-        itemStyle: { color: BAR_COLOR, borderRadius: [4, 4, 0, 0] },
+        itemStyle: { color: PUBLIC_CHART_COLORS.brand, borderRadius: [4, 4, 0, 0] },
       },
     ],
   };
@@ -39,7 +40,7 @@ function buildOption(data: PublicDistrictBarItem[]): EChartsOption {
 export function PublicSubmissionsByDistrictChart({ data }: PublicSubmissionsByDistrictChartProps) {
   if (data.length === 0) {
     return (
-      <p className="flex h-64 items-center justify-center text-sm text-text-muted" data-testid="chart-district-empty">
+      <p className={publicDashboardClasses.emptyChart} data-testid="chart-district-empty">
         No district data for the current filters.
       </p>
     );

@@ -1,8 +1,7 @@
 import type { EChartsOption } from 'echarts';
 import type { PublicGenderPieItem } from '../../../../core/domain/public-dashboard-charts.model';
+import { PUBLIC_CHART_AXIS, PUBLIC_CHART_PALETTE, publicDashboardClasses } from '../../../../core/domain/public-dashboard.theme';
 import { EChart } from '../components/EChart';
-
-const PIE_COLORS = ['#359966', '#19376d', '#f97316', '#64748b'];
 
 export interface PublicGenderSplitChartProps {
   data: PublicGenderPieItem[];
@@ -11,11 +10,11 @@ export interface PublicGenderSplitChartProps {
 function buildOption(data: PublicGenderPieItem[]): EChartsOption {
   return {
     animation: false,
-    color: PIE_COLORS,
+    color: [...PUBLIC_CHART_PALETTE],
     tooltip: { trigger: 'item' },
     legend: {
       bottom: 0,
-      textStyle: { color: '#64748b' },
+      textStyle: { color: PUBLIC_CHART_AXIS.label },
     },
     series: [
       {
@@ -23,7 +22,7 @@ function buildOption(data: PublicGenderPieItem[]): EChartsOption {
         radius: ['42%', '68%'],
         center: ['50%', '45%'],
         data: data.map((entry) => ({ name: entry.label, value: entry.count })),
-        label: { color: '#64748b' },
+        label: { color: PUBLIC_CHART_AXIS.label },
       },
     ],
   };
@@ -32,7 +31,7 @@ function buildOption(data: PublicGenderPieItem[]): EChartsOption {
 export function PublicGenderSplitChart({ data }: PublicGenderSplitChartProps) {
   if (data.length === 0) {
     return (
-      <p className="flex h-64 items-center justify-center text-sm text-text-muted" data-testid="chart-gender-empty">
+      <p className={publicDashboardClasses.emptyChart} data-testid="chart-gender-empty">
         No gender data for the current filters.
       </p>
     );

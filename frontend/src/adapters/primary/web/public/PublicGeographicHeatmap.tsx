@@ -59,7 +59,7 @@ export function PublicGeographicHeatmap({ data }: PublicGeographicHeatmapProps) 
               type="button"
               data-testid={`heatmap-region-${key}`}
               aria-label={formatHeatmapTooltip(entry)}
-              className={`rounded-xl border border-border px-4 py-3 text-left transition hover:shadow-sm ${intensityClass(entry.count, maxCount)}`}
+              className={`min-h-11 rounded-xl border border-border px-4 py-3 text-left transition hover:shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${intensityClass(entry.count, maxCount)}`}
               onMouseEnter={() => setActiveRegion(entry)}
               onFocus={() => setActiveRegion(entry)}
               onMouseLeave={() => setActiveRegion((current) => (current === entry ? null : current))}
