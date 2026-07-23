@@ -89,4 +89,22 @@ describe('LocationService', () => {
 
     expect(service.getLoadError()).toBe('fetch-failed');
   });
+
+  it('refetches without etag when the server returns 304 but the local cache is empty', async () => {
+    const repository = createRepository(false);
+    const service = new LocationService(repository);
+    Object.defineProperty(navigator, 'onLine', { configurable: true, value: true });
+    readLocationEtag.mockReturnValue('stale-etag');
+    fetchLocationDataset
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce({ locations: dataset, etag: 'etag-v2' });
+
+    await service.ensureLoaded();
+
+    expect(fetchLocationDataset).toHaveBeenCalledTimes(2);
+    expect(fetchLocationDataset).toHaveBeenNthCalledWith(1, 'stale-etag');
+    expect(fetchLocationDataset).toHaveBeenNthCalledWith(2, null);
+    expect(repository.save).toHaveBeenCalledWith(dataset);
+    expect(writeLocationEtag).toHaveBeenCalledWith('etag-v2');
+  });
 });

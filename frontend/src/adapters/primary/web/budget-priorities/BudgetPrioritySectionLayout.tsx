@@ -3,6 +3,7 @@ import { ArrowLeft, ListChecks } from 'lucide-react';
 import { getBudgetPrioritySection } from '../../../../core/domain/budget-priority-section.model';
 import { BUDGET_PRIORITY_ROUTES } from '../../../../core/domain/budget-priority.routes';
 import { publicDashboardClasses, publicResourcesClasses } from '../../../../core/domain/public-dashboard.theme';
+import { BudgetPriorityForm } from './BudgetPriorityForm';
 
 export function BudgetPrioritySectionLayout() {
   const { section: sectionParam } = useParams<{ section: string }>();
@@ -38,10 +39,7 @@ export function BudgetPrioritySectionLayout() {
         data-testid="budget-priority-form-slot"
         aria-label={`${section.shortLabel} submission form`}
       >
-        <p className="text-sm text-text-muted">
-          The {section.shortLabel.toLowerCase()} submission form will appear here. Demographics and priority rankings
-          are collected on the next step — no login required.
-        </p>
+        <BudgetPriorityForm section={section.id} />
       </section>
     </div>
   );
