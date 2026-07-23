@@ -23,4 +23,9 @@ public interface LgoBudgetAllocationReadRepositoryPort {
     List<String> findDistinctAgeGroups();
 
     List<String> findDistinctFinancialYearPeriods();
+
+    LgoBudgetAllocationAnonymisedRecordPage findExportRecordsByFilter(
+            LgoBudgetAllocationDashboardFilter filter,
+            PageRequest pageRequest
+    );
 }

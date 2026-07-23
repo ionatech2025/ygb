@@ -374,4 +374,19 @@ public class UseCaseConfig {
     ) {
         return lgoBudgetAllocationDashboardService;
     }
+
+    @Bean
+    public ExportLgoBudgetAllocationDatasetUseCase exportLgoBudgetAllocationDatasetUseCase(
+            LgoBudgetAllocationReadRepositoryPort lgoBudgetAllocationReadRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            LgoBudgetAllocationExportGeneratorPort lgoBudgetAllocationExportGeneratorPort,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new ExportLgoBudgetAllocationDatasetService(
+                lgoBudgetAllocationReadRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                lgoBudgetAllocationExportGeneratorPort,
+                anonymisationProjector
+        );
+    }
 }

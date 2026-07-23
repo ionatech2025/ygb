@@ -63,6 +63,10 @@ public final class AnonymisationProjector {
         assertNoPiiJsonKeys(BudgetPriorityAnonymisedRecord.exportHeaderKeys());
     }
 
+    public void assertLgoBudgetAllocationExportHeadersSafe() {
+        assertNoPiiJsonKeys(LgoBudgetAllocationAnonymisedRecord.exportHeaderKeys());
+    }
+
     public PublicAnonymisedRecord assertExportRecord(PublicAnonymisedRecord record) {
         if (record == null) {
             throw new IllegalArgumentException("PublicAnonymisedRecord must not be null.");
@@ -73,6 +77,15 @@ public final class AnonymisationProjector {
     public BudgetPriorityAnonymisedRecord assertBudgetPriorityExportRecord(BudgetPriorityAnonymisedRecord record) {
         if (record == null) {
             throw new IllegalArgumentException("BudgetPriorityAnonymisedRecord must not be null.");
+        }
+        return record;
+    }
+
+    public LgoBudgetAllocationAnonymisedRecord assertLgoBudgetAllocationExportRecord(
+            LgoBudgetAllocationAnonymisedRecord record
+    ) {
+        if (record == null) {
+            throw new IllegalArgumentException("LgoBudgetAllocationAnonymisedRecord must not be null.");
         }
         return record;
     }

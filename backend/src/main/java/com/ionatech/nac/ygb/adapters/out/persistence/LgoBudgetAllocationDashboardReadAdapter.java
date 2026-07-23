@@ -62,4 +62,12 @@ public class LgoBudgetAllocationDashboardReadAdapter implements LgoBudgetAllocat
     public List<String> findDistinctFinancialYearPeriods() {
         return jpaRepository.findDistinctFinancialYearPeriods();
     }
+
+    @Override
+    public LgoBudgetAllocationAnonymisedRecordPage findExportRecordsByFilter(
+            LgoBudgetAllocationDashboardFilter filter,
+            PageRequest pageRequest
+    ) {
+        return jpaRepository.findExportRecords(filter, pageRequest);
+    }
 }

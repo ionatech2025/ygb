@@ -138,6 +138,59 @@ class LgoBudgetAllocationDashboardJpaRepository {
                 """);
     }
 
+    LgoBudgetAllocationAnonymisedRecordPage findExportRecords(
+            LgoBudgetAllocationDashboardFilter filter,
+            PageRequest pageRequest
+    ) {
+        Map<String, Object> params = new HashMap<>();
+        String whereClause = LgoBudgetAllocationFilterSqlSupport.whereClause(filter, params);
+        long totalElements = countExportRecords(whereClause, params);
+
+        String sql = """
+                SELECT lba.lba_id,
+                       s.financial_year_period,
+                       s.district_id,
+                       ld.name,
+                       s.respondent_gender,
+                       s.respondent_age_group,
+                       lba.previous_fy_allocations::text,
+                       lba.submitted_at
+                """ + LgoBudgetAllocationFilterSqlSupport.baseFromClause() + """
+                 JOIN locations ld ON ld.id = s.district_id
+                """ + whereClause + """
+                 ORDER BY lba.submitted_at DESC, lba.lba_id DESC
+                 LIMIT :pageSize OFFSET :pageOffset
+                """;
+        params.put("pageSize", pageRequest.size());
+        params.put("pageOffset", pageRequest.offset());
+
+        List<LgoBudgetAllocationAnonymisedRecord> items = runQuery(sql, params).stream()
+                .map(this::mapExportRecordRow)
+                .toList();
+        return new LgoBudgetAllocationAnonymisedRecordPage(items, totalElements, pageRequest.page(), pageRequest.size());
+    }
+
+    private long countExportRecords(String whereClause, Map<String, Object> params) {
+        Map<String, Object> countParams = new HashMap<>(params);
+        String sql = "SELECT COUNT(*)" + LgoBudgetAllocationFilterSqlSupport.baseFromClause() + whereClause;
+        var query = entityManager.createNativeQuery(sql);
+        bindParams(query, countParams);
+        return ((Number) query.getSingleResult()).longValue();
+    }
+
+    private LgoBudgetAllocationAnonymisedRecord mapExportRecordRow(Object[] row) {
+        return new LgoBudgetAllocationAnonymisedRecord(
+                toUuid(row[0]),
+                (String) row[1],
+                toUuid(row[2]),
+                (String) row[3],
+                (String) row[4],
+                (String) row[5],
+                row[6] == null ? "{}" : (String) row[6],
+                toLocalDateTime(row[7])
+        );
+    }
+
     private List<LgoBudgetAllocationSectorCount> mapSectorRows(List<Object[]> rows) {
         return rows.stream()
                 .map(row -> new LgoBudgetAllocationSectorCount((String) row[0], ((Number) row[1]).longValue()))
@@ -178,5 +231,21 @@ class LgoBudgetAllocationDashboardJpaRepository {
             return timestamp.toLocalDateTime().toLocalDate();
         }
         return LocalDate.parse(value.toString());
+    }
+
+    private static LocalDateTime toLocalDateTime(Object value) {
+        if (value instanceof LocalDateTime localDateTime) {
+            return localDateTime;
+        }
+        if (value instanceof Timestamp timestamp) {
+            return timestamp.toLocalDateTime();
+        }
+        if (value instanceof OffsetDateTime offsetDateTime) {
+            return offsetDateTime.toLocalDateTime();
+        }
+        if (value instanceof Instant instant) {
+            return LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+        }
+        return LocalDateTime.parse(value.toString());
     }
 }
