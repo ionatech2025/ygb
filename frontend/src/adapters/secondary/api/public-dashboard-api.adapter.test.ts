@@ -4,6 +4,7 @@ import {
   HttpPublicDashboardAdapter,
   mapPublicChartDataPoint,
   mapPublicChartSeriesResponse,
+  mapPublicHeatmapResponse,
   mapPublicSummaryResponse,
 } from './public-dashboard-api.adapter';
 
@@ -67,6 +68,19 @@ describe('public-dashboard-api.adapter', () => {
       byGender: [{ gender: 'FEMALE', count: 2 }],
       byFinancialYearPeriod: [{ financialYearPeriod: 'JAN_JUN_2026', count: 4 }],
     });
+  });
+
+  it('defaults missing summary fields to safe empty values', () => {
+    expect(mapPublicSummaryResponse({} as never)).toEqual({
+      totalSubmissions: 0,
+      byFormType: [],
+      byGender: [],
+      byFinancialYearPeriod: [],
+    });
+  });
+
+  it('defaults missing heatmap entries to an empty array', () => {
+    expect(mapPublicHeatmapResponse({} as never)).toEqual([]);
   });
 
   it('maps bucketStart to date for trend chart points', () => {
