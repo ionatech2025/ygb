@@ -19,11 +19,11 @@ Add **Download CSV** and **Download Excel** actions to the public dashboard (US-
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: Download CSV builds URL/query params from current filter.
-- [ ] Adapter test: handles blob response and filename from `Content-Disposition`.
-- [ ] Component test: export works without auth store / token (TC-PUB-04-03).
-- [ ] Manual test: inspect downloaded columns contain no PII headers (TC-PUB-04-04).
-- [ ] Implement toolbar and download adapter.
+- [x] Component test: Download CSV builds URL/query params from current filter.
+- [x] Adapter test: handles blob response and filename from `Content-Disposition`.
+- [x] Component test: export works without auth store / token (TC-PUB-04-03).
+- [x] Manual test: inspect downloaded columns contain no PII headers (TC-PUB-04-04).
+- [x] Implement toolbar and download adapter.
 
 ## Blocked by
 

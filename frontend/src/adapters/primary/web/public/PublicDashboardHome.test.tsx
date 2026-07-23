@@ -6,6 +6,10 @@ vi.mock('./PublicDashboardFilterPanel', () => ({
   PublicDashboardFilterPanel: () => <div data-testid="public-dashboard-filter-panel" />,
 }));
 
+vi.mock('./PublicDashboardExportToolbar', () => ({
+  PublicDashboardExportToolbar: () => <div data-testid="public-dashboard-export-toolbar" />,
+}));
+
 vi.mock('./PublicDashboardSummaryCards', () => ({
   PublicDashboardSummaryCards: () => <div data-testid="public-dashboard-summary-cards" />,
 }));
@@ -20,6 +24,7 @@ describe('PublicDashboardHome', () => {
 
     expect(screen.getByTestId('public-dashboard-home')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-filter-panel')).toBeInTheDocument();
+    expect(screen.getByTestId('public-dashboard-export-toolbar')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-summary-cards')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-charts')).toBeInTheDocument();
   });

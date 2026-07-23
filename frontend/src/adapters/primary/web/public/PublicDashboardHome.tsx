@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { LayoutDashboard } from 'lucide-react';
 import { HttpPublicDashboardAdapter } from '../../../secondary/api/public-dashboard-api.adapter';
 import { PublicDashboardFilterPanel } from './PublicDashboardFilterPanel';
+import { PublicDashboardExportToolbar } from './PublicDashboardExportToolbar';
 import { PublicDashboardSummaryCards } from './PublicDashboardSummaryCards';
 import { PublicDashboardCharts } from './PublicDashboardCharts';
 
@@ -23,6 +24,8 @@ export function PublicDashboardHome() {
       </header>
 
       <PublicDashboardFilterPanel dashboardApi={dashboardApi} />
+
+      <PublicDashboardExportToolbar />
 
       <PublicDashboardSummaryCards dashboardApi={dashboardApi} />
 
