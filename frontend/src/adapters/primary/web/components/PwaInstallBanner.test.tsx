@@ -39,7 +39,7 @@ describe('PwaInstallBanner', () => {
   it('renders Install and Not now when install is available', () => {
     mockHook();
     render(<PwaInstallBanner />);
-    expect(screen.getByRole('button', { name: 'Install YGB' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Install' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Not now' })).toBeInTheDocument();
   });
 
@@ -49,7 +49,7 @@ describe('PwaInstallBanner', () => {
     const user = userEvent.setup();
 
     render(<PwaInstallBanner />);
-    await user.click(screen.getByRole('button', { name: 'Install YGB' }));
+    await user.click(screen.getByRole('button', { name: 'Install' }));
 
     expect(promptInstall).toHaveBeenCalledTimes(1);
   });
@@ -81,6 +81,14 @@ describe('PwaInstallBanner', () => {
     await user.click(screen.getByRole('button', { name: 'Not now' }));
 
     expect(dismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it('uses a compact dismiss control on the fixed login banner', () => {
+    mockHook();
+    render(<PwaInstallBanner placement="fixed" />);
+
+    expect(screen.getByRole('button', { name: 'Not now' })).toBeInTheDocument();
+    expect(screen.queryByText('Not now')).not.toBeInTheDocument();
   });
 
   it('does not render for standalone collectors', () => {
