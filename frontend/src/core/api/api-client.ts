@@ -42,8 +42,22 @@ export async function apiFetch<T>(
   }
 
   const contentType = response.headers.get('content-type') ?? '';
-  if (contentType.includes('application/json')) {
+  if (contentType.includes('application/json') || contentType.includes('application/problem+json')) {
     return response.json() as Promise<T>;
   }
-  return (await response.text()) as T;
+
+  const text = await response.text();
+  const trimmed = text.trimStart();
+  if (
+    contentType.includes('text/html') ||
+    trimmed.startsWith('<!') ||
+    trimmed.toLowerCase().startsWith('<html')
+  ) {
+    throw new ApiError(
+      'API returned HTML instead of JSON. Set VITE_API_BASE_URL to your backend URL at build time.',
+      response.status
+    );
+  }
+
+  return text as T;
 }

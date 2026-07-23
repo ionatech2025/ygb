@@ -76,7 +76,7 @@ export function CollectorProfilePage({
     void dashboardApi.fetchFilterOptions().then((options) => {
       if (!cancelled) {
         setDistricts(options.districts);
-        setFinancialYearPeriods(options.financialYearPeriods);
+        setFinancialYearPeriods(options.financialYearPeriods ?? []);
       }
     });
     return () => {

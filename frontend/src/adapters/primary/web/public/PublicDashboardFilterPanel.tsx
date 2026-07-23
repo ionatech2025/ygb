@@ -37,7 +37,7 @@ export function PublicDashboardFilterPanel({
         if (cancelled) {
           return;
         }
-        setFinancialYearPeriods(options.financialYearPeriods);
+        setFinancialYearPeriods(options.financialYearPeriods ?? []);
       })
       .catch(() => {
         if (!cancelled) {
