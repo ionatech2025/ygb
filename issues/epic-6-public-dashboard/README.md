@@ -42,7 +42,7 @@ API contract reference: [`backend/backend_docs/domain_arch_apis`](../../backend/
 
 ## Out of scope (Phase 2 — Epic 7/8)
 
-- Budget Priorities public forms and dashboard section (US-BP-*)
+- Budget Priorities public forms and dashboard section (US-BP-*) — see [epic-7-budget-priorities/README.md](../epic-7-budget-priorities/README.md); OTP deferred to [future-features.md](../future-features.md)
 - LGO Budget Allocation public views (US-LGOB-*)
 - Admin CMS for PDM content ([008](../epic-5-admin-dashboard/backend-issues/008-backend-pdm-content-cms-api.md))
 - **Programme Area filter** on the public dashboard (SRS PUB-03) — deferred until a submission field is defined; see [require-polishing.md](../require-polishing.md)
