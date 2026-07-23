@@ -12,7 +12,6 @@ export interface PublicDashboardFilter {
   gender: Gender | '';
   ageGroup: AgeGroup | '';
   financialYearPeriod: string;
-  programmeArea: string;
 }
 
 export const EMPTY_PUBLIC_DASHBOARD_FILTER: PublicDashboardFilter = {
@@ -25,7 +24,6 @@ export const EMPTY_PUBLIC_DASHBOARD_FILTER: PublicDashboardFilter = {
   gender: '',
   ageGroup: '',
   financialYearPeriod: '',
-  programmeArea: '',
 };
 
 const FILTER_PARAM_KEYS = [
@@ -38,7 +36,6 @@ const FILTER_PARAM_KEYS = [
   'gender',
   'ageGroup',
   'financialYearPeriod',
-  'programmeArea',
 ] as const satisfies ReadonlyArray<keyof PublicDashboardFilter>;
 
 export function hasActivePublicDashboardFilters(filter: PublicDashboardFilter): boolean {
@@ -68,7 +65,6 @@ export function publicDashboardFilterFromSearchParams(params: URLSearchParams): 
     gender: (params.get('gender') as Gender | null) ?? '',
     ageGroup: (params.get('ageGroup') as AgeGroup | null) ?? '',
     financialYearPeriod: params.get('financialYearPeriod') ?? '',
-    programmeArea: params.get('programmeArea') ?? '',
   };
 }
 

@@ -21,7 +21,6 @@ interface BackendPublicFilterOptionsResponse {
   genders: string[];
   ageGroups: string[];
   financialYearPeriods: string[];
-  programmeAreas: string[];
 }
 
 interface BackendPublicSummaryResponse {
@@ -61,7 +60,6 @@ function mapFilterOptions(response: BackendPublicFilterOptionsResponse): PublicD
     genders: response.genders,
     ageGroups: response.ageGroups,
     financialYearPeriods: response.financialYearPeriods,
-    programmeAreas: response.programmeAreas,
   };
 }
 

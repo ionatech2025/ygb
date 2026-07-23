@@ -56,7 +56,29 @@ body {
 
 .public-layout-bg {
   background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, hsl(152 45% 38% / 0.08), transparent),
+    radial-gradient(ellipse 120% 80% at 100% -20%, hsl(222 65% 28% / 0.05), transparent),
+    radial-gradient(ellipse 90% 60% at 0% 0%, hsl(152 45% 38% / 0.07), transparent),
+    linear-gradient(to bottom, hsl(210 40% 98%), var(--color-surface-muted));
+}
+
+.dark .public-layout-bg {
+  background:
+    radial-gradient(ellipse 120% 80% at 100% -20%, hsl(222 65% 28% / 0.18), transparent),
+    radial-gradient(ellipse 90% 60% at 0% 0%, hsl(152 45% 38% / 0.08), transparent),
+    var(--color-surface-muted);
+}
+
+.admin-layout-bg {
+  background:
+    radial-gradient(ellipse 100% 70% at 100% 0%, hsl(222 65% 28% / 0.04), transparent),
+    radial-gradient(ellipse 80% 50% at 0% 100%, hsl(24 95% 53% / 0.04), transparent),
+    linear-gradient(to bottom, hsl(210 40% 98%), var(--color-surface-muted));
+}
+
+.dark .admin-layout-bg {
+  background:
+    radial-gradient(ellipse 100% 70% at 100% 0%, hsl(222 65% 28% / 0.15), transparent),
+    radial-gradient(ellipse 80% 50% at 0% 100%, hsl(24 95% 53% / 0.06), transparent),
     var(--color-surface-muted);
 }
 

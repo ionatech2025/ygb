@@ -18,7 +18,6 @@ const FILTER_PARAM_KEYS = [
   'gender',
   'ageGroup',
   'financialYearPeriod',
-  'programmeArea',
 ] as const;
 
 function filtersEqual(a: PublicDashboardFilter, b: PublicDashboardFilter): boolean {

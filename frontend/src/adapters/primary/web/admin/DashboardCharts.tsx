@@ -11,6 +11,7 @@ import type {
   DashboardChartsViewModel,
 } from '../../../../core/domain/dashboard-charts.model';
 import { buildDashboardFilterQueryString } from '../../../../core/domain/dashboard-filter.model';
+import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import { useDashboardFilterStore } from '../../../../core/store/useDashboardFilterStore';
 import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
 import { GenderSplitChart } from './GenderSplitChart';
@@ -39,7 +40,7 @@ function ChartsSkeleton() {
       {Array.from({ length: 3 }).map((_, index) => (
         <div
           key={index}
-          className={`animate-pulse rounded-2xl border border-border bg-surface p-5 shadow-sm ${index === 0 ? 'lg:col-span-2' : ''}`}
+          className={`animate-pulse rounded-2xl border border-border/80 bg-surface p-5 shadow-sm ring-1 ring-black/[0.03] dark:ring-white/[0.04] ${index === 0 ? 'lg:col-span-2' : ''}`}
         >
           <div className="mb-4 h-3 w-40 rounded bg-surface-muted" />
           <div className="h-64 rounded bg-surface-muted" />
@@ -63,9 +64,12 @@ function ChartPanel({
   return (
     <article
       data-testid={testId}
-      className={`rounded-2xl border border-border bg-surface p-5 shadow-sm ${className ?? ''}`}
+      className={`${adminDashboardClasses.chartPanel} ${className ?? ''}`}
     >
-      <h3 className="mb-4 text-sm font-semibold text-text">{title}</h3>
+      <h3 className={adminDashboardClasses.chartPanelTitle}>
+        <span className={adminDashboardClasses.chartPanelAccent} aria-hidden="true" />
+        {title}
+      </h3>
       {children}
     </article>
   );
@@ -127,9 +131,9 @@ export function DashboardCharts({ dashboardApi, onDrillDown }: DashboardChartsPr
   }
 
   return (
-    <section aria-label="Dashboard charts" data-testid="dashboard-charts">
-      <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-text sm:text-xl">
-        <BarChart3 className="h-5 w-5 text-brand" aria-hidden="true" />
+    <section aria-label="Dashboard charts" data-testid="dashboard-charts" className={adminDashboardClasses.section}>
+      <h2 className={adminDashboardClasses.sectionHeading}>
+        <BarChart3 className={adminDashboardClasses.sectionHeadingIcon} aria-hidden="true" />
         Charts
       </h2>
 
@@ -137,7 +141,7 @@ export function DashboardCharts({ dashboardApi, onDrillDown }: DashboardChartsPr
         <div
           role="alert"
           data-testid="dashboard-charts-error"
-          className="mb-4 flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800"
+          className="mb-4 flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-900/60 dark:bg-rose-950/50 dark:text-rose-300"
         >
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <span>{error}</span>

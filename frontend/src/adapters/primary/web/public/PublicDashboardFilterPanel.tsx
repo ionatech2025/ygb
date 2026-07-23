@@ -28,7 +28,6 @@ export function PublicDashboardFilterPanel({
   const clearAll = usePublicDashboardFilterStore((state) => state.clearAll);
   const [expanded, setExpanded] = useState(true);
   const [financialYearPeriods, setFinancialYearPeriods] = useState<string[]>([]);
-  const [programmeAreas, setProgrammeAreas] = useState<string[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -39,12 +38,10 @@ export function PublicDashboardFilterPanel({
           return;
         }
         setFinancialYearPeriods(options.financialYearPeriods);
-        setProgrammeAreas(options.programmeAreas);
       })
       .catch(() => {
         if (!cancelled) {
           setFinancialYearPeriods([]);
-          setProgrammeAreas([]);
         }
       });
     return () => {
@@ -114,7 +111,7 @@ export function PublicDashboardFilterPanel({
             type="button"
             onClick={clearAll}
             data-testid="public-dashboard-filter-clear-all"
-            className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl border border-border px-3 text-xs font-semibold text-text-muted transition hover:bg-surface-muted hover:text-text"
+            className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl border border-border/80 px-3 text-xs font-semibold text-text-muted transition hover:border-brand/30 hover:bg-brand-light/40 hover:text-brand"
           >
             <X className="h-3.5 w-3.5" aria-hidden="true" />
             Clear all
@@ -153,7 +150,6 @@ export function PublicDashboardFilterPanel({
           <PublicDashboardScalarFilters
             filter={filter}
             financialYearPeriods={financialYearPeriods}
-            programmeAreas={programmeAreas}
             onChange={setFilter}
           />
         </div>

@@ -4,7 +4,7 @@ import {
   PUBLIC_CHART_PALETTE,
   PUBLIC_STAT_CARD_ACCENTS,
   publicDashboardClasses,
-} from '../../../../core/domain/public-dashboard.theme';
+} from './public-dashboard.theme';
 
 describe('public-dashboard.theme', () => {
   it('defines NAC-aligned chart palette with brand, blue, and orange', () => {
@@ -15,12 +15,13 @@ describe('public-dashboard.theme', () => {
   });
 
   it('exposes reusable presentation class bundles', () => {
-    expect(publicDashboardClasses.hero).toMatch(/gradient/);
-    expect(publicDashboardClasses.statCard).toMatch(/border-t-4/);
+    expect(publicDashboardClasses.hero).toMatch(/rounded-2xl/);
+    expect(publicDashboardClasses.statCard).toMatch(/rounded-2xl/);
     expect(publicDashboardClasses.exportButton).toMatch(/min-h-11/);
   });
 
-  it('cycles stat card accent borders', () => {
+  it('cycles stat card accent styles', () => {
     expect(PUBLIC_STAT_CARD_ACCENTS.length).toBeGreaterThanOrEqual(3);
+    expect(PUBLIC_STAT_CARD_ACCENTS[0]?.icon).toMatch(/bg-brand/);
   });
 });

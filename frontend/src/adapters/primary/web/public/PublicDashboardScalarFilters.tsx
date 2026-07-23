@@ -23,18 +23,14 @@ function labelFromFinancialYearPeriodKey(key: string): string {
 export interface PublicDashboardScalarFiltersProps {
   filter: PublicDashboardFilter;
   financialYearPeriods: string[];
-  programmeAreas: string[];
   onChange: (patch: Partial<PublicDashboardFilter>) => void;
 }
 
 export function PublicDashboardScalarFilters({
   filter,
   financialYearPeriods,
-  programmeAreas,
   onChange,
 }: PublicDashboardScalarFiltersProps) {
-  const programmeAreaDisabled = programmeAreas.length === 0;
-
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <FormField label="Form type" htmlFor="public-filter-form-type">
@@ -122,26 +118,6 @@ export function PublicDashboardScalarFilters({
           {financialYearPeriods.map((period) => (
             <option key={period} value={period}>
               {labelFromFinancialYearPeriodKey(period)}
-            </option>
-          ))}
-        </select>
-      </FormField>
-
-      <FormField label="Programme area" htmlFor="public-filter-programme-area">
-        <select
-          id="public-filter-programme-area"
-          data-testid="filter-programme-area"
-          value={filter.programmeArea}
-          disabled={programmeAreaDisabled}
-          onChange={(e) => onChange({ programmeArea: e.target.value })}
-          className={`${formControlClassName} disabled:cursor-not-allowed disabled:opacity-60`}
-        >
-          <option value="">
-            {programmeAreaDisabled ? 'Programme areas coming soon' : 'All programme areas'}
-          </option>
-          {programmeAreas.map((area) => (
-            <option key={area} value={area}>
-              {area}
             </option>
           ))}
         </select>

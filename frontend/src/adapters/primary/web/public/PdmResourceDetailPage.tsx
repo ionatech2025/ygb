@@ -1,9 +1,11 @@
 import { Link, Navigate, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import {
   extractHeadingAnchors,
   getPdmResourcePage,
   isPdmResourceSlug,
 } from '../../../../core/content/pdmPublicInfoSections';
+import { publicResourcesClasses } from '../../../../core/domain/public-dashboard.theme';
 import { MarkdownContent } from './MarkdownContent';
 import { getPdmResourceMarkdown } from './pdmResourceContent';
 
@@ -19,37 +21,42 @@ export function PdmResourceDetailPage() {
   const anchors = extractHeadingAnchors(markdown);
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row">
-        <article className="min-w-0 flex-1 rounded-lg border border-border bg-surface p-6 shadow-sm sm:p-8">
-          <Link to="/resources" className="text-sm font-medium text-brand hover:underline">
-            ← All resources
+    <div className={`${publicResourcesClasses.page} ${publicResourcesClasses.detailLayout}`} data-testid="pdm-resource-detail">
+      <article className={publicResourcesClasses.article}>
+        <header className={publicResourcesClasses.articleHeader}>
+          <Link to="/resources" className={publicResourcesClasses.backLink}>
+            <ArrowLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
+            All resources
           </Link>
-          <h1 className="mt-4 text-3xl font-bold text-text">{page.title}</h1>
-          <p className="mt-2 text-text-muted">{page.summary}</p>
-          <div className="prose prose-slate mt-8 max-w-none">
-            <MarkdownContent content={markdown} />
-          </div>
-        </article>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-brand">Resource article</p>
+          <h1 className={publicResourcesClasses.articleTitle}>{page.title}</h1>
+          <p className={publicResourcesClasses.articleSummary}>{page.summary}</p>
+        </header>
 
-        {anchors.length > 0 ? (
-          <aside className="lg:w-64 lg:shrink-0">
-            <nav
-              aria-label="On this page"
-              className="sticky top-8 rounded-lg border border-border bg-surface p-4 shadow-sm"
-            >
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-text-muted">On this page</h2>
-              <ul className="mt-3 space-y-2 text-sm">
-                {anchors.map((anchor) => (
-                  <li key={anchor.id} className={anchor.level === 3 ? 'pl-3' : undefined}>
-                    <a href={`#${anchor.id}`} className="text-brand hover:underline">
-                      {anchor.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </aside>
-        ) : null}
+        <div className={publicResourcesClasses.articleBody}>
+          <MarkdownContent content={markdown} />
+        </div>
+      </article>
+
+      {anchors.length > 0 ? (
+        <aside className="w-full shrink-0 lg:sticky lg:top-24 lg:w-72">
+          <nav aria-label="On this page" className={publicResourcesClasses.tocNav}>
+            <h2 className={publicResourcesClasses.tocHeading}>On this page</h2>
+            <ul className="mt-3 space-y-0.5">
+              {anchors.map((anchor) => (
+                <li key={anchor.id}>
+                  <a
+                    href={`#${anchor.id}`}
+                    className={`${publicResourcesClasses.tocLink} ${anchor.level === 3 ? 'pl-4' : ''}`}
+                  >
+                    {anchor.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
+      ) : null}
     </div>
   );
 }

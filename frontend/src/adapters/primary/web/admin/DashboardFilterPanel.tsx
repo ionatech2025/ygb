@@ -13,6 +13,7 @@ import { formatFinancialYearPeriodLabel } from '../../../../core/financial-year-
 import type { FinancialYearPeriodHalf } from '../../../../core/domain/financial-year-period.model';
 import { sanitizeDashboardLocationFilterFromApiOptions } from '../../../../core/domain/dashboard-filter-location.validation';
 import { hasActiveDashboardFilters } from '../../../../core/domain/dashboard-filter.model';
+import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import { useDashboardFilterStore } from '../../../../core/store/useDashboardFilterStore';
 import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
 
@@ -100,14 +101,14 @@ export function DashboardFilterPanel({ dashboardApi, compact = false }: Dashboar
     <section
       aria-label="Dashboard filters"
       data-testid="dashboard-filter-panel"
-      className="rounded-2xl border border-border bg-surface shadow-sm"
+      className={adminDashboardClasses.panel}
     >
-      <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">
+      <div className={adminDashboardClasses.panelHeader}>
         <button
           type="button"
           onClick={() => setExpanded((value) => !value)}
           aria-expanded={expanded}
-          className="inline-flex min-h-11 flex-1 items-center gap-2 text-left text-sm font-bold text-text"
+          className={adminDashboardClasses.panelHeaderTitle}
         >
           <Filter className="h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
           Filters
@@ -121,7 +122,7 @@ export function DashboardFilterPanel({ dashboardApi, compact = false }: Dashboar
             type="button"
             onClick={clearAll}
             data-testid="dashboard-filter-clear-all"
-            className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl border border-border px-3 text-xs font-semibold text-text-muted transition hover:bg-surface-muted hover:text-text"
+            className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl border border-border px-3 text-xs font-semibold text-text-muted transition hover:border-brand/30 hover:bg-brand/5 hover:text-brand"
           >
             <X className="h-3.5 w-3.5" aria-hidden="true" />
             Clear all
@@ -130,12 +131,12 @@ export function DashboardFilterPanel({ dashboardApi, compact = false }: Dashboar
       </div>
 
       {expanded && (
-        <div className="space-y-5 px-4 py-4 sm:px-5 sm:py-5">
+        <div className={adminDashboardClasses.panelBody}>
           {locationFilterError && (
             <div
               role="alert"
               data-testid="dashboard-location-filter-error"
-              className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+              className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200"
             >
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
               <span>{locationFilterError}</span>

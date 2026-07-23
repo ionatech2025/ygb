@@ -55,7 +55,6 @@ function createDashboardApi(overrides: Partial<IPublicDashboardApiPort> = {}): I
       genders: ['MALE'],
       ageGroups: ['AGE_15_19'],
       financialYearPeriods: ['JAN_JUN_2026'],
-      programmeAreas: [],
     }),
     buildFilterQueryString: vi.fn(),
     fetchSummary: vi.fn(),
@@ -95,7 +94,7 @@ describe('PublicDashboardFilterPanel', () => {
     vi.clearAllMocks();
   });
 
-  it('renders all nine filter dimensions (TC-PUB-02-01)', async () => {
+  it('renders all eight filter dimensions (TC-PUB-02-01)', async () => {
     render(
       <PublicDashboardFilterPanel
         dashboardApi={createDashboardApi()}
@@ -117,8 +116,8 @@ describe('PublicDashboardFilterPanel', () => {
     expect(screen.getByTestId('filter-gender')).toBeInTheDocument();
     expect(screen.getByTestId('filter-age-group')).toBeInTheDocument();
     expect(screen.getByTestId('filter-financial-year')).toBeInTheDocument();
-    expect(screen.getByTestId('filter-programme-area')).toBeDisabled();
     expect(screen.queryByTestId('filter-collector')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('filter-programme-area')).not.toBeInTheDocument();
   });
 
   it('clears all filters and URL params when Clear all is clicked', async () => {

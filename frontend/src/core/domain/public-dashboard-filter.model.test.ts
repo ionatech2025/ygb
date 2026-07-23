@@ -14,12 +14,9 @@ describe('public-dashboard-filter.model', () => {
       formType: 'BYP',
       gender: 'FEMALE',
       dateFrom: '2026-01-01',
-      programmeArea: 'AGRICULTURE',
     });
 
-    expect(query).toBe(
-      '?districtId=district-1&formType=BYP&dateFrom=2026-01-01&gender=FEMALE&programmeArea=AGRICULTURE'
-    );
+    expect(query).toBe('?districtId=district-1&formType=BYP&dateFrom=2026-01-01&gender=FEMALE');
   });
 
   it('returns empty string when no filters are active', () => {

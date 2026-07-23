@@ -27,7 +27,6 @@ describe('public-dashboard-api.adapter', () => {
           genders: ['FEMALE'],
           ageGroups: ['AGE_20_24'],
           financialYearPeriods: ['JAN_JUN_2026'],
-          programmeAreas: [],
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       )
@@ -42,7 +41,6 @@ describe('public-dashboard-api.adapter', () => {
       genders: ['FEMALE'],
       ageGroups: ['AGE_20_24'],
       financialYearPeriods: ['JAN_JUN_2026'],
-      programmeAreas: [],
     });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);

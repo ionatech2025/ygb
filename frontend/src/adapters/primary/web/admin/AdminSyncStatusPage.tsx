@@ -5,6 +5,8 @@ import type { AdminReceiptStatus } from '../../../../core/domain/admin-receipt-s
 import { HttpAdminSyncStatusAdapter } from '../../../secondary/api/admin-sync-status-api.adapter';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import type { IAdminSyncStatusApiPort } from '../../../../ports/admin-sync-status-api.port';
+import { AdminPageHeader } from './AdminPageHeader';
+import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import { CollectorReceiptTable } from './CollectorReceiptTable';
 import { ReceiptStatusSummary } from './ReceiptStatusSummary';
 
@@ -56,19 +58,19 @@ export function AdminSyncStatusPage({ syncStatusApi: syncStatusApiProp }: AdminS
   }, [syncStatusApi]);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6" data-testid="admin-sync-status-page">
-      <div>
-        <h2 className="flex items-center gap-2 text-lg font-bold text-text sm:text-xl">
-          <Radio className="h-5 w-5 text-brand" aria-hidden="true" />
-          Sync Receipt Status
-        </h2>
-        <p className="text-sm text-text-muted">
-          Server-side submission receipt metrics by collector. Stale collectors have not synced in over 48 hours.
-        </p>
-      </div>
+    <div className={adminDashboardClasses.page} data-testid="admin-sync-status-page">
+      <AdminPageHeader
+        eyebrow="Sync monitoring"
+        title="Sync Receipt Status"
+        description="Server-side submission receipt metrics by collector. Stale collectors have not synced in over 48 hours."
+        icon={<Radio className="h-7 w-7" aria-hidden="true" />}
+      />
 
       {error && (
-        <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+        <div
+          role="alert"
+          className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-900/60 dark:bg-rose-950/50 dark:text-rose-300"
+        >
           {error}
         </div>
       )}

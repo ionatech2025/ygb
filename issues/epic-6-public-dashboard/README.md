@@ -45,6 +45,7 @@ API contract reference: [`backend/backend_docs/domain_arch_apis`](../../backend/
 - Budget Priorities public forms and dashboard section (US-BP-*)
 - LGO Budget Allocation public views (US-LGOB-*)
 - Admin CMS for PDM content ([008](../epic-5-admin-dashboard/backend-issues/008-backend-pdm-content-cms-api.md))
+- **Programme Area filter** on the public dashboard (SRS PUB-03) — deferred until a submission field is defined; see [require-polishing.md](../require-polishing.md)
 
 ## Related
 

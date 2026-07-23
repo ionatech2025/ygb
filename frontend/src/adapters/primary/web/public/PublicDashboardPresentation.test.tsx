@@ -94,11 +94,11 @@ describe('PublicDashboardHome presentation (US-PUB-06)', () => {
   it('uses presentation section structure for stakeholder demo layout', () => {
     render(<PublicDashboardHome />);
 
-    expect(screen.getByTestId('public-dashboard-hero')).toHaveClass('rounded-3xl');
-    expect(screen.getByTestId('public-dashboard-filters-section').querySelector('h2')).toHaveTextContent('Filters');
-    expect(screen.getByTestId('public-dashboard-export-section').querySelector('h2')).toHaveTextContent(
-      'Export & download'
+    expect(screen.getByTestId('public-dashboard-hero')).toHaveClass('rounded-2xl');
+    expect(screen.getByTestId('public-dashboard-filters-section').querySelector('h2')).toHaveTextContent(
+      'Explore data'
     );
+    expect(screen.getByTestId('public-dashboard-export-section')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-summary-section').querySelector('h2')).toHaveTextContent(
       'Summary statistics'
     );
@@ -109,7 +109,7 @@ describe('PublicDashboardHome presentation (US-PUB-06)', () => {
     const html = container.innerHTML;
 
     expect(html).toMatch(/xl:max-w-7xl|max-w-6xl/);
-    expect(html).toMatch(/sm:px-8|sm:py-10/);
+    expect(html).toMatch(/sm:p-8/);
     expect(html).toMatch(/sm:text-3xl|text-2xl/);
   });
 

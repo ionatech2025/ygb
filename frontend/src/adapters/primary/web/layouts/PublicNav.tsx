@@ -8,15 +8,19 @@ const NAV_ITEMS = [
 
 function navLinkClassName(isActive: boolean) {
   const base =
-    'inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition min-h-11 min-w-[5.5rem] justify-center sm:justify-start';
+    'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition min-h-10 min-w-[5.5rem] justify-center sm:justify-start';
   return isActive
-    ? `${base} bg-brand-light text-brand shadow-sm ring-1 ring-brand/20`
-    : `${base} text-text-muted hover:bg-surface-muted hover:text-text`;
+    ? `${base} bg-surface text-text shadow-sm ring-1 ring-border/80`
+    : `${base} text-text-muted hover:text-text`;
 }
 
 export function PublicNav({ onNavigate }: { onNavigate?: () => void }) {
   return (
-    <nav aria-label="Public sections" data-testid="public-nav" className="flex flex-col gap-1 sm:flex-row">
+    <nav
+      aria-label="Public sections"
+      data-testid="public-nav"
+      className="inline-flex flex-col gap-1 rounded-xl border border-border/80 bg-surface-muted/60 p-1 sm:flex-row"
+    >
       {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
         <NavLink
           key={to}

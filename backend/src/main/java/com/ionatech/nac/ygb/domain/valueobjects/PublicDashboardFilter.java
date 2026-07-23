@@ -5,10 +5,7 @@ import com.ionatech.nac.ygb.domain.model.FormType;
 import java.time.LocalDate;
 import java.util.UUID;
 
-/**
- * Public dashboard filter criteria (US-PUB-02). AND semantics; no collector dimension.
- * {@code programmeArea} is reserved for SRS PUB-03 — not yet persisted on submissions.
- */
+/** Public dashboard filter criteria (US-PUB-02). AND semantics; no collector dimension. */
 public record PublicDashboardFilter(
         UUID districtId,
         UUID subcountyId,
@@ -18,8 +15,7 @@ public record PublicDashboardFilter(
         LocalDate dateTo,
         String gender,
         String ageGroup,
-        String financialYearPeriod,
-        String programmeArea
+        String financialYearPeriod
 ) {
     public PublicDashboardFilter {
         if (dateFrom != null && dateTo != null && dateFrom.isAfter(dateTo)) {
@@ -28,7 +24,7 @@ public record PublicDashboardFilter(
     }
 
     public static PublicDashboardFilter empty() {
-        return new PublicDashboardFilter(null, null, null, null, null, null, null, null, null, null);
+        return new PublicDashboardFilter(null, null, null, null, null, null, null, null, null);
     }
 
     public boolean hasActiveCriteria() {
@@ -40,7 +36,6 @@ public record PublicDashboardFilter(
                 || dateTo != null
                 || gender != null
                 || ageGroup != null
-                || financialYearPeriod != null
-                || programmeArea != null;
+                || financialYearPeriod != null;
     }
 }

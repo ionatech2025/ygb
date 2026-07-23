@@ -29,7 +29,6 @@ public class GetPublicDashboardFilterOptionsService implements GetPublicDashboar
 
         List<String> formTypes = Arrays.stream(FormType.values()).map(Enum::name).toList();
 
-        // Programme area filter reserved — no persisted column yet (SRS PUB-03).
         return new PublicDashboardFilterOptions(
                 optionsRepositoryPort.findDistricts(),
                 subcounties,
@@ -37,8 +36,7 @@ public class GetPublicDashboardFilterOptionsService implements GetPublicDashboar
                 formTypes,
                 optionsRepositoryPort.findDistinctGenders(),
                 optionsRepositoryPort.findDistinctAgeGroups(),
-                optionsRepositoryPort.findDistinctFinancialYearPeriods(),
-                List.of()
+                optionsRepositoryPort.findDistinctFinancialYearPeriods()
         );
     }
 }

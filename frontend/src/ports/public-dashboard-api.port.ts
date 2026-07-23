@@ -11,7 +11,6 @@ export interface PublicDashboardFilterOptions {
   genders: string[];
   ageGroups: string[];
   financialYearPeriods: string[];
-  programmeAreas: string[];
 }
 
 export interface IPublicDashboardApiPort {

@@ -13,7 +13,7 @@ function navLinkClassName(isActive: boolean, compact = false) {
     ? 'inline-flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition'
     : 'flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition';
   return isActive
-    ? `${base} bg-brand-light text-brand`
+    ? `${base} bg-brand/10 text-brand ring-1 ring-brand/20`
     : `${base} text-text-muted hover:bg-surface-muted hover:text-text`;
 }
 
@@ -23,7 +23,7 @@ export function AdminNav({ variant = 'sidebar' }: { variant?: 'sidebar' | 'horiz
       <nav
         aria-label="Admin sections"
         data-testid="admin-nav-horizontal"
-        className="flex gap-1 overflow-x-auto border-b border-border bg-surface px-4 py-2 md:hidden"
+        className="flex gap-1 overflow-x-auto border-b border-border/80 bg-surface/80 px-4 py-2 md:hidden"
       >
         {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
           <NavLink key={to} to={to} end={end} className={({ isActive }) => navLinkClassName(isActive, true)}>
@@ -36,7 +36,8 @@ export function AdminNav({ variant = 'sidebar' }: { variant?: 'sidebar' | 'horiz
   }
 
   return (
-    <nav aria-label="Admin sections" data-testid="admin-nav-sidebar" className="space-y-1 p-3">
+    <nav aria-label="Admin sections" data-testid="admin-nav-sidebar" className="space-y-1 p-4">
+      <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-text-muted">Administration</p>
       {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
         <NavLink key={to} to={to} end={end} className={({ isActive }) => navLinkClassName(isActive)}>
           <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />

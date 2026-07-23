@@ -1,6 +1,7 @@
 import { AlertCircle } from 'lucide-react';
 import { DEVICE_PENDING_INFO_MESSAGE } from '../../../../core/domain/admin-receipt-status.model';
 import type { AdminReceiptStatus } from '../../../../core/domain/admin-receipt-status.model';
+import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import { StatCard } from './StatCard';
 import type { StatCardViewModel } from '../../../../core/domain/dashboard-summary.model';
 
@@ -52,7 +53,7 @@ export function ReceiptStatusSummary({ status, loading = false }: ReceiptStatusS
     <div className="space-y-4" data-testid="receipt-status-summary">
       <div
         role="note"
-        className="flex items-start gap-2 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900"
+        className="flex items-start gap-2 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900 dark:border-sky-900/60 dark:bg-sky-950/40 dark:text-sky-200"
         data-testid="receipt-status-pending-info"
       >
         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
@@ -60,8 +61,8 @@ export function ReceiptStatusSummary({ status, loading = false }: ReceiptStatusS
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {buildSummaryCards(status).map((card) => (
-          <StatCard key={card.id} card={card} />
+        {buildSummaryCards(status).map((card, index) => (
+          <StatCard key={card.id} card={card} accentIndex={index} />
         ))}
       </div>
     </div>

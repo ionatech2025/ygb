@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
@@ -28,7 +28,7 @@ describe('PublicLayout', () => {
     expect(screen.getByRole('navigation', { name: 'Public sections' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
     expect(screen.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources');
-    expect(screen.queryByRole('link', { name: /sign in/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Staff sign in' })).toHaveAttribute('href', '/login');
     expect(screen.queryByRole('button', { name: /log out/i })).not.toBeInTheDocument();
   });
 
@@ -48,10 +48,12 @@ describe('PublicLayout', () => {
 
     expect(screen.getByTestId('public-mobile-nav')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Close menu' })).toBeInTheDocument();
+    const mobileNav = screen.getByTestId('public-mobile-nav');
+    expect(within(mobileNav).getByRole('link', { name: 'Staff sign in' })).toHaveAttribute('href', '/login');
   });
 
-  it('includes NAC attribution in the footer', () => {
+  it('includes YGB attribution in the footer', () => {
     renderPublicLayout();
-    expect(screen.getByText(/National Association of Councillors/i)).toBeInTheDocument();
+    expect(screen.getByText(/Youth Go Budget App \(YGB\)/i)).toBeInTheDocument();
   });
 });
