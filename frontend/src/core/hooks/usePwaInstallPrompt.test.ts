@@ -37,9 +37,21 @@ describe('usePwaInstallPrompt', () => {
     storage.clear();
     vi.clearAllMocks();
     mockMatchMedia(false);
+    Object.defineProperty(window, 'isSecureContext', {
+      configurable: true,
+      value: true,
+    });
     Object.defineProperty(window.navigator, 'standalone', {
       configurable: true,
       value: false,
+    });
+    Object.defineProperty(window.navigator, 'platform', {
+      configurable: true,
+      value: 'Win32',
+    });
+    Object.defineProperty(window.navigator, 'maxTouchPoints', {
+      configurable: true,
+      value: 0,
     });
     Object.defineProperty(window.navigator, 'userAgent', {
       configurable: true,
@@ -65,6 +77,21 @@ describe('usePwaInstallPrompt', () => {
 
     expect(result.current.canInstall).toBe(false);
     expect(result.current.shouldShow).toBe(false);
+  });
+
+  it('offers install on secure contexts without beforeinstallprompt', () => {
+    const { result } = renderHook(() =>
+      usePwaInstallPrompt({
+        storage: {
+          getItem: (key) => storage.get(key) ?? null,
+          setItem: (key, value) => storage.set(key, value),
+        },
+      })
+    );
+
+    expect(result.current.canInstall).toBe(true);
+    expect(result.current.installMode).toBe('browser');
+    expect(result.current.shouldShow).toBe(true);
   });
 
   it('stores dismiss flag and suppresses banner when dismissed', async () => {
@@ -124,6 +151,23 @@ describe('usePwaInstallPrompt', () => {
     expect(result.current.shouldShow).toBe(false);
   });
 
+  it('opens browser install help from showInstallGuide', () => {
+    const { result } = renderHook(() =>
+      usePwaInstallPrompt({
+        storage: {
+          getItem: (key) => storage.get(key) ?? null,
+          setItem: (key, value) => storage.set(key, value),
+        },
+      })
+    );
+
+    act(() => {
+      result.current.showInstallGuide();
+    });
+
+    expect(result.current.browserHelpOpen).toBe(true);
+  });
+
   it('enables iOS install help instead of deferred prompt', async () => {
     Object.defineProperty(window.navigator, 'userAgent', {
       configurable: true,
@@ -143,7 +187,7 @@ describe('usePwaInstallPrompt', () => {
     expect(result.current.canInstall).toBe(true);
 
     act(() => {
-      result.current.promptInstall();
+      result.current.showInstallGuide();
     });
 
     expect(result.current.iosHelpOpen).toBe(true);

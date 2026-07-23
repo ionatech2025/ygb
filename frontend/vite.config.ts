@@ -22,7 +22,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['favicon.svg', 'pwa-192.png', 'pwa-512.png'],
       manifest: pwaManifest,
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
@@ -30,7 +30,7 @@ export default defineConfig({
         runtimeCaching: workboxRuntimeCaching,
       },
       devOptions: {
-        enabled: false,
+        enabled: true,
       },
     }),
   ],

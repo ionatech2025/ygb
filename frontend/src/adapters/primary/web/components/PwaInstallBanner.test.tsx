@@ -12,10 +12,15 @@ function mockHook(overrides: Partial<ReturnType<typeof usePwaInstallPrompt>> = {
   vi.mocked(usePwaInstallPrompt).mockReturnValue({
     canInstall: true,
     shouldShow: true,
+    installMode: 'deferred',
     isIos: false,
+    isAndroid: false,
     iosHelpOpen: false,
     setIosHelpOpen: vi.fn(),
+    browserHelpOpen: false,
+    setBrowserHelpOpen: vi.fn(),
     promptInstall: vi.fn().mockResolvedValue(undefined),
+    showInstallGuide: vi.fn(),
     dismiss: vi.fn(),
     ...overrides,
   });
@@ -32,11 +37,23 @@ describe('PwaInstallBanner', () => {
     expect(screen.queryByTestId('pwa-install-banner')).not.toBeInTheDocument();
   });
 
-  it('renders Install and Not now when install is available', () => {
+  it('renders Install, How to install, and Not now when native install is available', () => {
     mockHook();
     render(<PwaInstallBanner />);
-    expect(screen.getByRole('button', { name: 'Install YGB' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Install' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Not now' })).toBeInTheDocument();
+  });
+
+  it('opens the install guide when How to install is clicked', async () => {
+    const showInstallGuide = vi.fn();
+    mockHook({ showInstallGuide });
+    const user = userEvent.setup();
+
+    render(<PwaInstallBanner />);
+    await user.click(screen.getByRole('button', { name: 'How to install' }));
+
+    expect(showInstallGuide).toHaveBeenCalledTimes(1);
   });
 
   it('calls deferred prompt when Install is clicked', async () => {
@@ -45,19 +62,29 @@ describe('PwaInstallBanner', () => {
     const user = userEvent.setup();
 
     render(<PwaInstallBanner />);
-    await user.click(screen.getByRole('button', { name: 'Install YGB' }));
+    await user.click(screen.getByRole('button', { name: 'Install' }));
 
     expect(promptInstall).toHaveBeenCalledTimes(1);
   });
 
-  it('shows iOS help content when primary action is clicked on iOS', async () => {
-    const promptInstall = vi.fn();
-    mockHook({ isIos: true, promptInstall, iosHelpOpen: true });
+  it('opens iOS install help when How to install is clicked on iOS', () => {
+    const showInstallGuide = vi.fn();
+    mockHook({ isIos: true, installMode: 'ios', showInstallGuide, iosHelpOpen: true });
     render(<PwaInstallBanner />);
 
     expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Install' })).not.toBeInTheDocument();
     expect(screen.getByTestId('pwa-ios-help')).toBeInTheDocument();
     expect(screen.getByText(/Add to Home Screen/i)).toBeInTheDocument();
+  });
+
+  it('opens browser install help when How to install is clicked in browser mode', () => {
+    mockHook({ installMode: 'browser', browserHelpOpen: true, isAndroid: true });
+    render(<PwaInstallBanner />);
+
+    expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Install' })).not.toBeInTheDocument();
+    expect(screen.getByTestId('pwa-browser-help')).toBeInTheDocument();
   });
 
   it('dismisses when Not now is clicked', async () => {
@@ -69,6 +96,14 @@ describe('PwaInstallBanner', () => {
     await user.click(screen.getByRole('button', { name: 'Not now' }));
 
     expect(dismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it('uses a compact dismiss control on the fixed login banner', () => {
+    mockHook();
+    render(<PwaInstallBanner placement="fixed" />);
+
+    expect(screen.getByRole('button', { name: 'Not now' })).toBeInTheDocument();
+    expect(screen.queryByText('Not now')).not.toBeInTheDocument();
   });
 
   it('does not render for standalone collectors', () => {
