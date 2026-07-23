@@ -25,12 +25,12 @@ Apply **modern presentation polish** to the entire Budget Priorities module (US-
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Theme unit test: exported class strings non-empty for hero, sector card, form panel.
-- [ ] Update component tests only where selectors depend on structural markup (minimal).
-- [ ] Manual/automated a11y check documented in PR — no critical violations on BP index + form + dashboard.
-- [ ] Visual consistency: sector cards, form panels, and dashboard section match Epic 6 public dashboard quality.
-- [ ] Mobile menu includes Budget Priorities with correct active states.
-- [ ] Implement theme file and apply across all BP components.
+- [x] Theme unit test: exported class strings non-empty for hero, sector card, form panel.
+- [x] Update component tests only where selectors depend on structural markup (minimal).
+- [x] Manual/automated a11y check documented in PR — no critical violations on BP index + form + dashboard.
+- [x] Visual consistency: sector cards, form panels, and dashboard section match Epic 6 public dashboard quality.
+- [x] Mobile menu includes Budget Priorities with correct active states.
+- [x] Implement theme file and apply across all BP components.
 
 ## Blocked by
 

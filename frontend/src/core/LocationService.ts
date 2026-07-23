@@ -62,6 +62,19 @@ export class LocationService {
     try {
       const result = await fetchLocationDataset(readLocationEtag());
       if (!result) {
+        if (await this.repository.hasData()) {
+          this.loadError = null;
+          return;
+        }
+
+        // Stale etag in localStorage but IndexedDB empty — refetch without conditional headers.
+        const fresh = await fetchLocationDataset(null);
+        if (!fresh) {
+          this.loadError = 'fetch-failed';
+          return;
+        }
+        await this.repository.save(fresh.locations);
+        writeLocationEtag(fresh.etag);
         this.loadError = null;
         return;
       }

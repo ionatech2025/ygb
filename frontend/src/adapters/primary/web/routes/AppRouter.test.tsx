@@ -80,6 +80,24 @@ vi.mock('../../../secondary/api/submission-admin-api.adapter', () => ({
   })),
 }));
 
+vi.mock('../../../secondary/api/budget-priority-dashboard-api.adapter', () => ({
+  HttpBudgetPriorityDashboardAdapter: vi.fn().mockImplementation(() => ({
+    buildFilterQueryString: vi.fn().mockReturnValue(''),
+    fetchFilterOptions: vi.fn().mockResolvedValue({
+      sections: ['health'],
+      genders: [],
+      ageGroups: [],
+      financialYearPeriods: [],
+    }),
+    fetchSummary: vi.fn().mockResolvedValue({
+      totalSubmissions: 0,
+      bySection: [],
+      topPriorityAreas: [],
+    }),
+    fetchChart: vi.fn().mockResolvedValue({ chartType: 'by-sector', data: [] }),
+  })),
+}));
+
 vi.mock('../../../secondary/api/http-user.adapter', () => ({
   HttpUserAdapter: vi.fn().mockImplementation(() => ({
     fetchActiveCollectors: vi.fn().mockResolvedValue([]),
@@ -139,12 +157,16 @@ describe('AppRouter public dashboard routes', () => {
     expect(window.location.pathname).toBe('/dashboard');
   });
 
-  it('renders public nav with Dashboard and Resources links', async () => {
+  it('renders public nav with Dashboard, Budget Priorities, and Resources links', async () => {
     window.history.pushState({}, '', '/dashboard');
     render(<AppRouter />);
 
     await waitFor(() => {
       expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
+      expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveAttribute(
+        'href',
+        '/budget-priorities'
+      );
       expect(screen.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources');
     });
   });
@@ -184,6 +206,57 @@ describe('AppRouter public dashboard routes', () => {
   });
 });
 
+describe('AppRouter budget priorities routes', () => {
+  beforeEach(() => {
+    useAuthStore.setState({
+      user: null,
+      tokens: null,
+      isAuthenticated: false,
+      isInitialized: true,
+      isOnline: true,
+    });
+  });
+
+  it('loads /budget-priorities without redirecting to login', async () => {
+    window.history.pushState({}, '', '/budget-priorities');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('budget-priorities-index')).toBeInTheDocument();
+    });
+    expect(window.location.pathname).toBe('/budget-priorities');
+  });
+
+  it('loads /budget-priorities/health section shell without authentication', async () => {
+    window.history.pushState({}, '', '/budget-priorities/health');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('budget-priority-section-shell')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Health Sector' })).toBeInTheDocument();
+    });
+  });
+
+  it('redirects invalid budget priority section slugs to the index', async () => {
+    window.history.pushState({}, '', '/budget-priorities/unknown-sector');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('budget-priorities-index')).toBeInTheDocument();
+    });
+  });
+
+  it('loads /dashboard/budget-priorities without redirecting to login', async () => {
+    window.history.pushState({}, '', '/dashboard/budget-priorities');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('public-budget-priorities-dashboard')).toBeInTheDocument();
+    });
+    expect(window.location.pathname).toBe('/dashboard/budget-priorities');
+  });
+});
+
 describe('AppRouter public resource routes', () => {
   beforeEach(() => {
     useAuthStore.setState({
@@ -215,19 +288,22 @@ describe('AppRouter public resource routes', () => {
     });
   });
 
-  it('loads all configured resource routes', async () => {
-    const routes = ['/resources/budget-allocations', '/resources/priorities'];
+  it('loads budget allocations resource route', async () => {
+    window.history.pushState({}, '', '/resources/budget-allocations');
+    render(<AppRouter />);
 
-    for (const route of routes) {
-      window.history.pushState({}, '', route);
-      const { unmount } = render(<AppRouter />);
+    await waitFor(() => {
+      expect(screen.getByRole('link', { name: 'All resources' })).toBeInTheDocument();
+    });
+  });
 
-      await waitFor(() => {
-        expect(screen.getByRole('link', { name: '← All resources' })).toBeInTheDocument();
-      });
+  it('loads priorities resource route', async () => {
+    window.history.pushState({}, '', '/resources/priorities');
+    render(<AppRouter />);
 
-      unmount();
-    }
+    await waitFor(() => {
+      expect(screen.getByRole('link', { name: 'All resources' })).toBeInTheDocument();
+    });
   });
 });
 

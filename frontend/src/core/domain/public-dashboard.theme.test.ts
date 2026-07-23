@@ -4,6 +4,7 @@ import {
   PUBLIC_CHART_PALETTE,
   PUBLIC_STAT_CARD_ACCENTS,
   publicDashboardClasses,
+  publicResourcesClasses,
 } from './public-dashboard.theme';
 
 describe('public-dashboard.theme', () => {
@@ -18,6 +19,11 @@ describe('public-dashboard.theme', () => {
     expect(publicDashboardClasses.hero).toMatch(/rounded-2xl/);
     expect(publicDashboardClasses.statCard).toMatch(/rounded-2xl/);
     expect(publicDashboardClasses.exportButton).toMatch(/min-h-11/);
+    expect(publicDashboardClasses.page).toMatch(/max-w-5xl/);
+  });
+
+  it('uses a narrower max width for content-oriented public pages', () => {
+    expect(publicResourcesClasses.page).toMatch(/max-w-4xl/);
   });
 
   it('cycles stat card accent styles', () => {

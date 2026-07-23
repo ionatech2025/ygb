@@ -1,20 +1,28 @@
-import { NavLink } from 'react-router-dom';
-import { BookOpen, LayoutDashboard } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { BookOpen, ClipboardList, LayoutDashboard } from 'lucide-react';
+import { BUDGET_PRIORITY_ROUTES } from '../../../../core/domain/budget-priority.routes';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: BUDGET_PRIORITY_ROUTES.index, label: 'Budget Priorities', icon: ClipboardList, end: false },
   { to: '/resources', label: 'Resources', icon: BookOpen, end: true },
 ] as const;
 
 function navLinkClassName(isActive: boolean) {
   const base =
-    'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition min-h-10 min-w-[5.5rem] justify-center sm:justify-start';
+    'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition min-h-11 min-w-[5.5rem] justify-center sm:justify-start';
   return isActive
     ? `${base} bg-surface text-text shadow-sm ring-1 ring-border/80`
     : `${base} text-text-muted hover:text-text`;
 }
 
+function isBudgetPrioritiesNavActive(pathname: string) {
+  return pathname.startsWith(BUDGET_PRIORITY_ROUTES.index) || pathname.startsWith(BUDGET_PRIORITY_ROUTES.dashboard);
+}
+
 export function PublicNav({ onNavigate }: { onNavigate?: () => void }) {
+  const location = useLocation();
+
   return (
     <nav
       aria-label="Public sections"
@@ -27,7 +35,12 @@ export function PublicNav({ onNavigate }: { onNavigate?: () => void }) {
           to={to}
           end={end}
           onClick={onNavigate}
-          className={({ isActive }) => navLinkClassName(isActive)}
+          className={({ isActive }) => {
+            const active =
+              isActive ||
+              (to === BUDGET_PRIORITY_ROUTES.index && isBudgetPrioritiesNavActive(location.pathname));
+            return navLinkClassName(active);
+          }}
         >
           <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
           {label}

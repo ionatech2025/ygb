@@ -33,13 +33,13 @@ Add a **Budget Priorities section to the public dashboard** (US-BP-02 / BP-04, T
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit tests for filter model and URL serialization.
-- [ ] Adapter tests with mocked API responses.
-- [ ] Component test: page renders section selector and summary region (TC-BP-02-01).
-- [ ] Component test: changing section refetches summary (mock adapter call count).
-- [ ] Component test: empty dataset shows empty state, not error.
-- [ ] Route test: unauthenticated access to BP dashboard section.
-- [ ] Implement port, adapter, page, filters, summary, and charts.
+- [x] Unit tests for filter model and URL serialization.
+- [x] Adapter tests with mocked API responses.
+- [x] Component test: page renders section selector and summary region (TC-BP-02-01).
+- [x] Component test: changing section refetches summary (mock adapter call count).
+- [x] Component test: empty dataset shows empty state, not error.
+- [x] Route test: unauthenticated access to BP dashboard section.
+- [x] Implement port, adapter, page, filters, summary, and charts.
 
 ## Blocked by
 
