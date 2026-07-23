@@ -18,6 +18,7 @@ public abstract class SubmissionMapper {
             case IypSubmission iyp -> toIypEntity(iyp);
             case LgoSubmission lgo -> toLgoEntity(lgo);
             case PcSubmission pc -> toPcEntity(pc);
+            case LgoBudgetAllocationSubmission lgoBudget -> toLgoBudgetAllocationEntity(lgoBudget);
             default -> throw new IllegalArgumentException("Unknown submission type: " + submission.getClass());
         };
     }
@@ -31,6 +32,7 @@ public abstract class SubmissionMapper {
             case IypSubmissionJpaEntity iyp -> toIypDomain(iyp);
             case LgoSubmissionJpaEntity lgo -> toLgoDomain(lgo);
             case PcSubmissionJpaEntity pc -> toPcDomain(pc);
+            case LgoBudgetAllocationSubmissionJpaEntity lgoBudget -> toLgoBudgetAllocationDomain(lgoBudget);
             default -> throw new IllegalArgumentException("Unknown JPA entity type: " + entity.getClass());
         };
     }
@@ -101,6 +103,23 @@ public abstract class SubmissionMapper {
     @Mapping(target = "economicTransformationExplanation", expression = "java(entity.getEconomicTransformationExplanation() != null ? new NarrativeText(entity.getEconomicTransformationExplanation()) : null)")
     @Mapping(target = "improvementSuggestion", expression = "java(new NarrativeText(entity.getImprovementSuggestion()))")
     protected abstract LgoSubmission toLgoDomain(LgoSubmissionJpaEntity entity);
+
+    // ==========================================
+    // LGO BUDGET ALLOCATION SUBMISSION MAPPINGS
+    // ==========================================
+    @Mapping(target = "collectorId", source = "metadata.collectorId")
+    @Mapping(target = "deviceSubmissionId", source = "metadata.deviceSubmissionId")
+    @Mapping(target = "formCompletedAt", source = "metadata.formCompletedAt")
+    @Mapping(target = "financialYearPeriod", expression = "java(submission.getMetadata().financialYearPeriod().toString())")
+    @Mapping(target = "districtId", source = "location.districtId")
+    @Mapping(target = "subcountyId", source = "location.subcountyId")
+    @Mapping(target = "parishId", source = "location.parishId")
+    @Mapping(target = "villageId", source = "location.villageId")
+    protected abstract LgoBudgetAllocationSubmissionJpaEntity toLgoBudgetAllocationEntity(LgoBudgetAllocationSubmission submission);
+
+    @Mapping(target = "metadata", expression = "java(mapMetadata(entity))")
+    @Mapping(target = "location", expression = "java(mapLocation(entity))")
+    protected abstract LgoBudgetAllocationSubmission toLgoBudgetAllocationDomain(LgoBudgetAllocationSubmissionJpaEntity entity);
 
     // ==========================================
     // PC MAPPINGS

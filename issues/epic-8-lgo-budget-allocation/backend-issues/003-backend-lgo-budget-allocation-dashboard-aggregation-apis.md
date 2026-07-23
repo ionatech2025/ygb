@@ -27,11 +27,11 @@ Deliver **public dashboard aggregation APIs** for LGO Budget Allocation data (US
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Application Tests** with mocked read port for summary and chart use cases.
-- [ ] Write **Controller Tests**: unauthenticated GET → `200` with anonymised payload; invalid filter → `400`.
-- [ ] Write **Integration Tests** (Testcontainers): seed multiple districts → summary reflects cross-district counts; no PII fields in JSON.
-- [ ] Document response DTO shapes in OpenAPI / `domain_arch_apis`.
-- [ ] Implement read repository, use cases, controllers, mappers.
+- [x] Write **Application Tests** with mocked read port for summary and chart use cases.
+- [x] Write **Controller Tests**: unauthenticated GET → `200` with anonymised payload; invalid filter → `400`.
+- [x] Write **Integration Tests** (Testcontainers): seed multiple districts → summary reflects cross-district counts; no PII fields in JSON.
+- [x] Document response DTO shapes in OpenAPI / `domain_arch_apis`.
+- [x] Implement read repository, use cases, controllers, mappers.
 
 ## Blocked by
 

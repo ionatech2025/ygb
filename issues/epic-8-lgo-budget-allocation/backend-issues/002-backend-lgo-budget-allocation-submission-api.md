@@ -34,17 +34,17 @@ Deliver the **LGO Budget Allocation submission REST API** (US-LGOB-01 / LGO-01, 
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Domain Tests** for allocation validation (TC-LGOB-01-02 field capture at domain level).
-- [ ] Write **Application Tests** with mocked SPI:
+- [x] Write **Domain Tests** for allocation validation (TC-LGOB-01-02 field capture at domain level).
+- [x] Write **Application Tests** with mocked SPI:
   - Happy path → submission + allocation saved, event emitted.
   - Non-collector role → rejected.
-- [ ] Write **Controller Tests**:
+- [x] Write **Controller Tests**:
   - Authenticated collector + valid payload → `201 Created` with `lbaId`.
   - Unauthenticated → `401` (TC-LGOB-01-01).
   - Admin role without collector permission → `403`.
   - Invalid payload → `400`.
-- [ ] Write **Integration Test** (Testcontainers): full POST persists allocation JSONB and text fields correctly.
-- [ ] Implement use case, controller, mappers, security rules, exception handling.
+- [x] Write **Integration Test** (Testcontainers): full POST persists allocation JSONB and text fields correctly.
+- [x] Implement use case, controller, mappers, security rules, exception handling.
 
 ## Blocked by
 

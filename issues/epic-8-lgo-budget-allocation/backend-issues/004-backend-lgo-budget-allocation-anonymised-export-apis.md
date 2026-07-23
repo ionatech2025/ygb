@@ -30,11 +30,11 @@ Deliver **anonymised CSV export** for LGO Budget Allocation data (US-LGOB-02 / L
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Domain Tests** for anonymised export row model and CSV header constants.
-- [ ] Write **Application Tests** with mocked read port — filters applied, rows mapped without PII.
-- [ ] Write **Controller Tests**: GET returns `200`, `Content-Type: text/csv`, attachment disposition.
-- [ ] Write **Integration Test**: seeded data → downloaded CSV parseable; no phone/name columns.
-- [ ] Implement use case, export adapter, controller, WireMock/slice tests as per project conventions.
+- [x] Write **Domain Tests** for anonymised export row model and CSV header constants.
+- [x] Write **Application Tests** with mocked read port — filters applied, rows mapped without PII.
+- [x] Write **Controller Tests**: GET returns `200`, `Content-Type: text/csv`, attachment disposition.
+- [x] Write **Integration Test**: seeded data → downloaded CSV parseable; no phone/name columns.
+- [x] Implement use case, export adapter, controller, WireMock/slice tests as per project conventions.
 
 ## Blocked by
 

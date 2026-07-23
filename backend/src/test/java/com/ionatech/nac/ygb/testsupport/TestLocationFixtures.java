@@ -33,6 +33,8 @@ public final class TestLocationFixtures {
     }
 
     public static void clearAllSubmissions(JdbcTemplate jdbcTemplate) {
+        jdbcTemplate.update("DELETE FROM lgo_budget_allocations");
+        jdbcTemplate.update("DELETE FROM lgo_budget_allocation_submissions");
         jdbcTemplate.update("DELETE FROM submissions");
     }
 

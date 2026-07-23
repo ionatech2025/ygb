@@ -317,4 +317,76 @@ public class UseCaseConfig {
                 anonymisationProjector
         );
     }
+
+    @Bean
+    public SaveLgoBudgetAllocationService saveLgoBudgetAllocationService(
+            LgoBudgetAllocationRepositoryPort lgoBudgetAllocationRepositoryPort
+    ) {
+        return new SaveLgoBudgetAllocationService(lgoBudgetAllocationRepositoryPort);
+    }
+
+    @Bean
+    @Transactional
+    public RecordLgoBudgetAllocationUseCase recordLgoBudgetAllocationUseCase(
+            UserRepositoryPort userRepositoryPort,
+            SubmissionRepositoryPort submissionRepositoryPort,
+            SaveLgoBudgetAllocationService saveLgoBudgetAllocationService
+    ) {
+        return new RecordLgoBudgetAllocationService(
+                userRepositoryPort,
+                submissionRepositoryPort,
+                saveLgoBudgetAllocationService
+        );
+    }
+
+    @Bean
+    public LgoBudgetAllocationDashboardService lgoBudgetAllocationDashboardService(
+            LgoBudgetAllocationReadRepositoryPort lgoBudgetAllocationReadRepositoryPort,
+            DashboardFilterOptionsRepositoryPort dashboardFilterOptionsRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new LgoBudgetAllocationDashboardService(
+                lgoBudgetAllocationReadRepositoryPort,
+                dashboardFilterOptionsRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                anonymisationProjector
+        );
+    }
+
+    @Bean
+    public GetLgoBudgetAllocationDashboardSummaryQuery getLgoBudgetAllocationDashboardSummaryQuery(
+            LgoBudgetAllocationDashboardService lgoBudgetAllocationDashboardService
+    ) {
+        return lgoBudgetAllocationDashboardService;
+    }
+
+    @Bean
+    public GetLgoBudgetAllocationChartDataQuery getLgoBudgetAllocationChartDataQuery(
+            LgoBudgetAllocationDashboardService lgoBudgetAllocationDashboardService
+    ) {
+        return lgoBudgetAllocationDashboardService;
+    }
+
+    @Bean
+    public GetLgoBudgetAllocationFilterOptionsQuery getLgoBudgetAllocationFilterOptionsQuery(
+            LgoBudgetAllocationDashboardService lgoBudgetAllocationDashboardService
+    ) {
+        return lgoBudgetAllocationDashboardService;
+    }
+
+    @Bean
+    public ExportLgoBudgetAllocationDatasetUseCase exportLgoBudgetAllocationDatasetUseCase(
+            LgoBudgetAllocationReadRepositoryPort lgoBudgetAllocationReadRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            LgoBudgetAllocationExportGeneratorPort lgoBudgetAllocationExportGeneratorPort,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new ExportLgoBudgetAllocationDatasetService(
+                lgoBudgetAllocationReadRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                lgoBudgetAllocationExportGeneratorPort,
+                anonymisationProjector
+        );
+    }
 }
