@@ -11,6 +11,7 @@ vi.mock('../../../../core/hooks/usePwaInstallPrompt', () => ({
 function mockHook(overrides: Partial<ReturnType<typeof usePwaInstallPrompt>> = {}) {
   vi.mocked(usePwaInstallPrompt).mockReturnValue({
     canInstall: true,
+    canNativeInstall: true,
     shouldShow: true,
     installMode: 'deferred',
     isIos: false,
@@ -69,7 +70,7 @@ describe('PwaInstallBanner', () => {
 
   it('opens iOS install help when How to install is clicked on iOS', () => {
     const showInstallGuide = vi.fn();
-    mockHook({ isIos: true, installMode: 'ios', showInstallGuide, iosHelpOpen: true });
+    mockHook({ isIos: true, installMode: 'ios', canNativeInstall: false, showInstallGuide, iosHelpOpen: true });
     render(<PwaInstallBanner />);
 
     expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();
@@ -79,7 +80,7 @@ describe('PwaInstallBanner', () => {
   });
 
   it('opens browser install help when How to install is clicked in browser mode', () => {
-    mockHook({ installMode: 'browser', browserHelpOpen: true, isAndroid: true });
+    mockHook({ installMode: 'browser', canNativeInstall: false, browserHelpOpen: true, isAndroid: true });
     render(<PwaInstallBanner />);
 
     expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();

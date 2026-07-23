@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   type PwaInstallMode,
   type StorageLike,
@@ -45,7 +45,8 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
   const storage = options.storage ?? (typeof window !== 'undefined' ? defaultStorage() : undefined);
   const now = options.now ?? (() => new Date());
 
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
+  const [canNativeInstall, setCanNativeInstall] = useState(false);
   const [installed, setInstalled] = useState(false);
   const [dismissed, setDismissed] = useState(() =>
     storage ? isDismissed(storage, now()) : false
@@ -74,12 +75,14 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
 
     const onBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
-      setDeferredPrompt(event as BeforeInstallPromptEvent);
+      deferredPromptRef.current = event as BeforeInstallPromptEvent;
+      setCanNativeInstall(true);
     };
 
     const onAppInstalled = () => {
       setInstalled(true);
-      setDeferredPrompt(null);
+      deferredPromptRef.current = null;
+      setCanNativeInstall(false);
       setIosHelpOpen(false);
       setBrowserHelpOpen(false);
     };
@@ -94,14 +97,14 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
   }, []);
 
   const installMode: PwaInstallMode = resolvePwaInstallMode({
-    hasDeferredPrompt: Boolean(deferredPrompt),
+    hasDeferredPrompt: canNativeInstall,
     isIosLike,
   });
 
   const canInstall = canOfferPwaInstall({
     standalone,
     installed,
-    hasDeferredPrompt: Boolean(deferredPrompt),
+    hasDeferredPrompt: canNativeInstall,
     isIosLike,
     isSecureContext,
   });
@@ -124,29 +127,36 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
     setBrowserHelpOpen(true);
   }, [isIosLike]);
 
+  const clearDeferredPrompt = useCallback(() => {
+    deferredPromptRef.current = null;
+    setCanNativeInstall(false);
+  }, []);
+
   const promptInstall = useCallback(async () => {
-    if (installMode !== 'deferred') {
+    const promptEvent = deferredPromptRef.current;
+    if (!promptEvent) {
       showInstallGuide();
       return;
     }
 
-    if (!deferredPrompt) {
+    try {
+      await promptEvent.prompt();
+      const choice = await promptEvent.userChoice;
+      if (choice.outcome === 'accepted') {
+        setInstalled(true);
+      }
+      setIosHelpOpen(false);
+      setBrowserHelpOpen(false);
+    } catch {
       showInstallGuide();
-      return;
+    } finally {
+      clearDeferredPrompt();
     }
-
-    await deferredPrompt.prompt();
-    const choice = await deferredPrompt.userChoice;
-    if (choice.outcome === 'accepted') {
-      setInstalled(true);
-    }
-    setDeferredPrompt(null);
-    setIosHelpOpen(false);
-    setBrowserHelpOpen(false);
-  }, [deferredPrompt, installMode, showInstallGuide]);
+  }, [clearDeferredPrompt, showInstallGuide]);
 
   return {
     canInstall,
+    canNativeInstall,
     shouldShow,
     installMode,
     isIos: isIosLike,

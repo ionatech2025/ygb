@@ -10,7 +10,7 @@ interface PwaInstallBannerProps {
 export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps) {
   const {
     shouldShow,
-    installMode,
+    canNativeInstall,
     iosHelpOpen,
     setIosHelpOpen,
     browserHelpOpen,
@@ -26,7 +26,6 @@ export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps
   }
 
   const isFixed = placement === 'fixed';
-  const hasNativeInstall = installMode === 'deferred';
 
   return (
     <>
@@ -55,7 +54,7 @@ export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps
             <span className="text-text-muted"> · Offline field access</span>
           </p>
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
-            {hasNativeInstall && (
+            {canNativeInstall && (
               <button
                 type="button"
                 onClick={() => void promptInstall()}
@@ -68,7 +67,7 @@ export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps
               type="button"
               onClick={showInstallGuide}
               className={
-                hasNativeInstall
+                canNativeInstall
                   ? 'inline-flex min-h-9 items-center justify-center rounded-lg border border-border bg-surface px-2.5 text-xs font-semibold text-text transition hover:bg-surface-muted'
                   : 'inline-flex min-h-9 items-center justify-center rounded-lg bg-brand px-2.5 text-xs font-semibold text-white transition hover:bg-brand-dark'
               }
