@@ -1,11 +1,15 @@
 package com.ionatech.nac.ygb.domain.service;
 
 import com.ionatech.nac.ygb.domain.exceptions.PublicPiiExposureException;
+import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityAreaCount;
+import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityChartDataPoint;
+import com.ionatech.nac.ygb.domain.valueobjects.BudgetPriorityChartSeries;
+import com.ionatech.nac.ygb.domain.valueobjects.BudgetPrioritySummary;
+import com.ionatech.nac.ygb.domain.valueobjects.HeatmapEntry;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicAnonymisedRecord;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicChartSeries;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicDashboardSummary;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicHeatmap;
-import com.ionatech.nac.ygb.domain.valueobjects.HeatmapEntry;
 import com.ionatech.nac.ygb.domain.valueobjects.SubmissionSummary;
 
 import java.util.Locale;
@@ -24,7 +28,9 @@ public final class AnonymisationProjector {
             "collectorid",
             "collectorname",
             "collector",
-            "devicesubmissionid"
+            "devicesubmissionid",
+            "demographicdata",
+            "demographic_data"
     );
 
     public PublicAnonymisedRecord fromSubmissionSummary(SubmissionSummary summary) {
@@ -73,6 +79,30 @@ public final class AnonymisationProjector {
     public PublicChartSeries assertAnonymisedChartSeries(PublicChartSeries series) {
         if (series == null) {
             throw new IllegalArgumentException("PublicChartSeries must not be null.");
+        }
+        return series;
+    }
+
+    public BudgetPrioritySummary assertAnonymisedBudgetPrioritySummary(BudgetPrioritySummary summary) {
+        if (summary == null) {
+            throw new IllegalArgumentException("BudgetPrioritySummary must not be null.");
+        }
+        for (BudgetPriorityAreaCount area : summary.topPriorityAreas()) {
+            if (looksLikePhoneNumber(area.priorityArea())) {
+                throw new PublicPiiExposureException("Public budget priority summary must not expose phone-like labels.");
+            }
+        }
+        return summary;
+    }
+
+    public BudgetPriorityChartSeries assertAnonymisedBudgetPriorityChartSeries(BudgetPriorityChartSeries series) {
+        if (series == null) {
+            throw new IllegalArgumentException("BudgetPriorityChartSeries must not be null.");
+        }
+        for (BudgetPriorityChartDataPoint point : series.data()) {
+            if (looksLikePhoneNumber(point.label())) {
+                throw new PublicPiiExposureException("Public budget priority chart must not expose phone-like labels.");
+            }
         }
         return series;
     }

@@ -266,4 +266,40 @@ public class UseCaseConfig {
                 clock
         );
     }
+
+    @Bean
+    public BudgetPriorityDashboardService budgetPriorityDashboardService(
+            BudgetPriorityDashboardReadPort budgetPriorityDashboardReadPort,
+            DashboardFilterOptionsRepositoryPort dashboardFilterOptionsRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            AnonymisationProjector anonymisationProjector
+    ) {
+        return new BudgetPriorityDashboardService(
+                budgetPriorityDashboardReadPort,
+                dashboardFilterOptionsRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                anonymisationProjector
+        );
+    }
+
+    @Bean
+    public GetBudgetPrioritySummaryQuery getBudgetPrioritySummaryQuery(
+            BudgetPriorityDashboardService budgetPriorityDashboardService
+    ) {
+        return budgetPriorityDashboardService;
+    }
+
+    @Bean
+    public GetBudgetPriorityChartsQuery getBudgetPriorityChartsQuery(
+            BudgetPriorityDashboardService budgetPriorityDashboardService
+    ) {
+        return budgetPriorityDashboardService;
+    }
+
+    @Bean
+    public GetBudgetPriorityFilterOptionsQuery getBudgetPriorityFilterOptionsQuery(
+            BudgetPriorityDashboardService budgetPriorityDashboardService
+    ) {
+        return budgetPriorityDashboardService;
+    }
 }
