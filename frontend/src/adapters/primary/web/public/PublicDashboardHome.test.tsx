@@ -10,6 +10,10 @@ vi.mock('./PublicDashboardSummaryCards', () => ({
   PublicDashboardSummaryCards: () => <div data-testid="public-dashboard-summary-cards" />,
 }));
 
+vi.mock('./PublicDashboardCharts', () => ({
+  PublicDashboardCharts: () => <div data-testid="public-dashboard-charts" />,
+}));
+
 describe('PublicDashboardHome', () => {
   it('renders placeholder regions for filters, summary cards, and charts', () => {
     render(<PublicDashboardHome />);

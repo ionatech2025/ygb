@@ -59,6 +59,8 @@ function createDashboardApi(overrides: Partial<IPublicDashboardApiPort> = {}): I
     }),
     buildFilterQueryString: vi.fn(),
     fetchSummary: vi.fn(),
+    fetchChart: vi.fn(),
+    fetchHeatmap: vi.fn(),
     ...overrides,
   };
 }

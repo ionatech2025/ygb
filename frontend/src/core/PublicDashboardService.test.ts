@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  mapPublicChartSeriesToViewModel,
   mapPublicSummaryToSummaryCards,
   PublicDashboardService,
 } from './PublicDashboardService';
@@ -38,6 +39,36 @@ describe('mapPublicSummaryToSummaryCards', () => {
   });
 });
 
+describe('mapPublicChartSeriesToViewModel', () => {
+  it('maps chart series to dashboard view models', () => {
+    const viewModel = mapPublicChartSeriesToViewModel(
+      {
+        chartType: 'by-district',
+        data: [{ label: 'Kampala', locationId: 'd1', date: null, count: 8 }],
+      },
+      {
+        chartType: 'by-gender',
+        data: [{ label: 'FEMALE', locationId: null, date: null, count: 5 }],
+      },
+      {
+        chartType: 'by-age-group',
+        data: [{ label: 'AGE_20_24', locationId: null, date: null, count: 3 }],
+      },
+      {
+        chartType: 'trend',
+        data: [{ label: '2026-03-15', locationId: null, date: '2026-03-15', count: 2 }],
+      },
+      [{ districtId: 'd1', parishId: null, label: 'Kampala', count: 8 }]
+    );
+
+    expect(viewModel.byDistrict[0]?.districtName).toBe('Kampala');
+    expect(viewModel.byGender[0]?.label).toBe('Female');
+    expect(viewModel.byAgeGroup[0]?.label).toBe('20-24');
+    expect(viewModel.overTime[0]?.date).toBe('2026-03-15');
+    expect(viewModel.heatmap).toHaveLength(1);
+  });
+});
+
 describe('PublicDashboardService', () => {
   it('loads summary cards via the public dashboard API port', async () => {
     const fetchSummary = vi.fn().mockResolvedValue(sampleSummary);
@@ -45,6 +76,8 @@ describe('PublicDashboardService', () => {
       fetchFilterOptions: vi.fn(),
       buildFilterQueryString: vi.fn(),
       fetchSummary,
+      fetchChart: vi.fn(),
+      fetchHeatmap: vi.fn(),
     };
 
     const service = new PublicDashboardService(api);

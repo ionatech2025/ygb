@@ -2,6 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EMPTY_PUBLIC_DASHBOARD_FILTER } from '../../../core/domain/public-dashboard-filter.model';
 import {
   HttpPublicDashboardAdapter,
+  mapPublicChartDataPoint,
+  mapPublicChartSeriesResponse,
   mapPublicSummaryResponse,
 } from './public-dashboard-api.adapter';
 
@@ -66,6 +68,35 @@ describe('public-dashboard-api.adapter', () => {
       byFormType: [{ formType: 'BYP', count: 3 }],
       byGender: [{ gender: 'FEMALE', count: 2 }],
       byFinancialYearPeriod: [{ financialYearPeriod: 'JAN_JUN_2026', count: 4 }],
+    });
+  });
+
+  it('maps bucketStart to date for trend chart points', () => {
+    expect(
+      mapPublicChartDataPoint({
+        label: '2026-03-15',
+        locationId: null,
+        date: null,
+        bucketStart: '2026-03-15',
+        count: 2,
+      })
+    ).toEqual({
+      label: '2026-03-15',
+      locationId: null,
+      date: '2026-03-15',
+      count: 2,
+    });
+  });
+
+  it('maps chart series API JSON to the domain chart model', () => {
+    expect(
+      mapPublicChartSeriesResponse({
+        chartType: 'trend',
+        data: [{ label: '2026-03-15', locationId: null, date: '2026-03-15', count: 2 }],
+      })
+    ).toEqual({
+      chartType: 'trend',
+      data: [{ label: '2026-03-15', locationId: null, date: '2026-03-15', count: 2 }],
     });
   });
 

@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { BarChart3, LayoutDashboard } from 'lucide-react';
+import { LayoutDashboard } from 'lucide-react';
 import { HttpPublicDashboardAdapter } from '../../../secondary/api/public-dashboard-api.adapter';
 import { PublicDashboardFilterPanel } from './PublicDashboardFilterPanel';
 import { PublicDashboardSummaryCards } from './PublicDashboardSummaryCards';
+import { PublicDashboardCharts } from './PublicDashboardCharts';
 
 export function PublicDashboardHome() {
   const dashboardApi = useMemo(() => new HttpPublicDashboardAdapter(), []);
@@ -25,17 +26,7 @@ export function PublicDashboardHome() {
 
       <PublicDashboardSummaryCards dashboardApi={dashboardApi} />
 
-      <section
-        aria-label="Dashboard charts"
-        data-testid="public-dashboard-charts"
-        className="rounded-lg border border-dashed border-border bg-surface p-6"
-      >
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-text">
-          <BarChart3 className="h-5 w-5 text-brand" aria-hidden="true" />
-          Charts
-        </h2>
-        <p className="mt-2 text-sm text-text-muted">Interactive charts and heatmaps — coming soon.</p>
-      </section>
+      <PublicDashboardCharts dashboardApi={dashboardApi} />
     </div>
   );
 }

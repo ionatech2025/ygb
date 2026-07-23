@@ -20,6 +20,8 @@ function createDashboardApi(
     fetchFilterOptions: vi.fn(),
     buildFilterQueryString: vi.fn(),
     fetchSummary,
+    fetchChart: vi.fn(),
+    fetchHeatmap: vi.fn(),
   };
 }
 
