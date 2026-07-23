@@ -9,23 +9,35 @@ vi.mock('../../../../core/LocationService', () => ({
   },
 }));
 
-vi.mock('../../../../core/store/useSyncStore', () => ({
-  useSyncStore: Object.assign(vi.fn(), {
-    getState: () => ({
-      initialize: vi.fn(),
-      triggerSync: vi.fn(),
+vi.mock('../../../../core/store/useSyncStore', () => {
+  const state = {
+    initialize: vi.fn(),
+    triggerSync: vi.fn(),
+    pendingCount: 0,
+    lastSyncedAt: null,
+    syncing: false,
+  };
+  return {
+    useSyncStore: Object.assign((selector: (value: typeof state) => unknown) => selector(state), {
+      getState: () => state,
     }),
-  }),
-}));
+  };
+});
 
-vi.mock('../../../../core/store/useSubmissionCountStore', () => ({
-  useSubmissionCountStore: Object.assign(vi.fn(), {
-    getState: () => ({
-      initialize: vi.fn(),
-      reconcileWithServer: vi.fn(),
+vi.mock('../../../../core/store/useSubmissionCountStore', () => {
+  const state = {
+    initialize: vi.fn(),
+    reconcileWithServer: vi.fn(),
+    refreshFromLocal: vi.fn(),
+    ensureCurrentDay: vi.fn(),
+    todayCount: 0,
+  };
+  return {
+    useSubmissionCountStore: Object.assign((selector: (value: typeof state) => unknown) => selector(state), {
+      getState: () => state,
     }),
-  }),
-}));
+  };
+});
 
 vi.mock('echarts', () => ({
   init: vi.fn(() => ({
@@ -168,6 +180,7 @@ describe('AppRouter public dashboard routes', () => {
         '/budget-priorities'
       );
       expect(screen.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources');
+      expect(screen.queryByRole('link', { name: 'LGO Budget Allocation' })).not.toBeInTheDocument();
     });
   });
 
@@ -304,6 +317,68 @@ describe('AppRouter public resource routes', () => {
     await waitFor(() => {
       expect(screen.getByRole('link', { name: 'All resources' })).toBeInTheDocument();
     });
+  });
+});
+
+describe('AppRouter collector LGO budget allocation routes', () => {
+  beforeEach(() => {
+    useAuthStore.setState({
+      user: null,
+      tokens: null,
+      isAuthenticated: false,
+      isInitialized: true,
+      isOnline: true,
+    });
+  });
+
+  it('redirects unauthenticated visitors from /collector/lgo-budget-allocation to login (TC-LGOB-01-01)', async () => {
+    window.history.pushState({}, '', '/collector/lgo-budget-allocation');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/login');
+      expect(screen.getByRole('heading', { name: 'Sign in' })).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('lgo-budget-allocation-page')).not.toBeInTheDocument();
+  });
+
+  it('loads the page shell for authenticated DATA_COLLECTOR sessions', async () => {
+    useAuthStore.setState({
+      user: collectorUser,
+      tokens: adminTokens,
+      isAuthenticated: true,
+      isInitialized: true,
+      isOnline: true,
+      getAccessToken: () => adminTokens.accessToken,
+    });
+
+    window.history.pushState({}, '', '/collector/lgo-budget-allocation');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('lgo-budget-allocation-page')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Budget Allocation Interview' })).toBeInTheDocument();
+    });
+    expect(window.location.pathname).toBe('/collector/lgo-budget-allocation');
+  });
+
+  it('redirects ADMIN users away from collector-only LGO budget allocation route', async () => {
+    useAuthStore.setState({
+      user: adminUser,
+      tokens: adminTokens,
+      isAuthenticated: true,
+      isInitialized: true,
+      isOnline: true,
+    });
+
+    window.history.pushState({}, '', '/collector/lgo-budget-allocation');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/admin/dashboard');
+      expect(screen.getByTestId('admin-dashboard-home')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('lgo-budget-allocation-page')).not.toBeInTheDocument();
   });
 });
 

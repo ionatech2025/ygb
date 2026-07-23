@@ -23,6 +23,7 @@ import { BudgetPrioritySectionLayout } from '../budget-priorities/BudgetPriority
 import { BudgetPrioritySuccessPage } from '../budget-priorities/BudgetPrioritySuccessPage';
 import { PublicBudgetPrioritiesPage } from '../public/PublicBudgetPrioritiesPage';
 import { PublicLayout } from '../layouts/PublicLayout';
+import { LgoBudgetAllocationPage } from '../lgo-budget-allocation/LgoBudgetAllocationPage';
 import { GuestRoute, ProtectedRoute, RootRedirect } from './ProtectedRoute';
 
 export function AppRouter() {
@@ -94,6 +95,7 @@ export function AppRouter() {
         <Route element={<ProtectedRoute allowedRoles={['DATA_COLLECTOR']} />}>
           <Route element={<CollectorLayout />}>
             <Route path="/collector/dashboard" element={<CollectorDashboard />} />
+            <Route path="/collector/lgo-budget-allocation" element={<LgoBudgetAllocationPage />} />
           </Route>
         </Route>
 
