@@ -107,7 +107,7 @@ export function CollectorDashboard() {
       </FormSection>
 
       <section aria-label="Other collector forms" className="space-y-3">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-text-muted">Other interviews</h3>
+        <h3 className={lgoBudgetAllocationClasses.otherInterviewsHeading}>Other interviews</h3>
         <Link
           to={LGO_BUDGET_ALLOCATION_ROUTES.index}
           data-testid="lgo-budget-allocation-entry"
@@ -122,7 +122,7 @@ export function CollectorDashboard() {
               Prior-FY sector allocations, rationale, and recommendations — not the LGO Questionnaire.
             </p>
           </div>
-          <ArrowRight className="h-5 w-5 shrink-0 text-nac-orange" aria-hidden="true" />
+          <ArrowRight className={lgoBudgetAllocationClasses.dashboardEntryArrow} aria-hidden="true" />
         </Link>
       </section>
     </div>

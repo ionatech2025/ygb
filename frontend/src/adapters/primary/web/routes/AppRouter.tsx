@@ -22,6 +22,7 @@ import { BudgetPrioritiesIndexPage } from '../budget-priorities/BudgetPriorities
 import { BudgetPrioritySectionLayout } from '../budget-priorities/BudgetPrioritySectionLayout';
 import { BudgetPrioritySuccessPage } from '../budget-priorities/BudgetPrioritySuccessPage';
 import { PublicBudgetPrioritiesPage } from '../public/PublicBudgetPrioritiesPage';
+import { PublicLgoBudgetAllocationPage } from '../public/PublicLgoBudgetAllocationPage';
 import { PublicLayout } from '../layouts/PublicLayout';
 import { LgoBudgetAllocationPage } from '../lgo-budget-allocation/LgoBudgetAllocationPage';
 import { GuestRoute, ProtectedRoute, RootRedirect } from './ProtectedRoute';
@@ -73,6 +74,7 @@ export function AppRouter() {
         <Route element={<PublicLayout />}>
           <Route path="/dashboard" element={<PublicDashboardHome />} />
           <Route path="/dashboard/budget-priorities" element={<PublicBudgetPrioritiesPage />} />
+          <Route path="/dashboard/lgo-budget-allocation" element={<PublicLgoBudgetAllocationPage />} />
           <Route path="/budget-priorities" element={<BudgetPrioritiesIndexPage />} />
           <Route path="/budget-priorities/:section/success" element={<BudgetPrioritySuccessPage />} />
           <Route path="/budget-priorities/:section" element={<BudgetPrioritySectionLayout />} />

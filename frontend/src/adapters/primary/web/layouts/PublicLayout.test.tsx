@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { PublicLayout } from './PublicLayout';
 import { BudgetPrioritiesIndexPage } from '../budget-priorities/BudgetPrioritiesIndexPage';
 import { PublicBudgetPrioritiesPage } from '../public/PublicBudgetPrioritiesPage';
+import { PublicLgoBudgetAllocationPage } from '../public/PublicLgoBudgetAllocationPage';
 
 vi.mock('../components/ThemeToggle', () => ({
   ThemeToggle: () => <div data-testid="theme-toggle" />,
@@ -26,6 +27,22 @@ vi.mock('../public/BudgetPriorityExportToolbar', () => ({
   BudgetPriorityExportToolbar: () => <div data-testid="budget-priority-export-toolbar" />,
 }));
 
+vi.mock('../public/LgoBudgetAllocationDashboardFilterPanel', () => ({
+  LgoBudgetAllocationDashboardFilterPanel: () => <div data-testid="lgo-budget-allocation-dashboard-filter-panel" />,
+}));
+
+vi.mock('../public/LgoBudgetAllocationSummaryCards', () => ({
+  LgoBudgetAllocationSummaryCards: () => <div data-testid="lgo-budget-allocation-summary-cards" />,
+}));
+
+vi.mock('../public/LgoBudgetAllocationCharts', () => ({
+  LgoBudgetAllocationCharts: () => <div data-testid="lgo-budget-allocation-charts-section" />,
+}));
+
+vi.mock('../public/LgoBudgetAllocationExportToolbar', () => ({
+  LgoBudgetAllocationExportToolbar: () => <div data-testid="lgo-budget-allocation-export-toolbar" />,
+}));
+
 function renderPublicLayout(initialPath = '/dashboard') {
   return render(
     <MemoryRouter initialEntries={[initialPath]}>
@@ -33,6 +50,7 @@ function renderPublicLayout(initialPath = '/dashboard') {
         <Route element={<PublicLayout />}>
           <Route path="/dashboard" element={<div>Dashboard page</div>} />
           <Route path="/dashboard/budget-priorities" element={<PublicBudgetPrioritiesPage />} />
+          <Route path="/dashboard/lgo-budget-allocation" element={<PublicLgoBudgetAllocationPage />} />
           <Route path="/budget-priorities" element={<BudgetPrioritiesIndexPage />} />
           <Route path="/resources" element={<div>Resources page</div>} />
         </Route>
@@ -42,7 +60,7 @@ function renderPublicLayout(initialPath = '/dashboard') {
 }
 
 describe('PublicLayout', () => {
-  it('renders Dashboard, Budget Priorities, and Resources links without auth context', () => {
+  it('renders Dashboard, Budget Priorities, LGO Budget, and Resources links without auth context', () => {
     renderPublicLayout();
 
     expect(screen.getByRole('navigation', { name: 'Public sections' })).toBeInTheDocument();
@@ -50,6 +68,10 @@ describe('PublicLayout', () => {
     expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveAttribute(
       'href',
       '/budget-priorities'
+    );
+    expect(screen.getByRole('link', { name: 'LGO Budget' })).toHaveAttribute(
+      'href',
+      '/dashboard/lgo-budget-allocation'
     );
     expect(screen.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources');
     expect(screen.getByRole('link', { name: 'Staff sign in' })).toHaveAttribute('href', '/login');
@@ -63,6 +85,11 @@ describe('PublicLayout', () => {
 
     renderPublicLayout('/dashboard/budget-priorities');
     expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveClass('bg-surface');
+  });
+
+  it('marks LGO Budget nav active on dashboard route', () => {
+    renderPublicLayout('/dashboard/lgo-budget-allocation');
+    expect(screen.getByRole('link', { name: 'LGO Budget' })).toHaveClass('bg-surface');
   });
 
   it('renders the active route outlet', () => {
@@ -84,6 +111,7 @@ describe('PublicLayout', () => {
     const mobileNav = screen.getByTestId('public-mobile-nav');
     expect(within(mobileNav).getByRole('link', { name: 'Staff sign in' })).toHaveAttribute('href', '/login');
     expect(within(mobileNav).getByRole('link', { name: 'Budget Priorities' })).toBeInTheDocument();
+    expect(within(mobileNav).getByRole('link', { name: 'LGO Budget' })).toBeInTheDocument();
   });
 
   it('includes YGB attribution in a content-width footer', () => {

@@ -1,3 +1,4 @@
+import { lgoBudgetAllocationClasses } from '../../../../core/domain/lgo-budget-allocation.theme';
 import { FormField, formControlClassName } from '../components/forms/FormField';
 import { FormSection } from '../components/forms/FormSection';
 
@@ -19,7 +20,7 @@ export function LgoRecommendationsSection({ value, onChange, error }: LgoRecomme
           rows={5}
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          className={`${formControlClassName} min-h-[8rem] resize-y`}
+          className={`${formControlClassName} ${lgoBudgetAllocationClasses.textArea}`}
           aria-invalid={Boolean(error)}
           data-testid="lgo-recommendations-section"
         />

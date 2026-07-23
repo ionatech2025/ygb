@@ -15,14 +15,14 @@ export function LgoBudgetAllocationPage() {
         Collector dashboard
       </Link>
 
-      <header className={`${lgoBudgetAllocationClasses.hero} mt-4`}>
+      <header className={`${lgoBudgetAllocationClasses.hero} mt-4`} data-testid="lgo-budget-allocation-hero">
         <span className={lgoBudgetAllocationClasses.heroAccent} aria-hidden="true" />
         <span className={lgoBudgetAllocationClasses.heroGlow} aria-hidden="true" />
 
         <div className={lgoBudgetAllocationClasses.heroContent}>
           <p className={lgoBudgetAllocationClasses.heroEyebrow}>Data collector interview</p>
           <h1 className={`${lgoBudgetAllocationClasses.heroTitle} flex items-center gap-3`}>
-            <span className={lgoBudgetAllocationClasses.dashboardEntryIcon}>
+            <span className={lgoBudgetAllocationClasses.heroIconWrap}>
               <Landmark className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
             </span>
             Budget Allocation Interview

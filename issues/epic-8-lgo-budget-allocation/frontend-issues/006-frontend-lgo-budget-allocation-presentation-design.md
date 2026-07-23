@@ -24,12 +24,12 @@ Apply **presentation polish** to the LGO Budget Allocation module (US-LGOB-01, U
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Theme unit test: exported class strings non-empty for form panel and dashboard hero.
-- [ ] Update component tests only where selectors depend on structural markup (minimal).
-- [ ] Presentation test file mirroring `BudgetPrioritiesPresentation.test.tsx` / `PublicDashboardPresentation.test.tsx`.
-- [ ] Visual consistency with Epic 6 public dashboard and Epic 7 Budget Priorities section.
-- [ ] Mobile menu / public nav includes LGO dashboard link with correct active states.
-- [ ] Implement theme file and apply across LGO Budget Allocation components.
+- [x] Theme unit test: exported class strings non-empty for form panel and dashboard hero.
+- [x] Update component tests only where selectors depend on structural markup (minimal).
+- [x] Presentation test file mirroring `BudgetPrioritiesPresentation.test.tsx` / `PublicDashboardPresentation.test.tsx`.
+- [x] Visual consistency with Epic 6 public dashboard and Epic 7 Budget Priorities section.
+- [x] Mobile menu / public nav includes LGO dashboard link with correct active states.
+- [x] Implement theme file and apply across LGO Budget Allocation components.
 
 ## Blocked by
 

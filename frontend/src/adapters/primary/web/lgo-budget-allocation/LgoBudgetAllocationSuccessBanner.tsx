@@ -1,4 +1,5 @@
 import { CheckCircle2 } from 'lucide-react';
+import { lgoBudgetAllocationClasses } from '../../../../core/domain/lgo-budget-allocation.theme';
 
 export interface LgoBudgetAllocationSuccessBannerProps {
   isOnline: boolean;
@@ -7,7 +8,7 @@ export interface LgoBudgetAllocationSuccessBannerProps {
 export function LgoBudgetAllocationSuccessBanner({ isOnline }: LgoBudgetAllocationSuccessBannerProps) {
   return (
     <div
-      className="flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-200"
+      className={lgoBudgetAllocationClasses.successBanner}
       role="status"
       data-testid="lgo-budget-allocation-success-banner"
     >

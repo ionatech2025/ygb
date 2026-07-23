@@ -3,6 +3,7 @@ import {
   type LgoBudgetAllocationSectorId,
   type PriorYearAllocationFields,
 } from '../../../../core/domain/lgo-budget-allocation-form.model';
+import { lgoBudgetAllocationClasses } from '../../../../core/domain/lgo-budget-allocation.theme';
 import { FormField, formControlClassName } from '../components/forms/FormField';
 import { FormSection } from '../components/forms/FormSection';
 
@@ -32,7 +33,7 @@ export function LgoPriorYearAllocationsSection({
       description="Enter sector amounts (UGX) and optional share of the total budget (%). At least one sector is required."
     >
       {formError && (
-        <p className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900 dark:border-rose-900/40 dark:bg-rose-950/40 dark:text-rose-200" role="alert">
+        <p className={lgoBudgetAllocationClasses.errorAlert} role="alert">
           {formError}
         </p>
       )}
@@ -44,11 +45,8 @@ export function LgoPriorYearAllocationsSection({
           const row = value[sector.id];
 
           return (
-            <div
-              key={sector.id}
-              className="grid grid-cols-1 gap-3 rounded-xl border border-border bg-surface-muted/40 p-3 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)] sm:items-end"
-            >
-              <p className="text-sm font-semibold text-text sm:py-2">{sector.label}</p>
+            <div key={sector.id} className={lgoBudgetAllocationClasses.sectorAllocationRow}>
+              <p className={lgoBudgetAllocationClasses.sectorAllocationLabel}>{sector.label}</p>
 
               <FormField
                 label="Amount (UGX)"

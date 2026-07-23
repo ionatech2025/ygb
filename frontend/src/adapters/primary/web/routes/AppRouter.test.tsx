@@ -268,6 +268,16 @@ describe('AppRouter budget priorities routes', () => {
     });
     expect(window.location.pathname).toBe('/dashboard/budget-priorities');
   });
+
+  it('loads /dashboard/lgo-budget-allocation without redirecting to login', async () => {
+    window.history.pushState({}, '', '/dashboard/lgo-budget-allocation');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('public-lgo-budget-allocation-dashboard')).toBeInTheDocument();
+    });
+    expect(window.location.pathname).toBe('/dashboard/lgo-budget-allocation');
+  });
 });
 
 describe('AppRouter public resource routes', () => {

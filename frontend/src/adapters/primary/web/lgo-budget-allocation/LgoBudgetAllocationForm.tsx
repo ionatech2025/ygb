@@ -138,7 +138,8 @@ export function LgoBudgetAllocationForm({
       <button
         type="submit"
         disabled={submitting}
-        className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand text-sm font-bold text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:bg-slate-400"
+        data-testid="lgo-budget-allocation-submit-button"
+        className={lgoBudgetAllocationClasses.submitButton}
       >
         {submitting ? (
           <>

@@ -1,10 +1,12 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { BookOpen, ClipboardList, LayoutDashboard } from 'lucide-react';
+import { BookOpen, ClipboardList, Landmark, LayoutDashboard } from 'lucide-react';
 import { BUDGET_PRIORITY_ROUTES } from '../../../../core/domain/budget-priority.routes';
+import { LGO_BUDGET_ALLOCATION_ROUTES } from '../../../../core/domain/lgo-budget-allocation.routes';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: BUDGET_PRIORITY_ROUTES.index, label: 'Budget Priorities', icon: ClipboardList, end: false },
+  { to: LGO_BUDGET_ALLOCATION_ROUTES.dashboard, label: 'LGO Budget', icon: Landmark, end: true },
   { to: '/resources', label: 'Resources', icon: BookOpen, end: true },
 ] as const;
 
@@ -18,6 +20,10 @@ function navLinkClassName(isActive: boolean) {
 
 function isBudgetPrioritiesNavActive(pathname: string) {
   return pathname.startsWith(BUDGET_PRIORITY_ROUTES.index) || pathname.startsWith(BUDGET_PRIORITY_ROUTES.dashboard);
+}
+
+function isLgoBudgetAllocationNavActive(pathname: string) {
+  return pathname.startsWith(LGO_BUDGET_ALLOCATION_ROUTES.dashboard);
 }
 
 export function PublicNav({ onNavigate }: { onNavigate?: () => void }) {
@@ -38,7 +44,8 @@ export function PublicNav({ onNavigate }: { onNavigate?: () => void }) {
           className={({ isActive }) => {
             const active =
               isActive ||
-              (to === BUDGET_PRIORITY_ROUTES.index && isBudgetPrioritiesNavActive(location.pathname));
+              (to === BUDGET_PRIORITY_ROUTES.index && isBudgetPrioritiesNavActive(location.pathname)) ||
+              (to === LGO_BUDGET_ALLOCATION_ROUTES.dashboard && isLgoBudgetAllocationNavActive(location.pathname));
             return navLinkClassName(active);
           }}
         >
