@@ -3,5 +3,6 @@ public enum FormType {
     BYP,
     IYP,
     LGO,
-    PC
+    PC,
+    LGO_BUDGET_ALLOCATION
 }

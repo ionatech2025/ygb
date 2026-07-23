@@ -31,15 +31,15 @@ This issue does **not** deliver REST endpoints (issues `002`–`004`).
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Write **Domain Tests** for `LgoBudgetAllocation` creation and required field validation.
-- [ ] Write **Domain Tests** verifying rationale and recommendations cannot be blank when submitting.
-- [ ] Write **Domain Tests** for `previousFyAllocations` structure validation (at least one sector entry).
-- [ ] Write **Application Tests** with mocked SPI for repository `save` behaviour.
-- [ ] Write **Persistence Tests** (`@DataJpaTest` or Testcontainers):
+- [x] Write **Domain Tests** for `LgoBudgetAllocation` creation and required field validation.
+- [x] Write **Domain Tests** verifying rationale and recommendations cannot be blank when submitting.
+- [x] Write **Domain Tests** for `previousFyAllocations` structure validation (at least one sector entry).
+- [x] Write **Application Tests** with mocked SPI for repository `save` behaviour.
+- [x] Write **Persistence Tests** (`@DataJpaTest` or Testcontainers):
   - Insert succeeds with valid FK to `submissions`.
   - FK violation when `submission_id` missing → appropriate error.
-- [ ] Flyway migration applies cleanly on empty and existing databases.
-- [ ] Implement aggregate, port, entity, adapter, and migration.
+- [x] Flyway migration applies cleanly on empty and existing databases.
+- [x] Implement aggregate, port, entity, adapter, and migration.
 
 ## Blocked by
 
