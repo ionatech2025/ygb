@@ -116,18 +116,22 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
     setBrowserHelpOpen(false);
   }, [now, storage]);
 
-  const promptInstall = useCallback(async () => {
-    if (installMode === 'ios') {
+  const showInstallGuide = useCallback(() => {
+    if (isIosLike) {
       setIosHelpOpen(true);
       return;
     }
+    setBrowserHelpOpen(true);
+  }, [isIosLike]);
 
-    if (installMode === 'browser') {
-      setBrowserHelpOpen(true);
+  const promptInstall = useCallback(async () => {
+    if (installMode !== 'deferred') {
+      showInstallGuide();
       return;
     }
 
     if (!deferredPrompt) {
+      showInstallGuide();
       return;
     }
 
@@ -139,7 +143,7 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
     setDeferredPrompt(null);
     setIosHelpOpen(false);
     setBrowserHelpOpen(false);
-  }, [deferredPrompt, installMode]);
+  }, [deferredPrompt, installMode, showInstallGuide]);
 
   return {
     canInstall,
@@ -152,6 +156,7 @@ export function usePwaInstallPrompt(options: UsePwaInstallPromptOptions = {}) {
     browserHelpOpen,
     setBrowserHelpOpen,
     promptInstall,
+    showInstallGuide,
     dismiss,
   };
 }

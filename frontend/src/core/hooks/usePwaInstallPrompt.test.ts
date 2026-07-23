@@ -151,7 +151,7 @@ describe('usePwaInstallPrompt', () => {
     expect(result.current.shouldShow).toBe(false);
   });
 
-  it('opens browser install help when no deferred prompt is available', () => {
+  it('opens browser install help from showInstallGuide', () => {
     const { result } = renderHook(() =>
       usePwaInstallPrompt({
         storage: {
@@ -162,7 +162,7 @@ describe('usePwaInstallPrompt', () => {
     );
 
     act(() => {
-      result.current.promptInstall();
+      result.current.showInstallGuide();
     });
 
     expect(result.current.browserHelpOpen).toBe(true);
@@ -187,7 +187,7 @@ describe('usePwaInstallPrompt', () => {
     expect(result.current.canInstall).toBe(true);
 
     act(() => {
-      result.current.promptInstall();
+      result.current.showInstallGuide();
     });
 
     expect(result.current.iosHelpOpen).toBe(true);

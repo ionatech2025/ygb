@@ -17,6 +17,7 @@ export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps
     setBrowserHelpOpen,
     isAndroid,
     promptInstall,
+    showInstallGuide,
     dismiss,
   } = usePwaInstallPrompt();
 
@@ -24,8 +25,8 @@ export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps
     return null;
   }
 
-  const primaryLabel = installMode === 'deferred' ? 'Install' : 'How to install';
   const isFixed = placement === 'fixed';
+  const hasNativeInstall = installMode === 'deferred';
 
   return (
     <>
@@ -42,7 +43,7 @@ export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps
         <div
           className={
             isFixed
-              ? 'pointer-events-auto flex w-full max-w-md items-center gap-2 rounded-xl border border-brand/20 bg-surface/95 px-2.5 py-2 shadow-md shadow-black/10 backdrop-blur-sm dark:shadow-black/30'
+              ? 'pointer-events-auto flex w-full max-w-lg items-center gap-2 rounded-xl border border-brand/20 bg-surface/95 px-2.5 py-2 shadow-md shadow-black/10 backdrop-blur-sm dark:shadow-black/30'
               : 'mx-auto flex max-w-lg items-center gap-2'
           }
         >
@@ -53,13 +54,26 @@ export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps
             <span className="font-semibold">Install YGB</span>
             <span className="text-text-muted"> · Offline field access</span>
           </p>
-          <div className="flex shrink-0 items-center gap-1.5">
+          <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
+            {hasNativeInstall && (
+              <button
+                type="button"
+                onClick={() => void promptInstall()}
+                className="inline-flex min-h-9 items-center justify-center rounded-lg bg-brand px-2.5 text-xs font-semibold text-white transition hover:bg-brand-dark"
+              >
+                Install
+              </button>
+            )}
             <button
               type="button"
-              onClick={() => void promptInstall()}
-              className="inline-flex min-h-9 items-center justify-center rounded-lg bg-brand px-2.5 text-xs font-semibold text-white transition hover:bg-brand-dark"
+              onClick={showInstallGuide}
+              className={
+                hasNativeInstall
+                  ? 'inline-flex min-h-9 items-center justify-center rounded-lg border border-border bg-surface px-2.5 text-xs font-semibold text-text transition hover:bg-surface-muted'
+                  : 'inline-flex min-h-9 items-center justify-center rounded-lg bg-brand px-2.5 text-xs font-semibold text-white transition hover:bg-brand-dark'
+              }
             >
-              {primaryLabel}
+              How to install
             </button>
             {isFixed ? (
               <button
