@@ -42,7 +42,7 @@ export function RootRedirect() {
   }
 
   if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return (

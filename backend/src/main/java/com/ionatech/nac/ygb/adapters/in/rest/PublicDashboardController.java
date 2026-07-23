@@ -101,12 +101,11 @@ public class PublicDashboardController {
             @RequestParam(value = "dateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "ageGroup", required = false) String ageGroup,
-            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod,
-            @RequestParam(value = "programmeArea", required = false) String programmeArea
+            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
     ) {
         PublicDashboardFilter filter = filterRequestMapper.toFilter(
                 districtId, subcountyId, parishId, formType, dateFrom, dateTo,
-                gender, ageGroup, financialYearPeriod, programmeArea
+                gender, ageGroup, financialYearPeriod
         );
         PublicDashboardSummary summary = getPublicDashboardSummaryQuery.getSummary(filter);
         PublicSummaryResponseDto response = restMapper.toSummaryResponse(summary);
@@ -126,12 +125,11 @@ public class PublicDashboardController {
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "ageGroup", required = false) String ageGroup,
             @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod,
-            @RequestParam(value = "programmeArea", required = false) String programmeArea,
             @RequestParam(value = "granularity", defaultValue = "DAY") TimeSeriesGranularity granularity
     ) {
         PublicDashboardFilter filter = filterRequestMapper.toFilter(
                 districtId, subcountyId, parishId, formType, dateFrom, dateTo,
-                gender, ageGroup, financialYearPeriod, programmeArea
+                gender, ageGroup, financialYearPeriod
         );
         PublicChartSeries series = getPublicDashboardChartQuery.getChart(
                 filter,
@@ -154,12 +152,11 @@ public class PublicDashboardController {
             @RequestParam(value = "dateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "ageGroup", required = false) String ageGroup,
-            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod,
-            @RequestParam(value = "programmeArea", required = false) String programmeArea
+            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
     ) {
         PublicDashboardFilter filter = filterRequestMapper.toFilter(
                 districtId, subcountyId, parishId, formType, dateFrom, dateTo,
-                gender, ageGroup, financialYearPeriod, programmeArea
+                gender, ageGroup, financialYearPeriod
         );
         PublicHeatmap heatmap = getPublicDashboardHeatmapQuery.getHeatmap(filter);
         PublicHeatmapResponseDto response = restMapper.toHeatmapResponse(heatmap);
@@ -178,13 +175,12 @@ public class PublicDashboardController {
             @RequestParam(value = "dateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "ageGroup", required = false) String ageGroup,
-            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod,
-            @RequestParam(value = "programmeArea", required = false) String programmeArea
+            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
     ) {
         return exportDownload(
                 filterRequestMapper.toFilter(
                         districtId, subcountyId, parishId, formType, dateFrom, dateTo,
-                        gender, ageGroup, financialYearPeriod, programmeArea
+                        gender, ageGroup, financialYearPeriod
                 ),
                 ExportFormat.CSV
         );
@@ -200,13 +196,12 @@ public class PublicDashboardController {
             @RequestParam(value = "dateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
             @RequestParam(value = "gender", required = false) String gender,
             @RequestParam(value = "ageGroup", required = false) String ageGroup,
-            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod,
-            @RequestParam(value = "programmeArea", required = false) String programmeArea
+            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
     ) {
         return exportDownload(
                 filterRequestMapper.toFilter(
                         districtId, subcountyId, parishId, formType, dateFrom, dateTo,
-                        gender, ageGroup, financialYearPeriod, programmeArea
+                        gender, ageGroup, financialYearPeriod
                 ),
                 ExportFormat.XLSX
         );

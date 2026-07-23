@@ -56,6 +56,6 @@ class AnonymisationProjectorTest {
 
     @Test
     void shouldAllowNonPiiJsonKeys() {
-        projector.assertNoPiiJsonKeys(List.of("districts", "formTypes", "genders", "programmeAreas"));
+        projector.assertNoPiiJsonKeys(List.of("districts", "formTypes", "genders"));
     }
 }

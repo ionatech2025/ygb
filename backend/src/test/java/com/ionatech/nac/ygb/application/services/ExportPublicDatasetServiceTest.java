@@ -45,7 +45,7 @@ class ExportPublicDatasetServiceTest {
     void shouldValidateFilterAndStreamProjectedRecordsBeforeWritingExport() {
         UUID districtId = UUID.randomUUID();
         PublicDashboardFilter publicFilter = new PublicDashboardFilter(
-                districtId, null, null, FormType.BYP, null, null, null, null, null, null
+                districtId, null, null, FormType.BYP, null, null, null, null, null
         );
         DashboardFilter dashboardFilter = PublicDashboardFilterMapper.toDashboardFilter(publicFilter);
 

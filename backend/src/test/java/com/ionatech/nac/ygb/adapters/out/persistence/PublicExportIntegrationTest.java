@@ -89,7 +89,7 @@ class PublicExportIntegrationTest {
     @Test
     void shouldExportCsvFilteredByDistrictWithoutPiiColumns() throws Exception {
         PublicDashboardFilter publicFilter = new PublicDashboardFilter(
-                TestLocationFixtures.NTUNGAMO_DISTRICT_ID, null, null, null, null, null, null, null, null, null
+                TestLocationFixtures.NTUNGAMO_DISTRICT_ID, null, null, null, null, null, null, null, null
         );
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -130,7 +130,7 @@ class PublicExportIntegrationTest {
                 TestLocationFixtures.NTUNGAMO_DISTRICT_ID, null, null, null, null, null, null, null, null, null
         );
         PublicDashboardFilter publicFilter = new PublicDashboardFilter(
-                TestLocationFixtures.NTUNGAMO_DISTRICT_ID, null, null, null, null, null, null, null, null, null
+                TestLocationFixtures.NTUNGAMO_DISTRICT_ID, null, null, null, null, null, null, null, null
         );
 
         assertThat(PublicDashboardFilterMapper.toDashboardFilter(publicFilter)).isEqualTo(adminFilter);

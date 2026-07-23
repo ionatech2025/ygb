@@ -41,7 +41,6 @@ class GetPublicDashboardFilterOptionsServiceTest {
         assertThat(options.subcounties()).hasSize(1);
         assertThat(options.formTypes()).contains("BYP", "IYP", "LGO", "PC");
         assertThat(options.genders()).containsExactly("FEMALE", "MALE");
-        assertThat(options.programmeAreas()).isEmpty();
         assertThat(PublicDashboardFilterOptions.class.getRecordComponents())
                 .noneMatch(component -> component.getName().equals("collectors"));
     }

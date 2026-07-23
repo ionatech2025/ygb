@@ -16,6 +16,8 @@ import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { isValidUgandaPhoneLocal, normalizeUgandaPhoneLocal } from '../../../../core/utils/phone-utils';
 import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
 import { FormField, formControlClassName } from '../components/forms';
+import { AdminPageHeader } from '../admin/AdminPageHeader';
+import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import type { UserProfile } from '../../../../core/domain/user.model';
 import type { IUserRepositoryPort } from '../../../../ports/user-repository.port';
 import { ConfirmActionDialog } from '../admin/ConfirmActionDialog';
@@ -29,14 +31,16 @@ export interface ManageUsersProps {
 function StatusBadge({ active }: { active: boolean }) {
   if (active) {
     return (
-      <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800">
+      <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
         Active
       </span>
     );
   }
 
   return (
-    <span className="rounded-full bg-slate-200 px-2.5 py-0.5 text-[10px] font-bold text-slate-700">Deactivated</span>
+    <span className="rounded-full border border-border bg-surface-muted px-2.5 py-0.5 text-[10px] font-bold text-text-muted">
+      Deactivated
+    </span>
   );
 }
 
@@ -308,11 +312,13 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
   );
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6" data-testid="manage-users-page">
-      <div>
-        <h2 className="text-lg font-bold text-text sm:text-xl">Data Collector Management</h2>
-        <p className="text-sm text-text-muted">Register field collectors, manage accounts, and view submission history.</p>
-      </div>
+    <div className={adminDashboardClasses.page} data-testid="manage-users-page">
+      <AdminPageHeader
+        eyebrow="Team management"
+        title="Data Collector Management"
+        description="Register field collectors, manage accounts, and view submission history."
+        icon={<Users className="h-7 w-7" aria-hidden="true" />}
+      />
 
       <ConfirmActionDialog
         open={pendingDeactivate !== null}
@@ -373,10 +379,12 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
       )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-        <section className="rounded-2xl border border-border bg-surface p-4 shadow-sm sm:p-6 lg:col-span-2">
-          <header className="mb-4 space-y-1 border-b border-border pb-3">
-            <h3 className="text-sm font-bold text-text">Add Data Collector</h3>
-            <p className="text-xs text-text-muted">POST /api/v1/admin/users/data-collectors</p>
+        <section className={`${adminDashboardClasses.contentCard} lg:col-span-2`}>
+          <header className={adminDashboardClasses.contentCardHeader}>
+            <h3 className={adminDashboardClasses.contentCardTitle}>Add Data Collector</h3>
+            <p className={adminDashboardClasses.contentCardSubtitle}>
+              Create a new field collector account with phone sign-in.
+            </p>
           </header>
           {successMessage && (
             <div
@@ -437,7 +445,7 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-nac-blue text-sm font-semibold text-white transition hover:bg-nac-blue-dark disabled:bg-slate-300"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand text-sm font-semibold text-white shadow-sm transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-text-muted"
             >
               <PlusCircle className="h-4 w-4" aria-hidden="true" />
               {saving ? 'Saving…' : 'Save Account'}
@@ -445,12 +453,12 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
           </form>
         </section>
 
-        <section className="rounded-2xl border border-border bg-surface p-4 shadow-sm sm:p-6 lg:col-span-3">
-          <header className="mb-4 flex items-center gap-2 border-b border-border pb-3">
-            <Users className="h-5 w-5 text-brand" aria-hidden="true" />
+        <section className={`${adminDashboardClasses.contentCard} lg:col-span-3`}>
+          <header className={`${adminDashboardClasses.contentCardHeader} flex items-center gap-2`}>
+            <Users className="h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
             <div>
-              <h3 className="text-sm font-bold text-text">Active Data Collectors</h3>
-              <p className="text-xs text-text-muted">
+              <h3 className={adminDashboardClasses.contentCardTitle}>Active Data Collectors</h3>
+              <p className={adminDashboardClasses.contentCardSubtitle}>
                 {activeUsers.length} active collector{activeUsers.length === 1 ? '' : 's'}
               </p>
             </div>
@@ -476,15 +484,12 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
       </div>
 
       {deactivatedUsers.length > 0 && (
-        <section
-          className="rounded-2xl border border-border bg-surface p-4 shadow-sm sm:p-6"
-          data-testid="deactivated-collectors-section"
-        >
-          <header className="mb-4 flex items-center gap-2 border-b border-border pb-3">
-            <UserMinus className="h-5 w-5 text-text-muted" aria-hidden="true" />
+        <section className={adminDashboardClasses.contentCard} data-testid="deactivated-collectors-section">
+          <header className={`${adminDashboardClasses.contentCardHeader} flex items-center gap-2`}>
+            <UserMinus className="h-5 w-5 shrink-0 text-text-muted" aria-hidden="true" />
             <div>
-              <h3 className="text-sm font-bold text-text">Deactivated Collectors</h3>
-              <p className="text-xs text-text-muted">
+              <h3 className={adminDashboardClasses.contentCardTitle}>Deactivated Collectors</h3>
+              <p className={adminDashboardClasses.contentCardSubtitle}>
                 {deactivatedUsers.length} deactivated account{deactivatedUsers.length === 1 ? '' : 's'} this session
               </p>
             </div>

@@ -9,6 +9,5 @@ public record PublicDashboardFilterOptionsResponseDto(
         List<String> formTypes,
         List<String> genders,
         List<String> ageGroups,
-        List<String> financialYearPeriods,
-        List<String> programmeAreas
+        List<String> financialYearPeriods
 ) {}

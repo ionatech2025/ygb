@@ -4,6 +4,9 @@ import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { useSyncStore } from '../../../../core/store/useSyncStore';
 import { useSubmissionCountStore } from '../../../../core/store/useSubmissionCountStore';
 import { locationService } from '../../../../core/LocationService';
+import { PdmResourceDetailPage } from '../public/PdmResourceDetailPage';
+import { PdmResourcesIndexPage } from '../public/PdmResourcesIndexPage';
+import { PublicDashboardHome } from '../public/PublicDashboardHome';
 import { PortalLogin } from '../forms/PortalLogin';
 import ManageUsers from '../forms/ManageUsers';
 import CollectorProfilePage from '../admin/CollectorProfilePage';
@@ -15,6 +18,7 @@ import { SubmissionDetailPage } from '../admin/SubmissionDetailPage';
 import { SubmissionListPage } from '../admin/SubmissionListPage';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { CollectorLayout } from '../layouts/CollectorLayout';
+import { PublicLayout } from '../layouts/PublicLayout';
 import { GuestRoute, ProtectedRoute, RootRedirect } from './ProtectedRoute';
 
 export function AppRouter() {
@@ -59,6 +63,12 @@ export function AppRouter() {
 
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<PortalLogin />} />
+        </Route>
+
+        <Route element={<PublicLayout />}>
+          <Route path="/dashboard" element={<PublicDashboardHome />} />
+          <Route path="/resources" element={<PdmResourcesIndexPage />} />
+          <Route path="/resources/:slug" element={<PdmResourceDetailPage />} />
         </Route>
 
         <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>

@@ -1,6 +1,7 @@
 import { AlertTriangle } from 'lucide-react';
 import { formatAdminTimestamp } from '../../../../core/domain/submission-detail-fields';
 import type { CollectorReceiptStatus } from '../../../../core/domain/admin-receipt-status.model';
+import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 
 export interface CollectorReceiptTableProps {
   rows: CollectorReceiptStatus[];
@@ -11,7 +12,7 @@ export function CollectorReceiptTable({ rows, loading = false }: CollectorReceip
   const showSkeleton = loading && rows.length === 0;
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border bg-surface shadow-sm">
+    <div className={`overflow-x-auto ${adminDashboardClasses.panel}`}>
       <table className="min-w-full text-left text-sm" data-testid="collector-receipt-table">
         <thead className="border-b border-border bg-surface-muted text-xs uppercase tracking-wide text-text-muted">
           <tr>

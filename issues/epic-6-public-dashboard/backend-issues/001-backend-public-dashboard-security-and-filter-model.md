@@ -1,18 +1,18 @@
 ## Objective
 
-Establish the **public dashboard backend foundation** (US-PUB-01, US-PUB-02): unauthenticated access to `/api/v1/public/dashboard/**`, a **`PublicDashboardFilter`** value object (nine dimensions — no Data Collector), filter-options for UI dropdowns, and a domain-level **PII guard** so public read paths never expose respondent or collector personal data.
+Establish the **public dashboard backend foundation** (US-PUB-01, US-PUB-02): unauthenticated access to `/api/v1/public/dashboard/**`, a **`PublicDashboardFilter`** value object (eight dimensions — no Data Collector), filter-options for UI dropdowns, and a domain-level **PII guard** so public read paths never expose respondent or collector personal data.
 
 This issue does **not** deliver chart/export endpoints (issues `002`–`003`); it defines the filter contract and security boundary reused by all public dashboard queries.
 
 ## Architectural Context
 
 - **Core Domain** (`domain/`):
-  - `PublicDashboardFilter` — district, sub-county, parish, age group, gender, form type, financial year period, date range, **programme area**; AND semantics; **excludes** `collectorId` (admin-only).
+  - `PublicDashboardFilter` — district, sub-county, parish, age group, gender, form type, financial year period, date range; AND semantics; **excludes** `collectorId` (admin-only).
   - `PublicAnonymisedRecord` — read model for exports; columns explicitly whitelisted (no name, phone, collector fields).
   - `AnonymisationProjector` (domain service) — maps internal aggregates to public-safe DTOs; rejects any field on a PII deny-list.
 
 - **Application Ports**:
-  - Input (`api`): `GetPublicDashboardFilterOptionsQuery` — districts, sub-counties, parishes, age groups, genders, form types, FY periods, programme areas (distinct values only).
+  - Input (`api`): `GetPublicDashboardFilterOptionsQuery` — districts, sub-counties, parishes, age groups, genders, form types, FY periods (distinct values only).
   - Output (`spi`): extend or reuse `DashboardAggregationRepositoryPort` predicate builder with `PublicDashboardFilter` adapter.
 
 - **Application Services**:
@@ -25,7 +25,7 @@ This issue does **not** deliver chart/export endpoints (issues `002`–`003`); i
 - **Adapters (Security)**:
   - Integration test asserting unauthenticated `GET` → `200`, never `401`/`403` (TC-PUB-01-01).
 
-> **Programme Area:** Required by SRS PUB-03 / TC-PUB-02-01. If no persisted submission column exists yet, implement the filter field and options endpoint with an empty/disabled state and document the mapping decision in code comments — do **not** block other dimensions. Confirm mapping with product (e.g. PDM pillar / enterprise category) before wiring SQL.
+> **Programme Area (deferred):** Originally in SRS PUB-03 / TC-PUB-02-01. Removed from MVP — no persisted submission column yet. Tracked in [require-polishing.md](../../require-polishing.md). Confirm mapping with product (e.g. PDM pillar / enterprise category) before wiring SQL.
 
 ## Technical Constraints & Clean Code
 

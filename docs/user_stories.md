@@ -856,7 +856,7 @@ This backlog translates the YGB Survey Tool SRS (v1.1, the authoritative, client
 
 **Priority: Must Have** *SRS Reference: PUB-03*
 
-*As a **member of the public / researcher**, I want **to filter the public dashboard by District, Sub-county, Parish, Age Group, Gender, Form Type, Financial Year Period, Date Range, and Programme Area**, so that **I can explore exactly the data slice relevant to my research or reporting needs**.*
+*As a **member of the public / researcher**, I want **to filter the public dashboard by District, Sub-county, Parish, Age Group, Gender, Form Type, Financial Year Period, and Date Range**, so that **I can explore exactly the data slice relevant to my research or reporting needs**.*
 
 ### Acceptance Criteria
 
@@ -868,7 +868,7 @@ This backlog translates the YGB Survey Tool SRS (v1.1, the authoritative, client
 
 | **Test ID** | **Description** | **Steps** | **Expected Result** |
 |-------------|-----------------|-----------|---------------------|
-| TC-PUB-02-01 | All filters present | Open the public dashboard's filter panel | District, Sub-county, Parish, Age Group, Gender, Form Type, FY Period, Date Range, Programme Area all present. |
+| TC-PUB-02-01 | All filters present | Open the public dashboard's filter panel | District, Sub-county, Parish, Age Group, Gender, Form Type, FY Period, and Date Range all present. |
 | TC-PUB-02-02 | Real-time update | Change District filter | Charts/stats update within a few seconds without a full page reload. |
 | TC-PUB-02-03 | Combined filters | Filter by Gender='Female' + Form Type='IYP' | Only IYP submissions from female respondents are reflected. |
 

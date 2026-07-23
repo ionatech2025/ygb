@@ -10,8 +10,7 @@ public record PublicDashboardFilterOptions(
         List<String> formTypes,
         List<String> genders,
         List<String> ageGroups,
-        List<String> financialYearPeriods,
-        List<String> programmeAreas
+        List<String> financialYearPeriods
 ) {
     public PublicDashboardFilterOptions {
         districts = List.copyOf(districts);
@@ -21,6 +20,5 @@ public record PublicDashboardFilterOptions(
         genders = List.copyOf(genders);
         ageGroups = List.copyOf(ageGroups);
         financialYearPeriods = List.copyOf(financialYearPeriods);
-        programmeAreas = List.copyOf(programmeAreas);
     }
 }

@@ -34,7 +34,7 @@ class PublicDashboardServiceTest {
     @Test
     void shouldAssembleSummaryFromPublicFilter() {
         PublicDashboardFilter publicFilter = new PublicDashboardFilter(
-                null, null, null, FormType.BYP, null, null, "FEMALE", null, null, null
+                null, null, null, FormType.BYP, null, null, "FEMALE", null, null
         );
         DashboardFilter dashboardFilter = PublicDashboardFilterMapper.toDashboardFilter(publicFilter);
 

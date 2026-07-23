@@ -19,8 +19,7 @@ public class PublicDashboardFilterRequestMapper {
             LocalDate dateTo,
             String gender,
             String ageGroup,
-            String financialYearPeriod,
-            String programmeArea
+            String financialYearPeriod
     ) {
         return new PublicDashboardFilter(
                 districtId,
@@ -31,8 +30,7 @@ public class PublicDashboardFilterRequestMapper {
                 dateTo,
                 gender,
                 ageGroup,
-                financialYearPeriod,
-                programmeArea
+                financialYearPeriod
         );
     }
 }

@@ -23,11 +23,11 @@ Build the **Public Dashboard shell** (US-PUB-01, foundation for US-PUB-06): a no
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: public nav renders Dashboard and Resources links without auth context.
-- [ ] Route test: unauthenticated visitor loads `/dashboard` — no redirect to `/login` (TC-PUB-01-01).
-- [ ] Route test: `/resources` remains accessible and linked from nav.
-- [ ] Component test: `DATA_COLLECTOR` / `ADMIN` sessions can still access public pages (no conflict).
-- [ ] Implement layout, routes, navigation, and dashboard home shell with placeholder slots.
+- [x] Component test: public nav renders Dashboard and Resources links without auth context.
+- [x] Route test: unauthenticated visitor loads `/dashboard` — no redirect to `/login` (TC-PUB-01-01).
+- [x] Route test: `/resources` remains accessible and linked from nav.
+- [x] Component test: `DATA_COLLECTOR` / `ADMIN` sessions can still access public pages (no conflict).
+- [x] Implement layout, routes, navigation, and dashboard home shell with placeholder slots.
 
 ## Blocked by
 

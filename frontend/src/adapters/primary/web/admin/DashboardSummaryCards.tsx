@@ -106,8 +106,8 @@ export function DashboardSummaryCards({ dashboardApi }: DashboardSummaryCardsPro
       )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        {cards.map((card) => (
-          <StatCard key={card.id} card={card} />
+        {cards.map((card, index) => (
+          <StatCard key={card.id} card={card} accentIndex={index} />
         ))}
       </div>
     </section>

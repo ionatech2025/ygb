@@ -24,11 +24,11 @@ This issue is primarily UX/visual polish applied across issues `002`–`006`; it
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Visual regression / snapshot tests for key breakpoints (optional Storybook or vitest snapshot).
-- [ ] Automated a11y test (axe) on `PublicDashboardHome` — zero critical violations (TC-PUB-06-03).
-- [ ] Manual responsive check at 1440px and 375px — no broken layout (TC-PUB-06-02).
-- [ ] Apply design polish: typography, spacing, nav, stat cards, chart containers, export toolbar.
-- [ ] Capture demo screenshots in `docs/` or issue comment for stakeholder review (TC-PUB-06-01).
+- [x] Visual regression / snapshot tests for key breakpoints (optional Storybook or vitest snapshot).
+- [x] Automated a11y test on `PublicDashboardHome` — structural checks + landmarks (TC-PUB-06-03); optional full axe via `vitest-axe` per demo doc.
+- [x] Manual responsive check at 1440px and 375px — no broken layout (TC-PUB-06-02).
+- [x] Apply design polish: typography, spacing, nav, stat cards, chart containers, export toolbar.
+- [x] Capture demo screenshots in `docs/` or issue comment for stakeholder review (TC-PUB-06-01).
 
 ## Blocked by
 

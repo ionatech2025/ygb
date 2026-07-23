@@ -90,8 +90,7 @@ class PublicDashboardControllerTest {
         performFilterOptionsRequest()
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.districts[0].name").value("Kampala"))
-                .andExpect(jsonPath("$.formTypes[0]").value("BYP"))
-                .andExpect(jsonPath("$.programmeAreas").isArray());
+                .andExpect(jsonPath("$.formTypes[0]").value("BYP"));
     }
 
     @Test
@@ -284,8 +283,7 @@ class PublicDashboardControllerTest {
                 List.of("BYP", "IYP"),
                 List.of("FEMALE"),
                 List.of("AGE_20_24"),
-                List.of("JAN_JUN_2026"),
-                List.of()
+                List.of("JAN_JUN_2026")
         );
         PublicDashboardFilterOptionsResponseDto responseDto = new PublicDashboardFilterOptionsResponseDto(
                 List.of(new FilterLocationOptionDto(districtId, "Kampala")),
@@ -294,8 +292,7 @@ class PublicDashboardControllerTest {
                 List.of("BYP", "IYP"),
                 List.of("FEMALE"),
                 List.of("AGE_20_24"),
-                List.of("JAN_JUN_2026"),
-                List.of()
+                List.of("JAN_JUN_2026")
         );
 
         when(getPublicDashboardFilterOptionsQuery.getOptions(isNull(), isNull())).thenReturn(options);

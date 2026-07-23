@@ -28,8 +28,7 @@ class PublicDashboardFilterTest {
                 null,
                 "FEMALE",
                 "AGE_20_24",
-                "JAN_JUN_2026",
-                null
+                "JAN_JUN_2026"
         );
 
         assertThat(filter.hasActiveCriteria()).isTrue();
@@ -45,7 +44,7 @@ class PublicDashboardFilterTest {
         LocalDate from = LocalDate.of(2026, 6, 1);
         LocalDate to = LocalDate.of(2026, 3, 1);
 
-        assertThatThrownBy(() -> new PublicDashboardFilter(null, null, null, null, from, to, null, null, null, null))
+        assertThatThrownBy(() -> new PublicDashboardFilter(null, null, null, null, from, to, null, null, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("dateFrom must not be after dateTo");
     }

@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { BarChart3, Loader2, ShieldCheck, Smartphone, Users } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, BarChart3, Loader2, ShieldCheck, Smartphone, Users } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { loginPortalClasses } from '../../../../core/domain/admin-dashboard.theme';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { isValidUgandaPhoneLocal } from '../../../../core/utils/phone-utils';
 import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
@@ -77,10 +78,10 @@ export function PortalLogin() {
   };
 
   return (
-    <div className="relative min-h-dvh bg-surface-muted">
+    <div className={loginPortalClasses.shell}>
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-32 top-0 h-96 w-96 rounded-full bg-brand/10 blur-3xl dark:bg-brand/5" />
-        <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-nac-orange/10 blur-3xl dark:bg-nac-orange/5" />
+        <div className={loginPortalClasses.ambientGlowLeft} />
+        <div className={loginPortalClasses.ambientGlowRight} />
       </div>
 
       <div className="absolute right-4 top-4 z-20">
@@ -88,9 +89,9 @@ export function PortalLogin() {
       </div>
 
       <div className="relative mx-auto flex max-w-6xl flex-col lg:min-h-dvh lg:flex-row">
-        <section className="relative order-1 flex flex-col overflow-hidden bg-linear-to-br from-nac-blue via-nac-blue-dark to-slate-950 px-5 py-10 text-white lg:min-h-dvh lg:flex-1 lg:justify-between lg:px-12 lg:py-14">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_45%)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[2.5rem_2.5rem] mask-[radial-gradient(ellipse_at_center,black_30%,transparent_80%)]" />
+        <section className={loginPortalClasses.brandPanel}>
+          <div className={loginPortalClasses.brandRadial} />
+          <div className={loginPortalClasses.brandGrid} />
 
           <div className="relative z-10 flex items-center justify-between gap-3 pt-8 lg:pt-0">
             <div className="flex min-w-0 items-center gap-3">
@@ -123,10 +124,7 @@ export function PortalLogin() {
             </p>
             <ul className="grid gap-3 sm:grid-cols-2">
               {FEATURES.map(({ icon: Icon, title, detail }) => (
-                <li
-                  key={title}
-                  className="flex gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-sm transition hover:border-white/20 hover:bg-white/10"
-                >
+                <li key={title} className={loginPortalClasses.featureCard}>
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-nac-orange/20 text-nac-orange">
                     <Icon className="h-4 w-4" aria-hidden="true" />
                   </span>
@@ -143,14 +141,15 @@ export function PortalLogin() {
             &copy; {new Date().getFullYear()} Youth Go Budget App
           </p>
         </section>
-        <section
-          ref={formSectionRef}
-          id="login-form"
-          className="order-2 flex scroll-mt-4 items-center justify-center px-4 py-8 lg:min-h-dvh lg:flex-1 lg:px-10"
-        >
+
+        <section ref={formSectionRef} id="login-form" className={loginPortalClasses.formPanel}>
           <div className="w-full max-w-md">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-md ring-1 ring-black/3 sm:p-8 dark:ring-white/4">
+            <div className={loginPortalClasses.formCard}>
               <div className="mb-6 space-y-1.5">
+                <Link to="/" className={`${loginPortalClasses.publicLink} mb-4`}>
+                  <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                  Back to public dashboard
+                </Link>
                 <h2 className="text-xl font-bold tracking-tight text-text sm:text-2xl">Sign in</h2>
                 <p className="text-sm text-text-muted">Use your phone number and password to open your portal.</p>
               </div>
@@ -192,26 +191,19 @@ export function PortalLogin() {
                   />
                 </FormField>
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-nac-orange text-sm font-bold text-white shadow-sm shadow-nac-orange/20 transition hover:bg-nac-orange-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-text-muted disabled:shadow-none"
-                >
+                <button type="submit" disabled={loading} className={loginPortalClasses.submitButton}>
                   {loading && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
                   {loading ? 'Signing in…' : 'Open My Portal'}
                 </button>
               </form>
 
-              <div className="mt-6 border-t border-border pt-5">
+              <div className="mt-6 border-t border-border/60 pt-5">
                 <p className="mb-3 text-center text-[10px] font-bold uppercase tracking-wider text-text-muted">
                   Backend test accounts
                 </p>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {TEST_ACCOUNTS.map(({ role, phone: testPhone, accent }) => (
-                    <div
-                      key={role}
-                      className="rounded-xl border border-border bg-surface-muted/70 px-3 py-2.5 text-center"
-                    >
+                    <div key={role} className={loginPortalClasses.testAccountCard}>
                       <p className={`text-xs font-bold ${accent}`}>{role}</p>
                       <p className="mt-1 font-mono text-[11px] text-text">{testPhone}</p>
                       <p className="font-mono text-[11px] text-text-muted">password</p>
@@ -226,6 +218,7 @@ export function PortalLogin() {
         <p className="order-3 px-4 pb-8 text-center text-xs text-text-muted lg:hidden">
           &copy; {new Date().getFullYear()} Youth Go Budget App
         </p>
-      </div>    </div>
+      </div>
+    </div>
   );
 }
