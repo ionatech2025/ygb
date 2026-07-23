@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
-import { CheckCircle2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import type { BudgetPrioritySection } from '../../../../core/domain/budget-priority-section.model';
+import { BUDGET_PRIORITY_ROUTES } from '../../../../core/domain/budget-priority.routes';
 import {
   buildBudgetPrioritySubmissionPayload,
   EMPTY_BUDGET_PRIORITY_DEMOGRAPHICS,
@@ -11,11 +13,18 @@ import {
   validateBudgetPriorityForm,
   type BudgetPriorityFormErrors,
 } from '../../../../core/domain/budget-priority-validation';
+import {
+  mapBudgetPrioritySubmitError,
+  type MappedBudgetPriorityError,
+} from '../../../../core/budget-priority-errors';
+import { deriveFinancialYearPeriod, toFinancialYearPeriodKey } from '../../../../core/financial-year-period';
 import type { IBudgetPriorityApiPort } from '../../../../ports/budget-priority-api.port';
-import { HttpBudgetPriorityAdapter, ApiError } from '../../../secondary/api/budget-priority-api.adapter';
+import { HttpBudgetPriorityAdapter } from '../../../secondary/api/budget-priority-api.adapter';
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
 import { BudgetPriorityDemographicsSection } from './BudgetPriorityDemographicsSection';
 import { BudgetPriorityAreasSection } from './BudgetPriorityAreasSection';
+import { BudgetPriorityDuplicateBlock } from './BudgetPriorityDuplicateBlock';
+import { BudgetPriorityErrorAlert } from './BudgetPriorityErrorAlert';
 
 export interface BudgetPriorityFormProps {
   section: BudgetPrioritySection;
@@ -30,12 +39,14 @@ export function BudgetPriorityForm({
   locationRepository,
   onSubmitted,
 }: BudgetPriorityFormProps) {
+  const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   const [demographics, setDemographics] = useState(EMPTY_BUDGET_PRIORITY_DEMOGRAPHICS);
   const [rankedAreas, setRankedAreas] = useState<string[]>([]);
   const [errors, setErrors] = useState<BudgetPriorityFormErrors>({});
   const [submitting, setSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [submitError, setSubmitError] = useState<MappedBudgetPriorityError | null>(null);
+  const [duplicateFinancialYearPeriod, setDuplicateFinancialYearPeriod] = useState<string | undefined>();
 
   const scrollToFirstError = (nextErrors: BudgetPriorityFormErrors) => {
     const fieldIdMap: Record<string, string> = {
@@ -53,7 +64,8 @@ export function BudgetPriorityForm({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setSuccessMessage('');
+    setSubmitError(null);
+    setDuplicateFinancialYearPeriod(undefined);
 
     const nextErrors = validateBudgetPriorityForm(demographics, rankedAreas);
     setErrors(nextErrors);
@@ -67,24 +79,18 @@ export function BudgetPriorityForm({
       const payload = buildBudgetPrioritySubmissionPayload(demographics, rankedAreas);
       const result = await api.submit(section, payload);
 
-      setSuccessMessage('Thank you — your budget priorities have been submitted.');
-      setDemographics(EMPTY_BUDGET_PRIORITY_DEMOGRAPHICS);
-      setRankedAreas([]);
-      setErrors({});
       onSubmitted?.(result);
+      navigate(BUDGET_PRIORITY_ROUTES.success(section), { state: { result } });
     } catch (error) {
-      if (error instanceof ApiError && error.status === 409) {
-        setErrors({
-          phoneNumber: 'A submission from this phone number already exists for this sector.',
-        });
-        scrollToFirstError({ phoneNumber: 'duplicate' });
+      const financialYearPeriodKey = toFinancialYearPeriodKey(deriveFinancialYearPeriod());
+      const mapped = mapBudgetPrioritySubmitError(error, section, { financialYearPeriodKey });
+      if (mapped.kind === 'duplicate') {
+        setSubmitError(mapped);
+        setDuplicateFinancialYearPeriod(financialYearPeriodKey);
         return;
       }
-      if (error instanceof ApiError) {
-        setErrors({ rankedAreas: error.message || 'Submission failed. Please try again.' });
-        return;
-      }
-      throw error;
+
+      setSubmitError(mapped);
     } finally {
       setSubmitting(false);
     }
@@ -98,14 +104,16 @@ export function BudgetPriorityForm({
       data-testid="budget-priority-form"
       noValidate
     >
-      {successMessage && (
-        <div
-          className="flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-200"
-          role="status"
-        >
-          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-          <span>{successMessage}</span>
-        </div>
+      {submitError?.kind === 'duplicate' && (
+        <BudgetPriorityDuplicateBlock
+          section={section}
+          financialYearPeriod={duplicateFinancialYearPeriod}
+          message={submitError.message}
+        />
+      )}
+
+      {submitError && submitError.kind !== 'duplicate' && (
+        <BudgetPriorityErrorAlert title={submitError.title} message={submitError.message} />
       )}
 
       <BudgetPriorityDemographicsSection

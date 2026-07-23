@@ -29,8 +29,9 @@ export async function apiFetch<T>(
     const text = await response.text();
     let message = text || response.statusText;
     try {
-      const json = JSON.parse(text) as { message?: string };
-      if (json.message) message = json.message;
+      const json = JSON.parse(text) as { message?: string; detail?: string };
+      if (json.detail) message = json.detail;
+      else if (json.message) message = json.message;
     } catch {
       // plain-text error body
     }

@@ -29,6 +29,10 @@ export interface BudgetPrioritySubmissionResult {
   financialYearPeriod: string;
 }
 
+export interface BudgetPrioritySuccessNavigationState {
+  result: BudgetPrioritySubmissionResult;
+}
+
 export const EMPTY_BUDGET_PRIORITY_DEMOGRAPHICS: BudgetPriorityDemographicsFields = {
   fullName: '',
   phoneNumber: '',

@@ -20,6 +20,7 @@ import { AdminLayout } from '../layouts/AdminLayout';
 import { CollectorLayout } from '../layouts/CollectorLayout';
 import { BudgetPrioritiesIndexPage } from '../budget-priorities/BudgetPrioritiesIndexPage';
 import { BudgetPrioritySectionLayout } from '../budget-priorities/BudgetPrioritySectionLayout';
+import { BudgetPrioritySuccessPage } from '../budget-priorities/BudgetPrioritySuccessPage';
 import { PublicLayout } from '../layouts/PublicLayout';
 import { GuestRoute, ProtectedRoute, RootRedirect } from './ProtectedRoute';
 
@@ -70,6 +71,7 @@ export function AppRouter() {
         <Route element={<PublicLayout />}>
           <Route path="/dashboard" element={<PublicDashboardHome />} />
           <Route path="/budget-priorities" element={<BudgetPrioritiesIndexPage />} />
+          <Route path="/budget-priorities/:section/success" element={<BudgetPrioritySuccessPage />} />
           <Route path="/budget-priorities/:section" element={<BudgetPrioritySectionLayout />} />
           <Route path="/resources" element={<PdmResourcesIndexPage />} />
           <Route path="/resources/:slug" element={<PdmResourceDetailPage />} />
