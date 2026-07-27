@@ -38,10 +38,26 @@ export const pwaManifest = {
   ],
 };
 
+/**
+ * Match same-origin API paths only. In production the API lives on a separate host
+ * (VITE_API_BASE_URL); intercepting those cross-origin fetches breaks login and dataset loads.
+ */
+export function isSameOriginLocationDatasetRequest(url: URL, appOrigin?: string): boolean {
+  if (url.pathname !== '/api/v1/locations/dataset') {
+    return false;
+  }
+
+  const origin =
+    appOrigin ??
+    (typeof self !== 'undefined' && 'location' in self ? self.location.origin : undefined);
+
+  return origin !== undefined && url.origin === origin;
+}
+
 /** App shell assets are precached (CacheFirst). Runtime rules for network resources only. */
 export const workboxRuntimeCaching = [
   {
-    urlPattern: ({ url }: { url: URL }) => url.pathname === '/api/v1/locations/dataset',
+    urlPattern: ({ url }: { url: URL }) => isSameOriginLocationDatasetRequest(url),
     handler: 'StaleWhileRevalidate' as const,
     options: {
       cacheName: 'ygb-location-dataset',

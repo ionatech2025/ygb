@@ -1,12 +1,43 @@
 import { describe, expect, it } from 'vitest';
-import { pwaManifest, workboxRuntimeCaching } from '../workbox-config';
+import {
+  isSameOriginLocationDatasetRequest,
+  pwaManifest,
+  workboxRuntimeCaching,
+} from '../workbox-config';
 
 describe('workbox-config', () => {
-  it('registers StaleWhileRevalidate for the Uganda location dataset', () => {
+  it('registers StaleWhileRevalidate for same-origin location dataset only', () => {
     const rule = workboxRuntimeCaching.find((entry) => entry.handler === 'StaleWhileRevalidate');
     expect(rule).toBeDefined();
-    expect(rule!.urlPattern({ url: new URL('https://example.com/api/v1/locations/dataset') })).toBe(true);
+    const appOrigin = 'https://youthgobudgetapp.org';
+    expect(
+      isSameOriginLocationDatasetRequest(
+        new URL('https://youthgobudgetapp.org/api/v1/locations/dataset'),
+        appOrigin
+      )
+    ).toBe(true);
+    expect(
+      isSameOriginLocationDatasetRequest(
+        new URL('https://api.youthgobudgetapp.org/api/v1/locations/dataset'),
+        appOrigin
+      )
+    ).toBe(false);
     expect(rule!.options.cacheName).toBe('ygb-location-dataset');
+  });
+
+  it('does not treat cross-origin API hosts as cacheable dataset requests', () => {
+    expect(
+      isSameOriginLocationDatasetRequest(
+        new URL('https://api.youthgobudgetapp.org/api/v1/locations/dataset'),
+        'https://youthgobudgetapp.org'
+      )
+    ).toBe(false);
+    expect(
+      isSameOriginLocationDatasetRequest(
+        new URL('/api/v1/locations/dataset', 'https://localhost:5173'),
+        'https://localhost:5173'
+      )
+    ).toBe(true);
   });
 
   it('defines a standalone manifest with icons', () => {
