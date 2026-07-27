@@ -10,6 +10,8 @@
 # Node / Frontend
 node_modules/
 dist/
+dev-dist/
+frontend/dev-dist/
 build/
 .npm/
 
