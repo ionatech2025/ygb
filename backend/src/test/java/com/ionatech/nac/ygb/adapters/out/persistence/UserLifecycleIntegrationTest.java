@@ -68,6 +68,16 @@ class UserLifecycleIntegrationTest {
     }
 
     @Test
+    void seededDefaultUsersShouldAuthenticateWithPassword() {
+        org.assertj.core.api.Assertions.assertThat(
+                authenticateUserService.authenticate(new AuthenticateUserCommand("0770000000", "password")).token()
+        ).isEqualTo("token");
+        org.assertj.core.api.Assertions.assertThat(
+                authenticateUserService.authenticate(new AuthenticateUserCommand("0771111111", "password")).token()
+        ).isEqualTo("token");
+    }
+
+    @Test
     void deactivatedCollectorShouldFailLogin() {
         UUID collectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
         User collector = userRepositoryPort.findById(collectorId).orElseThrow();

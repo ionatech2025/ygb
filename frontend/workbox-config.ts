@@ -57,7 +57,12 @@ export function isSameOriginLocationDatasetRequest(url: URL, appOrigin?: string)
 /** App shell assets are precached (CacheFirst). Runtime rules for network resources only. */
 export const workboxRuntimeCaching = [
   {
-    urlPattern: ({ url }: { url: URL }) => isSameOriginLocationDatasetRequest(url),
+    // Inline the matcher: vite-plugin-pwa does not bundle imported helpers into sw.js.
+    urlPattern: ({ url }: { url: URL }) =>
+      url.pathname === '/api/v1/locations/dataset' &&
+      typeof self !== 'undefined' &&
+      'location' in self &&
+      url.origin === self.location.origin,
     handler: 'StaleWhileRevalidate' as const,
     options: {
       cacheName: 'ygb-location-dataset',
