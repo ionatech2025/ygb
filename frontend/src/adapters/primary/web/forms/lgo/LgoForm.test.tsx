@@ -121,12 +121,26 @@ describe('LgoForm', () => {
     expect(document.getElementById('beneficiaryYoungMenCount-2024-25')).toBeInTheDocument();
   });
 
+  it('uses sub-letter labels for grouped Q1–Q3 fields in each FY block', async () => {
+    render(<LgoForm />);
+
+    await waitForFiscalYearBlocks();
+    expect(screen.getAllByLabelText(/Q1\(a\)\. Expected PDM funds received/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q1\(b\)\. Actual PDM funds received/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q2\(a\)\. Total beneficiaries from the PDM fund/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q2\(b\)\. Beneficiaries under 30/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q2\(c\)\. Beneficiary young women under 30/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q2\(d\)\. Beneficiary young men under 30/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q3\(a\)\. Total parishes in the district/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q3\(b\)\. Parishes that received PDM funds/i)).toHaveLength(2);
+  });
+
   it('uses parish labels that distinguish district total vs funded parishes', async () => {
     render(<LgoForm />);
 
     await waitForFiscalYearBlocks();
-    expect(screen.getAllByLabelText(/Q3\. Total parishes in the district/i)).toHaveLength(2);
-    expect(screen.getAllByLabelText(/Q3\. Parishes that received PDM funds/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q3\(a\)\. Total parishes in the district/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q3\(b\)\. Parishes that received PDM funds/i)).toHaveLength(2);
   });
 
   it('does not let collectors change the admin-selected fiscal year', async () => {

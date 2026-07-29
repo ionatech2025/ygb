@@ -36,7 +36,7 @@ function FiscalYearFields({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <FormField
-          label="Q1. Expected PDM funds received"
+          label="Q1(a). Expected PDM funds received"
           htmlFor={fiscalYearFieldId(fy, 'expectedFunds')}
           required
           error={errors[fiscalYearFieldId(fy, 'expectedFunds')]}
@@ -53,7 +53,7 @@ function FiscalYearFields({
         </FormField>
 
         <FormField
-          label="Q1. Actual PDM funds received"
+          label="Q1(b). Actual PDM funds received"
           htmlFor={fiscalYearFieldId(fy, 'actualFunds')}
           required
           error={errors[fiscalYearFieldId(fy, 'actualFunds')]}
@@ -72,7 +72,7 @@ function FiscalYearFields({
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <FormField
-          label="Q2. Total beneficiaries from the PDM fund"
+          label="Q2(a). Total beneficiaries from the PDM fund"
           htmlFor={fiscalYearFieldId(fy, 'totalBeneficiaryCount')}
           required
           error={errors[fiscalYearFieldId(fy, 'totalBeneficiaryCount')]}
@@ -89,7 +89,7 @@ function FiscalYearFields({
         </FormField>
 
         <FormField
-          label="Q2. Beneficiaries under 30"
+          label="Q2(b). Beneficiaries under 30"
           htmlFor={fiscalYearFieldId(fy, 'beneficiariesUnder30Count')}
           required
           error={errors[fiscalYearFieldId(fy, 'beneficiariesUnder30Count')]}
@@ -106,7 +106,7 @@ function FiscalYearFields({
         </FormField>
 
         <FormField
-          label="Q2. Beneficiary young women under 30"
+          label="Q2(c). Beneficiary young women under 30"
           htmlFor={fiscalYearFieldId(fy, 'beneficiaryYoungWomenCount')}
           required
           error={errors[fiscalYearFieldId(fy, 'beneficiaryYoungWomenCount')]}
@@ -123,7 +123,7 @@ function FiscalYearFields({
         </FormField>
 
         <FormField
-          label="Q2. Beneficiary young men under 30"
+          label="Q2(d). Beneficiary young men under 30"
           htmlFor={fiscalYearFieldId(fy, 'beneficiaryYoungMenCount')}
           required
           error={errors[fiscalYearFieldId(fy, 'beneficiaryYoungMenCount')]}
@@ -142,7 +142,7 @@ function FiscalYearFields({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <FormField
-          label="Q3. Total parishes in the district"
+          label="Q3(a). Total parishes in the district"
           htmlFor={fiscalYearFieldId(fy, 'totalParishesCount')}
           required
           error={errors[fiscalYearFieldId(fy, 'totalParishesCount')]}
@@ -159,7 +159,7 @@ function FiscalYearFields({
         </FormField>
 
         <FormField
-          label="Q3. Parishes that received PDM funds"
+          label="Q3(b). Parishes that received PDM funds"
           htmlFor={fiscalYearFieldId(fy, 'fundedParishesCount')}
           required
           error={errors[fiscalYearFieldId(fy, 'fundedParishesCount')]}
