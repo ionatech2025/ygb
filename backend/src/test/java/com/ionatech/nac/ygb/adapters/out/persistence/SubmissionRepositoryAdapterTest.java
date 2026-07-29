@@ -144,7 +144,10 @@ class SubmissionRepositoryAdapterTest {
                 "0772111444",
                 "FEMALE",
                 AgeGroup.AGE_ABOVE_35,
-                List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                List.of(
+                        new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                        new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+                ),
                 true,
                 true,
                 true,
@@ -165,9 +168,10 @@ class SubmissionRepositoryAdapterTest {
 
         assertThat(retrieved).isInstanceOf(LgoSubmission.class);
         LgoSubmission retrievedLgo = (LgoSubmission) retrieved;
-        assertThat(retrievedLgo.getFiscalYearRecords()).hasSize(1);
-        FiscalYearRecord record = retrievedLgo.getFiscalYearRecords().get(0);
-        assertThat(record.fiscalYearLabel()).isEqualTo("2024/25");
+        assertThat(retrievedLgo.getFiscalYearRecords()).hasSize(2);
+        FiscalYearRecord record = retrievedLgo.getFiscalYearRecords().getFirst();
+        assertThat(record.fiscalYearLabel()).isEqualTo("2025/26");
+        assertThat(record.beneficiaryYoungMenCount()).isEqualTo(8);
         assertThat(record.expectedFunds()).isEqualTo(100000L);
     }
 

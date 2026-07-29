@@ -4,6 +4,7 @@ import com.ionatech.nac.ygb.application.ports.api.*;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException;
 import com.ionatech.nac.ygb.domain.model.*;
+import com.ionatech.nac.ygb.domain.service.LgoFiscalYearRecordsPolicy;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.*;
 class SubmitSubmissionServiceTest {
 
     private SubmissionRepositoryPort repositoryPort;
+    private GetActiveFiscalYearUseCase getActiveFiscalYearUseCase;
     private SubmitSubmissionService service;
 
     private final UUID collectorId = UUID.randomUUID();
@@ -35,7 +37,22 @@ class SubmitSubmissionServiceTest {
     @BeforeEach
     void setUp() {
         repositoryPort = mock(SubmissionRepositoryPort.class);
-        service = new SubmitSubmissionService(repositoryPort);
+        getActiveFiscalYearUseCase = mock(GetActiveFiscalYearUseCase.class);
+        when(getActiveFiscalYearUseCase.getActiveFiscalYear()).thenReturn(
+                new ActiveFiscalYearView("2025/26", "2024/25", List.of("2025/26", "2024/25"))
+        );
+        service = new SubmitSubmissionService(
+                repositoryPort,
+                getActiveFiscalYearUseCase,
+                new LgoFiscalYearRecordsPolicy()
+        );
+    }
+
+    private List<FiscalYearRecord> currentAndPriorFiscalYearRecords() {
+        return List.of(
+                new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+        );
     }
 
     @Test
@@ -239,7 +256,7 @@ class SubmitSubmissionServiceTest {
                 "0772111444",
                 "FEMALE",
                 AgeGroup.AGE_ABOVE_35,
-                List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                currentAndPriorFiscalYearRecords(),
                 true,
                 true,
                 true,
@@ -258,8 +275,41 @@ class SubmitSubmissionServiceTest {
         assertThat(result).isInstanceOf(LgoSubmission.class);
         LgoSubmission lgo = (LgoSubmission) result;
         assertThat(lgo.getRespondentName()).isEqualTo("Official Name");
+        assertThat(lgo.getFiscalYearRecords()).hasSize(2);
+        assertThat(lgo.getFiscalYearRecords().getFirst().beneficiaryYoungMenCount()).isEqualTo(8);
 
         verify(repositoryPort, times(1)).save(any(Submission.class));
+    }
+
+    @Test
+    void shouldRejectLgoSubmissionWithSingleFiscalYearRecord() {
+        LgoSubmitCommand command = new LgoSubmitCommand(
+                collectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Official Name",
+                "0772111444",
+                "FEMALE",
+                AgeGroup.AGE_ABOVE_35,
+                List.of(new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4)),
+                true,
+                true,
+                true,
+                true,
+                true,
+                null,
+                true,
+                null,
+                "Provide more monitoring tools."
+        );
+
+        assertThatThrownBy(() -> service.submit(command))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Exactly two fiscal year records are required");
     }
 
     @Test

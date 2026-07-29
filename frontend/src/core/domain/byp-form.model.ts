@@ -1,22 +1,26 @@
 import type { Rating } from './form-validation.model';
 
 export const FUND_RECEIPT_DURATION_OPTIONS = [
-  { value: 'ONE_WEEK', label: 'One week' },
-  { value: 'MORE_THAN_WEEK_LESS_THAN_MONTH', label: 'More than a week and less than a month' },
-  { value: 'MONTH', label: 'One month' },
+  { value: 'ONE_WEEK', label: 'A week' },
+  { value: 'MORE_THAN_WEEK_LESS_THAN_MONTH', label: 'More than a week and less than a month (specify)' },
+  { value: 'MONTH', label: 'A month' },
   { value: 'MONTHS', label: 'Months (specify)' },
 ] as const;
 
 export const INSTALMENT_PERIOD_OPTIONS = [
   { value: 'MONTHLY', label: 'Monthly' },
   { value: 'QUARTERLY', label: 'Quarterly' },
-  { value: 'BIANNUALLY', label: 'Biannually' },
+  { value: 'BIANNUALLY', label: 'Biennially' },
   { value: 'ANNUAL', label: 'Annual' },
   { value: 'OTHERS', label: 'Other (specify)' },
 ] as const;
 
 export const BDS_SERVICE_OPTIONS = [
-  { value: 'TRAINING', label: 'Training' },
+  {
+    value: 'TRAINING',
+    label:
+      'Training to improve productivity, efficiency, profitability, business viability, and supply chain participation',
+  },
   { value: 'MARKET_LINKAGES', label: 'Market linkages' },
   { value: 'EXTENSION_SERVICE', label: 'Extension service' },
 ] as const;

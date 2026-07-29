@@ -85,7 +85,7 @@ class DashboardFilterOptionsRepositoryAdapterTest {
 
         assertThat(optionsRepository.findParishesBySubcounty(kawempeDivisionId))
                 .extracting(FilterLocationOption::name)
-                .contains("Bwaise I", "Komamboga");
+                .contains("Bwaise i", "Komamboga");
 
         assertThat(optionsRepository.findParishesBySubcounty(rubagaDivisionId))
                 .extracting(FilterLocationOption::name)

@@ -15,8 +15,9 @@ export interface FiscalYearRecordPayload {
   expectedFunds: number;
   actualFunds: number;
   totalBeneficiaryCount: number;
-  youngPeopleCount: number;
-  youngWomenCount: number;
+  beneficiariesUnder30Count: number;
+  beneficiaryYoungWomenCount: number;
+  beneficiaryYoungMenCount: number;
   totalParishesCount: number;
   fundedParishesCount: number;
 }

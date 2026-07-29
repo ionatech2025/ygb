@@ -9,10 +9,10 @@ export interface IypFeedbackSectionProps {
 
 export function IypFeedbackSection({ value, onChange, errors }: IypFeedbackSectionProps) {
   return (
-    <FormSection title="Feedback" description="Improvement suggestion">
+    <FormSection title="Closing feedback" description="Question 16">
       <NarrativeTextarea
         id="improvementSuggestion"
-        label="Suggestions for improvement"
+        label="Q16. What do you think should be improved to make the PDM programme more efficient and effective in your community?"
         value={value.improvementSuggestion}
         onChange={(text) => onChange({ ...value, improvementSuggestion: text })}
         required

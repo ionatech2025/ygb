@@ -1,5 +1,6 @@
 import {
   DIFFICULTIES_FACED_OPTIONS,
+  IYP_OTHERS_OPTION_VALUE,
   requiresLimitationExplanation,
   type IypFormFields,
 } from '../../../../../core/domain/iyp-form.model';
@@ -15,9 +16,10 @@ export function IypBarriersSection({ value, onChange, errors }: IypBarriersSecti
   const patch = (partial: Partial<IypFormFields>) => onChange({ ...value, ...partial });
 
   return (
-    <FormSection title="Access barriers" description="Question 10">
+    <FormSection title="Section B (continued): Access barriers" description="Question 10">
       <MultiCheckboxGroup
-        legend="Q10. What difficulties did you face?"
+        legend="Q10. What kind of difficulties have you faced in accessing the PDM fund in your parish?"
+        hint="(select all that apply)"
         options={DIFFICULTIES_FACED_OPTIONS.map((option) => ({
           value: option.value,
           label: option.label,
@@ -26,17 +28,25 @@ export function IypBarriersSection({ value, onChange, errors }: IypBarriersSecti
         onChange={(selected) =>
           patch({
             difficultiesFaced: selected as IypFormFields['difficultiesFaced'],
+            difficultiesFacedOthersSpecify: selected.includes(IYP_OTHERS_OPTION_VALUE)
+              ? value.difficultiesFacedOthersSpecify
+              : '',
             limitationExplanation: selected.includes('LIMITATION_IN_AMOUNT')
               ? value.limitationExplanation
               : '',
           })
         }
+        otherOptionValue={IYP_OTHERS_OPTION_VALUE}
+        otherSpecifyValue={value.difficultiesFacedOthersSpecify}
+        onOtherSpecifyChange={(text) => patch({ difficultiesFacedOthersSpecify: text })}
+        otherSpecifyLabel="Please specify the other difficulty faced"
+        otherSpecifyError={errors.difficultiesFacedOthersSpecify}
         error={errors.difficultiesFaced}
       />
 
       {requiresLimitationExplanation(value.difficultiesFaced) && (
         <FormField
-          label="Explain the limitation in amount applied for"
+          label="Explain the limitation in the amount applied for"
           htmlFor="limitationExplanation"
           required
           error={errors.limitationExplanation}

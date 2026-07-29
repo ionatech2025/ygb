@@ -164,7 +164,10 @@ class GetSubmissionDetailServiceTest {
                 "0774000111",
                 "MALE",
                 AgeGroup.AGE_ABOVE_35,
-                List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                List.of(
+                        new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                        new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+                ),
                 true,
                 true,
                 true,

@@ -47,11 +47,11 @@ Source questionnaire: [iyp_questions.md](../../docs/suggested_changes/07282026/i
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: Q2 and Q10 show "(select all that apply)" hint.
-- [ ] Component test: Q2/Q9/Q10/Q13/Q14 Other options reveal text inputs.
-- [ ] Component test: existing skip logic tests still pass (Q1 unaware, Q6 no apply, etc.).
-- [ ] Component test: Q16 programme-improvement wording updated.
-- [ ] Question numbers visible in UI (accessibility: aria labels include Q number).
+- [x] Component test: Q2 and Q10 show "(select all that apply)" hint.
+- [x] Component test: Q2/Q9/Q10 Other options reveal text inputs (Q13/Q14 N/A — not in backend/form).
+- [x] Component test: existing skip logic tests still pass (Q1 unaware, Q6 no apply, etc.).
+- [x] Component test: Q16 programme-improvement wording updated.
+- [x] Question numbers visible in UI (Q1–Q10, Q16 in labels).
 
 ## Blocked by
 

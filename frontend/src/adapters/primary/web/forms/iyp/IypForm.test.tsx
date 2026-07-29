@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { IypForm } from './IypForm';
@@ -58,6 +58,12 @@ async function fillRespondent(user: ReturnType<typeof userEvent.setup>) {
   await user.selectOptions(document.getElementById('village')!, 'village-1');
 }
 
+async function selectAwarePath(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(document.getElementById('awareOfPdm-yes')!);
+  await user.click(screen.getByLabelText(/^Radio$/i));
+  await user.click(document.getElementById('eligibleCriteriaAware-yes')!);
+}
+
 describe('IypForm', () => {
   beforeEach(() => {
     enqueueMock.mockClear();
@@ -70,35 +76,31 @@ describe('IypForm', () => {
 
     await user.click(document.getElementById('awareOfPdm-no')!);
     expect(screen.queryByLabelText(/Q3\. Are you aware of the eligibility criteria/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Q2\. How did you get information about PDM/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Q2\. How did you get information about the PDM programme/i)).not.toBeInTheDocument();
   });
 
   it('Q6 = No shows Q9, hides Q7/Q8 (TC-FORM-03-02)', async () => {
     const user = userEvent.setup();
     render(<IypForm />);
 
-    await user.click(document.getElementById('awareOfPdm-yes')!);
-    await user.click(screen.getByLabelText(/^Radio$/i));
-    await user.click(document.getElementById('eligibleCriteriaAware-yes')!);
+    await selectAwarePath(user);
     await user.click(document.getElementById('appliedForFund-no')!);
 
-    expect(screen.queryByLabelText(/Q7\. Did you access the fund/i)).not.toBeInTheDocument();
-    expect(screen.queryByLabelText(/Q8\. Narrate why the application/i)).not.toBeInTheDocument();
-    expect(screen.getByText(/Q9\. Reasons for not applying/i)).toBeInTheDocument();
+    expect(screen.queryByLabelText(/Q7\. Did you access the PDM fund after your application/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/Q8\. Please explain why you were rejected/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Q9\. What were the reasons for not applying/i)).toBeInTheDocument();
   });
 
   it('Q6 = Yes, Q7 = No shows Q8 (TC-FORM-03-03)', async () => {
     const user = userEvent.setup();
     render(<IypForm />);
 
-    await user.click(document.getElementById('awareOfPdm-yes')!);
-    await user.click(screen.getByLabelText(/^Radio$/i));
-    await user.click(document.getElementById('eligibleCriteriaAware-yes')!);
+    await selectAwarePath(user);
     await user.click(document.getElementById('appliedForFund-yes')!);
     await user.click(document.getElementById('accessedFund-no')!);
 
-    expect(screen.getByLabelText(/Q8\. Narrate why the application/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Q9\. Reasons for not applying/i)).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/Q8\. Please explain why you were rejected/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Q9\. What were the reasons for not applying/i)).not.toBeInTheDocument();
   });
 
   it('limitation checkbox shows explanation field (TC-FORM-03-04)', async () => {
@@ -106,9 +108,9 @@ describe('IypForm', () => {
     render(<IypForm />);
 
     await user.click(
-      screen.getByLabelText(/Limitation in the amount applied for/i)
+      screen.getByLabelText(/Limitation in the amount applied for \(low or high, explain\)/i)
     );
-    expect(screen.getByLabelText(/Explain the limitation in amount applied for/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Explain the limitation in the amount applied for/i)).toBeInTheDocument();
   });
 
   it('multiple checkboxes selectable on Q2 (TC-FORM-11-01)', async () => {
@@ -118,25 +120,88 @@ describe('IypForm', () => {
     await user.click(document.getElementById('awareOfPdm-yes')!);
     await user.click(screen.getByLabelText(/^Radio$/i));
     await user.click(screen.getByLabelText(/^Television$/i));
-    await user.click(screen.getByLabelText(/Relatives \/ Friends/i));
+    await user.click(screen.getByLabelText(/Relatives\/Friends/i));
 
     expect(screen.getByLabelText(/^Radio$/i)).toBeChecked();
     expect(screen.getByLabelText(/^Television$/i)).toBeChecked();
-    expect(screen.getByLabelText(/Relatives \/ Friends/i)).toBeChecked();
+    expect(screen.getByLabelText(/Relatives\/Friends/i)).toBeChecked();
+  });
+
+  it('Q2 and Q10 show "(select all that apply)" hint', async () => {
+    const user = userEvent.setup();
+    render(<IypForm />);
+
+    await user.click(document.getElementById('awareOfPdm-yes')!);
+    const hints = screen.getAllByText('(select all that apply)');
+    expect(hints.length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText(/Q10\. What kind of difficulties have you faced/i)).toBeInTheDocument();
+  });
+
+  it('Q2 Other option reveals specify text input', async () => {
+    const user = userEvent.setup();
+    render(<IypForm />);
+
+    await user.click(document.getElementById('awareOfPdm-yes')!);
+    const q2Group = screen.getByRole('group', {
+      name: /Q2\. How did you get information about the PDM programme/i,
+    });
+    await user.click(within(q2Group).getByLabelText(/Other \(specify\)/i));
+
+    expect(
+      within(q2Group).getByLabelText(/Please specify how you got information about the PDM programme/i)
+    ).toBeInTheDocument();
+  });
+
+  it('Q9 Other option reveals specify text input', async () => {
+    const user = userEvent.setup();
+    render(<IypForm />);
+
+    await selectAwarePath(user);
+    await user.click(document.getElementById('appliedForFund-no')!);
+    const q9Group = screen.getByRole('group', {
+      name: /Q9\. What were the reasons for not applying/i,
+    });
+    await user.click(within(q9Group).getByLabelText(/Other \(specify\)/i));
+
+    expect(
+      within(q9Group).getByLabelText(/Please specify why you did not apply for the PDM fund/i)
+    ).toBeInTheDocument();
+  });
+
+  it('Q10 Other option reveals specify text input', async () => {
+    const user = userEvent.setup();
+    render(<IypForm />);
+
+    const q10Group = screen.getByRole('group', {
+      name: /Q10\. What kind of difficulties have you faced/i,
+    });
+    await user.click(within(q10Group).getByLabelText(/Other \(specify\)/i));
+
+    expect(
+      within(q10Group).getByLabelText(/Please specify the other difficulty faced/i)
+    ).toBeInTheDocument();
+  });
+
+  it('Q16 shows PDM programme improvement wording', () => {
+    render(<IypForm />);
+
+    expect(
+      screen.getByLabelText(
+        /Q16\. What do you think should be improved to make the PDM programme more efficient and effective/i
+      )
+    ).toBeInTheDocument();
   });
 
   it('clears Q9 when Q6 changes from No to Yes (TC-FORM-09-03)', async () => {
     const user = userEvent.setup();
     render(<IypForm />);
 
-    await user.click(document.getElementById('awareOfPdm-yes')!);
-    await user.click(screen.getByLabelText(/^Radio$/i));
-    await user.click(document.getElementById('eligibleCriteriaAware-yes')!);
+    await selectAwarePath(user);
     await user.click(document.getElementById('appliedForFund-no')!);
-    await user.click(screen.getByLabelText(/^Not eligible$/i));
+    await user.click(screen.getByLabelText(/Does not meet the eligibility criteria/i));
 
     await user.click(document.getElementById('appliedForFund-yes')!);
-    expect(screen.queryByText(/Q9\. Reasons for not applying/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Q9\. What were the reasons for not applying/i)).not.toBeInTheDocument();
   });
 
   it('aware + applied + accessed path submits without Q8/Q9 (TC-FORM-03-05)', async () => {
@@ -150,17 +215,15 @@ describe('IypForm', () => {
 
     await fillRespondent(user);
 
-    await user.click(document.getElementById('awareOfPdm-yes')!);
-    await user.click(screen.getByLabelText(/^Radio$/i));
-    await user.click(document.getElementById('eligibleCriteriaAware-yes')!);
+    await selectAwarePath(user);
     await user.click(document.getElementById('appliedForFund-yes')!);
     await user.click(document.getElementById('accessedFund-yes')!);
 
-    expect(screen.queryByLabelText(/Q8\. Narrate why the application/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Q9\. Reasons for not applying/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/Q8\. Please explain why you were rejected/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Q9\. What were the reasons for not applying/i)).not.toBeInTheDocument();
 
     await user.type(
-      screen.getByLabelText(/Suggestions for improvement/i),
+      screen.getByLabelText(/Q16\. What do you think should be improved to make the PDM programme/i),
       'Provide more community outreach sessions.'
     );
 

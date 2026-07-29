@@ -114,32 +114,33 @@ class ValueObjectsTest {
 
     @Test
     void fiscalYearRecordShouldValidateRequiredFields() {
-        assertThatThrownBy(() -> new FiscalYearRecord(null, 1000L, 800L, 10, 5, 5, 2, 2))
+        assertThatThrownBy(() -> new FiscalYearRecord(null, 1000L, 800L, 10, 5, 5, 2, 2, 2))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Fiscal year label cannot be null or blank");
 
-        assertThatThrownBy(() -> new FiscalYearRecord("  ", 1000L, 800L, 10, 5, 5, 2, 2))
+        assertThatThrownBy(() -> new FiscalYearRecord("  ", 1000L, 800L, 10, 5, 5, 2, 2, 2))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Fiscal year label cannot be null or blank");
 
-        assertThatThrownBy(() -> new FiscalYearRecord("2025/26", -100L, 800L, 10, 5, 5, 2, 2))
+        assertThatThrownBy(() -> new FiscalYearRecord("2025/26", -100L, 800L, 10, 5, 5, 2, 2, 2))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Funds and counts cannot be negative");
 
-        assertThatThrownBy(() -> new FiscalYearRecord("2025/26", 1000L, 800L, -1, 5, 5, 2, 2))
+        assertThatThrownBy(() -> new FiscalYearRecord("2025/26", 1000L, 800L, -1, 5, 5, 2, 2, 2))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Funds and counts cannot be negative");
     }
 
     @Test
     void fiscalYearRecordShouldCreateSuccessfully() {
-        FiscalYearRecord record = new FiscalYearRecord("2025/26", 1000L, 800L, 10, 5, 5, 2, 2);
+        FiscalYearRecord record = new FiscalYearRecord("2025/26", 1000L, 800L, 10, 5, 3, 2, 2, 2);
         assertThat(record.fiscalYearLabel()).isEqualTo("2025/26");
         assertThat(record.expectedFunds()).isEqualTo(1000L);
         assertThat(record.actualFunds()).isEqualTo(800L);
         assertThat(record.totalBeneficiaryCount()).isEqualTo(10);
-        assertThat(record.youngPeopleCount()).isEqualTo(5);
-        assertThat(record.youngWomenCount()).isEqualTo(5);
+        assertThat(record.beneficiariesUnder30Count()).isEqualTo(5);
+        assertThat(record.beneficiaryYoungWomenCount()).isEqualTo(3);
+        assertThat(record.beneficiaryYoungMenCount()).isEqualTo(2);
         assertThat(record.totalParishesCount()).isEqualTo(2);
         assertThat(record.fundedParishesCount()).isEqualTo(2);
     }

@@ -16,7 +16,7 @@ Reference: [lgo_questions.md](../../docs/suggested_changes/07282026/lgo_question
 - **(b)** Prior FY — Expected / Actual received
 
 **Q2.** In total, how many **benefited from the PDM fund** in the:
-- **(a)** Admin-set FY — (i) beneficiaries under 30, (ii) young women under 30, (iii) young men under 30, (iv) other categories
+- **(a)** Admin-set FY — (i) beneficiaries under 30, (ii) beneficiary young women under 30, (iii) beneficiary young men under 30, (iv) other categories
 - **(b)** Prior FY — same sub-fields
 
 **Q3.** How many parishes received the PDM fund in the district/city/sub-county/town council?
@@ -28,9 +28,9 @@ Reference: [lgo_questions.md](../../docs/suggested_changes/07282026/lgo_question
 ## Architectural Context
 
 - **Core Domain**
-  - Extend `FiscalYearRecord` with `youngMenCount` (and rename `youngPeopleCount` → `beneficiariesUnder30Count` if breaking change acceptable; otherwise add alias field and deprecate old name with migration).
+  - Extend `FiscalYearRecord` with `beneficiaryYoungMenCount` (and rename `youngPeopleCount` → `beneficiariesUnder30Count` and `youngWomenCount` to `beneficiaryYoungWomenCount` if breaking change acceptable; otherwise add alias field and deprecate old name with migration).
   - `LgoSubmission` requires **exactly two** fiscal year records: current admin FY + computed prior FY label.
-  - Optional cross-validation: `youngWomenCount + youngMenCount <= beneficiariesUnder30Count` (warn or reject — confirm with client; default: soft validation warning in domain test).
+  - Optional cross-validation: `beneficiaryYoungWomenCount + beneficiaryYoungMenCount <= beneficiariesUnder30Count` (warn or reject — confirm with client; default: soft validation warning in domain test).
 
 - **Application**
   - Remove single-FY picker from submit command; accept two records with distinct labels.
@@ -41,12 +41,12 @@ Reference: [lgo_questions.md](../../docs/suggested_changes/07282026/lgo_question
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Domain test: LGO submission with one FY record rejected.
-- [ ] Domain test: two records with current + prior labels accepted.
-- [ ] Domain test: `youngMenCount` persisted and non-negative.
-- [ ] Application test: submit with two `FiscalYearRecord` entries succeeds.
-- [ ] Adapter test: POST LGO payload from revised shape returns success.
-- [ ] Dashboard/export tests updated for new field names where applicable.
+- [x] Domain test: LGO submission with one FY record rejected.
+- [x] Domain test: two records with current + prior labels accepted.
+- [x] Domain test: `youngMenCount` persisted and non-negative.
+- [x] Application test: submit with two `FiscalYearRecord` entries succeeds.
+- [x] Adapter test: POST LGO payload from revised shape returns success.
+- [x] Dashboard/export tests updated for new field names where applicable.
 
 ## Blocked by
 

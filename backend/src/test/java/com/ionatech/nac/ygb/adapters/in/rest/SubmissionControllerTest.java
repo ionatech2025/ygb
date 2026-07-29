@@ -437,6 +437,99 @@ class SubmissionControllerTest {
 
     @Test
     @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldSubmitLgoFormWithTwoFiscalYearRecordsSuccessfully() throws Exception {
+        List<FiscalYearRecord> fiscalYearRecords = List.of(
+                new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+        );
+
+        LgoSubmissionRequestDto requestDto = new LgoSubmissionRequestDto(
+                "LGO",
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Official Name",
+                "0772111444",
+                "FEMALE",
+                AgeGroup.AGE_ABOVE_35,
+                fiscalYearRecords,
+                true,
+                true,
+                true,
+                true,
+                true,
+                null,
+                true,
+                null,
+                "Improve PDM programme oversight across parishes."
+        );
+
+        UUID testCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        LgoSubmitCommand command = new LgoSubmitCommand(
+                testCollectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Official Name",
+                "0772111444",
+                "FEMALE",
+                AgeGroup.AGE_ABOVE_35,
+                fiscalYearRecords,
+                true,
+                true,
+                true,
+                true,
+                true,
+                null,
+                true,
+                null,
+                "Improve PDM programme oversight across parishes."
+        );
+
+        LgoSubmission saved = new LgoSubmission(
+                UUID.randomUUID(),
+                new SubmissionMetadata(testCollectorId, deviceSubmissionId, completedAt),
+                new Location(districtId, subcountyId, parishId, villageId),
+                "Official Name",
+                "0772111444",
+                "FEMALE",
+                AgeGroup.AGE_ABOVE_35,
+                fiscalYearRecords,
+                true,
+                true,
+                true,
+                true,
+                true,
+                null,
+                true,
+                null,
+                new NarrativeText("Improve PDM programme oversight across parishes.")
+        );
+
+        when(submissionRestMapper.toCommand(any(LgoSubmissionRequestDto.class), eq(testCollectorId))).thenReturn(command);
+        when(submitSubmissionUseCase.submit(command)).thenReturn(saved);
+        when(submissionRestMapper.toResponse(saved)).thenReturn(
+                new SubmissionResponseDto(saved.getId(), "LGO", "Official Name", "PENDING", completedAt)
+        );
+
+        mockMvc.perform(post("/api/v1/submissions")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.formType").value("LGO"));
+
+        verify(submitSubmissionUseCase, times(1)).submit(command);
+    }
+
+    @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
     void shouldGetSyncStatusSuccessfullyWhenDataCollector() throws Exception {
         UUID testCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
         LocalDateTime latestTime = LocalDateTime.of(2026, 7, 19, 12, 0);

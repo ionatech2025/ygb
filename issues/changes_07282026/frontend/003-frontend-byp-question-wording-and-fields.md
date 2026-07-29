@@ -33,12 +33,12 @@ Demographics header: Name (optional), Age bracket, Gender, District, Sub-county,
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: Q4 label mentions receiving funds / instalment period wording updated.
-- [ ] Component test: Q5 spells out Parish Development Committee.
-- [ ] Component test: Q8 shows multi-select hint; Other specify on Q4 works.
-- [ ] Component test: Q9 label references PDM **programme** improvement.
-- [ ] Unit test: payload shape matches backend DTO without `exactAge`.
-- [ ] Visual review against [byp_questions.md](../../docs/suggested_changes/07282026/byp_questions.md).
+- [x] Component test: Q4 label mentions receiving funds / instalment period wording updated.
+- [x] Component test: Q5 spells out Parish Development Committee.
+- [x] Component test: Q8 shows multi-select hint; Other specify on Q4 works.
+- [x] Component test: Q9 label references PDM **programme** improvement.
+- [x] Unit test: payload shape matches backend DTO without `exactAge`.
+- [x] Visual review against [byp_questions.md](../../docs/suggested_changes/07282026/byp_questions.md).
 
 ## Blocked by
 

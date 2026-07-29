@@ -31,8 +31,8 @@ describe('iyp-validation', () => {
       ...awareAppliedAccessed,
       appliedForFund: false,
       accessedFund: null,
-      reasonsForNotApplying: ['NOT_ELIGIBLE', 'LACK_OF_INFORMATION'],
-      difficultiesFaced: ['LIMITATION_IN_AMOUNT', 'LONG_PROCESSING_TIME'],
+      reasonsForNotApplying: ['NOT_ELIGIBLE', 'UNAWARE_OF_PROGRAMME'],
+      difficultiesFaced: ['LIMITATION_IN_AMOUNT', 'LENGTHY_DISBURSEMENT'],
       limitationExplanation: 'The amount offered was too low for my needs.',
     };
 
@@ -46,9 +46,36 @@ describe('iyp-validation', () => {
     );
 
     expect(payload.informationChannels).toEqual(['RADIO', 'TELEVISION', 'RELATIVES_FRIENDS']);
-    expect(payload.reasonsForNotApplying).toEqual(['NOT_ELIGIBLE', 'LACK_OF_INFORMATION']);
-    expect(payload.difficultiesFaced).toEqual(['LIMITATION_IN_AMOUNT', 'LONG_PROCESSING_TIME']);
+    expect(payload.reasonsForNotApplying).toEqual(['NOT_ELIGIBLE', 'UNAWARE_OF_PROGRAMME']);
+    expect(payload.difficultiesFaced).toEqual(['LIMITATION_IN_AMOUNT', 'LENGTHY_DISBURSEMENT']);
     expect(payload.limitationExplanation).toBe('The amount offered was too low for my needs.');
+  });
+
+  it('encodes Other specify text in multi-select payload values', () => {
+    const withOthers: typeof EMPTY_IYP_FIELDS = {
+      ...awareAppliedAccessed,
+      appliedForFund: false,
+      accessedFund: null,
+      informationChannels: ['RADIO', 'OTHERS'],
+      informationChannelsOthersSpecify: 'Community notice board',
+      reasonsForNotApplying: ['OTHERS'],
+      reasonsForNotApplyingOthersSpecify: 'Waiting for group formation',
+      difficultiesFaced: ['OTHERS'],
+      difficultiesFacedOthersSpecify: 'Transport costs to office',
+    };
+
+    const payload = buildIypSubmissionPayload(
+      { respondent: validRespondent, iyp: withOthers },
+      {
+        deviceSubmissionId: '11111111-1111-1111-1111-111111111111',
+        formCompletedAt: '2026-07-20T10:00:00.000Z',
+        collectorId: 'collector-1',
+      }
+    );
+
+    expect(payload.informationChannels).toEqual(['RADIO', 'OTHERS:Community notice board']);
+    expect(payload.reasonsForNotApplying).toEqual(['OTHERS:Waiting for group formation']);
+    expect(payload.difficultiesFaced).toEqual(['OTHERS:Transport costs to office']);
   });
 
   it('produces a payload matching IypSubmissionRequestDto shape for unaware branch', () => {
@@ -87,5 +114,17 @@ describe('iyp-validation', () => {
       },
     });
     expect(errors.limitationExplanation).toBeTruthy();
+  });
+
+  it('requires Other specify when OTHERS is selected on Q2', () => {
+    const errors = validateIypForm({
+      respondent: validRespondent,
+      iyp: {
+        ...awareAppliedAccessed,
+        informationChannels: ['OTHERS'],
+        informationChannelsOthersSpecify: '',
+      },
+    });
+    expect(errors.informationChannelsOthersSpecify).toBeTruthy();
   });
 });

@@ -1,8 +1,10 @@
 import {
+  encodeOthersInSelection,
   requiresAccessedFund,
   requiresEligibleCriteriaAware,
   requiresInformationChannels,
   requiresLimitationExplanation,
+  requiresOthersSpecify,
   requiresReasonsForNotApplying,
   requiresRejectionNarrative,
   type IypFormFields,
@@ -10,7 +12,7 @@ import {
 import type { RespondentFields } from './domain/respondent-fields.model';
 import type { AgeGroup } from './domain/form-validation.model';
 import { normalizeUgandaPhoneLocal } from './utils/phone-utils';
-import { validateNarrativeText } from './form-validation';
+import { validateNarrativeText, validateRequired } from './form-validation';
 import { formatRespondentName, validateRespondentDemographics } from './respondent-validation';
 
 export type IypFormErrors = Record<string, string>;
@@ -22,6 +24,21 @@ export interface IypFormState {
 
 function validateRespondent(respondent: RespondentFields, errors: IypFormErrors): void {
   validateRespondentDemographics(respondent, errors);
+}
+
+function validateOthersSpecify(
+  selected: string[],
+  specify: string,
+  errorKey: string,
+  errors: IypFormErrors,
+  message: string
+): void {
+  if (requiresOthersSpecify(selected)) {
+    const result = validateRequired(specify);
+    if (!result.valid) {
+      errors[errorKey] = message;
+    }
+  }
 }
 
 export function validateIypForm(state: IypFormState): IypFormErrors {
@@ -38,6 +55,13 @@ export function validateIypForm(state: IypFormState): IypFormErrors {
     if (iyp.informationChannels.length === 0) {
       errors.informationChannels = 'Select at least one information channel.';
     }
+    validateOthersSpecify(
+      iyp.informationChannels,
+      iyp.informationChannelsOthersSpecify,
+      'informationChannelsOthersSpecify',
+      errors,
+      'Please specify how you got information about the PDM programme.'
+    );
     if (requiresEligibleCriteriaAware(iyp.awareOfPdm) && iyp.eligibleCriteriaAware == null) {
       errors.eligibleCriteriaAware = 'Please answer the eligibility criteria question.';
     }
@@ -50,13 +74,28 @@ export function validateIypForm(state: IypFormState): IypFormErrors {
     if (requiresRejectionNarrative(iyp.appliedForFund, iyp.accessedFund)) {
       const narrative = validateNarrativeText(iyp.rejectionNarrative, { required: true });
       if (!narrative.valid) {
-        errors.rejectionNarrative = narrative.message ?? 'Rejection narrative is required (min 10 characters).';
+        errors.rejectionNarrative = narrative.message ?? 'Rejection explanation is required (min 10 characters).';
       }
     }
     if (requiresReasonsForNotApplying(iyp.appliedForFund) && iyp.reasonsForNotApplying.length === 0) {
       errors.reasonsForNotApplying = 'Select at least one reason for not applying.';
     }
+    validateOthersSpecify(
+      iyp.reasonsForNotApplying,
+      iyp.reasonsForNotApplyingOthersSpecify,
+      'reasonsForNotApplyingOthersSpecify',
+      errors,
+      'Please specify why you did not apply for the PDM fund.'
+    );
   }
+
+  validateOthersSpecify(
+    iyp.difficultiesFaced,
+    iyp.difficultiesFacedOthersSpecify,
+    'difficultiesFacedOthersSpecify',
+    errors,
+    'Please specify the other difficulty faced.'
+  );
 
   if (requiresLimitationExplanation(iyp.difficultiesFaced)) {
     const spec = validateNarrativeText(iyp.limitationExplanation, { required: true });
@@ -101,9 +140,16 @@ export function buildIypSubmissionPayload(
         ? iyp.rejectionNarrative.trim()
         : null,
     reasonsForNotApplying:
-      aware && requiresReasonsForNotApplying(iyp.appliedForFund) ? iyp.reasonsForNotApplying : null,
-    informationChannels: aware ? iyp.informationChannels : null,
-    difficultiesFaced: iyp.difficultiesFaced.length > 0 ? iyp.difficultiesFaced : null,
+      aware && requiresReasonsForNotApplying(iyp.appliedForFund)
+        ? encodeOthersInSelection(iyp.reasonsForNotApplying, iyp.reasonsForNotApplyingOthersSpecify)
+        : null,
+    informationChannels: aware
+      ? encodeOthersInSelection(iyp.informationChannels, iyp.informationChannelsOthersSpecify)
+      : null,
+    difficultiesFaced:
+      iyp.difficultiesFaced.length > 0
+        ? encodeOthersInSelection(iyp.difficultiesFaced, iyp.difficultiesFacedOthersSpecify)
+        : null,
     limitationExplanation: requiresLimitationExplanation(iyp.difficultiesFaced)
       ? iyp.limitationExplanation.trim()
       : null,

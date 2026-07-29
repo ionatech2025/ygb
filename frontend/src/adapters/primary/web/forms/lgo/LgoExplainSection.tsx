@@ -20,7 +20,7 @@ export function LgoExplainSection({ value, onChange, errors }: LgoExplainSection
     <FormSection title="Accountability & impact" description="Questions 8–9">
       <YesNoRadioGroup
         name="fundsSpentAsRequired"
-        label="Q8. Were PDM funds spent as required?"
+        label="Q8. Are allocated funds to the PDM Programme in the district/city/sub-county/town council being spent as required?"
         value={value.fundsSpentAsRequired}
         onChange={(choice) =>
           patch({
@@ -51,7 +51,7 @@ export function LgoExplainSection({ value, onChange, errors }: LgoExplainSection
 
       <YesNoRadioGroup
         name="economicTransformation"
-        label="Q9. Has PDM translated into economic transformation?"
+        label="Q9. Is resource spent on the PDM Programme translating into moving beneficiary young people into the money economy?"
         value={value.economicTransformation}
         onChange={(choice) =>
           patch({

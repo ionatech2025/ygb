@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EMPTY_LGO_FIELDS } from './domain/lgo-form.model';
+import { createEmptyFiscalYearRecord, EMPTY_LGO_FIELDS } from './domain/lgo-form.model';
 import { EMPTY_RESPONDENT_FIELDS } from './domain/respondent-fields.model';
 import { buildLgoSubmissionPayload, validateLgoForm } from './lgo-validation';
 
@@ -18,16 +18,29 @@ describe('lgo-validation', () => {
 
   const validLgo: typeof EMPTY_LGO_FIELDS = {
     ...EMPTY_LGO_FIELDS,
-    selectedFiscalYearLabel: '2022/23',
-    fiscalYearRecord: {
-      fiscalYearLabel: '2022/23',
+    reportingFiscalYearLabel: '2025/26',
+    priorFiscalYearLabel: '2024/25',
+    currentFiscalYearRecord: {
+      ...createEmptyFiscalYearRecord('2025/26'),
       expectedFunds: '1000000',
       actualFunds: '900000',
       totalBeneficiaryCount: '50',
-      youngPeopleCount: '20',
-      youngWomenCount: '15',
+      beneficiariesUnder30Count: '20',
+      beneficiaryYoungWomenCount: '12',
+      beneficiaryYoungMenCount: '8',
       totalParishesCount: '10',
       fundedParishesCount: '8',
+    },
+    priorFiscalYearRecord: {
+      ...createEmptyFiscalYearRecord('2024/25'),
+      expectedFunds: '800000',
+      actualFunds: '750000',
+      totalBeneficiaryCount: '40',
+      beneficiariesUnder30Count: '18',
+      beneficiaryYoungWomenCount: '10',
+      beneficiaryYoungMenCount: '8',
+      totalParishesCount: '10',
+      fundedParishesCount: '7',
     },
     fundsAllocatedEquitably: true,
     allocatedFundsSufficient: true,
@@ -48,29 +61,31 @@ describe('lgo-validation', () => {
       }
     );
 
-    expect(payload.fiscalYearRecords).toHaveLength(1);
+    expect(payload.fiscalYearRecords).toHaveLength(2);
     expect(payload.fiscalYearRecords[0]).toEqual({
-      fiscalYearLabel: '2022/23',
+      fiscalYearLabel: '2025/26',
       expectedFunds: 1000000,
       actualFunds: 900000,
       totalBeneficiaryCount: 50,
-      youngPeopleCount: 20,
-      youngWomenCount: 15,
+      beneficiariesUnder30Count: 20,
+      beneficiaryYoungWomenCount: 12,
+      beneficiaryYoungMenCount: 8,
       totalParishesCount: 10,
       fundedParishesCount: 8,
     });
+    expect(payload.fiscalYearRecords[1].fiscalYearLabel).toBe('2024/25');
     expect(payload.fundsAllocatedEquitably).toBe(true);
     expect(payload.transparentBeneficiarySelection).toBe(true);
     expect(payload.fundsSpentExplanation).toBeNull();
     expect(payload.economicTransformationExplanation).toBeNull();
   });
 
-  it('requires fiscal year selection before submit', () => {
+  it('requires active reporting fiscal year before submit', () => {
     const errors = validateLgoForm({
       respondent: validRespondent,
-      lgo: { ...validLgo, selectedFiscalYearLabel: '' },
+      lgo: { ...validLgo, reportingFiscalYearLabel: '' },
     });
-    expect(errors.selectedFiscalYearLabel).toBeTruthy();
+    expect(errors.reportingFiscalYearLabel).toBeTruthy();
   });
 
   it('requires funds spent explanation when Q8 is No (TC-FORM-12-03)', () => {
@@ -90,9 +105,12 @@ describe('lgo-validation', () => {
       respondent: validRespondent,
       lgo: {
         ...validLgo,
-        fiscalYearRecord: { ...validLgo.fiscalYearRecord, expectedFunds: 'abc' },
+        currentFiscalYearRecord: {
+          ...validLgo.currentFiscalYearRecord,
+          expectedFunds: 'abc',
+        },
       },
     });
-    expect(errors['expectedFunds-2022-23']).toMatch(/valid numeric/i);
+    expect(errors['expectedFunds-2025-26']).toMatch(/valid numeric/i);
   });
 });

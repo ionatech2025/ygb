@@ -27,11 +27,11 @@ Reference: [PDM_Tools_Change_Requests_07282026.md §4](../../docs/suggested_chan
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Domain/application test: invalid fiscal year label rejected on set.
-- [ ] Application test: get returns last admin-set value.
-- [ ] Adapter test: ADMIN can set; DATA_COLLECTOR receives 403 on PUT.
-- [ ] Adapter test: GET returns current label for collector app bootstrap.
-- [ ] Flyway migration creates settings storage with sensible default (`2025/26` or latest in catalog).
+- [x] Domain/application test: invalid fiscal year label rejected on set.
+- [x] Application test: get returns last admin-set value.
+- [x] Adapter test: ADMIN can set; DATA_COLLECTOR receives 403 on PUT.
+- [x] Adapter test: GET returns current label for collector app bootstrap.
+- [x] Flyway migration creates settings storage with sensible default (`2025/26` or latest in catalog).
 
 ## Blocked by
 
