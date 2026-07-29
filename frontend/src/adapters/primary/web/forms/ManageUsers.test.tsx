@@ -89,6 +89,68 @@ describe('ManageUsers lifecycle actions', () => {
     });
   });
 
+  it('register-collector password field renders a visibility toggle', () => {
+    render(
+      <MemoryRouter>
+        <ManageUsers userAdmin={createUserAdmin()} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('button', { name: 'Show password' })).toBeInTheDocument();
+  });
+
+  it('shows copyable initial password after creating a collector', async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal('navigator', {
+      ...navigator,
+      clipboard: { writeText },
+    });
+
+    const userAdmin = createUserAdmin({
+      createDataCollector: vi.fn().mockResolvedValue({
+        ...collector,
+        id: 'collector-new',
+        fullName: 'New Collector',
+        phoneNumber: '0772999888',
+      }),
+    });
+
+    render(
+      <MemoryRouter>
+        <ManageUsers userAdmin={userAdmin} />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
+    });
+
+    await user.type(screen.getByLabelText(/full name/i), 'New Collector');
+    await user.type(screen.getByLabelText(/phone number/i), '0772999888');
+    await user.type(screen.getByLabelText(/initial password/i), 'StartPass1');
+    await user.click(screen.getByRole('button', { name: /save account/i }));
+
+    await waitFor(() => {
+      expect(userAdmin.createDataCollector).toHaveBeenCalledWith(
+        expect.objectContaining({
+          fullName: 'New Collector',
+          phoneNumber: '0772999888',
+          password: 'StartPass1',
+        }),
+        expect.any(String)
+      );
+      expect(screen.getByTestId('creation-password-result')).toHaveTextContent('StartPass1');
+      expect(screen.getByTestId('creation-password-result')).toHaveTextContent('0772999888');
+    });
+
+    await user.click(screen.getByTestId('copy-creation-password'));
+    expect(writeText).toHaveBeenCalledWith('StartPass1');
+
+    await user.click(screen.getByTestId('copy-creation-login-details'));
+    expect(writeText).toHaveBeenCalledWith('Phone: 0772999888\nPassword: StartPass1');
+  });
+
   it('auto-dismisses success messages after five seconds', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });

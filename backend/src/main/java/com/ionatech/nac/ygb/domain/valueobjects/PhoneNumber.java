@@ -4,7 +4,10 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public final class PhoneNumber {
-    private static final Pattern LOCAL_UGANDA_PATTERN = Pattern.compile("^(077|078|076|070|075)\\d{7}$");
+    private static final Pattern LOCAL_UGANDA_PATTERN =
+            Pattern.compile("^0(77|78|76|39|75|70|74|72|71|79)\\d{7}$");
+    private static final String INVALID_MESSAGE =
+            "Invalid Uganda mobile number (use 10 digits starting with 07… or +256…): ";
 
     private final String value;
 
@@ -15,7 +18,7 @@ public final class PhoneNumber {
     public static PhoneNumber of(String raw) {
         String normalized = normalize(raw);
         if (!isValidLocal(normalized)) {
-            throw new IllegalArgumentException("Invalid Uganda phone number: " + raw);
+            throw new IllegalArgumentException(INVALID_MESSAGE + raw);
         }
         return new PhoneNumber(normalized);
     }

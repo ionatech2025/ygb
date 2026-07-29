@@ -16,4 +16,22 @@ describe('respondent-validation', () => {
     expect(formatRespondentName('  Jane  ')).toBe('Jane');
     expect(formatRespondentName('   ')).toBe('');
   });
+
+  it('accepts 074 mobile prefix for respondent phone', () => {
+    const errors: Record<string, string> = {};
+    validateRespondentDemographics(
+      {
+        ...EMPTY_RESPONDENT_FIELDS,
+        respondentPhone: '0746532164',
+        respondentGender: 'FEMALE',
+        respondentAgeGroup: 'AGE_18_24',
+        districtId: 'd1',
+        subcountyId: 's1',
+        parishId: 'p1',
+        villageId: 'v1',
+      },
+      errors
+    );
+    expect(errors.respondentPhone).toBeUndefined();
+  });
 });

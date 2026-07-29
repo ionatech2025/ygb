@@ -8,7 +8,9 @@ import {
 } from '../../../../../core/domain/form-validation.model';
 import { CascadingLocationSelector } from '../CascadingLocationSelector';
 import { FormField, formControlClassName } from './FormField';
+import { FormSelect } from './FormSelect';
 import { FormSection } from './FormSection';
+import { UGANDA_PHONE_HINT } from '../../../../../core/form-validation';
 import type { ILocationRepositoryPort } from '../../../../../ports/location-repository.port';
 
 export interface RespondentSectionProps {
@@ -57,7 +59,7 @@ export function RespondentSection({
           htmlFor="respondentPhone"
           required
           error={errors.respondentPhone}
-          hint="Uganda format, e.g. 0772123456 or +256772123456"
+          hint={UGANDA_PHONE_HINT}
         >
           <input
             id="respondentPhone"
@@ -72,37 +74,28 @@ export function RespondentSection({
         </FormField>
 
         <FormField label="Gender" htmlFor="respondentGender" required error={errors.respondentGender}>
-          <select
+          <FormSelect
             id="respondentGender"
             value={value.respondentGender}
-            onChange={(e) => patch({ respondentGender: e.target.value })}
-            className={formControlClassName}
+            onChange={(next) => patch({ respondentGender: next })}
+            options={GENDER_OPTIONS}
+            placeholder="Select gender…"
             required
-          >
-            <option value="">Select gender…</option>
-            {GENDER_OPTIONS.map((gender) => (
-              <option key={gender.value} value={gender.value}>
-                {gender.label}
-              </option>
-            ))}
-          </select>
+          />
         </FormField>
 
         <FormField label="Age group" htmlFor="respondentAgeGroup" required error={errors.respondentAgeGroup}>
-          <select
+          <FormSelect
             id="respondentAgeGroup"
             value={value.respondentAgeGroup}
-            onChange={(e) => patch({ respondentAgeGroup: e.target.value as AgeGroup })}
-            className={formControlClassName}
+            onChange={(next) => patch({ respondentAgeGroup: next as AgeGroup })}
+            options={AGE_GROUP_VALUES.map((group) => ({
+              value: group,
+              label: AGE_GROUP_LABELS[group],
+            }))}
+            placeholder="Select age group…"
             required
-          >
-            <option value="">Select age group…</option>
-            {AGE_GROUP_VALUES.map((group) => (
-              <option key={group} value={group}>
-                {AGE_GROUP_LABELS[group]}
-              </option>
-            ))}
-          </select>
+          />
         </FormField>
       </div>
 

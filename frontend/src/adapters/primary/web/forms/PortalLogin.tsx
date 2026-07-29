@@ -6,7 +6,7 @@ import { loginPortalClasses } from '../../../../core/domain/admin-dashboard.them
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { isValidUgandaPhoneLocal } from '../../../../core/utils/phone-utils';
 import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
-import { FormField, formControlClassName } from '../components/forms';
+import { FormField, formControlClassName, PasswordInput } from '../components/forms';
 import { PwaInstallBanner } from '../components/PwaInstallBanner';
 import { ThemeToggle } from '../components/ThemeToggle';
 
@@ -180,15 +180,14 @@ export function PortalLogin() {
                 </FormField>
 
                 <FormField label="Password" htmlFor="password" required>
-                  <input
+                  <PasswordInput
                     id="password"
-                    type="password"
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className={formControlClassName}
                     disabled={loading}
+                    required
                   />
                 </FormField>
 

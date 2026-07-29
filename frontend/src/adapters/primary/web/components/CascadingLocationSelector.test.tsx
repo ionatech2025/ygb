@@ -15,6 +15,7 @@ import {
   KAMPALA_DISTRICT_ID,
 } from '../../../../core/domain/location-seed.constants';
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
+import { chooseFormOptionByValue } from '../../../../test-utils/choose-form-option';
 
 vi.mock('../../../../core/LocationService', () => ({
   locationService: {
@@ -53,7 +54,7 @@ describe('CascadingLocationSelector', () => {
     vi.clearAllMocks();
   });
 
-  it('renders only select elements for location levels', async () => {
+  it('renders combobox pickers for location levels', async () => {
     const repository = createRepository();
     render(
       <CascadingLocationSelector
@@ -65,10 +66,10 @@ describe('CascadingLocationSelector', () => {
 
     await waitFor(() => expect(screen.getByLabelText(/^District/i)).not.toBeDisabled());
 
-    expect(screen.getByLabelText(/^District/i).tagName).toBe('SELECT');
-    expect(screen.getByLabelText(/Sub-county/i).tagName).toBe('SELECT');
-    expect(screen.getByLabelText(/^Parish/i).tagName).toBe('SELECT');
-    expect(screen.getByLabelText(/^Village/i).tagName).toBe('SELECT');
+    expect(screen.getByLabelText(/^District/i).tagName).toBe('BUTTON');
+    expect(screen.getByLabelText(/Sub-county/i).tagName).toBe('BUTTON');
+    expect(screen.getByLabelText(/^Parish/i).tagName).toBe('BUTTON');
+    expect(screen.getByLabelText(/^Village/i).tagName).toBe('BUTTON');
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
@@ -86,7 +87,7 @@ describe('CascadingLocationSelector', () => {
     );
 
     await waitFor(() => expect(screen.getByLabelText(/^District/i)).not.toBeDisabled());
-    await user.selectOptions(screen.getByLabelText(/^District/i), district.id);
+    await chooseFormOptionByValue(user, /^District/i, district.id);
 
     expect(onChange).toHaveBeenCalledWith({
       districtId: district.id,
@@ -121,13 +122,14 @@ describe('CascadingLocationSelector', () => {
     render(<ControlledSelector />);
 
     await waitFor(() => expect(screen.getByLabelText(/^District/i)).not.toBeDisabled());
-    await user.selectOptions(screen.getByLabelText(/^District/i), KAMPALA_DISTRICT_ID);
+    await chooseFormOptionByValue(user, /^District/i, KAMPALA_DISTRICT_ID);
     await waitFor(() => expect(screen.getByLabelText(/Sub-county/i)).not.toBeDisabled());
-    await user.selectOptions(screen.getByLabelText(/Sub-county/i), KAMPALA_CENTRAL_DIVISION_ID);
+    await chooseFormOptionByValue(user, /Sub-county/i, KAMPALA_CENTRAL_DIVISION_ID);
     await waitFor(() => expect(screen.getByLabelText(/^Parish/i)).not.toBeDisabled());
 
-    const parishSelect = screen.getByLabelText(/^Parish/i);
-    expect(within(parishSelect).getByRole('option', { name: CORRECTED_KAMWOKYA_I_PARISH_LABEL })).toBeInTheDocument();
-    expect(within(parishSelect).queryByRole('option', { name: LEGACY_KAMWOKYA_I_PARISH_LABEL })).not.toBeInTheDocument();
+    await user.click(screen.getByLabelText(/^Parish/i));
+    const parishList = screen.getByTestId('parish-option-list');
+    expect(within(parishList).getByRole('radio', { name: CORRECTED_KAMWOKYA_I_PARISH_LABEL })).toBeInTheDocument();
+    expect(within(parishList).queryByRole('radio', { name: LEGACY_KAMWOKYA_I_PARISH_LABEL })).not.toBeInTheDocument();
   });
 });

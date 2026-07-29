@@ -2,6 +2,7 @@ package com.ionatech.nac.ygb.application.services;
 
 import com.ionatech.nac.ygb.application.ports.api.AuthenticateUserCommand;
 import com.ionatech.nac.ygb.application.ports.api.AuthenticateUserUseCase;
+import com.ionatech.nac.ygb.application.ports.api.AuthenticatedUserProfile;
 import com.ionatech.nac.ygb.application.ports.api.AuthenticationResult;
 import com.ionatech.nac.ygb.application.ports.spi.PasswordEncoderPort;
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
@@ -36,6 +37,12 @@ public class AuthenticateUserService implements AuthenticateUserUseCase {
         }
 
         String token = tokenProviderPort.generateToken(user.getId(), user.getRole());
-        return new AuthenticationResult(token);
+        AuthenticatedUserProfile profile = new AuthenticatedUserProfile(
+                user.getId(),
+                user.getName(),
+                user.getPhoneNumber(),
+                user.getRole()
+        );
+        return new AuthenticationResult(token, profile);
     }
 }

@@ -5,7 +5,7 @@ import {
   INSTALMENT_PERIOD_OPTIONS,
   type BypFormFields,
 } from '../../../../../core/domain/byp-form.model';
-import { FormField, formControlClassName, FormSection, YesNoRadioGroup } from '../../components/forms';
+import { FormField, formControlClassName, FormSection, FormSelect, YesNoRadioGroup } from '../../components/forms';
 
 export interface BypFundSectionProps {
   value: BypFormFields;
@@ -24,25 +24,19 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
         required
         error={errors.fundReceiptDuration}
       >
-        <select
+        <FormSelect
           id="fundReceiptDuration"
           value={value.fundReceiptDuration}
-          onChange={(e) =>
+          onChange={(next) =>
             patch({
-              fundReceiptDuration: e.target.value as BypFormFields['fundReceiptDuration'],
+              fundReceiptDuration: next as BypFormFields['fundReceiptDuration'],
               fundReceiptDurationSpecify: '',
             })
           }
-          className={formControlClassName}
+          options={FUND_RECEIPT_DURATION_OPTIONS}
+          placeholder="Select duration…"
           required
-        >
-          <option value="">Select duration…</option>
-          {FUND_RECEIPT_DURATION_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        />
       </FormField>
 
       {requiresFundDurationSpecify(value.fundReceiptDuration) && (
@@ -99,25 +93,19 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
         error={errors.instalmentPeriod}
         hint="This refers to how often you receive PDM funds, not how you repay a loan."
       >
-        <select
+        <FormSelect
           id="instalmentPeriod"
           value={value.instalmentPeriod}
-          onChange={(e) =>
+          onChange={(next) =>
             patch({
-              instalmentPeriod: e.target.value as BypFormFields['instalmentPeriod'],
+              instalmentPeriod: next as BypFormFields['instalmentPeriod'],
               instalmentPeriodSpecify: '',
             })
           }
-          className={formControlClassName}
+          options={INSTALMENT_PERIOD_OPTIONS}
+          placeholder="Select period…"
           required
-        >
-          <option value="">Select period…</option>
-          {INSTALMENT_PERIOD_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        />
       </FormField>
 
       {requiresInstalmentSpecify(value.instalmentPeriod) && (

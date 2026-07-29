@@ -28,32 +28,37 @@ class YGBAuthDatabase extends Dexie {
 
 const db = new YGBAuthDatabase();
 
+interface BackendAuthUserResponse {
+  id: string;
+  fullName: string;
+  phoneNumber: string;
+  role: AuthenticatedUser['role'];
+}
+
 interface BackendAuthResponse {
   token: string;
+  user: BackendAuthUserResponse;
 }
 
-function roleDisplayName(role: AuthenticatedUser['role']): string {
-  return role === 'ADMIN' ? 'Administrator' : 'Field Collector';
-}
-
-function buildUserFromToken(token: string, phoneNumber: string): { user: AuthenticatedUser; tokens: TokenPair } {
+function buildTokenPair(token: string): TokenPair {
   const claims = decodeJwtPayload(token);
   const issuedAt = claims.iat ? claims.iat * 1000 : Date.now();
   const expiresAt = claims.exp ? claims.exp * 1000 : issuedAt + 24 * 60 * 60 * 1000;
 
   return {
-    user: {
-      id: claims.sub,
-      fullName: roleDisplayName(claims.role),
-      phoneNumber,
-      role: claims.role,
-    },
-    tokens: {
-      accessToken: token,
-      refreshToken: '',
-      issuedAt,
-      expiresAt,
-    },
+    accessToken: token,
+    refreshToken: '',
+    issuedAt,
+    expiresAt,
+  };
+}
+
+function mapLoginUser(user: BackendAuthUserResponse): AuthenticatedUser {
+  return {
+    id: user.id,
+    fullName: user.fullName,
+    phoneNumber: user.phoneNumber,
+    role: user.role,
   };
 }
 
@@ -85,8 +90,10 @@ export class PersistentAuthAdapter implements IAuthRepositoryPort {
         }),
       });
 
-      const { user, tokens } = buildUserFromToken(response.token, phoneNumber);
-      return { user, tokens };
+      return {
+        user: mapLoginUser(response.user),
+        tokens: buildTokenPair(response.token),
+      };
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) {
         throw new Error('The phone number or password you entered is incorrect.');

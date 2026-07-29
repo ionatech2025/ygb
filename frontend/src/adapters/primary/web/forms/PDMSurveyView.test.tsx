@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { PDMSurveyView } from './PDMSurveyView';
 import { FORM_TYPE_OPTIONS } from '../../../../core/domain/form-type.model';
+import { chooseFormOptionByValue } from '../../../../test-utils/choose-form-option';
 
 vi.mock('../../../../core/LocationService', () => ({
   locationService: {
@@ -43,9 +44,9 @@ describe('PDMSurveyView', () => {
   it('lists exactly BYP, IYP, LGO, PC in that order (TC-FORM-01-01)', () => {
     render(<PDMSurveyView />);
 
-    const options = screen.getAllByRole('option').slice(1);
+    const options = screen.getAllByRole('radio');
     expect(options).toHaveLength(4);
-    expect(options.map((option) => option.textContent)).toEqual(
+    expect(options.map((option) => option.closest('label')?.textContent?.trim())).toEqual(
       FORM_TYPE_OPTIONS.map((option) => option.label)
     );
   });
@@ -54,7 +55,7 @@ describe('PDMSurveyView', () => {
     const user = userEvent.setup();
     render(<PDMSurveyView />);
 
-    await user.selectOptions(screen.getByRole('combobox', { name: /respondent category/i }), 'IYP');
+    await chooseFormOptionByValue(user, /respondent category/i, 'IYP');
 
     expect(screen.getByTestId('iyp-form')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Individual Young Person \(IYP\) Questionnaire/i })).toBeInTheDocument();
@@ -66,19 +67,19 @@ describe('PDMSurveyView', () => {
     render(<PDMSurveyView />);
 
     expect(screen.getByText('Survey Entry Point Disabled')).toBeInTheDocument();
-    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+    expect(screen.queryByRole('radio', { name: /Beneficiary Young Person \(BYP\)/i })).not.toBeInTheDocument();
   });
 
   it('returns to the category selector when Back is clicked', async () => {
     const user = userEvent.setup();
     render(<PDMSurveyView />);
 
-    await user.selectOptions(screen.getByRole('combobox', { name: /respondent category/i }), 'IYP');
+    await chooseFormOptionByValue(user, /respondent category/i, 'IYP');
     expect(screen.getByTestId('iyp-form')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /back to category selection/i }));
 
     expect(screen.queryByTestId('iyp-form')).not.toBeInTheDocument();
-    expect(screen.getByRole('combobox', { name: /respondent category/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/respondent category/i)).toBeInTheDocument();
   });
 });
