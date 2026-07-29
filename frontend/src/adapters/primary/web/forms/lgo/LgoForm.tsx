@@ -1,7 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CheckCircle2, Loader2 } from 'lucide-react';
+import { fetchPublicActiveFiscalYear } from '../../../../../adapters/secondary/api/fiscal-year-settings-api.adapter';
+import {
+  createLgoFieldsFromActiveFiscalYear,
+  EMPTY_LGO_FIELDS,
+} from '../../../../../core/domain/lgo-form.model';
 import { EMPTY_RESPONDENT_FIELDS } from '../../../../../core/domain/respondent-fields.model';
-import { EMPTY_LGO_FIELDS } from '../../../../../core/domain/lgo-form.model';
 import { buildLgoSubmissionPayload, validateLgoForm, type LgoFormErrors } from '../../../../../core/lgo-validation';
 import { useAuthStore } from '../../../../../core/store/useAuthStore';
 import {
@@ -31,6 +35,36 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
   const [errors, setErrors] = useState<LgoFormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [fiscalYearLoading, setFiscalYearLoading] = useState(true);
+  const [fiscalYearLoadError, setFiscalYearLoadError] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetchPublicActiveFiscalYear()
+      .then((setting) => {
+        if (cancelled) return;
+        setLgo(createLgoFieldsFromActiveFiscalYear(setting));
+        setFiscalYearLoadError('');
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        setFiscalYearLoadError(
+          error instanceof Error
+            ? error.message
+            : 'Unable to load the active fiscal year. Try again or contact your administrator.'
+        );
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setFiscalYearLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const scrollToFirstError = (nextErrors: LgoFormErrors) => {
     const fieldIdMap: Record<string, string> = {
@@ -43,6 +77,24 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
     if (!firstKey) return;
     const el = document.getElementById(fieldIdMap[firstKey] ?? firstKey);
     el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  const resetForm = () => {
+    setRespondent(EMPTY_RESPONDENT_FIELDS);
+    setErrors({});
+    setFiscalYearLoading(true);
+    fetchPublicActiveFiscalYear()
+      .then((setting) => {
+        setLgo(createLgoFieldsFromActiveFiscalYear(setting));
+        setFiscalYearLoadError('');
+      })
+      .catch((error) => {
+        setLgo(EMPTY_LGO_FIELDS);
+        setFiscalYearLoadError(
+          error instanceof Error ? error.message : 'Unable to reload the active fiscal year.'
+        );
+      })
+      .finally(() => setFiscalYearLoading(false));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -76,9 +128,7 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
           : 'Saved locally. Your LGO submission will sync when online.'
       );
       window.setTimeout(() => {
-        setRespondent(EMPTY_RESPONDENT_FIELDS);
-        setLgo(EMPTY_LGO_FIELDS);
-        setErrors({});
+        resetForm();
         onSubmitted?.();
       }, 1200);
     } catch (error) {
@@ -110,14 +160,20 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
       )}
 
       <RespondentSection value={respondent} onChange={setRespondent} errors={errors} />
-      <LgoFiscalYearSection value={lgo} onChange={setLgo} errors={errors} />
+      <LgoFiscalYearSection
+        value={lgo}
+        onChange={setLgo}
+        errors={errors}
+        loading={fiscalYearLoading}
+        loadError={fiscalYearLoadError}
+      />
       <LgoGovernanceSection value={lgo} onChange={setLgo} errors={errors} />
       <LgoExplainSection value={lgo} onChange={setLgo} errors={errors} />
       <LgoFeedbackSection value={lgo} onChange={setLgo} errors={errors} />
 
       <button
         type="submit"
-        disabled={submitting}
+        disabled={submitting || fiscalYearLoading || Boolean(fiscalYearLoadError)}
         className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand text-sm font-bold text-white transition hover:bg-brand-hover active:scale-[0.98] disabled:bg-slate-400"
       >
         {submitting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}

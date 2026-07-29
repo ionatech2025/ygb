@@ -34,8 +34,7 @@ class SubmissionTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -53,7 +52,61 @@ class SubmissionTest {
         byp.validate();
 
         assertThat(byp.getId()).isNotNull();
-        assertThat(byp.getExactAge().getValue()).isEqualTo(22);
+        assertThat(byp.getRespondentAgeGroup()).isEqualTo(AgeGroup.AGE_18_24);
+    }
+
+    @Test
+    void submissionAcceptsBlankRespondentName() {
+        BypSubmission byp = new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support and early training.")
+        );
+
+        assertThat(byp.getRespondentName()).isEmpty();
+    }
+
+    @Test
+    void submissionRejectsBelow18AgeGroup() {
+        assertThatThrownBy(() -> new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_BELOW_18,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        ))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("out of programme scope");
     }
 
     @Test
@@ -65,8 +118,7 @@ class SubmissionTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "MONTHS", // requires specify
                 null, // missing specify
                 true,
@@ -95,8 +147,7 @@ class SubmissionTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -125,8 +176,7 @@ class SubmissionTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -159,7 +209,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 false, // unaware
                 null,
                 null,
@@ -185,7 +235,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true, // aware
                 true, // eligible criteria aware
                 true, // applied
@@ -211,7 +261,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 true, // applied
@@ -238,7 +288,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 false, // did not apply
@@ -265,7 +315,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 true,
@@ -296,8 +346,11 @@ class SubmissionTest {
                 "Official Name",
                 "0772111444",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
-                List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                AgeGroup.AGE_ABOVE_35,
+                List.of(
+                        new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                        new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+                ),
                 true,
                 true,
                 true,
@@ -310,7 +363,7 @@ class SubmissionTest {
         );
 
         lgo.validate();
-        assertThat(lgo.getFiscalYearRecords()).hasSize(1);
+        assertThat(lgo.getFiscalYearRecords()).hasSize(2);
     }
 
     @Test
@@ -322,8 +375,11 @@ class SubmissionTest {
                 "Official Name",
                 "0772111444",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
-                List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                AgeGroup.AGE_ABOVE_35,
+                List.of(
+                        new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                        new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+                ),
                 true,
                 true,
                 true,
@@ -349,8 +405,11 @@ class SubmissionTest {
                 "Official Name",
                 "0772111444",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
-                List.of(new FiscalYearRecord("2030/31", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                AgeGroup.AGE_ABOVE_35,
+                List.of(
+                        new FiscalYearRecord("2030/31", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                        new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+                ),
                 true,
                 true,
                 true,
@@ -380,12 +439,13 @@ class SubmissionTest {
                 "Parish Chief Name",
                 "0772111555",
                 "MALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 1500000L,
                 1500000L,
                 100,
                 40,
                 30,
+                10,
                 new NarrativeText("Lack of transport equipment is the main obstacle."),
                 true,
                 7,
@@ -393,7 +453,7 @@ class SubmissionTest {
                 4,
                 true,
                 List.of("FINANCIAL_LITERACY", "BUSINESS_PLANNING"),
-                "HIGHLY_EFFECTIVE",
+                PdcEffectivenessRating.VERY_EFFECTIVE,
                 List.of("CAO", "PDM_SECRETARIAT"),
                 null,
                 new NarrativeText("Regular fields checks performed."),
@@ -403,11 +463,96 @@ class SubmissionTest {
                 true,
                 new NarrativeText("Reports submitted quarterly to the CAO office."),
                 10,
-                8
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
 
         pc.validate();
         assertThat(pc.getAmountExpected()).isEqualTo(1500000L);
+        assertThat(pc.getYoungMenBeneficiaries()).isEqualTo(10);
+        assertThat(pc.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.VERY_EFFECTIVE);
+    }
+
+    @Test
+    void pcShouldRejectNullPdcEffectivenessRating() {
+        assertThatThrownBy(() -> new PcSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Parish Chief Name",
+                "0772111555",
+                "MALE",
+                AgeGroup.AGE_ABOVE_35,
+                1500000L,
+                1500000L,
+                100,
+                40,
+                30,
+                10,
+                new NarrativeText("Lack of transport equipment is the main obstacle."),
+                true,
+                7,
+                3,
+                4,
+                true,
+                List.of("FINANCIAL_LITERACY"),
+                null,
+                List.of("CAO"),
+                null,
+                new NarrativeText("Regular fields checks performed."),
+                true,
+                true,
+                new NarrativeText("Improvements seen in poultry sectors."),
+                true,
+                new NarrativeText("Reports submitted quarterly."),
+                10,
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
+        ))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("PDC effectiveness rating is required");
+    }
+
+    @Test
+    void pcShouldRejectYoungMenExceedingYouthBeneficiaries() {
+        PcSubmission pc = new PcSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Parish Chief Name",
+                "0772111555",
+                "MALE",
+                AgeGroup.AGE_ABOVE_35,
+                1500000L,
+                1500000L,
+                100,
+                40,
+                30,
+                15,
+                new NarrativeText("Lack of transport equipment is the main obstacle."),
+                true,
+                7,
+                3,
+                4,
+                true,
+                List.of("FINANCIAL_LITERACY"),
+                PdcEffectivenessRating.EFFECTIVE,
+                List.of("CAO"),
+                null,
+                new NarrativeText("Regular fields checks performed."),
+                true,
+                true,
+                new NarrativeText("Improvements seen in poultry sectors."),
+                true,
+                new NarrativeText("Reports submitted quarterly."),
+                10,
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
+        );
+
+        assertThatThrownBy(pc::validate)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Young women and young men beneficiaries cannot exceed youth beneficiaries");
     }
 
     @Test
@@ -419,12 +564,13 @@ class SubmissionTest {
                 "Parish Chief Name",
                 "0772111555",
                 "MALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 1500000L,
                 1500000L,
                 100,
                 40,
                 30,
+                10,
                 new NarrativeText("Lack of transport equipment is the main obstacle."),
                 true,
                 7,
@@ -432,9 +578,9 @@ class SubmissionTest {
                 4,
                 true,
                 List.of("FINANCIAL_LITERACY"),
-                "HIGHLY_EFFECTIVE",
-                List.of("OTHERS"), // monitored by OTHERS
-                null, // missing specify
+                PdcEffectivenessRating.MODERATELY_EFFECTIVE,
+                List.of("OTHERS"),
+                null,
                 new NarrativeText("Regular fields checks performed."),
                 true,
                 true,
@@ -442,7 +588,8 @@ class SubmissionTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
-                8
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
 
         assertThatThrownBy(pc::validate)

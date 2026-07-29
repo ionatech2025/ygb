@@ -27,7 +27,7 @@ class PublicDashboardFilterTest {
                 null,
                 null,
                 "FEMALE",
-                "AGE_20_24",
+                "AGE_18_24",
                 "JAN_JUN_2026"
         );
 
@@ -35,7 +35,7 @@ class PublicDashboardFilterTest {
         assertThat(filter.districtId()).isEqualTo(districtId);
         assertThat(filter.formType()).isEqualTo(FormType.IYP);
         assertThat(filter.gender()).isEqualTo("FEMALE");
-        assertThat(filter.ageGroup()).isEqualTo("AGE_20_24");
+        assertThat(filter.ageGroup()).isEqualTo("AGE_18_24");
         assertThat(filter.financialYearPeriod()).isEqualTo("JAN_JUN_2026");
     }
 

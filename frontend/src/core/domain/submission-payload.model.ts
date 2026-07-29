@@ -15,15 +15,15 @@ export interface FiscalYearRecordPayload {
   expectedFunds: number;
   actualFunds: number;
   totalBeneficiaryCount: number;
-  youngPeopleCount: number;
-  youngWomenCount: number;
+  beneficiariesUnder30Count: number;
+  beneficiaryYoungWomenCount: number;
+  beneficiaryYoungMenCount: number;
   totalParishesCount: number;
   fundedParishesCount: number;
 }
 
 export interface BypSubmissionPayload extends SubmissionPayloadBase {
   formType: 'BYP';
-  exactAge: number;
   fundReceiptDuration: string;
   fundReceiptDurationSpecify?: string | null;
   receivedActualAmountRequested: boolean;
@@ -73,6 +73,7 @@ export interface PcSubmissionPayload extends SubmissionPayloadBase {
   totalBeneficiaries: number;
   youthBeneficiaries: number;
   youngWomenBeneficiaries: number;
+  youngMenBeneficiaries: number;
   obstaclesDescription: string;
   spendingTargetedToMostInNeed: boolean;
   pdcTotalMembers: number;
@@ -91,6 +92,7 @@ export interface PcSubmissionPayload extends SubmissionPayloadBase {
   progressReportsSubmittedExplanation?: string | null;
   selfRelianceBeneficiariesCount: number;
   selfRelianceGroupProjectsCount: number;
+  programmeImprovementSuggestion: string;
 }
 
 export type SubmissionPayload =

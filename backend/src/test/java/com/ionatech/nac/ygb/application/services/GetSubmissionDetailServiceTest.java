@@ -17,6 +17,7 @@ import com.ionatech.nac.ygb.domain.valueobjects.AgeGroup;
 import com.ionatech.nac.ygb.domain.valueobjects.FiscalYearRecord;
 import com.ionatech.nac.ygb.domain.valueobjects.Location;
 import com.ionatech.nac.ygb.domain.valueobjects.NarrativeText;
+import com.ionatech.nac.ygb.domain.valueobjects.PdcEffectivenessRating;
 import com.ionatech.nac.ygb.domain.valueobjects.Rating;
 import com.ionatech.nac.ygb.domain.valueobjects.SubmissionMetadata;
 import org.junit.jupiter.api.BeforeEach;
@@ -91,7 +92,6 @@ class GetSubmissionDetailServiceTest {
 
         BypSubmissionRequestDto bypDto = (BypSubmissionRequestDto) payloadMapper.toPayload(sampleByp(UUID.randomUUID()));
         assertThat(bypDto.getFormType()).isEqualTo("BYP");
-        assertThat(bypDto.getExactAge()).isEqualTo(22);
         assertThat(bypDto.getImprovementSuggestion()).isEqualTo("Provide more technical support.");
 
         IypSubmissionRequestDto iypDto = (IypSubmissionRequestDto) payloadMapper.toPayload(sampleIyp(UUID.randomUUID()));
@@ -104,6 +104,9 @@ class GetSubmissionDetailServiceTest {
         PcSubmissionRequestDto pcDto = (PcSubmissionRequestDto) payloadMapper.toPayload(samplePc(UUID.randomUUID()));
         assertThat(pcDto.getAmountExpected()).isEqualTo(1500000L);
         assertThat(pcDto.getMonitoredBy()).containsExactly("CAO");
+        assertThat(pcDto.getYoungMenBeneficiaries()).isEqualTo(8);
+        assertThat(pcDto.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.EFFECTIVE);
+        assertThat(pcDto.getProgrammeImprovementSuggestion()).isEqualTo("Improve parish-level PDM monitoring.");
     }
 
     private SubmissionMetadata metadata(UUID deviceSubmissionId) {
@@ -118,8 +121,7 @@ class GetSubmissionDetailServiceTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -143,7 +145,7 @@ class GetSubmissionDetailServiceTest {
                 "John Four",
                 "0773000111",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 true,
@@ -165,8 +167,11 @@ class GetSubmissionDetailServiceTest {
                 "District Officer",
                 "0774000111",
                 "MALE",
-                AgeGroup.AGE_30_AND_ABOVE,
-                List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                AgeGroup.AGE_ABOVE_35,
+                List.of(
+                        new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                        new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+                ),
                 true,
                 true,
                 true,
@@ -187,12 +192,13 @@ class GetSubmissionDetailServiceTest {
                 "Parish Chief",
                 "0775000111",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 1500000L,
                 1200000L,
                 50,
                 20,
                 15,
+                8,
                 new NarrativeText("Delays in disbursement."),
                 true,
                 12,
@@ -200,7 +206,7 @@ class GetSubmissionDetailServiceTest {
                 7,
                 true,
                 List.of("FINANCIAL_MANAGEMENT"),
-                "GOOD",
+                PdcEffectivenessRating.EFFECTIVE,
                 List.of("CAO"),
                 null,
                 new NarrativeText("Regular field checks performed."),
@@ -210,7 +216,8 @@ class GetSubmissionDetailServiceTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
-                8
+                8,
+                new NarrativeText("Improve parish-level PDM monitoring.")
         );
     }
 }

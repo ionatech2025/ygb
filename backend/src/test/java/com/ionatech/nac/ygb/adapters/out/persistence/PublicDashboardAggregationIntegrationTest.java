@@ -78,10 +78,7 @@ class PublicDashboardAggregationIntegrationTest {
     @Test
     void shouldAggregateAgeGroupsForPublicCharts() {
         assertThat(aggregationRepository.countByAgeGroup(DashboardFilter.empty()))
-                .contains(
-                        new AgeGroupCount("AGE_20_24", 3L),
-                        new AgeGroupCount("AGE_15_19", 1L)
-                );
+                .containsExactly(new AgeGroupCount("AGE_18_24", 4L));
     }
 
     @Test
@@ -136,8 +133,7 @@ class PublicDashboardAggregationIntegrationTest {
                 name,
                 "0772000" + deviceSubmissionId.toString().substring(0, 3),
                 gender,
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -161,7 +157,7 @@ class PublicDashboardAggregationIntegrationTest {
                 name,
                 "0773000" + deviceSubmissionId.toString().substring(0, 3),
                 gender,
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 true,

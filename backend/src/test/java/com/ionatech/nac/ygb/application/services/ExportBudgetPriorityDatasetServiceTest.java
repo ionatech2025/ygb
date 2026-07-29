@@ -80,7 +80,7 @@ class ExportBudgetPriorityDatasetServiceTest {
                 districtId,
                 "Kampala",
                 "FEMALE",
-                "AGE_20_24",
+                "AGE_18_24",
                 "PRIMARY_HEALTH_CARE",
                 LocalDateTime.of(2026, 3, 15, 10, 0)
         );

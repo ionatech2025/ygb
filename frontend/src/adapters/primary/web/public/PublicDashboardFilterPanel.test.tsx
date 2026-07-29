@@ -53,7 +53,7 @@ function createDashboardApi(overrides: Partial<IPublicDashboardApiPort> = {}): I
     fetchFilterOptions: vi.fn().mockResolvedValue({
       formTypes: ['BYP'],
       genders: ['MALE'],
-      ageGroups: ['AGE_15_19'],
+      ageGroups: ['AGE_18_24'],
       financialYearPeriods: ['JAN_JUN_2026'],
     }),
     buildFilterQueryString: vi.fn(),

@@ -48,7 +48,7 @@ class LgoBudgetAllocationAnonymisedRecordTest {
                 districtId,
                 "Kampala",
                 "FEMALE",
-                "AGE_30_AND_ABOVE",
+                "AGE_ABOVE_35",
                 "{\"health\":{\"amount\":1200000}}",
                 LocalDateTime.of(2026, 3, 15, 10, 0)
         );

@@ -107,4 +107,28 @@ describe('LocationService', () => {
     expect(repository.save).toHaveBeenCalledWith(dataset);
     expect(writeLocationEtag).toHaveBeenCalledWith('etag-v2');
   });
+
+  it('persists corrected labels when the API ETag changes on background refresh', async () => {
+    const repository = createRepository(true);
+    const service = new LocationService(repository);
+    Object.defineProperty(navigator, 'onLine', { configurable: true, value: true });
+    readLocationEtag.mockReturnValue('etag-v1');
+
+    const updatedDataset: AdminLocation[] = [
+      { id: 'district-1', name: 'Kampala', parentId: null, level: 'DISTRICT' },
+      {
+        id: 'parish-1',
+        name: 'Kamwokya i',
+        parentId: 'subcounty-1',
+        level: 'PARISH',
+      },
+    ];
+    fetchLocationDataset.mockResolvedValue({ locations: updatedDataset, etag: 'etag-v2' });
+
+    await service.ensureLoaded();
+
+    expect(fetchLocationDataset).toHaveBeenCalledWith('etag-v1');
+    expect(repository.save).toHaveBeenCalledWith(updatedDataset);
+    expect(writeLocationEtag).toHaveBeenCalledWith('etag-v2');
+  });
 });

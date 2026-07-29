@@ -99,7 +99,7 @@ class LgoBudgetAllocationDashboardServiceTest {
         when(locationOptionsPort.findSubcountiesByDistrict(districtId))
                 .thenReturn(List.of(new FilterLocationOption(UUID.randomUUID(), "Central")));
         when(readPort.findDistinctGenders()).thenReturn(List.of("FEMALE"));
-        when(readPort.findDistinctAgeGroups()).thenReturn(List.of("AGE_30_AND_ABOVE"));
+        when(readPort.findDistinctAgeGroups()).thenReturn(List.of("AGE_ABOVE_35"));
         when(readPort.findDistinctFinancialYearPeriods()).thenReturn(List.of("JAN_JUN_2026"));
 
         LgoBudgetAllocationFilterOptions options = service.getOptions(districtId, null);

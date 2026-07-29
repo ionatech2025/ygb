@@ -21,6 +21,7 @@ import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.t
 import type { UserProfile } from '../../../../core/domain/user.model';
 import type { IUserRepositoryPort } from '../../../../ports/user-repository.port';
 import { ConfirmActionDialog } from '../admin/ConfirmActionDialog';
+import { AdminFiscalYearSettingsPanel } from '../admin/AdminFiscalYearSettingsPanel';
 
 const SUCCESS_DISMISS_MS = 5000;
 
@@ -319,6 +320,8 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
         description="Register field collectors, manage accounts, and view submission history."
         icon={<Users className="h-7 w-7" aria-hidden="true" />}
       />
+
+      <AdminFiscalYearSettingsPanel />
 
       <ConfirmActionDialog
         open={pendingDeactivate !== null}

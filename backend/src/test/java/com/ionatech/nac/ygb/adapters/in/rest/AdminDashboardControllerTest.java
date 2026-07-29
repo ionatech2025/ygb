@@ -116,7 +116,7 @@ class AdminDashboardControllerTest {
                         .param("dateFrom", "2026-01-01")
                         .param("dateTo", "2026-06-30")
                         .param("gender", "FEMALE")
-                        .param("ageGroup", "AGE_20_24")
+                        .param("ageGroup", "AGE_18_24")
                         .param("collectorId", collectorId.toString())
                         .param("financialYearPeriod", "JAN_JUN_2026")
                         .param("granularity", "WEEK"))
@@ -130,7 +130,7 @@ class AdminDashboardControllerTest {
         org.assertj.core.api.Assertions.assertThat(captured.parishId()).isEqualTo(parishId);
         org.assertj.core.api.Assertions.assertThat(captured.formType()).isEqualTo(FormType.BYP);
         org.assertj.core.api.Assertions.assertThat(captured.gender()).isEqualTo("FEMALE");
-        org.assertj.core.api.Assertions.assertThat(captured.ageGroup()).isEqualTo("AGE_20_24");
+        org.assertj.core.api.Assertions.assertThat(captured.ageGroup()).isEqualTo("AGE_18_24");
         org.assertj.core.api.Assertions.assertThat(captured.collectorId()).isEqualTo(collectorId);
         org.assertj.core.api.Assertions.assertThat(captured.financialYearPeriod()).isEqualTo("JAN_JUN_2026");
         org.assertj.core.api.Assertions.assertThat(captured.dateFrom()).isEqualTo(LocalDate.of(2026, 1, 1));
@@ -147,7 +147,7 @@ class AdminDashboardControllerTest {
                 List.of(),
                 List.of("BYP", "IYP", "LGO", "PC"),
                 List.of("FEMALE", "MALE"),
-                List.of("AGE_20_24"),
+                List.of("AGE_18_24"),
                 List.of(new FilterCollectorOption(UUID.randomUUID(), "Jane Doe")),
                 List.of("JAN_JUN_2026")
         );
@@ -157,7 +157,7 @@ class AdminDashboardControllerTest {
                 List.of(),
                 List.of("BYP", "IYP", "LGO", "PC"),
                 List.of("FEMALE", "MALE"),
-                List.of("AGE_20_24"),
+                List.of("AGE_18_24"),
                 List.of(new FilterCollectorOptionDto(UUID.randomUUID(), "Jane Doe")),
                 List.of("JAN_JUN_2026")
         );

@@ -1,4 +1,5 @@
 import {
+  PDC_EFFECTIVENESS_OPTIONS,
   requiresImprovementsSeenExplanation,
   requiresMonitoredByOthersSpecify,
   requiresPdcTrainingAreas,
@@ -9,7 +10,8 @@ import type { RespondentFields } from './domain/respondent-fields.model';
 import type { AgeGroup } from './domain/form-validation.model';
 import { parseFundAmount, parseNonNegativeInteger } from './lgo-validation';
 import { normalizeUgandaPhoneLocal } from './utils/phone-utils';
-import { validateNarrativeText, validatePhone, validateRequired } from './form-validation';
+import { validateNarrativeText, validateRequired } from './form-validation';
+import { formatRespondentName, validateRespondentDemographics } from './respondent-validation';
 
 export type PcFormErrors = Record<string, string>;
 
@@ -19,18 +21,7 @@ export interface PcFormState {
 }
 
 function validateRespondent(respondent: RespondentFields, errors: PcFormErrors): void {
-  if (!validateRequired(respondent.respondentName).valid) {
-    errors.respondentName = 'Name of respondent is required.';
-  }
-  if (!validatePhone(respondent.respondentPhone).valid) {
-    errors.respondentPhone = validatePhone(respondent.respondentPhone).message ?? 'Invalid phone number.';
-  }
-  if (!respondent.respondentGender) errors.respondentGender = 'Gender is required.';
-  if (!respondent.respondentAgeGroup) errors.respondentAgeGroup = 'Age group is required.';
-  if (!respondent.districtId) errors.districtId = 'District is required.';
-  if (!respondent.subcountyId) errors.subcountyId = 'Sub-county is required.';
-  if (!respondent.parishId) errors.parishId = 'Parish is required.';
-  if (!respondent.villageId) errors.villageId = 'Village is required.';
+  validateRespondentDemographics(respondent, errors);
 }
 
 function validateNumericField(value: string, errorKey: string, errors: PcFormErrors, message: string): void {
@@ -56,6 +47,18 @@ export function validatePcForm(state: PcFormState): PcFormErrors {
   validateCountField(pc.totalBeneficiaries, 'totalBeneficiaries', errors);
   validateCountField(pc.youthBeneficiaries, 'youthBeneficiaries', errors);
   validateCountField(pc.youngWomenBeneficiaries, 'youngWomenBeneficiaries', errors);
+  validateCountField(pc.youngMenBeneficiaries, 'youngMenBeneficiaries', errors);
+
+  const youth = parseNonNegativeInteger(pc.youthBeneficiaries);
+  const youngWomen = parseNonNegativeInteger(pc.youngWomenBeneficiaries);
+  const youngMen = parseNonNegativeInteger(pc.youngMenBeneficiaries);
+  if (youth != null && youth > 0 && youngMen == null) {
+    errors.youngMenBeneficiaries = 'Enter young men beneficiaries when youth beneficiaries is greater than zero.';
+  }
+  if (youth != null && youngWomen != null && youngMen != null && youngWomen + youngMen > youth) {
+    errors.youngMenBeneficiaries =
+      'Young women and young men beneficiaries cannot exceed beneficiaries under 30.';
+  }
 
   const obstacles = validateNarrativeText(pc.obstaclesDescription, { required: true });
   if (!obstacles.valid) {
@@ -79,6 +82,8 @@ export function validatePcForm(state: PcFormState): PcFormErrors {
 
   if (!pc.pdcEffectivenessRating) {
     errors.pdcEffectivenessRating = 'PDC effectiveness rating is required.';
+  } else if (!PDC_EFFECTIVENESS_OPTIONS.some((option) => option.value === pc.pdcEffectivenessRating)) {
+    errors.pdcEffectivenessRating = 'Select a valid PDC effectiveness rating.';
   }
 
   if (pc.monitoredBy.length === 0) {
@@ -124,6 +129,12 @@ export function validatePcForm(state: PcFormState): PcFormErrors {
   validateCountField(pc.selfRelianceBeneficiariesCount, 'selfRelianceBeneficiariesCount', errors);
   validateCountField(pc.selfRelianceGroupProjectsCount, 'selfRelianceGroupProjectsCount', errors);
 
+  const improvement = validateNarrativeText(pc.programmeImprovementSuggestion, { required: true });
+  if (!improvement.valid) {
+    errors.programmeImprovementSuggestion =
+      improvement.message ?? 'Programme improvement suggestion is required (min 10 characters).';
+  }
+
   return errors;
 }
 
@@ -141,7 +152,7 @@ export function buildPcSubmissionPayload(
     subcountyId: respondent.subcountyId,
     parishId: respondent.parishId,
     villageId: respondent.villageId,
-    respondentName: respondent.respondentName.trim(),
+    respondentName: formatRespondentName(respondent.respondentName),
     respondentPhone: normalizeUgandaPhoneLocal(respondent.respondentPhone),
     respondentGender: respondent.respondentGender,
     respondentAgeGroup: respondent.respondentAgeGroup as AgeGroup,
@@ -150,6 +161,7 @@ export function buildPcSubmissionPayload(
     totalBeneficiaries: parseNonNegativeInteger(pc.totalBeneficiaries) ?? 0,
     youthBeneficiaries: parseNonNegativeInteger(pc.youthBeneficiaries) ?? 0,
     youngWomenBeneficiaries: parseNonNegativeInteger(pc.youngWomenBeneficiaries) ?? 0,
+    youngMenBeneficiaries: parseNonNegativeInteger(pc.youngMenBeneficiaries) ?? 0,
     obstaclesDescription: pc.obstaclesDescription.trim(),
     spendingTargetedToMostInNeed: pc.spendingTargetedToMostInNeed as boolean,
     pdcTotalMembers: parseNonNegativeInteger(pc.pdcTotalMembers) ?? 0,
@@ -174,5 +186,6 @@ export function buildPcSubmissionPayload(
       : null,
     selfRelianceBeneficiariesCount: parseNonNegativeInteger(pc.selfRelianceBeneficiariesCount) ?? 0,
     selfRelianceGroupProjectsCount: parseNonNegativeInteger(pc.selfRelianceGroupProjectsCount) ?? 0,
+    programmeImprovementSuggestion: pc.programmeImprovementSuggestion.trim(),
   };
 }

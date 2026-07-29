@@ -49,7 +49,7 @@ async function fillValidHealthForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/full name/i), 'Jane Citizen');
   await user.type(screen.getByLabelText(/phone number/i), '0772123456');
   await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_20_24');
+  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_18_24');
 
   const districtSelect = await screen.findByTestId('budget-priority-district-select');
   await user.selectOptions(districtSelect, 'district-1');

@@ -15,7 +15,7 @@ export function BypRatingSection({ value, onChange, errors }: BypRatingSectionPr
     <FormSection title="Service quality & governance" description="Questions 5–7">
       <RatingSelect
         id="serviceRating"
-        label="Q5. PDC / Parish Chief service rating"
+        label="Q5. How would you rate the quality of services provided by the Parish Chief/Town Agent and Parish Development Committee (PDC) at the parish or ward level?"
         value={value.serviceRating}
         onChange={(rating: Rating) => patch({ serviceRating: rating })}
         required
@@ -23,7 +23,7 @@ export function BypRatingSection({ value, onChange, errors }: BypRatingSectionPr
       />
       <RatingSelect
         id="performanceRating"
-        label="Q6. PDM performance rating"
+        label="Q6. What do you think about the performance of PDM in this parish?"
         value={value.performanceRating}
         onChange={(rating: Rating) => patch({ performanceRating: rating })}
         required
@@ -31,7 +31,7 @@ export function BypRatingSection({ value, onChange, errors }: BypRatingSectionPr
       />
       <YesNoRadioGroup
         name="groupOrganizedTransparently"
-        label="Q7. Was the group organized transparently?"
+        label="Q7. Do you think your group was organized transparently?"
         value={value.groupOrganizedTransparently}
         onChange={(choice) => patch({ groupOrganizedTransparently: choice })}
         required

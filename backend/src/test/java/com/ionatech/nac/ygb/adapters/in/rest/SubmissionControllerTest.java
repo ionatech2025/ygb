@@ -80,8 +80,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -109,8 +108,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -132,8 +130,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -173,6 +170,104 @@ class SubmissionControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldAcceptBlankRespondentNameOnBypSubmit() throws Exception {
+        BypSubmissionRequestDto requestDto = new BypSubmissionRequestDto(
+                "BYP",
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                "Provide more technical support."
+        );
+
+        UUID testCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        BypSubmitCommand command = new BypSubmitCommand(
+                testCollectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                "Provide more technical support."
+        );
+
+        BypSubmission dummyByp = new BypSubmission(
+                UUID.randomUUID(),
+                new SubmissionMetadata(testCollectorId, deviceSubmissionId, completedAt),
+                new Location(districtId, subcountyId, parishId, villageId),
+                "",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+
+        SubmissionResponseDto responseDto = new SubmissionResponseDto(
+                dummyByp.getId(),
+                "BYP",
+                "",
+                "PENDING",
+                completedAt
+        );
+
+        when(submissionRestMapper.toCommand(any(BypSubmissionRequestDto.class), eq(testCollectorId))).thenReturn(command);
+        when(submitSubmissionUseCase.submit(command)).thenReturn(dummyByp);
+        when(submissionRestMapper.toResponse(dummyByp)).thenReturn(responseDto);
+
+        mockMvc.perform(post("/api/v1/submissions")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.respondentName").value(""));
+    }
+
+    @Test
     @WithMockUser(roles = "ADMIN")
     void shouldReturnForbiddenWhenUserIsAdmin() throws Exception {
         BypSubmissionRequestDto requestDto = new BypSubmissionRequestDto(
@@ -186,8 +281,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -224,8 +318,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -301,8 +394,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -321,7 +413,7 @@ class SubmissionControllerTest {
         BypSubmitCommand command = new BypSubmitCommand(
                 testCollectorId, deviceSubmissionId, completedAt,
                 districtId, subcountyId, parishId, villageId,
-                "Jane Doe", "0772111222", "FEMALE", AgeGroup.AGE_20_24, 22,
+                "Jane Doe", "0772111222", "FEMALE", AgeGroup.AGE_18_24,
                 "ONE_WEEK", null, true, 500000L, "MONTHLY", null,
                 Rating.VERY_GOOD, Rating.GOOD, true, true,
                 List.of("TRAINING"), "Provide more technical support."
@@ -341,6 +433,291 @@ class SubmissionControllerTest {
 
         // Controller must call submit exactly once — retries are the service's responsibility.
         verify(submitSubmissionUseCase, times(1)).submit(command);
+    }
+
+    @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldSubmitLgoFormWithTwoFiscalYearRecordsSuccessfully() throws Exception {
+        List<FiscalYearRecord> fiscalYearRecords = List.of(
+                new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+        );
+
+        LgoSubmissionRequestDto requestDto = new LgoSubmissionRequestDto(
+                "LGO",
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Official Name",
+                "0772111444",
+                "FEMALE",
+                AgeGroup.AGE_ABOVE_35,
+                fiscalYearRecords,
+                true,
+                true,
+                true,
+                true,
+                true,
+                null,
+                true,
+                null,
+                "Improve PDM programme oversight across parishes."
+        );
+
+        UUID testCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        LgoSubmitCommand command = new LgoSubmitCommand(
+                testCollectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Official Name",
+                "0772111444",
+                "FEMALE",
+                AgeGroup.AGE_ABOVE_35,
+                fiscalYearRecords,
+                true,
+                true,
+                true,
+                true,
+                true,
+                null,
+                true,
+                null,
+                "Improve PDM programme oversight across parishes."
+        );
+
+        LgoSubmission saved = new LgoSubmission(
+                UUID.randomUUID(),
+                new SubmissionMetadata(testCollectorId, deviceSubmissionId, completedAt),
+                new Location(districtId, subcountyId, parishId, villageId),
+                "Official Name",
+                "0772111444",
+                "FEMALE",
+                AgeGroup.AGE_ABOVE_35,
+                fiscalYearRecords,
+                true,
+                true,
+                true,
+                true,
+                true,
+                null,
+                true,
+                null,
+                new NarrativeText("Improve PDM programme oversight across parishes.")
+        );
+
+        when(submissionRestMapper.toCommand(any(LgoSubmissionRequestDto.class), eq(testCollectorId))).thenReturn(command);
+        when(submitSubmissionUseCase.submit(command)).thenReturn(saved);
+        when(submissionRestMapper.toResponse(saved)).thenReturn(
+                new SubmissionResponseDto(saved.getId(), "LGO", "Official Name", "PENDING", completedAt)
+        );
+
+        mockMvc.perform(post("/api/v1/submissions")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.formType").value("LGO"));
+
+        verify(submitSubmissionUseCase, times(1)).submit(command);
+    }
+
+    @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldSubmitPcFormWithNewEffectivenessRatingSuccessfully() throws Exception {
+        PcSubmissionRequestDto requestDto = new PcSubmissionRequestDto(
+                "PC",
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Parish Chief Name",
+                "0772111555",
+                "MALE",
+                AgeGroup.AGE_ABOVE_35,
+                1500000L,
+                1500000L,
+                100,
+                40,
+                30,
+                10,
+                "Lack of transport equipment is the main obstacle.",
+                true,
+                7,
+                3,
+                4,
+                true,
+                List.of("FINANCIAL_LITERACY"),
+                PdcEffectivenessRating.VERY_EFFECTIVE,
+                List.of("CAO"),
+                null,
+                "Regular field checks performed.",
+                true,
+                true,
+                "Improvements seen in poultry sectors.",
+                true,
+                "Reports submitted quarterly.",
+                10,
+                8,
+                "Provide more monitoring tools for parish chiefs."
+        );
+
+        UUID testCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        PcSubmitCommand command = new PcSubmitCommand(
+                testCollectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Parish Chief Name",
+                "0772111555",
+                "MALE",
+                AgeGroup.AGE_ABOVE_35,
+                1500000L,
+                1500000L,
+                100,
+                40,
+                30,
+                10,
+                "Lack of transport equipment is the main obstacle.",
+                true,
+                7,
+                3,
+                4,
+                true,
+                List.of("FINANCIAL_LITERACY"),
+                PdcEffectivenessRating.VERY_EFFECTIVE,
+                List.of("CAO"),
+                null,
+                "Regular field checks performed.",
+                true,
+                true,
+                "Improvements seen in poultry sectors.",
+                true,
+                "Reports submitted quarterly.",
+                10,
+                8,
+                "Provide more monitoring tools for parish chiefs."
+        );
+
+        PcSubmission saved = new PcSubmission(
+                UUID.randomUUID(),
+                new SubmissionMetadata(testCollectorId, deviceSubmissionId, completedAt),
+                new Location(districtId, subcountyId, parishId, villageId),
+                "Parish Chief Name",
+                "0772111555",
+                "MALE",
+                AgeGroup.AGE_ABOVE_35,
+                1500000L,
+                1500000L,
+                100,
+                40,
+                30,
+                10,
+                new NarrativeText("Lack of transport equipment is the main obstacle."),
+                true,
+                7,
+                3,
+                4,
+                true,
+                List.of("FINANCIAL_LITERACY"),
+                PdcEffectivenessRating.VERY_EFFECTIVE,
+                List.of("CAO"),
+                null,
+                new NarrativeText("Regular field checks performed."),
+                true,
+                true,
+                new NarrativeText("Improvements seen in poultry sectors."),
+                true,
+                new NarrativeText("Reports submitted quarterly."),
+                10,
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
+        );
+
+        when(submissionRestMapper.toCommand(any(PcSubmissionRequestDto.class), eq(testCollectorId))).thenReturn(command);
+        when(submitSubmissionUseCase.submit(command)).thenReturn(saved);
+        when(submissionRestMapper.toResponse(saved)).thenReturn(
+                new SubmissionResponseDto(saved.getId(), "PC", "Parish Chief Name", "PENDING", completedAt)
+        );
+
+        mockMvc.perform(post("/api/v1/submissions")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.formType").value("PC"));
+
+        verify(submitSubmissionUseCase, times(1)).submit(command);
+    }
+
+    @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldRejectPcSubmissionWithLegacyEffectivenessRating() throws Exception {
+        String payload = """
+                {
+                  "formType": "PC",
+                  "deviceSubmissionId": "%s",
+                  "formCompletedAt": "%s",
+                  "districtId": "%s",
+                  "subcountyId": "%s",
+                  "parishId": "%s",
+                  "villageId": "%s",
+                  "respondentName": "Parish Chief Name",
+                  "respondentPhone": "0772111555",
+                  "respondentGender": "MALE",
+                  "respondentAgeGroup": "AGE_ABOVE_35",
+                  "amountExpected": 1500000,
+                  "amountReceived": 1500000,
+                  "totalBeneficiaries": 100,
+                  "youthBeneficiaries": 40,
+                  "youngWomenBeneficiaries": 30,
+                  "youngMenBeneficiaries": 10,
+                  "obstaclesDescription": "Lack of transport equipment is the main obstacle.",
+                  "spendingTargetedToMostInNeed": true,
+                  "pdcTotalMembers": 7,
+                  "pdcYouthMembers": 3,
+                  "pdcWomenMembers": 4,
+                  "pdcTrainingReceived": true,
+                  "pdcTrainingAreas": ["FINANCIAL_LITERACY"],
+                  "pdcEffectivenessRating": "FULLY",
+                  "monitoredBy": ["CAO"],
+                  "monitoringMethod": "Regular field checks performed.",
+                  "reportSharedWithRespondent": true,
+                  "improvementsSeen": true,
+                  "improvementsSeenExplanation": "Improvements seen in poultry sectors.",
+                  "progressReportsSubmitted": true,
+                  "progressReportsSubmittedExplanation": "Reports submitted quarterly.",
+                  "selfRelianceBeneficiariesCount": 10,
+                  "selfRelianceGroupProjectsCount": 8,
+                  "programmeImprovementSuggestion": "Provide more monitoring tools for parish chiefs."
+                }
+                """.formatted(
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId
+        );
+
+        mockMvc.perform(post("/api/v1/submissions")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload))
+                .andExpect(status().isBadRequest());
+
+        verify(submitSubmissionUseCase, never()).submit(any());
     }
 
     @Test

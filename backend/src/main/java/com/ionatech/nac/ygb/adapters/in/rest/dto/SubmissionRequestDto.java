@@ -43,7 +43,6 @@ public abstract class SubmissionRequestDto {
     @NotNull
     private UUID villageId;
 
-    @NotBlank
     private String respondentName;
 
     @NotBlank

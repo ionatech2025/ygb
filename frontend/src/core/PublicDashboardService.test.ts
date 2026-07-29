@@ -52,7 +52,7 @@ describe('mapPublicChartSeriesToViewModel', () => {
       },
       {
         chartType: 'by-age-group',
-        data: [{ label: 'AGE_20_24', locationId: null, date: null, count: 3 }],
+        data: [{ label: 'AGE_18_24', locationId: null, date: null, count: 3 }],
       },
       {
         chartType: 'trend',
@@ -63,7 +63,7 @@ describe('mapPublicChartSeriesToViewModel', () => {
 
     expect(viewModel.byDistrict[0]?.districtName).toBe('Kampala');
     expect(viewModel.byGender[0]?.label).toBe('Female');
-    expect(viewModel.byAgeGroup[0]?.label).toBe('20-24');
+    expect(viewModel.byAgeGroup[0]?.label).toBe('18-24');
     expect(viewModel.overTime[0]?.date).toBe('2026-03-15');
     expect(viewModel.heatmap).toHaveLength(1);
   });

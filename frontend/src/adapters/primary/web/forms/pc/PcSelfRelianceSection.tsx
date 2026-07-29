@@ -1,5 +1,4 @@
 import {
-  requiresImprovementsSeenExplanation,
   requiresProgressReportsExplanation,
   type PcFormFields,
 } from '../../../../../core/domain/pc-form.model';
@@ -15,41 +14,10 @@ export function PcSelfRelianceSection({ value, onChange, errors }: PcSelfRelianc
   const patch = (partial: Partial<PcFormFields>) => onChange({ ...value, ...partial });
 
   return (
-    <FormSection title="Self-reliance" description="Improvements, reporting, and enterprise indicators">
-      <YesNoRadioGroup
-        name="improvementsSeen"
-        label="Did you see improvements from PDM?"
-        value={value.improvementsSeen}
-        onChange={(choice) =>
-          patch({
-            improvementsSeen: choice,
-            improvementsSeenExplanation: choice ? value.improvementsSeenExplanation : '',
-          })
-        }
-        required
-        error={errors.improvementsSeen}
-      />
-
-      {requiresImprovementsSeenExplanation(value.improvementsSeen) && (
-        <>
-          <NarrativeTextarea
-            id="improvementsSeenExplanation"
-            label="In what areas did you see improvements?"
-            value={value.improvementsSeenExplanation}
-            onChange={(text) => patch({ improvementsSeenExplanation: text })}
-            required
-          />
-          {errors.improvementsSeenExplanation && (
-            <p className="text-[11px] text-rose-600" role="alert">
-              {errors.improvementsSeenExplanation}
-            </p>
-          )}
-        </>
-      )}
-
+    <FormSection title="Reporting & Self-Reliance" description="Section E — Questions 21–26">
       <YesNoRadioGroup
         name="progressReportsSubmitted"
-        label="Were progress reports submitted?"
+        label="Q21. Do you prepare and submit programme progress reports?"
         value={value.progressReportsSubmitted}
         onChange={(choice) =>
           patch({
@@ -61,11 +29,15 @@ export function PcSelfRelianceSection({ value, onChange, errors }: PcSelfRelianc
         error={errors.progressReportsSubmitted}
       />
 
+      {value.progressReportsSubmitted !== true && (
+        <p className="text-xs text-text-muted">Q22. If yes, to whom and when?</p>
+      )}
+
       {requiresProgressReportsExplanation(value.progressReportsSubmitted) && (
         <>
           <NarrativeTextarea
             id="progressReportsSubmittedExplanation"
-            label="To whom and when were reports submitted?"
+            label="Q22. If yes, to whom and when?"
             value={value.progressReportsSubmittedExplanation}
             onChange={(text) => patch({ progressReportsSubmittedExplanation: text })}
             required
@@ -78,41 +50,48 @@ export function PcSelfRelianceSection({ value, onChange, errors }: PcSelfRelianc
         </>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <FormField
-          label="Self-reliant beneficiaries count"
-          htmlFor="selfRelianceBeneficiariesCount"
+      <FormField
+        label="Q23. The number of young people who benefited from the PDM and started agricultural enterprises"
+        htmlFor="selfRelianceBeneficiariesCount"
+        required
+        error={errors.selfRelianceBeneficiariesCount}
+      >
+        <input
+          id="selfRelianceBeneficiariesCount"
+          type="text"
+          inputMode="numeric"
+          value={value.selfRelianceBeneficiariesCount}
+          onChange={(e) => patch({ selfRelianceBeneficiariesCount: e.target.value })}
+          className={formControlClassName}
           required
-          error={errors.selfRelianceBeneficiariesCount}
-        >
-          <input
-            id="selfRelianceBeneficiariesCount"
-            type="text"
-            inputMode="numeric"
-            value={value.selfRelianceBeneficiariesCount}
-            onChange={(e) => patch({ selfRelianceBeneficiariesCount: e.target.value })}
-            className={formControlClassName}
-            required
-          />
-        </FormField>
+        />
+      </FormField>
 
-        <FormField
-          label="Self-reliance group projects count"
-          htmlFor="selfRelianceGroupProjectsCount"
+      <p className="text-xs text-text-muted">
+        Q24. The number of young people who benefited from the PDM and had a stable income from their enterprises
+        established
+      </p>
+      <p className="text-xs text-text-muted">
+        Q25. Number of beneficiary young people trained to improve productivity, efficiency, profitability, business
+        viability, and supply chain
+      </p>
+
+      <FormField
+        label="Q26. The number of youth-led enterprises established with support from the PDM and remained active after the support"
+        htmlFor="selfRelianceGroupProjectsCount"
+        required
+        error={errors.selfRelianceGroupProjectsCount}
+      >
+        <input
+          id="selfRelianceGroupProjectsCount"
+          type="text"
+          inputMode="numeric"
+          value={value.selfRelianceGroupProjectsCount}
+          onChange={(e) => patch({ selfRelianceGroupProjectsCount: e.target.value })}
+          className={formControlClassName}
           required
-          error={errors.selfRelianceGroupProjectsCount}
-        >
-          <input
-            id="selfRelianceGroupProjectsCount"
-            type="text"
-            inputMode="numeric"
-            value={value.selfRelianceGroupProjectsCount}
-            onChange={(e) => patch({ selfRelianceGroupProjectsCount: e.target.value })}
-            className={formControlClassName}
-            required
-          />
-        </FormField>
-      </div>
+        />
+      </FormField>
     </FormSection>
   );
 }

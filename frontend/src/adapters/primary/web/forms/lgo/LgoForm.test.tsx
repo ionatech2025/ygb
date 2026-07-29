@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { LGO_FISCAL_YEAR_LABELS } from '../../../../../core/domain/lgo-form.model';
 import { LgoForm } from './LgoForm';
 
 vi.mock('../../../../../core/LocationService', () => ({
@@ -32,6 +31,18 @@ vi.mock('../../../../../adapters/secondary/location/location-repository.adapter'
   },
 }));
 
+const activeFiscalYear = {
+  fiscalYearLabel: '2025/26',
+  priorFiscalYearLabel: '2024/25',
+  supportedLabels: ['2025/26', '2024/25', '2023/24', '2022/23'],
+};
+
+const fetchPublicActiveFiscalYearMock = vi.fn().mockResolvedValue(activeFiscalYear);
+
+vi.mock('../../../../../adapters/secondary/api/fiscal-year-settings-api.adapter', () => ({
+  fetchPublicActiveFiscalYear: () => fetchPublicActiveFiscalYearMock(),
+}));
+
 const enqueueMock = vi.fn().mockResolvedValue(1);
 
 vi.mock('../../../../../core/submission-submit.service', () => ({
@@ -39,15 +50,15 @@ vi.mock('../../../../../core/submission-submit.service', () => ({
 }));
 
 vi.mock('../../../../../core/store/useAuthStore', () => ({
-  useAuthStore: (selector: (state: { user: { id: string } }) => unknown) =>
-    selector({ user: { id: '22222222-2222-2222-2222-222222222222' } }),
+  useAuthStore: (selector: (state: { user: { id: string }; isOnline: boolean }) => unknown) =>
+    selector({ user: { id: '22222222-2222-2222-2222-222222222222' }, isOnline: true }),
 }));
 
 async function fillRespondent(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/name of respondent/i), 'Official Name');
   await user.type(screen.getByLabelText(/phone number/i), '0772111444');
   await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_30_AND_ABOVE');
+  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_ABOVE_35');
 
   await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
   await user.selectOptions(document.getElementById('district')!, 'district-1');
@@ -59,20 +70,22 @@ async function fillRespondent(user: ReturnType<typeof userEvent.setup>) {
   await user.selectOptions(document.getElementById('village')!, 'village-1');
 }
 
-async function selectFiscalYear(user: ReturnType<typeof userEvent.setup>, label: string) {
-  await user.selectOptions(screen.getByLabelText(/^Fiscal year/i), label);
+async function waitForFiscalYearBlocks() {
+  await waitFor(() => {
+    expect(screen.getByText(/Reporting for fiscal year:/i)).toHaveTextContent('2025/26');
+    expect(screen.getByText('(a) Admin-set fiscal year')).toBeInTheDocument();
+    expect(screen.getByText('(b) Prior fiscal year')).toBeInTheDocument();
+  });
 }
 
-async function fillSelectedFiscalYear(user: ReturnType<typeof userEvent.setup>, fy: string) {
+async function fillFiscalYearBlock(user: ReturnType<typeof userEvent.setup>, fy: string) {
   const slug = fy.replace('/', '-');
-  await user.type(screen.getByLabelText(new RegExp(`Expected funds \\(FY ${fy.replace('/', '\\/')}\\)`, 'i')), '1000000');
-  await user.type(
-    screen.getByLabelText(new RegExp(`Actual funds received \\(FY ${fy.replace('/', '\\/')}\\)`, 'i')),
-    '900000'
-  );
+  await user.type(document.getElementById(`expectedFunds-${slug}`)!, '1000000');
+  await user.type(document.getElementById(`actualFunds-${slug}`)!, '900000');
   await user.type(document.getElementById(`totalBeneficiaryCount-${slug}`)!, '50');
-  await user.type(document.getElementById(`youngPeopleCount-${slug}`)!, '20');
-  await user.type(document.getElementById(`youngWomenCount-${slug}`)!, '15');
+  await user.type(document.getElementById(`beneficiariesUnder30Count-${slug}`)!, '20');
+  await user.type(document.getElementById(`beneficiaryYoungWomenCount-${slug}`)!, '12');
+  await user.type(document.getElementById(`beneficiaryYoungMenCount-${slug}`)!, '8');
   await user.type(document.getElementById(`totalParishesCount-${slug}`)!, '10');
   await user.type(document.getElementById(`fundedParishesCount-${slug}`)!, '8');
 }
@@ -87,53 +100,71 @@ async function fillGovernanceQuestions(user: ReturnType<typeof userEvent.setup>)
 describe('LgoForm', () => {
   beforeEach(() => {
     enqueueMock.mockClear();
+    fetchPublicActiveFiscalYearMock.mockClear();
+    fetchPublicActiveFiscalYearMock.mockResolvedValue(activeFiscalYear);
     Element.prototype.scrollIntoView = vi.fn();
   });
 
-  it('shows fiscal year dropdown with options through FY2029/30 (TC-FORM-04-01)', () => {
+  it('loads admin fiscal year and renders two FY blocks with (a)/(b) labels', async () => {
     render(<LgoForm />);
 
-    const dropdown = screen.getByLabelText(/^Fiscal year/i);
-    expect(dropdown).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'FY 2022/23' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'FY 2029/30' })).toBeInTheDocument();
-    expect(LGO_FISCAL_YEAR_LABELS).toHaveLength(8);
-    expect(screen.queryByLabelText(/Expected funds \(FY 2022\/23\)/i)).not.toBeInTheDocument();
+    await waitForFiscalYearBlocks();
+    expect(screen.queryByLabelText(/^Fiscal year/i)).not.toBeInTheDocument();
+    expect(fetchPublicActiveFiscalYearMock).toHaveBeenCalledTimes(1);
   });
 
-  it('reveals Expected/Actual inputs only after a fiscal year is selected', async () => {
-    const user = userEvent.setup();
+  it('shows young men count field in each FY block', async () => {
     render(<LgoForm />);
 
-    await selectFiscalYear(user, '2023/24');
-
-    expect(screen.getByLabelText(/Expected funds \(FY 2023\/24\)/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Actual funds received \(FY 2023\/24\)/i)).toBeInTheDocument();
-    expect(screen.queryByLabelText(/Expected funds \(FY 2022\/23\)/i)).not.toBeInTheDocument();
+    await waitForFiscalYearBlocks();
+    expect(document.getElementById('beneficiaryYoungMenCount-2025-26')).toBeInTheDocument();
+    expect(document.getElementById('beneficiaryYoungMenCount-2024-25')).toBeInTheDocument();
   });
 
-  it('renders Q4–Q7 governance questions', () => {
+  it('uses parish labels that distinguish district total vs funded parishes', async () => {
     render(<LgoForm />);
 
-    expect(screen.getByLabelText(/Q4\. Were PDM funds allocated equitably/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Q5\. Were the allocated funds sufficient/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Q6\. Was there adequate oversight/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Q7\. Were beneficiary selection processes transparent/i)).toBeInTheDocument();
+    await waitForFiscalYearBlocks();
+    expect(screen.getAllByLabelText(/Q3\. Total parishes in the district/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/Q3\. Parishes that received PDM funds/i)).toHaveLength(2);
+  });
+
+  it('does not let collectors change the admin-selected fiscal year', async () => {
+    render(<LgoForm />);
+
+    await waitForFiscalYearBlocks();
+    expect(screen.queryByRole('combobox', { name: /fiscal year/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'FY 2024/25' })).not.toBeInTheDocument();
+  });
+
+  it('renders updated Q4–Q7 governance questions', async () => {
+    render(<LgoForm />);
+
+    await waitForFiscalYearBlocks();
+    expect(
+      screen.getByLabelText(/Q4\. Is the central government's commitment to PDM reflected/i)
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(/Q5\. Is enough fund being allocated/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Q6\. Should there be an increment in allocation/i)).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(/Q7\. Are resources distributed equitably according to the size of population/i)
+    ).toBeInTheDocument();
   });
 
   it('Q8 = No shows explain field and blocks submit if empty (TC-FORM-04-02)', async () => {
     const user = userEvent.setup();
     render(<LgoForm />);
 
+    await waitForFiscalYearBlocks();
     await fillRespondent(user);
-    await selectFiscalYear(user, '2022/23');
-    await fillSelectedFiscalYear(user, '2022/23');
+    await fillFiscalYearBlock(user, '2025/26');
+    await fillFiscalYearBlock(user, '2024/25');
     await fillGovernanceQuestions(user);
 
     await user.click(document.getElementById('fundsSpentAsRequired-no')!);
     await user.click(document.getElementById('economicTransformation-yes')!);
     await user.type(
-      screen.getByLabelText(/Q10\. Suggestions for improvement/i),
+      screen.getByLabelText(/Q10\. What do you think should be improved/i),
       'Provide more monitoring tools for local governments.'
     );
 
@@ -148,16 +179,16 @@ describe('LgoForm', () => {
     const user = userEvent.setup();
     render(<LgoForm />);
 
+    await waitForFiscalYearBlocks();
     await fillRespondent(user);
-    await selectFiscalYear(user, '2022/23');
-    await user.type(screen.getByLabelText(/Expected funds \(FY 2022\/23\)/i), 'abc');
+    await user.type(document.getElementById('expectedFunds-2025-26')!, 'abc');
 
     await user.click(screen.getByRole('button', { name: /Submit LGO Survey/i }));
     expect(enqueueMock).not.toHaveBeenCalled();
-    expect(document.getElementById('expectedFunds-2022-23-error')).toHaveTextContent(/Enter a valid numeric amount/i);
+    expect(document.getElementById('expectedFunds-2025-26-error')).toHaveTextContent(/Enter a valid numeric amount/i);
   }, 15_000);
 
-  it('Q8/Q9 = Yes path submits a single selected fiscal year record (TC-FORM-04-04)', async () => {
+  it('Q8/Q9 = Yes path submits two fiscal year records (TC-FORM-04-04)', async () => {
     vi.spyOn(crypto, 'randomUUID')
       .mockReturnValueOnce('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa')
       .mockReturnValueOnce('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb');
@@ -165,16 +196,17 @@ describe('LgoForm', () => {
     const user = userEvent.setup();
     render(<LgoForm />);
 
+    await waitForFiscalYearBlocks();
     await fillRespondent(user);
-    await selectFiscalYear(user, '2024/25');
-    await fillSelectedFiscalYear(user, '2024/25');
+    await fillFiscalYearBlock(user, '2025/26');
+    await fillFiscalYearBlock(user, '2024/25');
     await fillGovernanceQuestions(user);
 
     await user.click(document.getElementById('fundsSpentAsRequired-yes')!);
     await user.click(document.getElementById('economicTransformation-yes')!);
 
     await user.type(
-      screen.getByLabelText(/Q10\. Suggestions for improvement/i),
+      screen.getByLabelText(/Q10\. What do you think should be improved/i),
       'Provide more monitoring tools for local governments.'
     );
 
@@ -184,8 +216,10 @@ describe('LgoForm', () => {
 
     const payload = enqueueMock.mock.calls[0][0].payload;
     expect(payload.formType).toBe('LGO');
-    expect(payload.fiscalYearRecords).toHaveLength(1);
-    expect(payload.fiscalYearRecords[0].fiscalYearLabel).toBe('2024/25');
+    expect(payload.fiscalYearRecords).toHaveLength(2);
+    expect(payload.fiscalYearRecords[0].fiscalYearLabel).toBe('2025/26');
+    expect(payload.fiscalYearRecords[1].fiscalYearLabel).toBe('2024/25');
+    expect(payload.fiscalYearRecords[0].beneficiaryYoungMenCount).toBe(8);
     expect(payload.fundsSpentExplanation).toBeNull();
     expect(payload.economicTransformationExplanation).toBeNull();
   }, 30_000);

@@ -9,7 +9,7 @@ describe('pc-validation', () => {
     respondentName: 'Parish Chief Name',
     respondentPhone: '0772111555',
     respondentGender: 'MALE',
-    respondentAgeGroup: 'AGE_30_AND_ABOVE' as const,
+    respondentAgeGroup: 'AGE_ABOVE_35' as const,
     districtId: 'district-1',
     subcountyId: 'subcounty-1',
     parishId: 'parish-1',
@@ -22,7 +22,8 @@ describe('pc-validation', () => {
     amountReceived: '1500000',
     totalBeneficiaries: '100',
     youthBeneficiaries: '40',
-    youngWomenBeneficiaries: '30',
+    youngWomenBeneficiaries: '22',
+    youngMenBeneficiaries: '18',
     obstaclesDescription: 'Lack of transport equipment is the main obstacle.',
     spendingTargetedToMostInNeed: true,
     pdcTotalMembers: '7',
@@ -30,7 +31,7 @@ describe('pc-validation', () => {
     pdcWomenMembers: '4',
     pdcTrainingReceived: true,
     pdcTrainingAreas: ['FINANCIAL_LITERACY', 'BUSINESS_PLANNING'],
-    pdcEffectivenessRating: 'FULLY',
+    pdcEffectivenessRating: 'VERY_EFFECTIVE',
     monitoredBy: ['CAO', 'PDM_SECRETARIAT'],
     monitoredByOthersSpecify: '',
     monitoringMethod: 'Regular field checks performed by the parish team.',
@@ -41,7 +42,23 @@ describe('pc-validation', () => {
     progressReportsSubmittedExplanation: '',
     selfRelianceBeneficiariesCount: '10',
     selfRelianceGroupProjectsCount: '8',
+    programmeImprovementSuggestion: 'Provide more monitoring tools for parish chiefs.',
   };
+
+  it('payload includes programme improvement narrative and new enum', () => {
+    const payload = buildPcSubmissionPayload(
+      { respondent: validRespondent, pc: validPc },
+      {
+        deviceSubmissionId: '11111111-1111-1111-1111-111111111111',
+        formCompletedAt: '2026-07-20T10:00:00.000Z',
+        collectorId: 'collector-1',
+      }
+    );
+
+    expect(payload.youngMenBeneficiaries).toBe(18);
+    expect(payload.pdcEffectivenessRating).toBe('VERY_EFFECTIVE');
+    expect(payload.programmeImprovementSuggestion).toBe('Provide more monitoring tools for parish chiefs.');
+  });
 
   it('monitoredBy array persisted with all checked values', () => {
     const payload = buildPcSubmissionPayload(
@@ -80,5 +97,18 @@ describe('pc-validation', () => {
       },
     });
     expect(errors.monitoredByOthersSpecify).toBeTruthy();
+  });
+
+  it('rejects young women and young men counts that exceed youth beneficiaries', () => {
+    const errors = validatePcForm({
+      respondent: validRespondent,
+      pc: {
+        ...validPc,
+        youthBeneficiaries: '30',
+        youngWomenBeneficiaries: '20',
+        youngMenBeneficiaries: '15',
+      },
+    });
+    expect(errors.youngMenBeneficiaries).toBeTruthy();
   });
 });

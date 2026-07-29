@@ -18,7 +18,12 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
 
   return (
     <FormSection title="Fund acquisition & disbursement" description="Questions 1–4">
-      <FormField label="Q1. Fund receipt duration" htmlFor="fundReceiptDuration" required error={errors.fundReceiptDuration}>
+      <FormField
+        label="Q1. How long did it take you to receive your funds?"
+        htmlFor="fundReceiptDuration"
+        required
+        error={errors.fundReceiptDuration}
+      >
         <select
           id="fundReceiptDuration"
           value={value.fundReceiptDuration}
@@ -42,7 +47,7 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
 
       {requiresFundDurationSpecify(value.fundReceiptDuration) && (
         <FormField
-          label="Please specify duration"
+          label="Please specify how long it took to receive your funds"
           htmlFor="fundReceiptDurationSpecify"
           required
           error={errors.fundReceiptDurationSpecify}
@@ -60,14 +65,19 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
 
       <YesNoRadioGroup
         name="receivedActualAmountRequested"
-        label="Q2. Received actual amount requested?"
+        label="Q2. Did you get the actual amount of money you requested?"
         value={value.receivedActualAmountRequested}
         onChange={(choice) => patch({ receivedActualAmountRequested: choice })}
         required
         error={errors.receivedActualAmountRequested}
       />
 
-      <FormField label="Q3. Cash amount received (UGX)" htmlFor="cashAmountReceived" required error={errors.cashAmountReceived}>
+      <FormField
+        label="Q3. How much cash did you get?"
+        htmlFor="cashAmountReceived"
+        required
+        error={errors.cashAmountReceived}
+      >
         <input
           id="cashAmountReceived"
           type="number"
@@ -82,7 +92,13 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
         />
       </FormField>
 
-      <FormField label="Q4. Instalment period" htmlFor="instalmentPeriod" required error={errors.instalmentPeriod}>
+      <FormField
+        label="Q4. What is the instalment period for receiving funds?"
+        htmlFor="instalmentPeriod"
+        required
+        error={errors.instalmentPeriod}
+        hint="This refers to how often you receive PDM funds, not how you repay a loan."
+      >
         <select
           id="instalmentPeriod"
           value={value.instalmentPeriod}
@@ -106,7 +122,7 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
 
       {requiresInstalmentSpecify(value.instalmentPeriod) && (
         <FormField
-          label="Please specify instalment period"
+          label="Please specify the instalment period for receiving funds"
           htmlFor="instalmentPeriodSpecify"
           required
           error={errors.instalmentPeriodSpecify}

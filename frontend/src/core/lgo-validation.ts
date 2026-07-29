@@ -8,7 +8,8 @@ import type { RespondentFields } from './domain/respondent-fields.model';
 import type { AgeGroup } from './domain/form-validation.model';
 import type { FiscalYearRecordPayload } from './domain/submission-payload.model';
 import { normalizeUgandaPhoneLocal } from './utils/phone-utils';
-import { validateNarrativeText, validatePhone, validateRequired } from './form-validation';
+import { validateNarrativeText } from './form-validation';
+import { formatRespondentName, validateRespondentDemographics } from './respondent-validation';
 
 export type LgoFormErrors = Record<string, string>;
 
@@ -18,18 +19,7 @@ export interface LgoFormState {
 }
 
 function validateRespondent(respondent: RespondentFields, errors: LgoFormErrors): void {
-  if (!validateRequired(respondent.respondentName).valid) {
-    errors.respondentName = 'Name of respondent is required.';
-  }
-  if (!validatePhone(respondent.respondentPhone).valid) {
-    errors.respondentPhone = validatePhone(respondent.respondentPhone).message ?? 'Invalid phone number.';
-  }
-  if (!respondent.respondentGender) errors.respondentGender = 'Gender is required.';
-  if (!respondent.respondentAgeGroup) errors.respondentAgeGroup = 'Age group is required.';
-  if (!respondent.districtId) errors.districtId = 'District is required.';
-  if (!respondent.subcountyId) errors.subcountyId = 'Sub-county is required.';
-  if (!respondent.parishId) errors.parishId = 'Parish is required.';
-  if (!respondent.villageId) errors.villageId = 'Village is required.';
+  validateRespondentDemographics(respondent, errors);
 }
 
 export function parseNonNegativeInteger(value: string): number | null {
@@ -61,19 +51,48 @@ function validateFiscalYearRecord(record: FiscalYearRecordFields, errors: LgoFor
     errors[`actualFunds-${prefix}`] = 'Enter a valid numeric amount.';
   }
 
-  const countFields: Array<{ key: keyof FiscalYearRecordFields; errorKey: string; label: string }> = [
-    { key: 'totalBeneficiaryCount', errorKey: `totalBeneficiaryCount-${prefix}`, label: 'Total beneficiaries' },
-    { key: 'youngPeopleCount', errorKey: `youngPeopleCount-${prefix}`, label: 'Young people under 30' },
-    { key: 'youngWomenCount', errorKey: `youngWomenCount-${prefix}`, label: 'Young women under 30' },
-    { key: 'totalParishesCount', errorKey: `totalParishesCount-${prefix}`, label: 'Total parishes' },
-    { key: 'fundedParishesCount', errorKey: `fundedParishesCount-${prefix}`, label: 'Parishes that received funds' },
+  const countFields: Array<{ key: keyof FiscalYearRecordFields; errorKey: string }> = [
+    { key: 'totalBeneficiaryCount', errorKey: `totalBeneficiaryCount-${prefix}` },
+    { key: 'beneficiariesUnder30Count', errorKey: `beneficiariesUnder30Count-${prefix}` },
+    { key: 'beneficiaryYoungWomenCount', errorKey: `beneficiaryYoungWomenCount-${prefix}` },
+    { key: 'beneficiaryYoungMenCount', errorKey: `beneficiaryYoungMenCount-${prefix}` },
+    { key: 'totalParishesCount', errorKey: `totalParishesCount-${prefix}` },
+    { key: 'fundedParishesCount', errorKey: `fundedParishesCount-${prefix}` },
   ];
+
+  const parsedCounts: Partial<Record<keyof FiscalYearRecordFields, number>> = {};
 
   for (const { key, errorKey } of countFields) {
     const parsed = parseNonNegativeInteger(record[key] as string);
     if (parsed == null) {
       errors[errorKey] = 'Enter a valid whole number (0 or greater).';
+    } else {
+      parsedCounts[key] = parsed;
     }
+  }
+
+  const fundedParishes = parsedCounts.fundedParishesCount;
+  const totalParishes = parsedCounts.totalParishesCount;
+  if (
+    fundedParishes != null &&
+    totalParishes != null &&
+    fundedParishes > totalParishes
+  ) {
+    errors[`fundedParishesCount-${prefix}`] =
+      'Parishes that received PDM funds cannot exceed total parishes in the district.';
+  }
+
+  const beneficiariesUnder30 = parsedCounts.beneficiariesUnder30Count;
+  const youngWomen = parsedCounts.beneficiaryYoungWomenCount;
+  const youngMen = parsedCounts.beneficiaryYoungMenCount;
+  if (
+    beneficiariesUnder30 != null &&
+    youngWomen != null &&
+    youngMen != null &&
+    youngWomen + youngMen > beneficiariesUnder30
+  ) {
+    errors[`beneficiaryYoungMenCount-${prefix}`] =
+      'Young women and young men beneficiaries cannot exceed beneficiaries under 30.';
   }
 }
 
@@ -83,13 +102,13 @@ export function validateLgoForm(state: LgoFormState): LgoFormErrors {
 
   validateRespondent(respondent, errors);
 
-  if (!lgo.selectedFiscalYearLabel) {
-    errors.selectedFiscalYearLabel = 'Select the fiscal year you are reporting for.';
+  if (!lgo.reportingFiscalYearLabel) {
+    errors.reportingFiscalYearLabel = 'Active fiscal year is not available. Contact your administrator.';
   } else {
-    validateFiscalYearRecord(
-      { ...lgo.fiscalYearRecord, fiscalYearLabel: lgo.selectedFiscalYearLabel },
-      errors
-    );
+    validateFiscalYearRecord(lgo.currentFiscalYearRecord, errors);
+    if (lgo.priorFiscalYearLabel && lgo.priorFiscalYearRecord) {
+      validateFiscalYearRecord(lgo.priorFiscalYearRecord, errors);
+    }
   }
 
   if (lgo.fundsAllocatedEquitably == null) {
@@ -140,8 +159,9 @@ function toFiscalYearPayload(record: FiscalYearRecordFields): FiscalYearRecordPa
     expectedFunds: parseFundAmount(record.expectedFunds) ?? 0,
     actualFunds: parseFundAmount(record.actualFunds) ?? 0,
     totalBeneficiaryCount: parseNonNegativeInteger(record.totalBeneficiaryCount) ?? 0,
-    youngPeopleCount: parseNonNegativeInteger(record.youngPeopleCount) ?? 0,
-    youngWomenCount: parseNonNegativeInteger(record.youngWomenCount) ?? 0,
+    beneficiariesUnder30Count: parseNonNegativeInteger(record.beneficiariesUnder30Count) ?? 0,
+    beneficiaryYoungWomenCount: parseNonNegativeInteger(record.beneficiaryYoungWomenCount) ?? 0,
+    beneficiaryYoungMenCount: parseNonNegativeInteger(record.beneficiaryYoungMenCount) ?? 0,
     totalParishesCount: parseNonNegativeInteger(record.totalParishesCount) ?? 0,
     fundedParishesCount: parseNonNegativeInteger(record.fundedParishesCount) ?? 0,
   };
@@ -153,6 +173,13 @@ export function buildLgoSubmissionPayload(
 ) {
   const { respondent, lgo } = state;
 
+  const fiscalYearRecords: FiscalYearRecordPayload[] = [
+    toFiscalYearPayload(lgo.currentFiscalYearRecord),
+  ];
+  if (lgo.priorFiscalYearLabel && lgo.priorFiscalYearRecord) {
+    fiscalYearRecords.push(toFiscalYearPayload(lgo.priorFiscalYearRecord));
+  }
+
   return {
     formType: 'LGO' as const,
     deviceSubmissionId: provenance.deviceSubmissionId,
@@ -161,16 +188,11 @@ export function buildLgoSubmissionPayload(
     subcountyId: respondent.subcountyId,
     parishId: respondent.parishId,
     villageId: respondent.villageId,
-    respondentName: respondent.respondentName.trim(),
+    respondentName: formatRespondentName(respondent.respondentName),
     respondentPhone: normalizeUgandaPhoneLocal(respondent.respondentPhone),
     respondentGender: respondent.respondentGender,
     respondentAgeGroup: respondent.respondentAgeGroup as AgeGroup,
-    fiscalYearRecords: [
-      toFiscalYearPayload({
-        ...lgo.fiscalYearRecord,
-        fiscalYearLabel: lgo.selectedFiscalYearLabel,
-      }),
-    ],
+    fiscalYearRecords,
     fundsAllocatedEquitably: lgo.fundsAllocatedEquitably as boolean,
     allocatedFundsSufficient: lgo.allocatedFundsSufficient as boolean,
     adequateUtilisationOversight: lgo.adequateUtilisationOversight as boolean,

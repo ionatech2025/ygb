@@ -95,7 +95,7 @@ class LgoBudgetAllocationSubmissionIntegrationTest {
                 "District Health Officer",
                 "0772555666",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 TestLocationFixtures.KAMPALA_DISTRICT_ID,
                 TestLocationFixtures.KAMPALA_SUBCOUNTY_ID,
                 TestLocationFixtures.KAMPALA_PARISH_ID,

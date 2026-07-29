@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class BypSubmission extends Submission {
-    private final Age exactAge;
     private final String fundReceiptDuration;
     private final String fundReceiptDurationSpecify;
     private final Boolean receivedActualAmountRequested;
@@ -28,7 +27,6 @@ public class BypSubmission extends Submission {
             String respondentPhone,
             String respondentGender,
             AgeGroup respondentAgeGroup,
-            Age exactAge,
             String fundReceiptDuration,
             String fundReceiptDurationSpecify,
             Boolean receivedActualAmountRequested,
@@ -43,10 +41,7 @@ public class BypSubmission extends Submission {
             NarrativeText improvementSuggestion
     ) {
         super(id, metadata, location, respondentName, respondentPhone, respondentGender, respondentAgeGroup);
-        
-        if (exactAge == null) {
-            throw new IllegalArgumentException("Exact age is required");
-        }
+
         if (fundReceiptDuration == null || fundReceiptDuration.trim().isEmpty()) {
             throw new IllegalArgumentException("Fund receipt duration is required");
         }
@@ -75,7 +70,6 @@ public class BypSubmission extends Submission {
             throw new IllegalArgumentException("Improvement suggestion is required");
         }
 
-        this.exactAge = exactAge;
         this.fundReceiptDuration = fundReceiptDuration;
         this.fundReceiptDurationSpecify = fundReceiptDurationSpecify;
         this.receivedActualAmountRequested = receivedActualAmountRequested;
@@ -88,10 +82,6 @@ public class BypSubmission extends Submission {
         this.receivedBds = receivedBds;
         this.bdsServices = bdsServices == null ? List.of() : List.copyOf(bdsServices);
         this.improvementSuggestion = improvementSuggestion;
-    }
-
-    public Age getExactAge() {
-        return exactAge;
     }
 
     public String getFundReceiptDuration() {

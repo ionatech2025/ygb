@@ -9,10 +9,10 @@ export interface LgoFeedbackSectionProps {
 
 export function LgoFeedbackSection({ value, onChange, errors }: LgoFeedbackSectionProps) {
   return (
-    <FormSection title="Feedback" description="Question 10">
+    <FormSection title="Closing feedback" description="Question 10">
       <NarrativeTextarea
         id="improvementSuggestion"
-        label="Q10. Suggestions for improvement"
+        label="Q10. What do you think should be improved to make the PDM programme more efficient and effective in your community?"
         value={value.improvementSuggestion}
         onChange={(text) => onChange({ ...value, improvementSuggestion: text })}
         required

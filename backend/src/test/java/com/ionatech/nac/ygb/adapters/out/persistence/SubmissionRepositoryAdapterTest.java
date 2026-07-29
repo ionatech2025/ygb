@@ -70,8 +70,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -96,7 +95,6 @@ class SubmissionRepositoryAdapterTest {
         assertThat(retrieved).isInstanceOf(BypSubmission.class);
         BypSubmission retrievedByp = (BypSubmission) retrieved;
         assertThat(retrievedByp.getRespondentName()).isEqualTo("Jane Doe");
-        assertThat(retrievedByp.getExactAge().getValue()).isEqualTo(22);
         assertThat(retrievedByp.getBdsServices()).containsExactly("TRAINING", "MARKET_LINKAGES");
     }
 
@@ -109,7 +107,7 @@ class SubmissionRepositoryAdapterTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 true,
@@ -145,8 +143,11 @@ class SubmissionRepositoryAdapterTest {
                 "Official Name",
                 "0772111444",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
-                List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                AgeGroup.AGE_ABOVE_35,
+                List.of(
+                        new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                        new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+                ),
                 true,
                 true,
                 true,
@@ -167,9 +168,10 @@ class SubmissionRepositoryAdapterTest {
 
         assertThat(retrieved).isInstanceOf(LgoSubmission.class);
         LgoSubmission retrievedLgo = (LgoSubmission) retrieved;
-        assertThat(retrievedLgo.getFiscalYearRecords()).hasSize(1);
-        FiscalYearRecord record = retrievedLgo.getFiscalYearRecords().get(0);
-        assertThat(record.fiscalYearLabel()).isEqualTo("2024/25");
+        assertThat(retrievedLgo.getFiscalYearRecords()).hasSize(2);
+        FiscalYearRecord record = retrievedLgo.getFiscalYearRecords().getFirst();
+        assertThat(record.fiscalYearLabel()).isEqualTo("2025/26");
+        assertThat(record.beneficiaryYoungMenCount()).isEqualTo(8);
         assertThat(record.expectedFunds()).isEqualTo(100000L);
     }
 
@@ -182,12 +184,13 @@ class SubmissionRepositoryAdapterTest {
                 "Parish Chief Name",
                 "0772111555",
                 "MALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 1500000L,
                 1500000L,
                 100,
                 40,
                 30,
+                10,
                 new NarrativeText("Lack of transport equipment is the main obstacle."),
                 true,
                 7,
@@ -195,7 +198,7 @@ class SubmissionRepositoryAdapterTest {
                 4,
                 true,
                 List.of("FINANCIAL_LITERACY"),
-                "HIGHLY_EFFECTIVE",
+                PdcEffectivenessRating.VERY_EFFECTIVE,
                 List.of("CAO"),
                 null,
                 new NarrativeText("Regular fields checks performed."),
@@ -205,7 +208,8 @@ class SubmissionRepositoryAdapterTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
-                8
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
 
         Submission saved = adapter.save(pc);
@@ -219,6 +223,8 @@ class SubmissionRepositoryAdapterTest {
         PcSubmission retrievedPc = (PcSubmission) retrieved;
         assertThat(retrievedPc.getAmountExpected()).isEqualTo(1500000L);
         assertThat(retrievedPc.getMonitoredBy()).containsExactly("CAO");
+        assertThat(retrievedPc.getYoungMenBeneficiaries()).isEqualTo(10);
+        assertThat(retrievedPc.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.VERY_EFFECTIVE);
     }
 
     @Test
@@ -232,8 +238,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -255,8 +260,7 @@ class SubmissionRepositoryAdapterTest {
                 "Other Name",
                 "0772111223",
                 "MALE",
-                AgeGroup.AGE_20_24,
-                new Age(23),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -291,8 +295,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -314,8 +317,7 @@ class SubmissionRepositoryAdapterTest {
                 "Other Doe",
                 "0772111223",
                 "MALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -352,8 +354,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -402,8 +403,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -426,8 +426,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe Duplicate",
                 "0772111222", // same phone
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -460,8 +459,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -484,8 +482,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe Duplicate",
                 "0772111222", // same phone
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -518,8 +515,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -542,8 +538,7 @@ class SubmissionRepositoryAdapterTest {
                 "John Doe",
                 "0772111223",
                 "MALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -580,8 +575,7 @@ class SubmissionRepositoryAdapterTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -604,8 +598,7 @@ class SubmissionRepositoryAdapterTest {
                 "John Doe",
                 "0772111223",
                 "MALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,

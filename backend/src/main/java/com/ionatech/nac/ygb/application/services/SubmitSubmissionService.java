@@ -4,6 +4,7 @@ import com.ionatech.nac.ygb.application.ports.api.*;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException;
 import com.ionatech.nac.ygb.domain.model.*;
+import com.ionatech.nac.ygb.domain.service.LgoFiscalYearRecordsPolicy;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 
 import java.util.UUID;
@@ -14,13 +15,30 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
     private static final int MAX_ATTEMPTS = 3;
 
     private final SubmissionRepositoryPort repositoryPort;
+    private final GetActiveFiscalYearUseCase getActiveFiscalYearUseCase;
+    private final LgoFiscalYearRecordsPolicy lgoFiscalYearRecordsPolicy;
 
-    public SubmitSubmissionService(SubmissionRepositoryPort repositoryPort) {
+    public SubmitSubmissionService(
+            SubmissionRepositoryPort repositoryPort,
+            GetActiveFiscalYearUseCase getActiveFiscalYearUseCase,
+            LgoFiscalYearRecordsPolicy lgoFiscalYearRecordsPolicy
+    ) {
         this.repositoryPort = repositoryPort;
+        this.getActiveFiscalYearUseCase = getActiveFiscalYearUseCase;
+        this.lgoFiscalYearRecordsPolicy = lgoFiscalYearRecordsPolicy;
     }
 
     @Override
     public Submission submit(SubmitSubmissionCommand command) {
+        if (command instanceof LgoSubmitCommand lgoCommand) {
+            ActiveFiscalYearView activeFiscalYear = getActiveFiscalYearUseCase.getActiveFiscalYear();
+            lgoFiscalYearRecordsPolicy.validate(
+                    lgoCommand.fiscalYearRecords(),
+                    activeFiscalYear.fiscalYearLabel(),
+                    activeFiscalYear.priorFiscalYearLabel()
+            );
+        }
+
         Submission submission = mapToDomain(command);
         submission.validate();
         return saveWithRetry(submission, MAX_ATTEMPTS);
@@ -74,7 +92,6 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     byp.respondentPhone(),
                     byp.respondentGender(),
                     byp.respondentAgeGroup(),
-                    new Age(byp.exactAge()),
                     byp.fundReceiptDuration(),
                     byp.fundReceiptDurationSpecify(),
                     byp.receivedActualAmountRequested(),
@@ -139,6 +156,7 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     pc.totalBeneficiaries(),
                     pc.youthBeneficiaries(),
                     pc.youngWomenBeneficiaries(),
+                    pc.youngMenBeneficiaries(),
                     pc.obstaclesDescription() != null ? new NarrativeText(pc.obstaclesDescription()) : null,
                     pc.spendingTargetedToMostInNeed(),
                     pc.pdcTotalMembers(),
@@ -156,7 +174,8 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     pc.progressReportsSubmitted(),
                     pc.progressReportsSubmittedExplanation() != null ? new NarrativeText(pc.progressReportsSubmittedExplanation()) : null,
                     pc.selfRelianceBeneficiariesCount(),
-                    pc.selfRelianceGroupProjectsCount()
+                    pc.selfRelianceGroupProjectsCount(),
+                    pc.programmeImprovementSuggestion() != null ? new NarrativeText(pc.programmeImprovementSuggestion()) : null
             );
         };
     }

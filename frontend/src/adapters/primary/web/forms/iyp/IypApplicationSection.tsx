@@ -1,4 +1,5 @@
 import {
+  IYP_OTHERS_OPTION_VALUE,
   REASONS_FOR_NOT_APPLYING_OPTIONS,
   requiresAccessedFund,
   requiresAppliedQuestions,
@@ -22,10 +23,10 @@ export function IypApplicationSection({ value, onChange, errors }: IypApplicatio
   }
 
   return (
-    <FormSection title="Application status" description="Questions 6–9">
+    <FormSection title="Section B: Application & access to PDM funds" description="Questions 6–9">
       <YesNoRadioGroup
         name="appliedForFund"
-        label="Q6. Did you apply for the PDM fund?"
+        label="Q6. Have you applied for the PDM fund?"
         value={value.appliedForFund}
         onChange={(choice) =>
           patch({
@@ -33,6 +34,7 @@ export function IypApplicationSection({ value, onChange, errors }: IypApplicatio
             accessedFund: choice ? value.accessedFund : null,
             rejectionNarrative: choice ? value.rejectionNarrative : '',
             reasonsForNotApplying: choice ? [] : value.reasonsForNotApplying,
+            reasonsForNotApplyingOthersSpecify: choice ? '' : value.reasonsForNotApplyingOthersSpecify,
           })
         }
         required
@@ -42,7 +44,7 @@ export function IypApplicationSection({ value, onChange, errors }: IypApplicatio
       {requiresAccessedFund(value.appliedForFund) && (
         <YesNoRadioGroup
           name="accessedFund"
-          label="Q7. Did you access the fund after applying?"
+          label="Q7. Did you access the PDM fund after your application?"
           value={value.accessedFund}
           onChange={(choice) =>
             patch({
@@ -58,7 +60,7 @@ export function IypApplicationSection({ value, onChange, errors }: IypApplicatio
       {requiresRejectionNarrative(value.appliedForFund, value.accessedFund) && (
         <NarrativeTextarea
           id="rejectionNarrative"
-          label="Q8. Narrate why the application was not successful"
+          label="Q8. Please explain why you were rejected"
           value={value.rejectionNarrative}
           onChange={(text) => patch({ rejectionNarrative: text })}
           required
@@ -72,15 +74,26 @@ export function IypApplicationSection({ value, onChange, errors }: IypApplicatio
 
       {requiresReasonsForNotApplying(value.appliedForFund) && (
         <MultiCheckboxGroup
-          legend="Q9. Reasons for not applying"
+          legend="Q9. What were the reasons for not applying for the PDM fund?"
+          hint="(select all that apply)"
           options={REASONS_FOR_NOT_APPLYING_OPTIONS.map((option) => ({
             value: option.value,
             label: option.label,
           }))}
           selected={value.reasonsForNotApplying}
           onChange={(selected) =>
-            patch({ reasonsForNotApplying: selected as IypFormFields['reasonsForNotApplying'] })
+            patch({
+              reasonsForNotApplying: selected as IypFormFields['reasonsForNotApplying'],
+              reasonsForNotApplyingOthersSpecify: selected.includes(IYP_OTHERS_OPTION_VALUE)
+                ? value.reasonsForNotApplyingOthersSpecify
+                : '',
+            })
           }
+          otherOptionValue={IYP_OTHERS_OPTION_VALUE}
+          otherSpecifyValue={value.reasonsForNotApplyingOthersSpecify}
+          onOtherSpecifyChange={(text) => patch({ reasonsForNotApplyingOthersSpecify: text })}
+          otherSpecifyLabel="Please specify why you did not apply for the PDM fund"
+          otherSpecifyError={errors.reasonsForNotApplyingOthersSpecify}
           required
           error={errors.reasonsForNotApplying}
         />

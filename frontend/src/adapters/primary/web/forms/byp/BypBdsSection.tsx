@@ -14,7 +14,7 @@ export function BypBdsSection({ value, onChange, errors }: BypBdsSectionProps) {
     <FormSection title="Business development services" description="Question 8">
       <YesNoRadioGroup
         name="receivedBds"
-        label="Q8. Did you receive business development services?"
+        label="Q8. Did you receive any business development services? If yes, specify:"
         value={value.receivedBds}
         onChange={(choice) =>
           patch({
@@ -28,7 +28,8 @@ export function BypBdsSection({ value, onChange, errors }: BypBdsSectionProps) {
 
       {value.receivedBds === true && (
         <MultiCheckboxGroup
-          legend="Select services received"
+          legend="Select the business development services you received"
+          hint="(select all that apply)"
           options={BDS_SERVICE_OPTIONS.map((option) => ({
             value: option.value,
             label: option.label,

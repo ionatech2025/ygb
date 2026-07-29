@@ -11,6 +11,7 @@ public class PcSubmission extends Submission {
     private final Integer totalBeneficiaries;
     private final Integer youthBeneficiaries;
     private final Integer youngWomenBeneficiaries;
+    private final Integer youngMenBeneficiaries;
     private final NarrativeText obstaclesDescription;
     private final Boolean spendingTargetedToMostInNeed;
     private final Integer pdcTotalMembers;
@@ -18,7 +19,7 @@ public class PcSubmission extends Submission {
     private final Integer pdcWomenMembers;
     private final Boolean pdcTrainingReceived;
     private final List<String> pdcTrainingAreas;
-    private final String pdcEffectivenessRating;
+    private final PdcEffectivenessRating pdcEffectivenessRating;
     private final List<String> monitoredBy;
     private final String monitoredByOthersSpecify;
     private final NarrativeText monitoringMethod;
@@ -29,6 +30,7 @@ public class PcSubmission extends Submission {
     private final NarrativeText progressReportsSubmittedExplanation;
     private final Integer selfRelianceBeneficiariesCount;
     private final Integer selfRelianceGroupProjectsCount;
+    private final NarrativeText programmeImprovementSuggestion;
 
     public PcSubmission(
             UUID id,
@@ -43,6 +45,7 @@ public class PcSubmission extends Submission {
             Integer totalBeneficiaries,
             Integer youthBeneficiaries,
             Integer youngWomenBeneficiaries,
+            Integer youngMenBeneficiaries,
             NarrativeText obstaclesDescription,
             Boolean spendingTargetedToMostInNeed,
             Integer pdcTotalMembers,
@@ -50,7 +53,7 @@ public class PcSubmission extends Submission {
             Integer pdcWomenMembers,
             Boolean pdcTrainingReceived,
             List<String> pdcTrainingAreas,
-            String pdcEffectivenessRating,
+            PdcEffectivenessRating pdcEffectivenessRating,
             List<String> monitoredBy,
             String monitoredByOthersSpecify,
             NarrativeText monitoringMethod,
@@ -60,14 +63,15 @@ public class PcSubmission extends Submission {
             Boolean progressReportsSubmitted,
             NarrativeText progressReportsSubmittedExplanation,
             Integer selfRelianceBeneficiariesCount,
-            Integer selfRelianceGroupProjectsCount
+            Integer selfRelianceGroupProjectsCount,
+            NarrativeText programmeImprovementSuggestion
     ) {
         super(id, metadata, location, respondentName, respondentPhone, respondentGender, respondentAgeGroup);
-        
+
         if (amountExpected == null || amountExpected < 0 || amountReceived == null || amountReceived < 0) {
             throw new IllegalArgumentException("Amounts expected and received must be positive");
         }
-        if (totalBeneficiaries == null || totalBeneficiaries < 0 || youthBeneficiaries == null || youthBeneficiaries < 0 
+        if (totalBeneficiaries == null || totalBeneficiaries < 0 || youthBeneficiaries == null || youthBeneficiaries < 0
                 || youngWomenBeneficiaries == null || youngWomenBeneficiaries < 0) {
             throw new IllegalArgumentException("Beneficiary counts must be positive");
         }
@@ -77,14 +81,14 @@ public class PcSubmission extends Submission {
         if (spendingTargetedToMostInNeed == null) {
             throw new IllegalArgumentException("Spending targeted indicator is required");
         }
-        if (pdcTotalMembers == null || pdcTotalMembers < 0 || pdcYouthMembers == null || pdcYouthMembers < 0 
+        if (pdcTotalMembers == null || pdcTotalMembers < 0 || pdcYouthMembers == null || pdcYouthMembers < 0
                 || pdcWomenMembers == null || pdcWomenMembers < 0) {
             throw new IllegalArgumentException("PDC members counts must be positive");
         }
         if (pdcTrainingReceived == null) {
             throw new IllegalArgumentException("PDC training received indicator is required");
         }
-        if (pdcEffectivenessRating == null || pdcEffectivenessRating.trim().isEmpty()) {
+        if (pdcEffectivenessRating == null) {
             throw new IllegalArgumentException("PDC effectiveness rating is required");
         }
         if (monitoredBy == null || monitoredBy.isEmpty()) {
@@ -102,9 +106,12 @@ public class PcSubmission extends Submission {
         if (progressReportsSubmitted == null) {
             throw new IllegalArgumentException("Progress reports indicator is required");
         }
-        if (selfRelianceBeneficiariesCount == null || selfRelianceBeneficiariesCount < 0 
+        if (selfRelianceBeneficiariesCount == null || selfRelianceBeneficiariesCount < 0
                 || selfRelianceGroupProjectsCount == null || selfRelianceGroupProjectsCount < 0) {
             throw new IllegalArgumentException("Self-reliance counts must be positive");
+        }
+        if (programmeImprovementSuggestion == null) {
+            throw new IllegalArgumentException("Programme improvement suggestion is required");
         }
 
         this.amountExpected = amountExpected;
@@ -112,6 +119,7 @@ public class PcSubmission extends Submission {
         this.totalBeneficiaries = totalBeneficiaries;
         this.youthBeneficiaries = youthBeneficiaries;
         this.youngWomenBeneficiaries = youngWomenBeneficiaries;
+        this.youngMenBeneficiaries = youngMenBeneficiaries;
         this.obstaclesDescription = obstaclesDescription;
         this.spendingTargetedToMostInNeed = spendingTargetedToMostInNeed;
         this.pdcTotalMembers = pdcTotalMembers;
@@ -130,6 +138,7 @@ public class PcSubmission extends Submission {
         this.progressReportsSubmittedExplanation = progressReportsSubmittedExplanation;
         this.selfRelianceBeneficiariesCount = selfRelianceBeneficiariesCount;
         this.selfRelianceGroupProjectsCount = selfRelianceGroupProjectsCount;
+        this.programmeImprovementSuggestion = programmeImprovementSuggestion;
     }
 
     public Long getAmountExpected() {
@@ -150,6 +159,10 @@ public class PcSubmission extends Submission {
 
     public Integer getYoungWomenBeneficiaries() {
         return youngWomenBeneficiaries;
+    }
+
+    public Integer getYoungMenBeneficiaries() {
+        return youngMenBeneficiaries;
     }
 
     public NarrativeText getObstaclesDescription() {
@@ -180,7 +193,7 @@ public class PcSubmission extends Submission {
         return pdcTrainingAreas;
     }
 
-    public String getPdcEffectivenessRating() {
+    public PdcEffectivenessRating getPdcEffectivenessRating() {
         return pdcEffectivenessRating;
     }
 
@@ -224,6 +237,10 @@ public class PcSubmission extends Submission {
         return selfRelianceGroupProjectsCount;
     }
 
+    public NarrativeText getProgrammeImprovementSuggestion() {
+        return programmeImprovementSuggestion;
+    }
+
     @Override
     public FormType getFormType() {
         return FormType.PC;
@@ -231,6 +248,19 @@ public class PcSubmission extends Submission {
 
     @Override
     public void validate() {
+        if (youthBeneficiaries > 0) {
+            if (youngMenBeneficiaries == null || youngMenBeneficiaries < 0) {
+                throw new IllegalArgumentException(
+                        "Young men beneficiaries count is required when youth beneficiaries is greater than zero"
+                );
+            }
+            if (youngWomenBeneficiaries + youngMenBeneficiaries > youthBeneficiaries) {
+                throw new IllegalArgumentException(
+                        "Young women and young men beneficiaries cannot exceed youth beneficiaries"
+                );
+            }
+        }
+
         if (Boolean.TRUE.equals(pdcTrainingReceived) && pdcTrainingAreas.isEmpty()) {
             throw new IllegalArgumentException("PDC training areas list cannot be empty when pdcTrainingReceived is true");
         }

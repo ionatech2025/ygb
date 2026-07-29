@@ -61,7 +61,7 @@ class BudgetPriorityControllerTest {
                 Map.of(
                         "fullName", "Jane Nakato",
                         "phoneNumber", "0772123456",
-                        "ageGroup", "AGE_20_24",
+                        "ageGroup", "AGE_18_24",
                         "gender", "FEMALE",
                         "districtId", UUID.randomUUID().toString()
                 ),
@@ -112,7 +112,7 @@ class BudgetPriorityControllerTest {
                 new BudgetPriorityDemographicsDto(
                         "Jane Nakato",
                         "0772123456",
-                        "AGE_20_24",
+                        "AGE_18_24",
                         "FEMALE",
                         UUID.randomUUID().toString()
                 ),

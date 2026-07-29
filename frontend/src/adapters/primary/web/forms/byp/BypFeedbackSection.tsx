@@ -12,7 +12,7 @@ export function BypFeedbackSection({ value, onChange, errors }: BypFeedbackSecti
     <FormSection title="Feedback" description="Question 9">
       <NarrativeTextarea
         id="improvementSuggestion"
-        label="Q9. Suggestions for improvement"
+        label="Q9. What do you think should be improved to make the PDM programme efficient and effective?"
         value={value.improvementSuggestion}
         onChange={(text) => onChange({ ...value, improvementSuggestion: text })}
         required

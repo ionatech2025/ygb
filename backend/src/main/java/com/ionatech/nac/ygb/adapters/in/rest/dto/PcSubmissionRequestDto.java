@@ -1,6 +1,7 @@
 package com.ionatech.nac.ygb.adapters.in.rest.dto;
 
 import com.ionatech.nac.ygb.domain.valueobjects.AgeGroup;
+import com.ionatech.nac.ygb.domain.valueobjects.PdcEffectivenessRating;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,6 +13,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     private Integer totalBeneficiaries;
     private Integer youthBeneficiaries;
     private Integer youngWomenBeneficiaries;
+    private Integer youngMenBeneficiaries;
     private String obstaclesDescription;
     private Boolean spendingTargetedToMostInNeed;
     private Integer pdcTotalMembers;
@@ -19,7 +21,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     private Integer pdcWomenMembers;
     private Boolean pdcTrainingReceived;
     private List<String> pdcTrainingAreas;
-    private String pdcEffectivenessRating;
+    private PdcEffectivenessRating pdcEffectivenessRating;
     private List<String> monitoredBy;
     private String monitoredByOthersSpecify;
     private String monitoringMethod;
@@ -30,6 +32,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     private String progressReportsSubmittedExplanation;
     private Integer selfRelianceBeneficiariesCount;
     private Integer selfRelianceGroupProjectsCount;
+    private String programmeImprovementSuggestion;
 
     public PcSubmissionRequestDto() {}
 
@@ -50,6 +53,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
             Integer totalBeneficiaries,
             Integer youthBeneficiaries,
             Integer youngWomenBeneficiaries,
+            Integer youngMenBeneficiaries,
             String obstaclesDescription,
             Boolean spendingTargetedToMostInNeed,
             Integer pdcTotalMembers,
@@ -57,7 +61,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
             Integer pdcWomenMembers,
             Boolean pdcTrainingReceived,
             List<String> pdcTrainingAreas,
-            String pdcEffectivenessRating,
+            PdcEffectivenessRating pdcEffectivenessRating,
             List<String> monitoredBy,
             String monitoredByOthersSpecify,
             String monitoringMethod,
@@ -67,7 +71,8 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
             Boolean progressReportsSubmitted,
             String progressReportsSubmittedExplanation,
             Integer selfRelianceBeneficiariesCount,
-            Integer selfRelianceGroupProjectsCount
+            Integer selfRelianceGroupProjectsCount,
+            String programmeImprovementSuggestion
     ) {
         super(formType, deviceSubmissionId, formCompletedAt, districtId, subcountyId, parishId, villageId, respondentName, respondentPhone, respondentGender, respondentAgeGroup);
         this.amountExpected = amountExpected;
@@ -75,6 +80,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
         this.totalBeneficiaries = totalBeneficiaries;
         this.youthBeneficiaries = youthBeneficiaries;
         this.youngWomenBeneficiaries = youngWomenBeneficiaries;
+        this.youngMenBeneficiaries = youngMenBeneficiaries;
         this.obstaclesDescription = obstaclesDescription;
         this.spendingTargetedToMostInNeed = spendingTargetedToMostInNeed;
         this.pdcTotalMembers = pdcTotalMembers;
@@ -93,6 +99,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
         this.progressReportsSubmittedExplanation = progressReportsSubmittedExplanation;
         this.selfRelianceBeneficiariesCount = selfRelianceBeneficiariesCount;
         this.selfRelianceGroupProjectsCount = selfRelianceGroupProjectsCount;
+        this.programmeImprovementSuggestion = programmeImprovementSuggestion;
     }
 
     public Long getAmountExpected() { return amountExpected; }
@@ -100,6 +107,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     public Integer getTotalBeneficiaries() { return totalBeneficiaries; }
     public Integer getYouthBeneficiaries() { return youthBeneficiaries; }
     public Integer getYoungWomenBeneficiaries() { return youngWomenBeneficiaries; }
+    public Integer getYoungMenBeneficiaries() { return youngMenBeneficiaries; }
     public String getObstaclesDescription() { return obstaclesDescription; }
     public Boolean getSpendingTargetedToMostInNeed() { return spendingTargetedToMostInNeed; }
     public Integer getPdcTotalMembers() { return pdcTotalMembers; }
@@ -107,7 +115,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     public Integer getPdcWomenMembers() { return pdcWomenMembers; }
     public Boolean getPdcTrainingReceived() { return pdcTrainingReceived; }
     public List<String> getPdcTrainingAreas() { return pdcTrainingAreas; }
-    public String getPdcEffectivenessRating() { return pdcEffectivenessRating; }
+    public PdcEffectivenessRating getPdcEffectivenessRating() { return pdcEffectivenessRating; }
     public List<String> getMonitoredBy() { return monitoredBy; }
     public String getMonitoredByOthersSpecify() { return monitoredByOthersSpecify; }
     public String getMonitoringMethod() { return monitoringMethod; }
@@ -118,4 +126,5 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     public String getProgressReportsSubmittedExplanation() { return progressReportsSubmittedExplanation; }
     public Integer getSelfRelianceBeneficiariesCount() { return selfRelianceBeneficiariesCount; }
     public Integer getSelfRelianceGroupProjectsCount() { return selfRelianceGroupProjectsCount; }
+    public String getProgrammeImprovementSuggestion() { return programmeImprovementSuggestion; }
 }

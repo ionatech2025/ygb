@@ -1,6 +1,7 @@
 package com.ionatech.nac.ygb.application.ports.api;
 
 import com.ionatech.nac.ygb.domain.valueobjects.AgeGroup;
+import com.ionatech.nac.ygb.domain.valueobjects.PdcEffectivenessRating;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +24,7 @@ public record PcSubmitCommand(
         Integer totalBeneficiaries,
         Integer youthBeneficiaries,
         Integer youngWomenBeneficiaries,
+        Integer youngMenBeneficiaries,
         String obstaclesDescription,
         Boolean spendingTargetedToMostInNeed,
         Integer pdcTotalMembers,
@@ -30,7 +32,7 @@ public record PcSubmitCommand(
         Integer pdcWomenMembers,
         Boolean pdcTrainingReceived,
         List<String> pdcTrainingAreas,
-        String pdcEffectivenessRating,
+        PdcEffectivenessRating pdcEffectivenessRating,
         List<String> monitoredBy,
         String monitoredByOthersSpecify,
         String monitoringMethod,
@@ -40,5 +42,6 @@ public record PcSubmitCommand(
         Boolean progressReportsSubmitted,
         String progressReportsSubmittedExplanation,
         Integer selfRelianceBeneficiariesCount,
-        Integer selfRelianceGroupProjectsCount
+        Integer selfRelianceGroupProjectsCount,
+        String programmeImprovementSuggestion
 ) implements SubmitSubmissionCommand {}

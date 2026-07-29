@@ -4,6 +4,7 @@ import com.ionatech.nac.ygb.application.ports.api.*;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.exceptions.DuplicateSyncedSubmissionException;
 import com.ionatech.nac.ygb.domain.model.*;
+import com.ionatech.nac.ygb.domain.service.LgoFiscalYearRecordsPolicy;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.*;
 class SubmitSubmissionServiceTest {
 
     private SubmissionRepositoryPort repositoryPort;
+    private GetActiveFiscalYearUseCase getActiveFiscalYearUseCase;
     private SubmitSubmissionService service;
 
     private final UUID collectorId = UUID.randomUUID();
@@ -35,7 +37,22 @@ class SubmitSubmissionServiceTest {
     @BeforeEach
     void setUp() {
         repositoryPort = mock(SubmissionRepositoryPort.class);
-        service = new SubmitSubmissionService(repositoryPort);
+        getActiveFiscalYearUseCase = mock(GetActiveFiscalYearUseCase.class);
+        when(getActiveFiscalYearUseCase.getActiveFiscalYear()).thenReturn(
+                new ActiveFiscalYearView("2025/26", "2024/25", List.of("2025/26", "2024/25"))
+        );
+        service = new SubmitSubmissionService(
+                repositoryPort,
+                getActiveFiscalYearUseCase,
+                new LgoFiscalYearRecordsPolicy()
+        );
+    }
+
+    private List<FiscalYearRecord> currentAndPriorFiscalYearRecords() {
+        return List.of(
+                new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4),
+                new FiscalYearRecord("2024/25", 90000L, 70000L, 45, 18, 10, 8, 5, 3)
+        );
     }
 
     @Test
@@ -51,8 +68,7 @@ class SubmitSubmissionServiceTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -74,7 +90,7 @@ class SubmitSubmissionServiceTest {
         assertThat(result).isInstanceOf(BypSubmission.class);
         BypSubmission byp = (BypSubmission) result;
         assertThat(byp.getRespondentName()).isEqualTo("Jane Doe");
-        assertThat(byp.getExactAge().getValue()).isEqualTo(22);
+        assertThat(byp.getRespondentAgeGroup()).isEqualTo(AgeGroup.AGE_18_24);
         assertThat(byp.getStatus()).isEqualTo(SubmissionStatus.SYNCED);
         assertThat(byp.getMetadata().financialYearPeriod().toString()).isNotNull();
 
@@ -96,8 +112,7 @@ class SubmitSubmissionServiceTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "MONTHS", // requires specify
                 null, // missing specify
                 true,
@@ -120,6 +135,77 @@ class SubmitSubmissionServiceTest {
     }
 
     @Test
+    void shouldSubmitBypWithoutExactAgeAndBlankRespondentName() {
+        BypSubmitCommand command = new BypSubmitCommand(
+                collectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                "Provide more technical support and early training."
+        );
+
+        when(repositoryPort.save(any(Submission.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Submission result = service.submit(command);
+
+        assertThat(result).isInstanceOf(BypSubmission.class);
+        assertThat(((BypSubmission) result).getRespondentName()).isEmpty();
+    }
+
+    @Test
+    void shouldRejectBelow18AgeGroupOnSubmit() {
+        BypSubmitCommand command = new BypSubmitCommand(
+                collectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_BELOW_18,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                "Provide more technical support."
+        );
+
+        assertThatThrownBy(() -> service.submit(command))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("out of programme scope");
+
+        verify(repositoryPort, never()).save(any(Submission.class));
+    }
+
+    @Test
     void shouldSubmitIypFormSuccessfully() {
         IypSubmitCommand command = new IypSubmitCommand(
                 collectorId,
@@ -132,7 +218,7 @@ class SubmitSubmissionServiceTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 false, // unaware of PDM
                 null,
                 null,
@@ -169,8 +255,8 @@ class SubmitSubmissionServiceTest {
                 "Official Name",
                 "0772111444",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
-                List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
+                AgeGroup.AGE_ABOVE_35,
+                currentAndPriorFiscalYearRecords(),
                 true,
                 true,
                 true,
@@ -189,8 +275,41 @@ class SubmitSubmissionServiceTest {
         assertThat(result).isInstanceOf(LgoSubmission.class);
         LgoSubmission lgo = (LgoSubmission) result;
         assertThat(lgo.getRespondentName()).isEqualTo("Official Name");
+        assertThat(lgo.getFiscalYearRecords()).hasSize(2);
+        assertThat(lgo.getFiscalYearRecords().getFirst().beneficiaryYoungMenCount()).isEqualTo(8);
 
         verify(repositoryPort, times(1)).save(any(Submission.class));
+    }
+
+    @Test
+    void shouldRejectLgoSubmissionWithSingleFiscalYearRecord() {
+        LgoSubmitCommand command = new LgoSubmitCommand(
+                collectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "Official Name",
+                "0772111444",
+                "FEMALE",
+                AgeGroup.AGE_ABOVE_35,
+                List.of(new FiscalYearRecord("2025/26", 100000L, 80000L, 50, 20, 12, 8, 5, 4)),
+                true,
+                true,
+                true,
+                true,
+                true,
+                null,
+                true,
+                null,
+                "Provide more monitoring tools."
+        );
+
+        assertThatThrownBy(() -> service.submit(command))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Exactly two fiscal year records are required");
     }
 
     @Test
@@ -206,12 +325,13 @@ class SubmitSubmissionServiceTest {
                 "Parish Chief Name",
                 "0772111555",
                 "MALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 1500000L,
                 1500000L,
                 100,
                 40,
                 30,
+                10,
                 "Lack of transport equipment is the main obstacle.",
                 true,
                 7,
@@ -219,7 +339,7 @@ class SubmitSubmissionServiceTest {
                 4,
                 true,
                 List.of("FINANCIAL_LITERACY"),
-                "HIGHLY_EFFECTIVE",
+                PdcEffectivenessRating.VERY_EFFECTIVE,
                 List.of("CAO"),
                 null,
                 "Regular fields checks performed.",
@@ -229,7 +349,8 @@ class SubmitSubmissionServiceTest {
                 true,
                 "Reports submitted quarterly.",
                 10,
-                8
+                8,
+                "Provide more monitoring tools for parish chiefs."
         );
 
         when(repositoryPort.save(any(Submission.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -239,6 +360,8 @@ class SubmitSubmissionServiceTest {
         assertThat(result).isInstanceOf(PcSubmission.class);
         PcSubmission pc = (PcSubmission) result;
         assertThat(pc.getAmountExpected()).isEqualTo(1500000L);
+        assertThat(pc.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.VERY_EFFECTIVE);
+        assertThat(pc.getYoungMenBeneficiaries()).isEqualTo(10);
 
         verify(repositoryPort, times(1)).save(any(Submission.class));
     }
@@ -346,8 +469,7 @@ class SubmitSubmissionServiceTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,

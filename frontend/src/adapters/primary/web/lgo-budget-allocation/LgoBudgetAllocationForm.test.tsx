@@ -66,7 +66,7 @@ async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/name of respondent/i), 'District Health Officer');
   await user.type(screen.getByLabelText(/phone number/i), '0772555666');
   await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_30_AND_ABOVE');
+  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_ABOVE_35');
 
   await user.selectOptions(await screen.findByLabelText(/^district/i), 'district-1');
   await user.selectOptions(await screen.findByLabelText(/sub-county \/ division/i), 'subcounty-1');

@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { FormField, formControlClassName } from './FormField';
 import { MULTI_SELECT_OTHER_VALUE } from '../../../../../core/domain/form-validation.model';
 
@@ -18,6 +19,7 @@ export interface MultiCheckboxGroupProps {
   required?: boolean;
   error?: string;
   otherSpecifyError?: string;
+  hint?: string;
 }
 
 export function MultiCheckboxGroup({
@@ -32,7 +34,9 @@ export function MultiCheckboxGroup({
   required,
   error,
   otherSpecifyError,
+  hint,
 }: MultiCheckboxGroupProps) {
+  const groupId = useId();
   const showOtherSpecify = selected.includes(otherOptionValue);
 
   const toggle = (value: string) => {
@@ -53,9 +57,10 @@ export function MultiCheckboxGroup({
           </span>
         )}
       </legend>
+      {hint && <p className="mb-2 text-[11px] text-text-muted">{hint}</p>}
       <div className="space-y-2">
         {options.map((option) => {
-          const inputId = `multi-${option.value}`;
+          const inputId = `${groupId}-${option.value}`;
           return (
             <label
               key={option.value}
@@ -77,12 +82,12 @@ export function MultiCheckboxGroup({
       {showOtherSpecify && onOtherSpecifyChange && (
         <FormField
           label={otherSpecifyLabel}
-          htmlFor={`${legend}-other-specify`}
+          htmlFor={`${groupId}-other-specify`}
           required
           error={otherSpecifyError}
         >
           <input
-            id={`${legend}-other-specify`}
+            id={`${groupId}-other-specify`}
             type="text"
             value={otherSpecifyValue}
             onChange={(e) => onOtherSpecifyChange(e.target.value)}

@@ -180,7 +180,7 @@ class BudgetPriorityExportIntegrationTest {
                 Map.of(
                         BudgetPriorityDemographics.FULL_NAME, "Jane Nakato",
                         BudgetPriorityDemographics.PHONE_NUMBER, phone,
-                        BudgetPriorityDemographics.AGE_GROUP, "AGE_20_24",
+                        BudgetPriorityDemographics.AGE_GROUP, "AGE_18_24",
                         BudgetPriorityDemographics.GENDER, "FEMALE",
                         BudgetPriorityDemographics.DISTRICT_ID, districtId
                 ),
