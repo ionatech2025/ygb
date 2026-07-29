@@ -1,5 +1,5 @@
 import type { LocationFields } from '../../../../core/domain/admin-location.model';
-import { FormField, formControlClassName } from './forms/FormField';
+import { FormField, FormSelect } from './forms';
 import { useCascadingLocation } from '../../../../core/hooks/useCascadingLocation';
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
 import { Loader2, MapPin } from 'lucide-react';
@@ -31,20 +31,16 @@ function LocationSelect({
 }) {
   return (
     <FormField label={label} htmlFor={id} required>
-      <select
+      <FormSelect
         id={id}
         value={value}
         disabled={disabled}
-        onChange={(e) => onSelect(e.target.value)}
-        className={`${formControlClassName} disabled:cursor-not-allowed disabled:opacity-60`}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option.id} value={option.id}>
-            {option.name}
-          </option>
-        ))}
-      </select>
+        onChange={onSelect}
+        options={options.map((option) => ({ value: option.id, label: option.name }))}
+        placeholder={placeholder}
+        collapsible
+        required
+      />
     </FormField>
   );
 }

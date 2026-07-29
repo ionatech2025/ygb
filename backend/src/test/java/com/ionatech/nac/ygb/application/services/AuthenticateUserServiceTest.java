@@ -55,6 +55,10 @@ class AuthenticateUserServiceTest {
         AuthenticationResult result = authenticateUserService.authenticate(command);
 
         assertThat(result.token()).isEqualTo("jwt.token.here");
+        assertThat(result.user().fullName()).isEqualTo("Test User");
+        assertThat(result.user().phoneNumber()).isEqualTo("0770000000");
+        assertThat(result.user().role()).isEqualTo(Role.DATA_COLLECTOR);
+        assertThat(result.user().id()).isEqualTo(userId);
     }
 
     @Test

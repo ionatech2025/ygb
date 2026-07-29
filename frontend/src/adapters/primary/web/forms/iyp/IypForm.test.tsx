@@ -2,6 +2,7 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { IypForm } from './IypForm';
+import { chooseFormOptionById, chooseFormOptionByValue } from '../../../../../test-utils/choose-form-option';
 
 vi.mock('../../../../../core/LocationService', () => ({
   locationService: { ensureLoaded: vi.fn().mockResolvedValue(undefined) },
@@ -45,17 +46,17 @@ vi.mock('../../../../../core/store/useAuthStore', () => ({
 async function fillRespondent(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/name of respondent/i), 'Jane Doe');
   await user.type(screen.getByLabelText(/phone number/i), '0772111222');
-  await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_18_24');
+  await chooseFormOptionByValue(user, /^gender/i, 'FEMALE');
+  await chooseFormOptionByValue(user, /age group/i, 'AGE_18_24');
 
   await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
-  await user.selectOptions(document.getElementById('district')!, 'district-1');
+  await chooseFormOptionById(user, 'district', 'district-1');
   await waitFor(() => expect(document.getElementById('subcounty')).not.toBeDisabled());
-  await user.selectOptions(document.getElementById('subcounty')!, 'subcounty-1');
+  await chooseFormOptionById(user, 'subcounty', 'subcounty-1');
   await waitFor(() => expect(document.getElementById('parish')).not.toBeDisabled());
-  await user.selectOptions(document.getElementById('parish')!, 'parish-1');
+  await chooseFormOptionById(user, 'parish', 'parish-1');
   await waitFor(() => expect(document.getElementById('village')).not.toBeDisabled());
-  await user.selectOptions(document.getElementById('village')!, 'village-1');
+  await chooseFormOptionById(user, 'village', 'village-1');
 }
 
 async function selectAwarePath(user: ReturnType<typeof userEvent.setup>) {

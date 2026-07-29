@@ -4,7 +4,7 @@ import {
   requiresPdcTrainingAreas,
   type PcFormFields,
 } from '../../../../../core/domain/pc-form.model';
-import { FormField, formControlClassName, FormSection, MultiCheckboxGroup, YesNoRadioGroup } from '../../components/forms';
+import { FormField, formControlClassName, FormSection, FormSelect, MultiCheckboxGroup, YesNoRadioGroup } from '../../components/forms';
 
 export interface PcPdcSectionProps {
   value: PcFormFields;
@@ -108,20 +108,14 @@ export function PcPdcSection({ value, onChange, errors }: PcPdcSectionProps) {
         required
         error={errors.pdcEffectivenessRating}
       >
-        <select
+        <FormSelect
           id="pdcEffectivenessRating"
           value={value.pdcEffectivenessRating}
-          onChange={(e) => patch({ pdcEffectivenessRating: e.target.value })}
-          className={formControlClassName}
+          onChange={(next) => patch({ pdcEffectivenessRating: next })}
+          options={PDC_EFFECTIVENESS_OPTIONS}
+          placeholder="Select rating…"
           required
-        >
-          <option value="">Select rating…</option>
-          {PDC_EFFECTIVENESS_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        />
       </FormField>
     </FormSection>
   );

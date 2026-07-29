@@ -1,6 +1,6 @@
 import type { FormType } from '../../../../core/domain/form-type.model';
 import { FORM_TYPE_OPTIONS } from '../../../../core/domain/form-type.model';
-import { FormField, formControlClassName } from '../components/forms';
+import { FormField, FormSelect } from '../components/forms';
 import { ClipboardList } from 'lucide-react';
 
 export interface PdmEntryScreenProps {
@@ -28,25 +28,14 @@ export function PdmEntryScreen({ onSelect }: PdmEntryScreenProps) {
         required
         hint="Select a category — the form opens immediately."
       >
-        <select
+        <FormSelect
           id="pdm-category"
-          defaultValue=""
-          onChange={(e) => {
-            const value = e.target.value as FormType;
-            if (value) onSelect(value);
-          }}
-          className={formControlClassName}
-          aria-label="Respondent category"
-        >
-          <option value="" disabled>
-            Select a respondent category…
-          </option>
-          {FORM_TYPE_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          value=""
+          onChange={(value) => onSelect(value as FormType)}
+          options={FORM_TYPE_OPTIONS}
+          placeholder="Select a respondent category…"
+          required
+        />
       </FormField>
     </div>
   );

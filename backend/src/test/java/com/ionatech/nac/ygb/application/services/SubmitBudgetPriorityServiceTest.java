@@ -100,6 +100,31 @@ class SubmitBudgetPriorityServiceTest {
     }
 
     @Test
+    void shouldAccept074MobilePrefix() {
+        when(repositoryPort.existsByPhoneSectionAndPeriod(
+                "0746532164",
+                BudgetPrioritySection.HEALTH,
+                "JAN_JUN_2026"
+        )).thenReturn(false);
+        when(repositoryPort.save(org.mockito.ArgumentMatchers.any(BudgetPrioritySubmission.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        BudgetPrioritySubmission saved = service.submit(new SubmitBudgetPriorityCommand(
+                BudgetPrioritySection.HEALTH,
+                Map.of(
+                        BudgetPriorityDemographics.FULL_NAME, "Jane Nakato",
+                        BudgetPriorityDemographics.PHONE_NUMBER, "0746532164",
+                        BudgetPriorityDemographics.AGE_GROUP, "AGE_18_24",
+                        BudgetPriorityDemographics.GENDER, "FEMALE",
+                        BudgetPriorityDemographics.DISTRICT_ID, UUID.randomUUID().toString()
+                ),
+                Map.of("rankedAreas", List.of("PRIMARY_HEALTH_CARE"))
+        ));
+
+        assertThat(saved.getPhoneNumber().getValue()).isEqualTo("0746532164");
+    }
+
+    @Test
     void shouldRejectInvalidPhoneNumber() {
         Map<String, Object> demographics = Map.of(
                 BudgetPriorityDemographics.FULL_NAME, "Jane Nakato",
@@ -114,7 +139,7 @@ class SubmitBudgetPriorityServiceTest {
                 demographics,
                 Map.of("rankedAreas", List.of("PRIMARY_HEALTH_CARE"))
         ))).isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Invalid Uganda phone number");
+                .hasMessageContaining("Invalid Uganda mobile number");
     }
 
     private SubmitBudgetPriorityCommand validCommand(BudgetPrioritySection section) {

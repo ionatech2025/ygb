@@ -1,8 +1,9 @@
 import { MIN_NARRATIVE_LENGTH } from './domain/form-validation.model';
 import { isValidUgandaPhoneLocal } from './utils/phone-utils';
 
-export const UGANDA_PHONE_HINT = 'Uganda format, e.g. 0772123456 or +256772123456';
-export const UGANDA_PHONE_ERROR = 'Enter a valid Uganda phone number (e.g. 0772123456 or +256772123456).';
+export const UGANDA_PHONE_HINT = 'Uganda mobile, e.g. 0746532164 or +256746532164';
+export const UGANDA_PHONE_ERROR =
+  'Enter a valid Uganda mobile number (10 digits starting with 07… or +2567… / +25639…).';
 
 export interface ValidationResult {
   valid: boolean;

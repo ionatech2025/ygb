@@ -1,4 +1,5 @@
-import { FormField, formControlClassName } from './FormField';
+import { FormField } from './FormField';
+import { FormSelect } from './FormSelect';
 import { RATING_LABELS, RATING_VALUES, type Rating } from '../../../../../core/domain/form-validation.model';
 
 export interface RatingSelectProps {
@@ -13,22 +14,17 @@ export interface RatingSelectProps {
 export function RatingSelect({ id, label, value, onChange, required, error }: RatingSelectProps) {
   return (
     <FormField label={label} htmlFor={id} required={required} error={error}>
-      <select
+      <FormSelect
         id={id}
         value={value}
-        onChange={(e) => onChange(e.target.value as Rating)}
-        className={formControlClassName}
+        onChange={(next) => onChange(next as Rating)}
+        options={RATING_VALUES.map((rating) => ({
+          value: rating,
+          label: RATING_LABELS[rating],
+        }))}
+        placeholder="Select a rating"
         required={required}
-      >
-        <option value="" disabled>
-          Select a rating
-        </option>
-        {RATING_VALUES.map((rating) => (
-          <option key={rating} value={rating}>
-            {RATING_LABELS[rating]}
-          </option>
-        ))}
-      </select>
+      />
     </FormField>
   );
 }

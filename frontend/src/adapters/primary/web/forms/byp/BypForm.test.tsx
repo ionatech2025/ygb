@@ -6,6 +6,7 @@ import { buildBypSubmissionPayload } from '../../../../../core/byp-validation';
 import { EMPTY_BYP_FIELDS } from '../../../../../core/domain/byp-form.model';
 import { EMPTY_RESPONDENT_FIELDS } from '../../../../../core/domain/respondent-fields.model';
 import { BypForm } from './BypForm';
+import { chooseFormOptionById, chooseFormOptionByValue } from '../../../../../test-utils/choose-form-option';
 
 vi.mock('../../../../../core/LocationService', () => ({
   locationService: { ensureLoaded: vi.fn().mockResolvedValue(undefined) },
@@ -96,8 +97,9 @@ describe('BypForm', () => {
     const user = userEvent.setup();
     render(<BypForm />);
 
-    await user.selectOptions(
-      screen.getByLabelText(/Q4\. What is the instalment period for receiving funds/i),
+    await chooseFormOptionByValue(
+      user,
+      /Q4\. What is the instalment period for receiving funds/i,
       'OTHERS'
     );
     expect(screen.getByLabelText(/Please specify the instalment period for receiving funds/i)).toBeInTheDocument();
@@ -107,8 +109,9 @@ describe('BypForm', () => {
     const user = userEvent.setup();
     render(<BypForm />);
 
-    await user.selectOptions(
-      screen.getByLabelText(/Q1\. How long did it take you to receive your funds/i),
+    await chooseFormOptionByValue(
+      user,
+      /Q1\. How long did it take you to receive your funds/i,
       'MONTHS'
     );
     expect(screen.getByLabelText(/Please specify how long it took to receive your funds/i)).toBeInTheDocument();
@@ -189,34 +192,38 @@ describe('BypForm', () => {
     render(<BypForm onSubmitted={onSubmitted} />);
 
     await user.type(screen.getByLabelText(/phone number/i), '0772111222');
-    await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-    await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_18_24');
+    await chooseFormOptionByValue(user, /^gender/i, 'FEMALE');
+    await chooseFormOptionByValue(user, /age group/i, 'AGE_18_24');
 
     await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
-    await user.selectOptions(document.getElementById('district')!, 'district-1');
+    await chooseFormOptionById(user, 'district', 'district-1');
     await waitFor(() => expect(document.getElementById('subcounty')).not.toBeDisabled());
-    await user.selectOptions(document.getElementById('subcounty')!, 'subcounty-1');
+    await chooseFormOptionById(user, 'subcounty', 'subcounty-1');
     await waitFor(() => expect(document.getElementById('parish')).not.toBeDisabled());
-    await user.selectOptions(document.getElementById('parish')!, 'parish-1');
+    await chooseFormOptionById(user, 'parish', 'parish-1');
     await waitFor(() => expect(document.getElementById('village')).not.toBeDisabled());
-    await user.selectOptions(document.getElementById('village')!, 'village-1');
+    await chooseFormOptionById(user, 'village', 'village-1');
 
-    await user.selectOptions(
-      screen.getByLabelText(/Q1\. How long did it take you to receive your funds/i),
+    await chooseFormOptionByValue(
+      user,
+      /Q1\. How long did it take you to receive your funds/i,
       'ONE_WEEK'
     );
     await user.click(document.getElementById('receivedActualAmountRequested-yes')!);
     await user.type(screen.getByLabelText(/Q3\. How much cash did you get/i), '500000');
-    await user.selectOptions(
-      screen.getByLabelText(/Q4\. What is the instalment period for receiving funds/i),
+    await chooseFormOptionByValue(
+      user,
+      /Q4\. What is the instalment period for receiving funds/i,
       'MONTHLY'
     );
-    await user.selectOptions(
-      screen.getByLabelText(/Parish Development Committee \(PDC\)/i),
+    await chooseFormOptionByValue(
+      user,
+      /Parish Development Committee \(PDC\)/i,
       'VERY_GOOD'
     );
-    await user.selectOptions(
-      screen.getByLabelText(/Q6\. What do you think about the performance of PDM in this parish/i),
+    await chooseFormOptionByValue(
+      user,
+      /Q6\. What do you think about the performance of PDM in this parish/i,
       'GOOD'
     );
     await user.click(document.getElementById('groupOrganizedTransparently-yes')!);
@@ -248,34 +255,38 @@ describe('BypForm', () => {
     render(<BypForm />);
 
     await user.type(screen.getByLabelText(/phone number/i), '0772111222');
-    await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-    await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_18_24');
+    await chooseFormOptionByValue(user, /^gender/i, 'FEMALE');
+    await chooseFormOptionByValue(user, /age group/i, 'AGE_18_24');
 
     await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
-    await user.selectOptions(document.getElementById('district')!, 'district-1');
+    await chooseFormOptionById(user, 'district', 'district-1');
     await waitFor(() => expect(document.getElementById('subcounty')).not.toBeDisabled());
-    await user.selectOptions(document.getElementById('subcounty')!, 'subcounty-1');
+    await chooseFormOptionById(user, 'subcounty', 'subcounty-1');
     await waitFor(() => expect(document.getElementById('parish')).not.toBeDisabled());
-    await user.selectOptions(document.getElementById('parish')!, 'parish-1');
+    await chooseFormOptionById(user, 'parish', 'parish-1');
     await waitFor(() => expect(document.getElementById('village')).not.toBeDisabled());
-    await user.selectOptions(document.getElementById('village')!, 'village-1');
+    await chooseFormOptionById(user, 'village', 'village-1');
 
-    await user.selectOptions(
-      screen.getByLabelText(/Q1\. How long did it take you to receive your funds/i),
+    await chooseFormOptionByValue(
+      user,
+      /Q1\. How long did it take you to receive your funds/i,
       'ONE_WEEK'
     );
     await user.click(document.getElementById('receivedActualAmountRequested-yes')!);
     await user.type(screen.getByLabelText(/Q3\. How much cash did you get/i), '500000');
-    await user.selectOptions(
-      screen.getByLabelText(/Q4\. What is the instalment period for receiving funds/i),
+    await chooseFormOptionByValue(
+      user,
+      /Q4\. What is the instalment period for receiving funds/i,
       'MONTHLY'
     );
-    await user.selectOptions(
-      screen.getByLabelText(/Parish Development Committee \(PDC\)/i),
+    await chooseFormOptionByValue(
+      user,
+      /Parish Development Committee \(PDC\)/i,
       'VERY_GOOD'
     );
-    await user.selectOptions(
-      screen.getByLabelText(/Q6\. What do you think about the performance of PDM in this parish/i),
+    await chooseFormOptionByValue(
+      user,
+      /Q6\. What do you think about the performance of PDM in this parish/i,
       'GOOD'
     );
     await user.click(document.getElementById('groupOrganizedTransparently-yes')!);

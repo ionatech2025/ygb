@@ -26,7 +26,7 @@ export function CollectorLayout() {
               <ClipboardList className="h-4 w-4" aria-hidden="true" />
             </span>
             <div className="min-w-0">
-              <p className="truncate text-sm font-bold text-text">Collector Portal</p>
+              <p className="truncate text-sm font-bold text-text">{user?.fullName ?? 'Collector'}</p>
               <p className="truncate text-[11px] text-text-muted">{user?.phoneNumber}</p>
             </div>
           </div>

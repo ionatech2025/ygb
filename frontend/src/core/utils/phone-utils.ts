@@ -1,4 +1,4 @@
-/** Normalize to local Uganda format expected by the backend (077XXXXXXXX). */
+/** Normalize to local Uganda format expected by the backend (0XXXXXXXXX). */
 export function normalizeUgandaPhoneLocal(input: string): string {
   const raw = input.trim().replace(/[^+\d]/g, '');
   let digits = raw.startsWith('+') ? raw.slice(1) : raw;
@@ -15,6 +15,8 @@ export function normalizeUgandaPhoneLocal(input: string): string {
   return input.trim();
 }
 
+const LOCAL_UGANDA_MOBILE_PATTERN = /^0(77|78|76|39|75|70|74|72|71|79)\d{7}$/;
+
 export function isValidUgandaPhoneLocal(input: string): boolean {
-  return /^(077|078|076|070|075)\d{7}$/.test(normalizeUgandaPhoneLocal(input));
+  return LOCAL_UGANDA_MOBILE_PATTERN.test(normalizeUgandaPhoneLocal(input));
 }

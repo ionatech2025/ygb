@@ -3,7 +3,7 @@ export const PWA_BACKGROUND_COLOR = '#f8faf9';
 
 export const pwaManifest = {
   name: 'Youth Go Budget App',
-  short_name: 'YGB',
+  short_name: 'Youth Go Budget App',
   description: 'Offline-first PDM field data collection for Youth Go Budget.',
   theme_color: PWA_THEME_COLOR,
   background_color: PWA_BACKGROUND_COLOR,

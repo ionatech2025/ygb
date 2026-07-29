@@ -1,5 +1,9 @@
 export { FormField, formControlClassName } from './FormField';
 export type { FormFieldProps } from './FormField';
+export { PasswordInput } from './PasswordInput';
+export type { PasswordInputProps } from './PasswordInput';
+export { FormSelect } from './FormSelect';
+export type { FormSelectOption, FormSelectProps } from './FormSelect';
 export { FormSection } from './FormSection';
 export { RatingSelect } from './RatingSelect';
 export { MultiCheckboxGroup } from './MultiCheckboxGroup';

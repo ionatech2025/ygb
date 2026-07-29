@@ -31,7 +31,7 @@ vi.mock('./PDMSurveyView', () => ({
 
 const collectorUser = {
   id: '22222222-2222-2222-2222-222222222222',
-  fullName: 'Field Collector',
+  fullName: 'Default Collector',
   phoneNumber: '0771111111',
   role: 'DATA_COLLECTOR' as const,
 };
@@ -65,5 +65,16 @@ describe('CollectorDashboard', () => {
     expect(screen.getByText('LGO Budget Allocation')).toBeInTheDocument();
     expect(screen.getByText(/not the LGO Questionnaire/i)).toBeInTheDocument();
     expect(screen.getByTestId('pdm-survey-view')).toBeInTheDocument();
+  });
+
+  it('greets the signed-in collector by registered full name', () => {
+    render(
+      <MemoryRouter>
+        <CollectorDashboard />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/Welcome back, Default Collector\./i)).toBeInTheDocument();
+    expect(screen.queryByText(/Welcome back, Field Collector\./i)).not.toBeInTheDocument();
   });
 });
