@@ -97,14 +97,14 @@ class BudgetPriorityControllerTest {
     @Test
     void shouldReturnBadRequestProblemDetailForInvalidPhone() throws Exception {
         when(submitBudgetPriorityUseCase.submit(any(SubmitBudgetPriorityCommand.class)))
-                .thenThrow(new IllegalArgumentException("Invalid Uganda phone number: 12345"));
+                .thenThrow(new IllegalArgumentException("Invalid Uganda mobile number (use 10 digits starting with 07… or +256…): 12345"));
 
         mockMvc.perform(post("/api/v1/public/budget-priorities/health")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validRequest())))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.title").value("Invalid Budget Priority Submission"))
-                .andExpect(jsonPath("$.detail").value(org.hamcrest.Matchers.containsString("Invalid Uganda phone number")));
+                .andExpect(jsonPath("$.detail").value(org.hamcrest.Matchers.containsString("Invalid Uganda mobile number")));
     }
 
     private BudgetPrioritySubmissionRequestDto validRequest() {

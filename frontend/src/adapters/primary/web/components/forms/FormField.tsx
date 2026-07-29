@@ -15,7 +15,7 @@ export function FormField({ label, htmlFor, required, error, hint, children }: F
 
   return (
     <div className="space-y-1.5">
-      <label htmlFor={htmlFor} className="block text-xs font-semibold text-text">
+      <label id={`${htmlFor}-label`} htmlFor={htmlFor} className="block text-xs font-semibold text-text">
         {label}
         {required && (
           <span className="text-rose-600 ml-0.5" aria-hidden="true">

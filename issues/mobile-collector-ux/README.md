@@ -13,12 +13,13 @@ Issues filed from production / mobile field testing (July 2026). These address c
 | 005 | [Auth login profile in response](./backend/005-backend-auth-login-profile-response.md) | Backend | Return collector/admin `fullName` from login API |
 | 006 | [Personalized collector greeting](./frontend/006-frontend-personalized-collector-greeting.md) | Frontend | Use real name in dashboard, header, and offline cache |
 | 007 | [PWA icon YGB monogram](./frontend/007-frontend-pwa-icon-ygb-monogram.md) | Frontend | Replace “H.” placeholder with **YGB** on favicon + PWA PNGs |
+| 008 | [Copy collector password on creation](./frontend/008-frontend-copy-collector-password-on-creation.md) | Frontend | Share initial password via copy panel after admin registers a collector |
 
 ## Recommended order
 
 1. **003 → 004** (phone validation — backend first so synced submissions are not rejected)
 2. **005 → 006** (display name — backend API shape before frontend auth adapter)
-3. **001**, **002**, and **007** (independent UI work; can run in parallel with 003–006)
+3. **001**, **002**, **008**, and **007** (independent UI work; can run in parallel with 003–006)
 
 ## Screenshots / context
 

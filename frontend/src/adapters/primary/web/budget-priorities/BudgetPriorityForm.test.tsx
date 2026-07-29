@@ -8,6 +8,7 @@ import type { IBudgetPriorityApiPort } from '../../../../ports/budget-priority-a
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
 import { BudgetPriorityForm } from './BudgetPriorityForm';
 import { BudgetPrioritySuccessPage } from './BudgetPrioritySuccessPage';
+import { chooseFormOptionByValue } from '../../../../test-utils/choose-form-option';
 
 vi.mock('../../../../core/LocationService', () => ({
   locationService: {
@@ -48,8 +49,8 @@ function createMockApi(overrides: Partial<IBudgetPriorityApiPort> = {}): IBudget
 async function fillValidHealthForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/full name/i), 'Jane Citizen');
   await user.type(screen.getByLabelText(/phone number/i), '0772123456');
-  await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_18_24');
+  await chooseFormOptionByValue(user, /^gender/i, 'FEMALE');
+  await chooseFormOptionByValue(user, /age group/i, 'AGE_18_24');
 
   const districtSelect = await screen.findByTestId('budget-priority-district-select');
   await user.selectOptions(districtSelect, 'district-1');

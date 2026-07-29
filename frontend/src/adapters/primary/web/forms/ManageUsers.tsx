@@ -15,7 +15,7 @@ import { HttpUserAdapter } from '../../../secondary/api/http-user.adapter';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { isValidUgandaPhoneLocal, normalizeUgandaPhoneLocal } from '../../../../core/utils/phone-utils';
 import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
-import { FormField, formControlClassName } from '../components/forms';
+import { FormField, formControlClassName, PasswordInput } from '../components/forms';
 import { AdminPageHeader } from '../admin/AdminPageHeader';
 import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import type { UserProfile } from '../../../../core/domain/user.model';
@@ -24,6 +24,78 @@ import { ConfirmActionDialog } from '../admin/ConfirmActionDialog';
 import { AdminFiscalYearSettingsPanel } from '../admin/AdminFiscalYearSettingsPanel';
 
 const SUCCESS_DISMISS_MS = 5000;
+
+type SharePasswordContext = 'creation' | 'reset';
+
+interface SharePasswordResult {
+  context: SharePasswordContext;
+  fullName: string;
+  phoneNumber?: string;
+  password: string;
+}
+
+interface ShareablePasswordPanelProps {
+  result: SharePasswordResult;
+  copied: boolean;
+  onCopyPassword: () => void;
+  onCopyLoginDetails?: () => void;
+  onDismiss: () => void;
+}
+
+function ShareablePasswordPanel({
+  result,
+  copied,
+  onCopyPassword,
+  onCopyLoginDetails,
+  onDismiss,
+}: ShareablePasswordPanelProps) {
+  const isCreation = result.context === 'creation';
+
+  return (
+    <div
+      className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm text-emerald-900"
+      data-testid={isCreation ? 'creation-password-result' : 'reset-password-result'}
+    >
+      <p className="font-semibold">
+        {isCreation ? `Account created for ${result.fullName}` : `Password reset for ${result.fullName}`}
+      </p>
+      {isCreation && result.phoneNumber && (
+        <p className="mt-1 font-mono text-xs text-emerald-800">Phone: {result.phoneNumber}</p>
+      )}
+      <p className="mt-2 text-emerald-800">
+        {isCreation
+          ? 'Share this initial password with the collector outside the system. It will not be shown again after you dismiss this message.'
+          : 'Share this temporary password once. It will not be shown again.'}
+      </p>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <code className="rounded-lg bg-white px-3 py-2 font-mono text-sm">{result.password}</code>
+        <button
+          type="button"
+          onClick={onCopyPassword}
+          className="inline-flex items-center gap-1 rounded-lg border border-emerald-300 bg-white px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
+          data-testid={isCreation ? 'copy-creation-password' : 'copy-temporary-password'}
+        >
+          <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+          {copied ? 'Copied' : 'Copy password'}
+        </button>
+        {isCreation && onCopyLoginDetails && (
+          <button
+            type="button"
+            onClick={onCopyLoginDetails}
+            className="inline-flex items-center gap-1 rounded-lg border border-emerald-300 bg-white px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
+            data-testid="copy-creation-login-details"
+          >
+            <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+            Copy phone + password
+          </button>
+        )}
+        <button type="button" onClick={onDismiss} className="text-xs font-semibold text-emerald-700 underline">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export interface ManageUsersProps {
   userAdmin?: IUserRepositoryPort;
@@ -130,8 +202,8 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
   const [actionBusy, setActionBusy] = useState(false);
   const [pendingDeactivate, setPendingDeactivate] = useState<UserProfile | null>(null);
   const [pendingReset, setPendingReset] = useState<UserProfile | null>(null);
-  const [resetResult, setResetResult] = useState<{ fullName: string; temporaryPassword: string } | null>(null);
-  const [copiedPassword, setCopiedPassword] = useState(false);
+  const [sharePasswordResult, setSharePasswordResult] = useState<SharePasswordResult | null>(null);
+  const [copiedSharePassword, setCopiedSharePassword] = useState(false);
 
   const loadCollectors = async () => {
     setLoading(true);
@@ -180,15 +252,25 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
 
     setSaving(true);
     try {
+      const createdFullName = fullName.trim();
+      const createdPhone = normalizeUgandaPhoneLocal(phoneInput);
+      const createdPassword = password;
+
       await userRepo.createDataCollector(
         {
-          fullName: fullName.trim(),
-          phoneNumber: normalizeUgandaPhoneLocal(phoneInput),
-          password,
+          fullName: createdFullName,
+          phoneNumber: createdPhone,
+          password: createdPassword,
         },
         useAuthStore.getState().user?.id ?? ''
       );
-      setSuccessMessage(`Account for "${fullName.trim()}" created successfully.`);
+      setSharePasswordResult({
+        context: 'creation',
+        fullName: createdFullName,
+        phoneNumber: createdPhone,
+        password: createdPassword,
+      });
+      setCopiedSharePassword(false);
       setFullName('');
       setPhoneInput('');
       setPassword('');
@@ -238,9 +320,13 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
     setActionError('');
     try {
       const result = await userRepo.resetPassword(pendingReset.id);
-      setResetResult({ fullName: pendingReset.fullName, temporaryPassword: result.temporaryPassword });
+      setSharePasswordResult({
+        context: 'reset',
+        fullName: pendingReset.fullName,
+        password: result.temporaryPassword,
+      });
       setPendingReset(null);
-      setCopiedPassword(false);
+      setCopiedSharePassword(false);
     } catch (err) {
       setActionError(err instanceof Error ? err.message : 'Unable to reset password.');
     } finally {
@@ -248,10 +334,18 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
     }
   };
 
-  const copyTemporaryPassword = async () => {
-    if (!resetResult) return;
-    await navigator.clipboard.writeText(resetResult.temporaryPassword);
-    setCopiedPassword(true);
+  const copySharePassword = async () => {
+    if (!sharePasswordResult) return;
+    await navigator.clipboard.writeText(sharePasswordResult.password);
+    setCopiedSharePassword(true);
+  };
+
+  const copyCreationLoginDetails = async () => {
+    if (!sharePasswordResult?.phoneNumber) return;
+    await navigator.clipboard.writeText(
+      `Phone: ${sharePasswordResult.phoneNumber}\nPassword: ${sharePasswordResult.password}`
+    );
+    setCopiedSharePassword(true);
   };
 
   const renderCollectorTable = (collectors: UserProfile[], variant: 'active' | 'deactivated') => (
@@ -345,33 +439,19 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
         onCancel={() => setPendingReset(null)}
       />
 
-      {resetResult && (
-        <div
-          className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm text-emerald-900"
-          data-testid="reset-password-result"
-        >
-          <p className="font-semibold">Password reset for {resetResult.fullName}</p>
-          <p className="mt-2 text-emerald-800">Share this temporary password once. It will not be shown again.</p>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <code className="rounded-lg bg-white px-3 py-2 font-mono text-sm">{resetResult.temporaryPassword}</code>
-            <button
-              type="button"
-              onClick={() => void copyTemporaryPassword()}
-              className="inline-flex items-center gap-1 rounded-lg border border-emerald-300 bg-white px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
-              data-testid="copy-temporary-password"
-            >
-              <Copy className="h-3.5 w-3.5" aria-hidden="true" />
-              {copiedPassword ? 'Copied' : 'Copy to clipboard'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setResetResult(null)}
-              className="text-xs font-semibold text-emerald-700 underline"
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
+      {sharePasswordResult && (
+        <ShareablePasswordPanel
+          result={sharePasswordResult}
+          copied={copiedSharePassword}
+          onCopyPassword={() => void copySharePassword()}
+          onCopyLoginDetails={
+            sharePasswordResult.context === 'creation' ? () => void copyCreationLoginDetails() : undefined
+          }
+          onDismiss={() => {
+            setSharePasswordResult(null);
+            setCopiedSharePassword(false);
+          }}
+        />
       )}
 
       {actionError && (
@@ -427,21 +507,20 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
                 inputMode="tel"
                 value={phoneInput}
                 onChange={(e) => setPhoneInput(e.target.value)}
-                placeholder="e.g. 0772123456"
+                placeholder="e.g. 0746532164"
                 className={formControlClassName}
                 disabled={saving}
               />
             </FormField>
 
             <FormField label="Initial password" htmlFor="password" required error={errors.password}>
-              <input
+              <PasswordInput
                 id="password"
-                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Minimum 6 characters"
-                className={formControlClassName}
                 disabled={saving}
+                required
               />
             </FormField>
 

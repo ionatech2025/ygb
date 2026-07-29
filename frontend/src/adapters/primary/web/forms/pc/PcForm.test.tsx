@@ -1,8 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PDC_EFFECTIVENESS_OPTIONS } from '../../../../../core/domain/pc-form.model';
 import { PcForm } from './PcForm';
+import { chooseFormOptionById, chooseFormOptionByValue } from '../../../../../test-utils/choose-form-option';
 
 vi.mock('../../../../../core/LocationService', () => ({
   locationService: { ensureLoaded: vi.fn().mockResolvedValue(undefined) },
@@ -46,17 +47,17 @@ vi.mock('../../../../../core/store/useAuthStore', () => ({
 async function fillRespondent(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/name of respondent/i), 'Parish Chief Name');
   await user.type(screen.getByLabelText(/phone number/i), '0772111555');
-  await user.selectOptions(screen.getByLabelText(/^gender/i), 'MALE');
-  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_ABOVE_35');
+  await chooseFormOptionByValue(user, /^gender/i, 'MALE');
+  await chooseFormOptionByValue(user, /age group/i, 'AGE_ABOVE_35');
 
   await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
-  await user.selectOptions(document.getElementById('district')!, 'district-1');
+  await chooseFormOptionById(user, 'district', 'district-1');
   await waitFor(() => expect(document.getElementById('subcounty')).not.toBeDisabled());
-  await user.selectOptions(document.getElementById('subcounty')!, 'subcounty-1');
+  await chooseFormOptionById(user, 'subcounty', 'subcounty-1');
   await waitFor(() => expect(document.getElementById('parish')).not.toBeDisabled());
-  await user.selectOptions(document.getElementById('parish')!, 'parish-1');
+  await chooseFormOptionById(user, 'parish', 'parish-1');
   await waitFor(() => expect(document.getElementById('village')).not.toBeDisabled());
-  await user.selectOptions(document.getElementById('village')!, 'village-1');
+  await chooseFormOptionById(user, 'village', 'village-1');
 }
 
 async function fillFundsReceipt(user: ReturnType<typeof userEvent.setup>) {
@@ -88,8 +89,9 @@ async function fillMinimalValidForm(user: ReturnType<typeof userEvent.setup>) {
     '4'
   );
   await user.click(document.getElementById('pdcTrainingReceived-no')!);
-  await user.selectOptions(
-    screen.getByLabelText(/Q14\. How effective are the PDC members in fulfilling their responsibilities/i),
+  await chooseFormOptionByValue(
+    user,
+    /Q14\. How effective are the PDC members in fulfilling their responsibilities/i,
     'VERY_EFFECTIVE'
   );
 
@@ -143,13 +145,14 @@ describe('PcForm', () => {
     expect(screen.getByRole('heading', { name: 'PDM Programme Monitoring and Oversight' })).toBeInTheDocument();
   });
 
-  it('effectiveness dropdown shows five new labels only', () => {
+  it('effectiveness picker shows five new labels only', () => {
     render(<PcForm />);
 
-    const select = screen.getByLabelText(/Q14\. How effective are the PDC members/i);
-    const optionLabels = Array.from(select.querySelectorAll('option'))
-      .map((option) => option.textContent?.trim())
-      .filter((label) => label && label !== 'Select rating…');
+    const effectivenessGroup = screen.getByLabelText(/Q14\. How effective are the PDC members/i);
+    const optionLabels = within(effectivenessGroup)
+      .getAllByRole('radio')
+      .map((radio) => radio.closest('label')?.textContent?.trim())
+      .filter(Boolean);
 
     expect(optionLabels).toEqual(PDC_EFFECTIVENESS_OPTIONS.map((option) => option.label));
   });

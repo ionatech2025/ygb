@@ -27,13 +27,21 @@ JWT currently carries only `sub` + `role`, not display name. Offline cache then 
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Adapter test: `loginOnline` maps API `user.fullName` into `AuthResponse.user`.
-- [ ] Adapter test: offline login returns cached real `fullName`, not role label.
-- [ ] `CollectorDashboard.test.tsx`: renders seeded name (e.g. “Default Collector”), not “Field Collector”.
-- [ ] `CollectorLayout` / router test: header shows collector name when space allows.
+- [x] Adapter test: `loginOnline` maps API `user.fullName` into `AuthResponse.user`.
+- [x] Adapter test: offline login returns cached real `fullName`, not role label.
+- [x] `CollectorDashboard.test.tsx`: renders seeded name (e.g. “Default Collector”), not “Field Collector”.
+- [x] `CollectorLayout` / router test: header shows collector name when space allows.
 - [ ] Manual QA: log in as collector `0767896508` (or seeded account) → dashboard greeting uses account name from Admin → Users.
 - [ ] Manual QA: admin login shows admin’s registered name in admin header.
+
+## Manual QA note
+
+Collectors who previously logged in online may still have `"Field Collector"` cached in IndexedDB. One fresh **online** login refreshes the cached name.
 
 ## Blocked by
 
 - [005-backend-auth-login-profile-response.md](../backend/005-backend-auth-login-profile-response.md)
+
+## Outcome
+
+**Result: PASS** (automated)

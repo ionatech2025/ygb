@@ -5,6 +5,7 @@ import type { AdminLocation } from '../../../../core/domain/admin-location.model
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { LgoBudgetAllocationForm } from './LgoBudgetAllocationForm';
+import { chooseFormOptionByValue } from '../../../../test-utils/choose-form-option';
 
 vi.mock('../../../../core/LocationService', () => ({
   locationService: {
@@ -65,13 +66,13 @@ function createMockRepository(): ILocationRepositoryPort {
 async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/name of respondent/i), 'District Health Officer');
   await user.type(screen.getByLabelText(/phone number/i), '0772555666');
-  await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_ABOVE_35');
+  await chooseFormOptionByValue(user, /^gender/i, 'FEMALE');
+  await chooseFormOptionByValue(user, /age group/i, 'AGE_ABOVE_35');
 
-  await user.selectOptions(await screen.findByLabelText(/^district/i), 'district-1');
-  await user.selectOptions(await screen.findByLabelText(/sub-county \/ division/i), 'subcounty-1');
-  await user.selectOptions(await screen.findByLabelText(/parish \/ ward/i), 'parish-1');
-  await user.selectOptions(await screen.findByLabelText(/village \/ zone/i), 'village-1');
+  await chooseFormOptionByValue(user, /^district/i, 'district-1');
+  await chooseFormOptionByValue(user, /sub-county \/ division/i, 'subcounty-1');
+  await chooseFormOptionByValue(user, /parish \/ ward/i, 'parish-1');
+  await chooseFormOptionByValue(user, /village \/ zone/i, 'village-1');
 
   await user.type(screen.getByLabelText('Amount (UGX)', { selector: '#allocation-health-amount' }), '1200000');
   await user.type(

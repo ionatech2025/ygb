@@ -53,11 +53,12 @@ describe('RespondentSection', () => {
       />
     );
 
-    const ageSelect = screen.getByLabelText(/age group/i);
-    expect(within(ageSelect).getByRole('option', { name: '18-24' })).toBeInTheDocument();
-    expect(within(ageSelect).getByRole('option', { name: '25-29' })).toBeInTheDocument();
-    expect(within(ageSelect).getByRole('option', { name: '30-35' })).toBeInTheDocument();
-    expect(within(ageSelect).getByRole('option', { name: 'Above 35' })).toBeInTheDocument();
+    const ageGroup = screen.getByLabelText(/age group/i);
+    expect(screen.getByRole('radio', { name: '18-24' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: '25-29' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: '30-35' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Above 35' })).toBeInTheDocument();
+    expect(ageGroup).toBeInTheDocument();
   });
 
   it('does not require respondent name', () => {

@@ -29,13 +29,23 @@ User-visible hint: *“e.g. 0772123456 or +256772123456”* — implies only `77
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit test: `isValidUgandaPhoneLocal` accepts all prefixes listed in backend 003.
-- [ ] Unit test: `normalizeUgandaPhoneLocal('+256746532164')` → `0746532164`.
-- [ ] Unit test: rejects invalid numbers (unchanged negative cases).
-- [ ] `validatePhone` / respondent form tests: `0746532164` passes client validation on BYP (or shared respondent section test).
-- [ ] Hint and error strings updated wherever `UGANDA_PHONE_HINT` / `UGANDA_PHONE_ERROR` are used.
+- [x] Unit test: `isValidUgandaPhoneLocal` accepts all prefixes listed in backend 003.
+- [x] Unit test: `normalizeUgandaPhoneLocal('+256746532164')` → `0746532164`.
+- [x] Unit test: rejects invalid numbers (unchanged negative cases).
+- [x] `validatePhone` / respondent form tests: `0746532164` passes client validation on BYP (or shared respondent section test).
+- [x] Hint and error strings updated wherever `UGANDA_PHONE_HINT` / `UGANDA_PHONE_ERROR` are used.
 - [ ] End-to-end manual: fill respondent phone `0746532164` on phone, submit online, backend accepts payload.
+
+## Implementation notes
+
+- Regex aligned with backend: `^0(77|78|76|39|75|70|74|72|71|79)\d{7}$`
+- `RespondentSection`, `CollectorLogin`, `ManageUsers` placeholders/hints updated
+- `PortalLogin` uses shared `UGANDA_PHONE_ERROR` via `isValidUgandaPhoneLocal`
 
 ## Blocked by
 
 - [003-backend-uganda-phone-prefix-expansion.md](../backend/003-backend-uganda-phone-prefix-expansion.md) — deploy backend before relying on sync for new prefixes; frontend can be developed in parallel but release together.
+
+## Outcome
+
+**Result: PASS** (automated); manual E2E on device pending.

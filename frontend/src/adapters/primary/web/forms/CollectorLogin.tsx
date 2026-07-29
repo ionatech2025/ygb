@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { validateLoginPayload } from '../../../../core/domain/auth.model';
+import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
+import { PasswordInput } from '../components/forms';
 
 export const CollectorLogin: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -35,7 +37,7 @@ export const CollectorLogin: React.FC = () => {
     setErrorMsg(null);
 
     if (!validateLoginPayload(phone)) {
-      setErrorMsg('Invalid phone number syntax. Use format e.g. 0772123456');
+      setErrorMsg(UGANDA_PHONE_ERROR);
       return;
     }
 
@@ -81,23 +83,24 @@ export const CollectorLogin: React.FC = () => {
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="e.g. 0772123456"
+              placeholder="e.g. 0746532164"
               className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all text-sm"
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+            <label htmlFor="collector-password" className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
               Password *
             </label>
-            <input
-              type="password"
+            <PasswordInput
+              id="collector-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all text-sm"
               disabled={loading}
+              required
             />
           </div>
 
