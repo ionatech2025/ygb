@@ -3,7 +3,10 @@ package com.ionatech.nac.ygb.adapters.out.persistence.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import com.ionatech.nac.ygb.domain.valueobjects.PdcEffectivenessRating;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +37,9 @@ public class PcSubmissionJpaEntity extends SubmissionJpaEntity {
     @Column(name = "young_women_beneficiaries", nullable = false)
     private Integer youngWomenBeneficiaries;
 
+    @Column(name = "young_men_beneficiaries", nullable = false)
+    private Integer youngMenBeneficiaries;
+
     @Column(name = "obstacles_description", nullable = false)
     private String obstaclesDescription;
 
@@ -56,8 +62,9 @@ public class PcSubmissionJpaEntity extends SubmissionJpaEntity {
     @Column(name = "pdc_training_areas")
     private List<String> pdcTrainingAreas;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "pdc_effectiveness_rating", nullable = false)
-    private String pdcEffectivenessRating;
+    private PdcEffectivenessRating pdcEffectivenessRating;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "monitored_by", nullable = false)
@@ -89,4 +96,7 @@ public class PcSubmissionJpaEntity extends SubmissionJpaEntity {
 
     @Column(name = "self_reliance_group_projects_count", nullable = false)
     private Integer selfRelianceGroupProjectsCount;
+
+    @Column(name = "programme_improvement_suggestion", nullable = false)
+    private String programmeImprovementSuggestion;
 }

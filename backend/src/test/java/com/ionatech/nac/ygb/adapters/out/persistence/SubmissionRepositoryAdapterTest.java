@@ -190,6 +190,7 @@ class SubmissionRepositoryAdapterTest {
                 100,
                 40,
                 30,
+                10,
                 new NarrativeText("Lack of transport equipment is the main obstacle."),
                 true,
                 7,
@@ -197,7 +198,7 @@ class SubmissionRepositoryAdapterTest {
                 4,
                 true,
                 List.of("FINANCIAL_LITERACY"),
-                "HIGHLY_EFFECTIVE",
+                PdcEffectivenessRating.VERY_EFFECTIVE,
                 List.of("CAO"),
                 null,
                 new NarrativeText("Regular fields checks performed."),
@@ -207,7 +208,8 @@ class SubmissionRepositoryAdapterTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
-                8
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
 
         Submission saved = adapter.save(pc);
@@ -221,6 +223,8 @@ class SubmissionRepositoryAdapterTest {
         PcSubmission retrievedPc = (PcSubmission) retrieved;
         assertThat(retrievedPc.getAmountExpected()).isEqualTo(1500000L);
         assertThat(retrievedPc.getMonitoredBy()).containsExactly("CAO");
+        assertThat(retrievedPc.getYoungMenBeneficiaries()).isEqualTo(10);
+        assertThat(retrievedPc.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.VERY_EFFECTIVE);
     }
 
     @Test

@@ -445,6 +445,7 @@ class SubmissionTest {
                 100,
                 40,
                 30,
+                10,
                 new NarrativeText("Lack of transport equipment is the main obstacle."),
                 true,
                 7,
@@ -452,7 +453,7 @@ class SubmissionTest {
                 4,
                 true,
                 List.of("FINANCIAL_LITERACY", "BUSINESS_PLANNING"),
-                "HIGHLY_EFFECTIVE",
+                PdcEffectivenessRating.VERY_EFFECTIVE,
                 List.of("CAO", "PDM_SECRETARIAT"),
                 null,
                 new NarrativeText("Regular fields checks performed."),
@@ -462,11 +463,96 @@ class SubmissionTest {
                 true,
                 new NarrativeText("Reports submitted quarterly to the CAO office."),
                 10,
-                8
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
 
         pc.validate();
         assertThat(pc.getAmountExpected()).isEqualTo(1500000L);
+        assertThat(pc.getYoungMenBeneficiaries()).isEqualTo(10);
+        assertThat(pc.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.VERY_EFFECTIVE);
+    }
+
+    @Test
+    void pcShouldRejectNullPdcEffectivenessRating() {
+        assertThatThrownBy(() -> new PcSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Parish Chief Name",
+                "0772111555",
+                "MALE",
+                AgeGroup.AGE_ABOVE_35,
+                1500000L,
+                1500000L,
+                100,
+                40,
+                30,
+                10,
+                new NarrativeText("Lack of transport equipment is the main obstacle."),
+                true,
+                7,
+                3,
+                4,
+                true,
+                List.of("FINANCIAL_LITERACY"),
+                null,
+                List.of("CAO"),
+                null,
+                new NarrativeText("Regular fields checks performed."),
+                true,
+                true,
+                new NarrativeText("Improvements seen in poultry sectors."),
+                true,
+                new NarrativeText("Reports submitted quarterly."),
+                10,
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
+        ))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("PDC effectiveness rating is required");
+    }
+
+    @Test
+    void pcShouldRejectYoungMenExceedingYouthBeneficiaries() {
+        PcSubmission pc = new PcSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Parish Chief Name",
+                "0772111555",
+                "MALE",
+                AgeGroup.AGE_ABOVE_35,
+                1500000L,
+                1500000L,
+                100,
+                40,
+                30,
+                15,
+                new NarrativeText("Lack of transport equipment is the main obstacle."),
+                true,
+                7,
+                3,
+                4,
+                true,
+                List.of("FINANCIAL_LITERACY"),
+                PdcEffectivenessRating.EFFECTIVE,
+                List.of("CAO"),
+                null,
+                new NarrativeText("Regular fields checks performed."),
+                true,
+                true,
+                new NarrativeText("Improvements seen in poultry sectors."),
+                true,
+                new NarrativeText("Reports submitted quarterly."),
+                10,
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
+        );
+
+        assertThatThrownBy(pc::validate)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Young women and young men beneficiaries cannot exceed youth beneficiaries");
     }
 
     @Test
@@ -484,6 +570,7 @@ class SubmissionTest {
                 100,
                 40,
                 30,
+                10,
                 new NarrativeText("Lack of transport equipment is the main obstacle."),
                 true,
                 7,
@@ -491,9 +578,9 @@ class SubmissionTest {
                 4,
                 true,
                 List.of("FINANCIAL_LITERACY"),
-                "HIGHLY_EFFECTIVE",
-                List.of("OTHERS"), // monitored by OTHERS
-                null, // missing specify
+                PdcEffectivenessRating.MODERATELY_EFFECTIVE,
+                List.of("OTHERS"),
+                null,
                 new NarrativeText("Regular fields checks performed."),
                 true,
                 true,
@@ -501,7 +588,8 @@ class SubmissionTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
-                8
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
 
         assertThatThrownBy(pc::validate)

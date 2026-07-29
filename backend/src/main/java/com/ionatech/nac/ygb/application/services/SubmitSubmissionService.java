@@ -156,6 +156,7 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     pc.totalBeneficiaries(),
                     pc.youthBeneficiaries(),
                     pc.youngWomenBeneficiaries(),
+                    pc.youngMenBeneficiaries(),
                     pc.obstaclesDescription() != null ? new NarrativeText(pc.obstaclesDescription()) : null,
                     pc.spendingTargetedToMostInNeed(),
                     pc.pdcTotalMembers(),
@@ -173,7 +174,8 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     pc.progressReportsSubmitted(),
                     pc.progressReportsSubmittedExplanation() != null ? new NarrativeText(pc.progressReportsSubmittedExplanation()) : null,
                     pc.selfRelianceBeneficiariesCount(),
-                    pc.selfRelianceGroupProjectsCount()
+                    pc.selfRelianceGroupProjectsCount(),
+                    pc.programmeImprovementSuggestion() != null ? new NarrativeText(pc.programmeImprovementSuggestion()) : null
             );
         };
     }

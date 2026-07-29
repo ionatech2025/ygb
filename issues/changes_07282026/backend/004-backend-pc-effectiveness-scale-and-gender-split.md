@@ -35,11 +35,11 @@ Renumbering is primarily a **frontend concern**; backend stores ordered fields /
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Domain test: invalid effectiveness enum rejected.
-- [ ] Domain test: young men count required and non-negative when youth beneficiaries > 0.
-- [ ] Application test: submit PC with new enum succeeds.
-- [ ] Adapter test: POST PC with new payload shape; old effectiveness values rejected with 400.
-- [ ] Admin submission detail mapper shows new fields.
+- [x] Domain test: invalid effectiveness enum rejected.
+- [x] Domain test: young men count required and non-negative when youth beneficiaries > 0.
+- [x] Application test: submit PC with new enum succeeds.
+- [x] Adapter test: POST PC with new payload shape; old effectiveness values rejected with 400.
+- [x] Admin submission detail mapper shows new fields.
 
 ## Blocked by
 

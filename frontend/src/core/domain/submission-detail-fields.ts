@@ -120,6 +120,7 @@ const FORM_SPECIFIC_KEYS: Record<string, string[]> = {
     'totalBeneficiaries',
     'youthBeneficiaries',
     'youngWomenBeneficiaries',
+    'youngMenBeneficiaries',
     'obstaclesDescription',
     'spendingTargetedToMostInNeed',
     'pdcTotalMembers',
@@ -138,6 +139,7 @@ const FORM_SPECIFIC_KEYS: Record<string, string[]> = {
     'progressReportsSubmittedExplanation',
     'selfRelianceBeneficiariesCount',
     'selfRelianceGroupProjectsCount',
+    'programmeImprovementSuggestion',
   ],
 };
 

@@ -73,6 +73,7 @@ export interface PcSubmissionPayload extends SubmissionPayloadBase {
   totalBeneficiaries: number;
   youthBeneficiaries: number;
   youngWomenBeneficiaries: number;
+  youngMenBeneficiaries: number;
   obstaclesDescription: string;
   spendingTargetedToMostInNeed: boolean;
   pdcTotalMembers: number;
@@ -91,6 +92,7 @@ export interface PcSubmissionPayload extends SubmissionPayloadBase {
   progressReportsSubmittedExplanation?: string | null;
   selfRelianceBeneficiariesCount: number;
   selfRelianceGroupProjectsCount: number;
+  programmeImprovementSuggestion: string;
 }
 
 export type SubmissionPayload =

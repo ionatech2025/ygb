@@ -1,4 +1,5 @@
 import {
+  PDC_EFFECTIVENESS_OPTIONS,
   requiresImprovementsSeenExplanation,
   requiresMonitoredByOthersSpecify,
   requiresPdcTrainingAreas,
@@ -46,6 +47,18 @@ export function validatePcForm(state: PcFormState): PcFormErrors {
   validateCountField(pc.totalBeneficiaries, 'totalBeneficiaries', errors);
   validateCountField(pc.youthBeneficiaries, 'youthBeneficiaries', errors);
   validateCountField(pc.youngWomenBeneficiaries, 'youngWomenBeneficiaries', errors);
+  validateCountField(pc.youngMenBeneficiaries, 'youngMenBeneficiaries', errors);
+
+  const youth = parseNonNegativeInteger(pc.youthBeneficiaries);
+  const youngWomen = parseNonNegativeInteger(pc.youngWomenBeneficiaries);
+  const youngMen = parseNonNegativeInteger(pc.youngMenBeneficiaries);
+  if (youth != null && youth > 0 && youngMen == null) {
+    errors.youngMenBeneficiaries = 'Enter young men beneficiaries when youth beneficiaries is greater than zero.';
+  }
+  if (youth != null && youngWomen != null && youngMen != null && youngWomen + youngMen > youth) {
+    errors.youngMenBeneficiaries =
+      'Young women and young men beneficiaries cannot exceed beneficiaries under 30.';
+  }
 
   const obstacles = validateNarrativeText(pc.obstaclesDescription, { required: true });
   if (!obstacles.valid) {
@@ -69,6 +82,8 @@ export function validatePcForm(state: PcFormState): PcFormErrors {
 
   if (!pc.pdcEffectivenessRating) {
     errors.pdcEffectivenessRating = 'PDC effectiveness rating is required.';
+  } else if (!PDC_EFFECTIVENESS_OPTIONS.some((option) => option.value === pc.pdcEffectivenessRating)) {
+    errors.pdcEffectivenessRating = 'Select a valid PDC effectiveness rating.';
   }
 
   if (pc.monitoredBy.length === 0) {
@@ -114,6 +129,12 @@ export function validatePcForm(state: PcFormState): PcFormErrors {
   validateCountField(pc.selfRelianceBeneficiariesCount, 'selfRelianceBeneficiariesCount', errors);
   validateCountField(pc.selfRelianceGroupProjectsCount, 'selfRelianceGroupProjectsCount', errors);
 
+  const improvement = validateNarrativeText(pc.programmeImprovementSuggestion, { required: true });
+  if (!improvement.valid) {
+    errors.programmeImprovementSuggestion =
+      improvement.message ?? 'Programme improvement suggestion is required (min 10 characters).';
+  }
+
   return errors;
 }
 
@@ -140,6 +161,7 @@ export function buildPcSubmissionPayload(
     totalBeneficiaries: parseNonNegativeInteger(pc.totalBeneficiaries) ?? 0,
     youthBeneficiaries: parseNonNegativeInteger(pc.youthBeneficiaries) ?? 0,
     youngWomenBeneficiaries: parseNonNegativeInteger(pc.youngWomenBeneficiaries) ?? 0,
+    youngMenBeneficiaries: parseNonNegativeInteger(pc.youngMenBeneficiaries) ?? 0,
     obstaclesDescription: pc.obstaclesDescription.trim(),
     spendingTargetedToMostInNeed: pc.spendingTargetedToMostInNeed as boolean,
     pdcTotalMembers: parseNonNegativeInteger(pc.pdcTotalMembers) ?? 0,
@@ -164,5 +186,6 @@ export function buildPcSubmissionPayload(
       : null,
     selfRelianceBeneficiariesCount: parseNonNegativeInteger(pc.selfRelianceBeneficiariesCount) ?? 0,
     selfRelianceGroupProjectsCount: parseNonNegativeInteger(pc.selfRelianceGroupProjectsCount) ?? 0,
+    programmeImprovementSuggestion: pc.programmeImprovementSuggestion.trim(),
   };
 }

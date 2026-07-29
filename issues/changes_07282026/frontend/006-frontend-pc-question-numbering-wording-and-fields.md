@@ -53,13 +53,13 @@ Source questionnaire: [pc_questions.md](../../docs/suggested_changes/07282026/pc
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component test: questions display S/No or Q numbers 1–26 + improvement question.
-- [ ] Component test: Section D title is "PDM Programme Monitoring and Oversight".
-- [ ] Component test: effectiveness dropdown shows five new labels only.
-- [ ] Component test: young men beneficiaries field visible in Section B.
-- [ ] Component test: monitoring question shows "(select all that apply)".
-- [ ] Component test: self-reliance questions use full-sentence labels from client doc.
-- [ ] Unit test: payload includes programme improvement narrative and new enum.
+- [x] Component test: questions display S/No or Q numbers 1–26 + improvement question.
+- [x] Component test: Section D title is "PDM Programme Monitoring and Oversight".
+- [x] Component test: effectiveness dropdown shows five new labels only.
+- [x] Component test: young men beneficiaries field visible in Section B.
+- [x] Component test: monitoring question shows "(select all that apply)".
+- [x] Component test: self-reliance questions use full-sentence labels from client doc.
+- [x] Unit test: payload includes programme improvement narrative and new enum.
 
 ## Blocked by
 

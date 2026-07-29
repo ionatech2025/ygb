@@ -16,9 +16,14 @@ export function PcPdcSection({ value, onChange, errors }: PcPdcSectionProps) {
   const patch = (partial: Partial<PcFormFields>) => onChange({ ...value, ...partial });
 
   return (
-    <FormSection title="PDC" description="Parish Development Committee composition and capacity">
+    <FormSection title="Parish Development Committee (PDC)" description="Section C — Questions 9–14">
       <div className="grid gap-4 sm:grid-cols-3">
-        <FormField label="Total PDC members" htmlFor="pdcTotalMembers" required error={errors.pdcTotalMembers}>
+        <FormField
+          label="Q9. Total number of committee members"
+          htmlFor="pdcTotalMembers"
+          required
+          error={errors.pdcTotalMembers}
+        >
           <input
             id="pdcTotalMembers"
             type="text"
@@ -30,7 +35,12 @@ export function PcPdcSection({ value, onChange, errors }: PcPdcSectionProps) {
           />
         </FormField>
 
-        <FormField label="Youth members" htmlFor="pdcYouthMembers" required error={errors.pdcYouthMembers}>
+        <FormField
+          label="Q10. Number of youth representatives"
+          htmlFor="pdcYouthMembers"
+          required
+          error={errors.pdcYouthMembers}
+        >
           <input
             id="pdcYouthMembers"
             type="text"
@@ -42,7 +52,12 @@ export function PcPdcSection({ value, onChange, errors }: PcPdcSectionProps) {
           />
         </FormField>
 
-        <FormField label="Women members" htmlFor="pdcWomenMembers" required error={errors.pdcWomenMembers}>
+        <FormField
+          label="Q11. Total number of young women aged 30 years below coopted as committee members"
+          htmlFor="pdcWomenMembers"
+          required
+          error={errors.pdcWomenMembers}
+        >
           <input
             id="pdcWomenMembers"
             type="text"
@@ -57,7 +72,7 @@ export function PcPdcSection({ value, onChange, errors }: PcPdcSectionProps) {
 
       <YesNoRadioGroup
         name="pdcTrainingReceived"
-        label="Did the PDC receive training?"
+        label="Q12. Have the PDC members received leadership and management skills training?"
         value={value.pdcTrainingReceived}
         onChange={(choice) =>
           patch({
@@ -69,9 +84,13 @@ export function PcPdcSection({ value, onChange, errors }: PcPdcSectionProps) {
         error={errors.pdcTrainingReceived}
       />
 
+      {value.pdcTrainingReceived !== true && (
+        <p className="text-xs text-text-muted">Q13. If yes, what specific areas did they receive training in?</p>
+      )}
+
       {requiresPdcTrainingAreas(value.pdcTrainingReceived) && (
         <MultiCheckboxGroup
-          legend="Training areas received"
+          legend="Q13. If yes, what specific areas did they receive training in?"
           options={PDC_TRAINING_AREA_OPTIONS.map((option) => ({
             value: option.value,
             label: option.label,
@@ -84,7 +103,7 @@ export function PcPdcSection({ value, onChange, errors }: PcPdcSectionProps) {
       )}
 
       <FormField
-        label="PDC effectiveness rating"
+        label="Q14. How effective are the PDC members in fulfilling their responsibilities?"
         htmlFor="pdcEffectivenessRating"
         required
         error={errors.pdcEffectivenessRating}

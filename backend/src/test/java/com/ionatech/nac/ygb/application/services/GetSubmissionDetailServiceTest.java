@@ -17,6 +17,7 @@ import com.ionatech.nac.ygb.domain.valueobjects.AgeGroup;
 import com.ionatech.nac.ygb.domain.valueobjects.FiscalYearRecord;
 import com.ionatech.nac.ygb.domain.valueobjects.Location;
 import com.ionatech.nac.ygb.domain.valueobjects.NarrativeText;
+import com.ionatech.nac.ygb.domain.valueobjects.PdcEffectivenessRating;
 import com.ionatech.nac.ygb.domain.valueobjects.Rating;
 import com.ionatech.nac.ygb.domain.valueobjects.SubmissionMetadata;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,6 +104,9 @@ class GetSubmissionDetailServiceTest {
         PcSubmissionRequestDto pcDto = (PcSubmissionRequestDto) payloadMapper.toPayload(samplePc(UUID.randomUUID()));
         assertThat(pcDto.getAmountExpected()).isEqualTo(1500000L);
         assertThat(pcDto.getMonitoredBy()).containsExactly("CAO");
+        assertThat(pcDto.getYoungMenBeneficiaries()).isEqualTo(8);
+        assertThat(pcDto.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.EFFECTIVE);
+        assertThat(pcDto.getProgrammeImprovementSuggestion()).isEqualTo("Improve parish-level PDM monitoring.");
     }
 
     private SubmissionMetadata metadata(UUID deviceSubmissionId) {
@@ -194,6 +198,7 @@ class GetSubmissionDetailServiceTest {
                 50,
                 20,
                 15,
+                8,
                 new NarrativeText("Delays in disbursement."),
                 true,
                 12,
@@ -201,7 +206,7 @@ class GetSubmissionDetailServiceTest {
                 7,
                 true,
                 List.of("FINANCIAL_MANAGEMENT"),
-                "GOOD",
+                PdcEffectivenessRating.EFFECTIVE,
                 List.of("CAO"),
                 null,
                 new NarrativeText("Regular field checks performed."),
@@ -211,7 +216,8 @@ class GetSubmissionDetailServiceTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
-                8
+                8,
+                new NarrativeText("Improve parish-level PDM monitoring.")
         );
     }
 }

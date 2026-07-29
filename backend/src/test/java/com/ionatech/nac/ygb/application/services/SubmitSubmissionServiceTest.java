@@ -331,6 +331,7 @@ class SubmitSubmissionServiceTest {
                 100,
                 40,
                 30,
+                10,
                 "Lack of transport equipment is the main obstacle.",
                 true,
                 7,
@@ -338,7 +339,7 @@ class SubmitSubmissionServiceTest {
                 4,
                 true,
                 List.of("FINANCIAL_LITERACY"),
-                "HIGHLY_EFFECTIVE",
+                PdcEffectivenessRating.VERY_EFFECTIVE,
                 List.of("CAO"),
                 null,
                 "Regular fields checks performed.",
@@ -348,7 +349,8 @@ class SubmitSubmissionServiceTest {
                 true,
                 "Reports submitted quarterly.",
                 10,
-                8
+                8,
+                "Provide more monitoring tools for parish chiefs."
         );
 
         when(repositoryPort.save(any(Submission.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -358,6 +360,8 @@ class SubmitSubmissionServiceTest {
         assertThat(result).isInstanceOf(PcSubmission.class);
         PcSubmission pc = (PcSubmission) result;
         assertThat(pc.getAmountExpected()).isEqualTo(1500000L);
+        assertThat(pc.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.VERY_EFFECTIVE);
+        assertThat(pc.getYoungMenBeneficiaries()).isEqualTo(10);
 
         verify(repositoryPort, times(1)).save(any(Submission.class));
     }
