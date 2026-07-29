@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
@@ -108,7 +108,7 @@ public class AdminSubmissionController {
 
     @GetMapping("/export")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<StreamingResponseBody> exportSubmissions(
+    public ResponseEntity<byte[]> exportSubmissions(
             @RequestParam String format,
             @RequestParam(required = false) UUID districtId,
             @RequestParam(required = false) UUID subcountyId,
@@ -135,12 +135,13 @@ public class AdminSubmissionController {
                 financialYearPeriod
         );
         String filename = ExportFilenameBuilder.build(exportFormat);
-        StreamingResponseBody body = output -> exportSubmissionsQuery.export(filter, exportFormat, output);
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        exportSubmissionsQuery.export(filter, exportFormat, buffer);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
                 .contentType(MediaType.parseMediaType(exportFormat.contentType()))
-                .body(body);
+                .body(buffer.toByteArray());
     }
 
     @ExceptionHandler(InvalidDashboardFilterException.class)

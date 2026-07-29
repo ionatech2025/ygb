@@ -23,7 +23,7 @@ class PdfExportWriterTest {
 
     private final PdfExportWriter writer = new PdfExportWriter(
             new AdminDashboardReportAssembler(),
-            new PdfChartRenderer()
+            new PdfVectorChartRenderer()
     );
 
     @Test

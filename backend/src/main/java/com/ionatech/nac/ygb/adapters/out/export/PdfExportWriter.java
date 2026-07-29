@@ -29,9 +29,9 @@ import java.util.List;
 public class PdfExportWriter {
 
     private final AdminDashboardReportAssembler reportAssembler;
-    private final PdfChartRenderer chartRenderer;
+    private final PdfVectorChartRenderer chartRenderer;
 
-    public PdfExportWriter(AdminDashboardReportAssembler reportAssembler, PdfChartRenderer chartRenderer) {
+    public PdfExportWriter(AdminDashboardReportAssembler reportAssembler, PdfVectorChartRenderer chartRenderer) {
         this.reportAssembler = reportAssembler;
         this.chartRenderer = chartRenderer;
     }
@@ -92,24 +92,21 @@ public class PdfExportWriter {
         document.add(kpiTable);
     }
 
-    private void addChartsSection(Document document, AdminDashboardReportModel report) throws DocumentException, IOException {
+    private void addChartsSection(Document document, AdminDashboardReportModel report) throws DocumentException {
         document.add(sectionHeading("Visual Overview"));
         document.add(new Paragraph(" ", bodyFont()));
 
         if (!report.submissionsOverTime().isEmpty()) {
-            document.add(chartImage(chartRenderer.createSubmissionsOverTimeChart(report.submissionsOverTime())));
-            document.add(new Paragraph(" "));
+            document.add(chartRenderer.createSubmissionsOverTimeChart(report.submissionsOverTime()));
         }
         if (!report.formTypes().isEmpty()) {
-            document.add(chartImage(chartRenderer.createFormTypePieChart(report.formTypes())));
-            document.add(new Paragraph(" "));
+            document.add(chartRenderer.createFormTypeChart(report.formTypes()));
         }
         if (!report.genders().isEmpty()) {
-            document.add(chartImage(chartRenderer.createGenderBarChart(report.genders())));
-            document.add(new Paragraph(" "));
+            document.add(chartRenderer.createGenderChart(report.genders()));
         }
         if (!report.topDistricts().isEmpty()) {
-            document.add(chartImage(chartRenderer.createTopDistrictsChart(report.topDistricts())));
+            document.add(chartRenderer.createTopDistrictsChart(report.topDistricts()));
         }
     }
 
@@ -216,13 +213,6 @@ public class PdfExportWriter {
 
     private Font bodyFont() {
         return FontFactory.getFont(FontFactory.HELVETICA, 10, PdfReportTheme.BODY_TEXT);
-    }
-
-    private Image chartImage(byte[] pngBytes) throws DocumentException, IOException {
-        Image image = Image.getInstance(pngBytes);
-        image.scaleToFit(500, 280);
-        image.setAlignment(Element.ALIGN_CENTER);
-        return image;
     }
 
     private Image loadLogo() {

@@ -22,9 +22,7 @@ Reference: [epic-5 backend export issue](../../epic-5-admin-dashboard/backend-is
 
 - **Core domain** — optional value objects for `ReportSection`, `ChartSeries`, `ReportBranding` if layout logic grows; keep chart data derived from existing `DashboardAggregates`.
 - **Application** — extend export use case / port to assemble a structured `AdminDashboardReportModel` from filter + aggregates (and optional submission sample).
-- **Adapters (out/export)** — refactor `PdfExportWriter` into composable builders (cover page, KPI strip, chart renderer, tables). Consider:
-  - **OpenPDF / iText** with embedded chart images generated via **JFreeChart**, **XChart**, or SVG → PNG pipeline; OR
-  - **HTML → PDF** (Flying Saucer / OpenHTMLtoPDF) if team prefers CSS layout — evaluate maintainability vs pure PDF API.
+- **Adapters (out/export)** — refactor `PdfExportWriter` into composable builders (cover page, KPI strip, vector chart renderer via OpenPDF `PdfPCellEvent`, tables). Charts are drawn with pure OpenPDF vector APIs (no raster chart library).
 - **Adapters (in/rest)** — no contract change if `format=pdf` stays; response remains `application/pdf` stream honouring `DashboardFilter`.
 - **Frontend** — no change required beyond existing “Generate PDF report” button; optional filename/metadata polish.
 
