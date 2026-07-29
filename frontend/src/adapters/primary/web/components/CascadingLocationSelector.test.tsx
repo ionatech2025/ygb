@@ -1,9 +1,19 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CascadingLocationSelector } from './CascadingLocationSelector';
 import { EMPTY_LOCATION_FIELDS } from '../../../../core/domain/admin-location.model';
 import type { AdminLocation } from '../../../../core/domain/admin-location.model';
+import {
+  buildKampalaCentralDivisionLocations,
+  CORRECTED_KAMWOKYA_I_PARISH_LABEL,
+  LEGACY_KAMWOKYA_I_PARISH_LABEL,
+} from '../../../../core/domain/location-label-fixtures';
+import {
+  KAMPALA_CENTRAL_DIVISION_ID,
+  KAMPALA_DISTRICT_ID,
+} from '../../../../core/domain/location-seed.constants';
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
 
 vi.mock('../../../../core/LocationService', () => ({
@@ -84,5 +94,40 @@ describe('CascadingLocationSelector', () => {
       parishId: '',
       villageId: '',
     });
+  });
+
+  it('renders corrected parish labels from an updated dataset fixture (Jul 2026 naming fix)', async () => {
+    const locations = buildKampalaCentralDivisionLocations();
+    const repository: ILocationRepositoryPort = {
+      save: vi.fn(),
+      clear: vi.fn(),
+      hasData: vi.fn().mockResolvedValue(true),
+      findByLevel: vi.fn().mockImplementation(async (level: AdminLocation['level']) =>
+        locations.filter((location) => location.level === level)
+      ),
+      findByParentId: vi.fn().mockImplementation(async (parentId: string | null) =>
+        locations.filter((location) => location.parentId === parentId)
+      ),
+    };
+    const user = userEvent.setup();
+
+    function ControlledSelector() {
+      const [value, setValue] = useState(EMPTY_LOCATION_FIELDS);
+      return (
+        <CascadingLocationSelector value={value} onChange={setValue} repository={repository} />
+      );
+    }
+
+    render(<ControlledSelector />);
+
+    await waitFor(() => expect(screen.getByLabelText(/^District/i)).not.toBeDisabled());
+    await user.selectOptions(screen.getByLabelText(/^District/i), KAMPALA_DISTRICT_ID);
+    await waitFor(() => expect(screen.getByLabelText(/Sub-county/i)).not.toBeDisabled());
+    await user.selectOptions(screen.getByLabelText(/Sub-county/i), KAMPALA_CENTRAL_DIVISION_ID);
+    await waitFor(() => expect(screen.getByLabelText(/^Parish/i)).not.toBeDisabled());
+
+    const parishSelect = screen.getByLabelText(/^Parish/i);
+    expect(within(parishSelect).getByRole('option', { name: CORRECTED_KAMWOKYA_I_PARISH_LABEL })).toBeInTheDocument();
+    expect(within(parishSelect).queryByRole('option', { name: LEGACY_KAMWOKYA_I_PARISH_LABEL })).not.toBeInTheDocument();
   });
 });

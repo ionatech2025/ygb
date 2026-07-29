@@ -20,10 +20,10 @@ Reference: [PDM_Tools_Change_Requests_07282026.md §1 item 6](../../docs/suggest
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Migration script lists every corrected parish/sub-county/village with before/after comment.
-- [ ] Integration test: known typo (e.g. `Parish I` → `Parish 1`) reflected in dataset response.
-- [ ] Dataset ETag changes after migration.
-- [ ] No duplicate unique constraint violations after renames.
+- [x] Migration script lists every corrected parish/sub-county/village with before/after comment.
+- [x] Integration test: known typo (e.g. `Parish I` → `Parish 1`) reflected in dataset response.
+- [x] Dataset ETag changes after migration.
+- [x] No duplicate unique constraint violations after renames.
 
 ## Blocked by
 

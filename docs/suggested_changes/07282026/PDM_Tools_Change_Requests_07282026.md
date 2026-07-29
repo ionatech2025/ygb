@@ -29,7 +29,7 @@
    - Data collectors already carry a physical introduction letter; no in-app introductory statement/section is required.
 
 6. **District/sub-county/parish naming inconsistency**
-   - Fix inconsistent labelling in dropdowns (e.g., "Parish 1" vs "Parish I" — mixed numerals/letters, mixed capitalization). Likely a typo carried over from the source reference document.
+   - Fix inconsistent labelling in dropdowns (e.g., "Parish 1" vs "Parish I" — mixed numerals/letters, mixed capitalization). Likely a typo carried over from the source reference document, so use lowercase roman numerals.
    - Apply the same fix across **all divisions, sub-counties, and villages** — must be corrected individually per entry (no bulk/global fix available).
 
 7. **Unpack/expand brief questions into full sentences**

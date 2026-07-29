@@ -12,8 +12,8 @@ Reference: [PDM_Tools_Change_Requests_07282026.md §1 item 6](../../docs/suggest
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unit test: location service refetches when API ETag changes.
-- [ ] Component test: parish dropdown renders corrected label from updated fixture (spot-check known fix).
+- [x] Unit test: location service refetches when API ETag changes.
+- [x] Component test: parish dropdown renders corrected label from updated fixture (spot-check known fix).
 - [ ] Manual QA: compare dropdown labels against client-approved list.
 
 ## Blocked by
