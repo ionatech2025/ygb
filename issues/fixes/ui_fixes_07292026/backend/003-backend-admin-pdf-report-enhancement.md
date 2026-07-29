@@ -77,12 +77,12 @@ Build a single report DTO from:
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] PDF includes branded cover and executive summary derived from live DB aggregates (not hard-coded).
-- [ ] PDF includes at least **four chart visualisations** aligned with public/admin dashboard metrics.
-- [ ] PDF includes well-designed and colored tabular breakdowns for form type, gender, top districts, and financial year period (when data present).
-- [ ] Export honours active `DashboardFilter` (same as CSV/XLSX).
-- [ ] Unit tests for report model assembly and PDF section rendering.
-- [ ] Controller/integration test confirms PDF response headers and non-zero body.
+- [x] PDF includes branded cover and executive summary derived from live DB aggregates (not hard-coded).
+- [x] PDF includes at least **four chart visualisations** aligned with public/admin dashboard metrics.
+- [x] PDF includes well-designed and colored tabular breakdowns for form type, gender, top districts, and financial year period (when data present).
+- [x] Export honours active `DashboardFilter` (same as CSV/XLSX).
+- [x] Unit tests for report model assembly and PDF section rendering.
+- [x] Controller/integration test confirms PDF response headers and non-zero body.
 - [ ] Manual QA: open PDF in Acrobat/browser — readable on A4, charts not clipped, filters described in plain language.
 
 
