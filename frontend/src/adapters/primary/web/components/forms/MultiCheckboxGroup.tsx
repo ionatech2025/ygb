@@ -18,6 +18,7 @@ export interface MultiCheckboxGroupProps {
   required?: boolean;
   error?: string;
   otherSpecifyError?: string;
+  hint?: string;
 }
 
 export function MultiCheckboxGroup({
@@ -32,6 +33,7 @@ export function MultiCheckboxGroup({
   required,
   error,
   otherSpecifyError,
+  hint,
 }: MultiCheckboxGroupProps) {
   const showOtherSpecify = selected.includes(otherOptionValue);
 
@@ -53,6 +55,7 @@ export function MultiCheckboxGroup({
           </span>
         )}
       </legend>
+      {hint && <p className="mb-2 text-[11px] text-text-muted">{hint}</p>}
       <div className="space-y-2">
         {options.map((option) => {
           const inputId = `multi-${option.value}`;

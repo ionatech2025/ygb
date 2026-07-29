@@ -63,7 +63,7 @@ class PublicDashboardServiceTest {
         when(repositoryPort.countByGender(dashboardFilter))
                 .thenReturn(List.of(new GenderCount("FEMALE", 2L)));
         when(repositoryPort.countByAgeGroup(dashboardFilter))
-                .thenReturn(List.of(new AgeGroupCount("AGE_20_24", 2L)));
+                .thenReturn(List.of(new AgeGroupCount("AGE_18_24", 2L)));
         when(repositoryPort.countOverTime(dashboardFilter, TimeSeriesGranularity.DAY))
                 .thenReturn(List.of(new TimeSeriesPoint(LocalDate.of(2026, 3, 1), 2L)));
 
@@ -76,7 +76,7 @@ class PublicDashboardServiceTest {
         assertThat(byDistrict.data()).hasSize(1);
         assertThat(byDistrict.data().getFirst().locationId()).isEqualTo(districtId);
         assertThat(byGender.data().getFirst().label()).isEqualTo("FEMALE");
-        assertThat(byAgeGroup.data().getFirst().label()).isEqualTo("AGE_20_24");
+        assertThat(byAgeGroup.data().getFirst().label()).isEqualTo("AGE_18_24");
         assertThat(trend.data().getFirst().date()).isEqualTo(LocalDate.of(2026, 3, 1));
         verify(filterValidator, times(4)).validate(dashboardFilter);
     }

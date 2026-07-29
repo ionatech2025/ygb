@@ -1,4 +1,4 @@
-import { MIN_AGE, MIN_NARRATIVE_LENGTH } from './domain/form-validation.model';
+import { MIN_NARRATIVE_LENGTH } from './domain/form-validation.model';
 import { isValidUgandaPhoneLocal } from './utils/phone-utils';
 
 export const UGANDA_PHONE_HINT = 'Uganda format, e.g. 0772123456 or +256772123456';
@@ -7,13 +7,6 @@ export const UGANDA_PHONE_ERROR = 'Enter a valid Uganda phone number (e.g. 07721
 export interface ValidationResult {
   valid: boolean;
   message?: string;
-}
-
-export function validateAge(age: number): ValidationResult {
-  if (!Number.isFinite(age) || age < MIN_AGE) {
-    return { valid: false, message: `Age must be at least ${MIN_AGE}.` };
-  }
-  return { valid: true };
 }
 
 export function validateRequired(value: string | null | undefined): ValidationResult {

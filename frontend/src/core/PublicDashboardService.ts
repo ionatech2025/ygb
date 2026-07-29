@@ -7,7 +7,7 @@ import type {
   PublicHeatmapEntry,
 } from './domain/public-dashboard-charts.model';
 import { FORM_TYPE_OPTIONS } from './domain/form-type.model';
-import { AGE_GROUP_LABELS, GENDER_OPTIONS } from './domain/form-validation.model';
+import { formatAgeGroupLabel, GENDER_OPTIONS } from './domain/form-validation.model';
 import type { FinancialYearPeriodHalf } from './domain/financial-year-period.model';
 import { formatFinancialYearPeriodLabel } from './financial-year-period';
 import type { IPublicDashboardApiPort } from '../ports/public-dashboard-api.port';
@@ -51,7 +51,7 @@ export function mapPublicChartSeriesToViewModel(
     })),
     byAgeGroup: byAgeGroup.data.map((point) => ({
       ageGroup: point.label,
-      label: AGE_GROUP_LABELS[point.label as keyof typeof AGE_GROUP_LABELS] ?? point.label,
+      label: formatAgeGroupLabel(point.label),
       count: point.count,
     })),
     overTime: [...trend.data]

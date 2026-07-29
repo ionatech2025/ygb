@@ -104,7 +104,7 @@ class SubmitBudgetPriorityServiceTest {
         Map<String, Object> demographics = Map.of(
                 BudgetPriorityDemographics.FULL_NAME, "Jane Nakato",
                 BudgetPriorityDemographics.PHONE_NUMBER, "12345",
-                BudgetPriorityDemographics.AGE_GROUP, "AGE_20_24",
+                BudgetPriorityDemographics.AGE_GROUP, "AGE_18_24",
                 BudgetPriorityDemographics.GENDER, "FEMALE",
                 BudgetPriorityDemographics.DISTRICT_ID, UUID.randomUUID().toString()
         );
@@ -123,7 +123,7 @@ class SubmitBudgetPriorityServiceTest {
                 Map.of(
                         BudgetPriorityDemographics.FULL_NAME, "Jane Nakato",
                         BudgetPriorityDemographics.PHONE_NUMBER, "0772123456",
-                        BudgetPriorityDemographics.AGE_GROUP, "AGE_20_24",
+                        BudgetPriorityDemographics.AGE_GROUP, "AGE_18_24",
                         BudgetPriorityDemographics.GENDER, "FEMALE",
                         BudgetPriorityDemographics.DISTRICT_ID, UUID.randomUUID().toString()
                 ),

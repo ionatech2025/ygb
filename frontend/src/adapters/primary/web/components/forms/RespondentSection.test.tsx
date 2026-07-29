@@ -44,6 +44,34 @@ describe('RespondentSection', () => {
     expect(screen.getByLabelText(/age group/i)).toBeInTheDocument();
   });
 
+  it('renders programme target age brackets', () => {
+    render(
+      <RespondentSection
+        value={EMPTY_RESPONDENT_FIELDS}
+        onChange={() => undefined}
+        locationRepository={createMockRepository()}
+      />
+    );
+
+    const ageSelect = screen.getByLabelText(/age group/i);
+    expect(within(ageSelect).getByRole('option', { name: '18-24' })).toBeInTheDocument();
+    expect(within(ageSelect).getByRole('option', { name: '25-29' })).toBeInTheDocument();
+    expect(within(ageSelect).getByRole('option', { name: '30-35' })).toBeInTheDocument();
+    expect(within(ageSelect).getByRole('option', { name: 'Above 35' })).toBeInTheDocument();
+  });
+
+  it('does not require respondent name', () => {
+    render(
+      <RespondentSection
+        value={EMPTY_RESPONDENT_FIELDS}
+        onChange={() => undefined}
+        locationRepository={createMockRepository()}
+      />
+    );
+
+    expect(screen.getByLabelText(/name of respondent/i)).not.toBeRequired();
+  });
+
   it('renders CascadingLocationSelector selects instead of text inputs for location', async () => {
     render(
       <RespondentSection
@@ -73,8 +101,8 @@ describe('RespondentSection', () => {
     expect(screen.queryByLabelText(/device submission id/i)).not.toBeInTheDocument();
   });
 
-  it('shows exact age only when requested (BYP)', () => {
-    const { rerender } = render(
+  it('does not render an exact age field', () => {
+    render(
       <RespondentSection
         value={EMPTY_RESPONDENT_FIELDS}
         onChange={() => undefined}
@@ -83,16 +111,5 @@ describe('RespondentSection', () => {
     );
 
     expect(screen.queryByLabelText(/exact age/i)).not.toBeInTheDocument();
-
-    rerender(
-      <RespondentSection
-        value={EMPTY_RESPONDENT_FIELDS}
-        onChange={() => undefined}
-        showExactAge
-        locationRepository={createMockRepository()}
-      />
-    );
-
-    expect(screen.getByLabelText(/exact age/i)).toBeInTheDocument();
   });
 });

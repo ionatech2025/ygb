@@ -56,7 +56,7 @@ describe('budget-priority-api.adapter', () => {
       demographics: {
         fullName: 'Jane Citizen',
         phoneNumber: '0772123456',
-        ageGroup: 'AGE_20_24',
+        ageGroup: 'AGE_18_24',
         gender: 'FEMALE',
         districtId: 'district-1',
       },
@@ -80,7 +80,7 @@ describe('budget-priority-api.adapter', () => {
       demographics: {
         fullName: 'Jane Citizen',
         phoneNumber: '0772123456',
-        ageGroup: 'AGE_20_24',
+        ageGroup: 'AGE_18_24',
         gender: 'FEMALE',
         districtId: 'district-1',
       },

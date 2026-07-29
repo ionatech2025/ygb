@@ -48,13 +48,11 @@ public abstract class SubmissionMapper {
     @Mapping(target = "subcountyId", source = "location.subcountyId")
     @Mapping(target = "parishId", source = "location.parishId")
     @Mapping(target = "villageId", source = "location.villageId")
-    @Mapping(target = "exactAge", source = "exactAge.value")
     @Mapping(target = "improvementSuggestion", source = "improvementSuggestion.value")
     protected abstract BypSubmissionJpaEntity toBypEntity(BypSubmission submission);
 
     @Mapping(target = "metadata", expression = "java(mapMetadata(entity))")
     @Mapping(target = "location", expression = "java(mapLocation(entity))")
-    @Mapping(target = "exactAge", expression = "java(new Age(entity.getExactAge()))")
     @Mapping(target = "improvementSuggestion", expression = "java(new NarrativeText(entity.getImprovementSuggestion()))")
     protected abstract BypSubmission toBypDomain(BypSubmissionJpaEntity entity);
 

@@ -79,7 +79,7 @@ class ExportPublicDatasetServiceTest {
                 districtId,
                 "Kampala",
                 "FEMALE",
-                "AGE_20_24",
+                "AGE_18_24",
                 LocalDateTime.of(2026, 3, 15, 10, 0),
                 "SYNCED",
                 "JAN_JUN_2026"

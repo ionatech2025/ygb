@@ -77,7 +77,6 @@ function payloadRows(payload: SubmissionPayload, keys: string[]): DetailFieldRow
 
 const FORM_SPECIFIC_KEYS: Record<string, string[]> = {
   BYP: [
-    'exactAge',
     'fundReceiptDuration',
     'fundReceiptDurationSpecify',
     'receivedActualAmountRequested',

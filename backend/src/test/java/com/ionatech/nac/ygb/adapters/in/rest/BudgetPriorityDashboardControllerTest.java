@@ -155,7 +155,7 @@ class BudgetPriorityDashboardControllerTest {
                 List.of(),
                 List.of(),
                 List.of("FEMALE"),
-                List.of("AGE_20_24"),
+                List.of("AGE_18_24"),
                 List.of("JAN_JUN_2026")
         );
         BudgetPriorityFilterOptionsResponseDto responseDto = new BudgetPriorityFilterOptionsResponseDto(
@@ -164,7 +164,7 @@ class BudgetPriorityDashboardControllerTest {
                 List.of(),
                 List.of(),
                 List.of("FEMALE"),
-                List.of("AGE_20_24"),
+                List.of("AGE_18_24"),
                 List.of("JAN_JUN_2026")
         );
 

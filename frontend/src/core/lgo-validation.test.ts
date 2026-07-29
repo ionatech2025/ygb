@@ -9,7 +9,7 @@ describe('lgo-validation', () => {
     respondentName: 'Official Name',
     respondentPhone: '0772111444',
     respondentGender: 'FEMALE',
-    respondentAgeGroup: 'AGE_30_AND_ABOVE' as const,
+    respondentAgeGroup: 'AGE_ABOVE_35' as const,
     districtId: 'district-1',
     subcountyId: 'subcounty-1',
     parishId: 'parish-1',

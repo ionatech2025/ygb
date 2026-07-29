@@ -39,7 +39,7 @@ class SaveBudgetPrioritySubmissionServiceTest {
             "fullName", "Jane Nakato",
             "phoneNumber", "0772123456",
             "gender", "FEMALE",
-            "ageGroup", "AGE_20_24",
+            "ageGroup", "AGE_18_24",
             "districtId", UUID.randomUUID().toString()
     );
 

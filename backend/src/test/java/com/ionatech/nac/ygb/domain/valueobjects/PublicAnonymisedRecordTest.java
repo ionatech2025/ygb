@@ -41,7 +41,7 @@ class PublicAnonymisedRecordTest {
                 districtId,
                 "Kampala",
                 "FEMALE",
-                "AGE_20_24",
+                "AGE_18_24",
                 LocalDateTime.of(2026, 3, 15, 10, 0),
                 "SYNCED",
                 "JAN_JUN_2026"
@@ -49,6 +49,6 @@ class PublicAnonymisedRecordTest {
 
         assertThat(record.id()).isEqualTo(id);
         assertThat(record.gender()).isEqualTo("FEMALE");
-        assertThat(record.ageGroup()).isEqualTo("AGE_20_24");
+        assertThat(record.ageGroup()).isEqualTo("AGE_18_24");
     }
 }

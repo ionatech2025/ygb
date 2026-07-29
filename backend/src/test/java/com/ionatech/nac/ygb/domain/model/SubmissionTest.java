@@ -34,8 +34,7 @@ class SubmissionTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -53,7 +52,61 @@ class SubmissionTest {
         byp.validate();
 
         assertThat(byp.getId()).isNotNull();
-        assertThat(byp.getExactAge().getValue()).isEqualTo(22);
+        assertThat(byp.getRespondentAgeGroup()).isEqualTo(AgeGroup.AGE_18_24);
+    }
+
+    @Test
+    void submissionAcceptsBlankRespondentName() {
+        BypSubmission byp = new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support and early training.")
+        );
+
+        assertThat(byp.getRespondentName()).isEmpty();
+    }
+
+    @Test
+    void submissionRejectsBelow18AgeGroup() {
+        assertThatThrownBy(() -> new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_BELOW_18,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        ))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("out of programme scope");
     }
 
     @Test
@@ -65,8 +118,7 @@ class SubmissionTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "MONTHS", // requires specify
                 null, // missing specify
                 true,
@@ -95,8 +147,7 @@ class SubmissionTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -125,8 +176,7 @@ class SubmissionTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -159,7 +209,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 false, // unaware
                 null,
                 null,
@@ -185,7 +235,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true, // aware
                 true, // eligible criteria aware
                 true, // applied
@@ -211,7 +261,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 true, // applied
@@ -238,7 +288,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 false, // did not apply
@@ -265,7 +315,7 @@ class SubmissionTest {
                 "John Doe",
                 "0772111333",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 true,
@@ -296,7 +346,7 @@ class SubmissionTest {
                 "Official Name",
                 "0772111444",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
                 true,
                 true,
@@ -322,7 +372,7 @@ class SubmissionTest {
                 "Official Name",
                 "0772111444",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
                 true,
                 true,
@@ -349,7 +399,7 @@ class SubmissionTest {
                 "Official Name",
                 "0772111444",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 List.of(new FiscalYearRecord("2030/31", 100000L, 80000L, 50, 20, 20, 5, 4)),
                 true,
                 true,
@@ -380,7 +430,7 @@ class SubmissionTest {
                 "Parish Chief Name",
                 "0772111555",
                 "MALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 1500000L,
                 1500000L,
                 100,
@@ -419,7 +469,7 @@ class SubmissionTest {
                 "Parish Chief Name",
                 "0772111555",
                 "MALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 1500000L,
                 1500000L,
                 100,

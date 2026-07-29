@@ -82,13 +82,17 @@ describe('BypForm', () => {
     expect(screen.queryByText(/Select services received/i)).not.toBeInTheDocument();
   });
 
-  it('blocks submit when respondent name is blank (TC-FORM-02-04)', async () => {
+  it('allows submit with blank respondent name', async () => {
     const user = userEvent.setup();
     render(<BypForm />);
 
     await user.click(screen.getByRole('button', { name: /Submit BYP Survey/i }));
-    expect(enqueueMock).not.toHaveBeenCalled();
-    expect(screen.getByText(/Name of respondent is required/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Name of respondent is required/i)).not.toBeInTheDocument();
+  });
+
+  it('does not render an exact age field', () => {
+    render(<BypForm />);
+    expect(screen.queryByLabelText(/exact age/i)).not.toBeInTheDocument();
   });
 
   it('calls enqueue with a fresh deviceSubmissionId on valid submit', async () => {
@@ -100,11 +104,9 @@ describe('BypForm', () => {
     const onSubmitted = vi.fn();
     render(<BypForm onSubmitted={onSubmitted} />);
 
-    await user.type(screen.getByLabelText(/name of respondent/i), 'Jane Doe');
     await user.type(screen.getByLabelText(/phone number/i), '0772111222');
     await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-    await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_20_24');
-    await user.type(screen.getByLabelText(/exact age/i), '22');
+    await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_18_24');
 
     await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
     await user.selectOptions(document.getElementById('district')!, 'district-1');
@@ -145,11 +147,9 @@ describe('BypForm', () => {
     const user = userEvent.setup();
     render(<BypForm />);
 
-    await user.type(screen.getByLabelText(/name of respondent/i), 'Jane Doe');
     await user.type(screen.getByLabelText(/phone number/i), '0772111222');
     await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-    await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_20_24');
-    await user.type(screen.getByLabelText(/exact age/i), '22');
+    await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_18_24');
 
     await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
     await user.selectOptions(document.getElementById('district')!, 'district-1');

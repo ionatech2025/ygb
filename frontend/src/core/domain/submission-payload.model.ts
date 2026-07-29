@@ -23,7 +23,6 @@ export interface FiscalYearRecordPayload {
 
 export interface BypSubmissionPayload extends SubmissionPayloadBase {
   formType: 'BYP';
-  exactAge: number;
   fundReceiptDuration: string;
   fundReceiptDurationSpecify?: string | null;
   receivedActualAmountRequested: boolean;

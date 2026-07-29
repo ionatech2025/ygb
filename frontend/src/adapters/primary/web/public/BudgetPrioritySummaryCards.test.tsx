@@ -19,7 +19,7 @@ function createMockApi(
     fetchFilterOptions: vi.fn().mockResolvedValue({
       sections: ['health', 'agriculture'],
       genders: ['FEMALE'],
-      ageGroups: ['AGE_20_24'],
+      ageGroups: ['AGE_18_24'],
       financialYearPeriods: ['JAN_JUN_2026'],
     }),
     fetchSummary,

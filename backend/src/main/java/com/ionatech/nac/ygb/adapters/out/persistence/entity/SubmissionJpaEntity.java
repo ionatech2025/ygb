@@ -49,7 +49,7 @@ public abstract class SubmissionJpaEntity {
     @Column(name = "village_id", nullable = false)
     private UUID villageId;
 
-    @Column(name = "respondent_name", nullable = false)
+    @Column(name = "respondent_name")
     private String respondentName;
 
     @Column(name = "respondent_phone", nullable = false)

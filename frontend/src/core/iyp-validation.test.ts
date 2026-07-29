@@ -9,7 +9,7 @@ describe('iyp-validation', () => {
     respondentName: 'Jane Doe',
     respondentPhone: '0772111222',
     respondentGender: 'FEMALE',
-    respondentAgeGroup: 'AGE_20_24' as const,
+    respondentAgeGroup: 'AGE_18_24' as const,
     districtId: 'district-1',
     subcountyId: 'subcounty-1',
     parishId: 'parish-1',

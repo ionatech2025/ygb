@@ -27,7 +27,7 @@ function createDashboardApi(
       parishes: subcountyId ? [parish] : [],
       formTypes: ['BYP'],
       genders: ['MALE'],
-      ageGroups: ['AGE_15_19'],
+      ageGroups: ['AGE_18_24'],
       collectors: [{ id: 'c1', fullName: 'Jane Collector' }],
       financialYearPeriods: ['JAN_JUN_2026'],
     })),

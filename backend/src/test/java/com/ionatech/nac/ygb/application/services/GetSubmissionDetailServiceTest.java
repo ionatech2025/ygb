@@ -91,7 +91,6 @@ class GetSubmissionDetailServiceTest {
 
         BypSubmissionRequestDto bypDto = (BypSubmissionRequestDto) payloadMapper.toPayload(sampleByp(UUID.randomUUID()));
         assertThat(bypDto.getFormType()).isEqualTo("BYP");
-        assertThat(bypDto.getExactAge()).isEqualTo(22);
         assertThat(bypDto.getImprovementSuggestion()).isEqualTo("Provide more technical support.");
 
         IypSubmissionRequestDto iypDto = (IypSubmissionRequestDto) payloadMapper.toPayload(sampleIyp(UUID.randomUUID()));
@@ -118,8 +117,7 @@ class GetSubmissionDetailServiceTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -143,7 +141,7 @@ class GetSubmissionDetailServiceTest {
                 "John Four",
                 "0773000111",
                 "MALE",
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 true,
@@ -165,7 +163,7 @@ class GetSubmissionDetailServiceTest {
                 "District Officer",
                 "0774000111",
                 "MALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 List.of(new FiscalYearRecord("2024/25", 100000L, 80000L, 50, 20, 20, 5, 4)),
                 true,
                 true,
@@ -187,7 +185,7 @@ class GetSubmissionDetailServiceTest {
                 "Parish Chief",
                 "0775000111",
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 1500000L,
                 1200000L,
                 50,

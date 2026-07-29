@@ -47,7 +47,7 @@ async function fillRespondent(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/name of respondent/i), 'Official Name');
   await user.type(screen.getByLabelText(/phone number/i), '0772111444');
   await user.selectOptions(screen.getByLabelText(/^gender/i), 'FEMALE');
-  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_30_AND_ABOVE');
+  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_ABOVE_35');
 
   await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
   await user.selectOptions(document.getElementById('district')!, 'district-1');

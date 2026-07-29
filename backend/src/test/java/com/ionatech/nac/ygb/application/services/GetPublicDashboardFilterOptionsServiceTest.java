@@ -32,7 +32,7 @@ class GetPublicDashboardFilterOptionsServiceTest {
         when(optionsRepositoryPort.findSubcountiesByDistrict(districtId))
                 .thenReturn(List.of(new FilterLocationOption(UUID.randomUUID(), "Central")));
         when(optionsRepositoryPort.findDistinctGenders()).thenReturn(List.of("FEMALE", "MALE"));
-        when(optionsRepositoryPort.findDistinctAgeGroups()).thenReturn(List.of("AGE_20_24"));
+        when(optionsRepositoryPort.findDistinctAgeGroups()).thenReturn(List.of("AGE_18_24"));
         when(optionsRepositoryPort.findDistinctFinancialYearPeriods()).thenReturn(List.of("JAN_JUN_2026"));
 
         PublicDashboardFilterOptions options = service.getOptions(districtId, null);

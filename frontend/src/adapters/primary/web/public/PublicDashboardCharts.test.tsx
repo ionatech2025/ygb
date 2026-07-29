@@ -39,7 +39,7 @@ function createDashboardApi(
       if (chartType === 'by-age-group') {
         return {
           chartType,
-          data: [{ label: 'AGE_20_24', locationId: null, date: null, count: 4 }],
+          data: [{ label: 'AGE_18_24', locationId: null, date: null, count: 4 }],
         };
       }
       return {

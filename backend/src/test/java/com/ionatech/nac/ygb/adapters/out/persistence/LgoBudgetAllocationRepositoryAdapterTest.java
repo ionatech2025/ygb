@@ -117,7 +117,7 @@ class LgoBudgetAllocationRepositoryAdapterTest {
                 "District Health Officer",
                 "0772555666",
                 "FEMALE",
-                "AGE_30_AND_ABOVE",
+                "AGE_ABOVE_35",
                 "LGO"
         );
         return submissionId;

@@ -205,7 +205,7 @@ class LgoBudgetAllocationDashboardAggregationIntegrationTest {
                 "District Health Officer",
                 phone,
                 "FEMALE",
-                AgeGroup.AGE_30_AND_ABOVE,
+                AgeGroup.AGE_ABOVE_35,
                 districtId,
                 subcountyId,
                 parishId,

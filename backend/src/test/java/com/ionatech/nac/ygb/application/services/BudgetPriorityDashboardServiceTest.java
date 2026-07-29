@@ -92,7 +92,7 @@ class BudgetPriorityDashboardServiceTest {
         when(locationOptionsPort.findSubcountiesByDistrict(districtId))
                 .thenReturn(List.of(new FilterLocationOption(UUID.randomUUID(), "Central")));
         when(readPort.findDistinctGenders()).thenReturn(List.of("FEMALE"));
-        when(readPort.findDistinctAgeGroups()).thenReturn(List.of("AGE_20_24"));
+        when(readPort.findDistinctAgeGroups()).thenReturn(List.of("AGE_18_24"));
         when(readPort.findDistinctFinancialYearPeriods()).thenReturn(List.of("JAN_JUN_2026"));
 
         BudgetPriorityFilterOptions options = service.getOptions(districtId, null);

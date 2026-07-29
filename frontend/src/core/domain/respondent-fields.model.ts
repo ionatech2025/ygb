@@ -7,7 +7,6 @@ export interface RespondentFields extends LocationFields {
   respondentPhone: string;
   respondentGender: string;
   respondentAgeGroup: AgeGroup | '';
-  exactAge?: number;
 }
 
 export const EMPTY_RESPONDENT_FIELDS: RespondentFields = {

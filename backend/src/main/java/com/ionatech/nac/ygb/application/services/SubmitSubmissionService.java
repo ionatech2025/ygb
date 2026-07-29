@@ -74,7 +74,6 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     byp.respondentPhone(),
                     byp.respondentGender(),
                     byp.respondentAgeGroup(),
-                    new Age(byp.exactAge()),
                     byp.fundReceiptDuration(),
                     byp.fundReceiptDurationSpecify(),
                     byp.receivedActualAmountRequested(),

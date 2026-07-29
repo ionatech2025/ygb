@@ -26,7 +26,7 @@ public record SubmissionSummary(
             throw new IllegalArgumentException("SubmissionSummary formType must not be null.");
         }
         if (respondentName == null) {
-            throw new IllegalArgumentException("SubmissionSummary respondentName must not be null.");
+            respondentName = "";
         }
         if (districtId == null || districtName == null) {
             throw new IllegalArgumentException("SubmissionSummary district must not be null.");

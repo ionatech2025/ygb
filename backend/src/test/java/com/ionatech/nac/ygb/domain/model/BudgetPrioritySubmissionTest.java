@@ -22,7 +22,7 @@ class BudgetPrioritySubmissionTest {
             "fullName", "Jane Nakato",
             "phoneNumber", "0772123456",
             "gender", "FEMALE",
-            "ageGroup", "AGE_20_24",
+            "ageGroup", "AGE_18_24",
             "districtId", UUID.randomUUID().toString()
     );
 
@@ -45,7 +45,7 @@ class BudgetPrioritySubmissionTest {
         assertThat(submission.getDemographicData())
                 .containsEntry("fullName", "Jane Nakato")
                 .containsEntry("gender", "FEMALE")
-                .containsEntry("ageGroup", "AGE_20_24");
+                .containsEntry("ageGroup", "AGE_18_24");
         assertThat(submission.getFinancialYearPeriod().toString()).isEqualTo("JAN_JUN_2026");
         assertThat(submission.getSubmittedAt()).isEqualTo(submittedAt);
 
@@ -85,7 +85,7 @@ class BudgetPrioritySubmissionTest {
                 "fullName", "Jane Nakato",
                 "phoneNumber", "0772123456",
                 "gender", "FEMALE",
-                "ageGroup", "AGE_20_24"
+                "ageGroup", "AGE_18_24"
         );
 
         assertThatThrownBy(() -> BudgetPrioritySubmission.recordNew(

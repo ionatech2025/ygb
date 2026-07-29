@@ -9,7 +9,7 @@ describe('pc-validation', () => {
     respondentName: 'Parish Chief Name',
     respondentPhone: '0772111555',
     respondentGender: 'MALE',
-    respondentAgeGroup: 'AGE_30_AND_ABOVE' as const,
+    respondentAgeGroup: 'AGE_ABOVE_35' as const,
     districtId: 'district-1',
     subcountyId: 'subcounty-1',
     parishId: 'parish-1',

@@ -54,7 +54,7 @@ const samplePayload: LgoBudgetAllocationSubmissionPayload = {
     name: 'District Health Officer',
     phone: '0772555666',
     gender: 'FEMALE',
-    ageGroup: 'AGE_30_AND_ABOVE',
+    ageGroup: 'AGE_ABOVE_35',
     districtId: '11111111-1111-1111-1111-111111111111',
     subcountyId: '22222222-2222-2222-2222-222222222222',
     parishId: '33333333-3333-3333-3333-333333333333',

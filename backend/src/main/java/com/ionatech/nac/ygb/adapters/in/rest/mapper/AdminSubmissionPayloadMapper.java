@@ -33,7 +33,6 @@ public class AdminSubmissionPayloadMapper {
                 submission.getRespondentPhone(),
                 submission.getRespondentGender(),
                 submission.getRespondentAgeGroup(),
-                submission.getExactAge().getValue(),
                 submission.getFundReceiptDuration(),
                 submission.getFundReceiptDurationSpecify(),
                 submission.getReceivedActualAmountRequested(),

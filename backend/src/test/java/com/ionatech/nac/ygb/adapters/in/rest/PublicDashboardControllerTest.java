@@ -160,7 +160,7 @@ class PublicDashboardControllerTest {
 
         stubChart(PublicChartType.BY_AGE_GROUP, new PublicChartSeries(
                 PublicChartType.BY_AGE_GROUP,
-                List.of(new PublicChartDataPoint("AGE_20_24", null, null, 2L))
+                List.of(new PublicChartDataPoint("AGE_18_24", null, null, 2L))
         ), "by-age-group");
 
         stubChart(PublicChartType.TREND, new PublicChartSeries(
@@ -179,7 +179,7 @@ class PublicDashboardControllerTest {
 
         mockMvc.perform(get("/api/v1/public/dashboard/charts/by-age-group"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].label").value("AGE_20_24"));
+                .andExpect(jsonPath("$.data[0].label").value("AGE_18_24"));
 
         mockMvc.perform(get("/api/v1/public/dashboard/charts/trend"))
                 .andExpect(status().isOk())
@@ -282,7 +282,7 @@ class PublicDashboardControllerTest {
                 List.of(),
                 List.of("BYP", "IYP"),
                 List.of("FEMALE"),
-                List.of("AGE_20_24"),
+                List.of("AGE_18_24"),
                 List.of("JAN_JUN_2026")
         );
         PublicDashboardFilterOptionsResponseDto responseDto = new PublicDashboardFilterOptionsResponseDto(
@@ -291,7 +291,7 @@ class PublicDashboardControllerTest {
                 List.of(),
                 List.of("BYP", "IYP"),
                 List.of("FEMALE"),
-                List.of("AGE_20_24"),
+                List.of("AGE_18_24"),
                 List.of("JAN_JUN_2026")
         );
 

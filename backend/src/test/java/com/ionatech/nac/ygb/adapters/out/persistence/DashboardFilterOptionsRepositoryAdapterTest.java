@@ -74,7 +74,7 @@ class DashboardFilterOptionsRepositoryAdapterTest {
                 .contains("Kampala Central");
 
         assertThat(optionsRepository.findDistinctGenders()).contains("FEMALE");
-        assertThat(optionsRepository.findDistinctAgeGroups()).contains("AGE_20_24");
+        assertThat(optionsRepository.findDistinctAgeGroups()).contains("AGE_18_24");
         assertThat(optionsRepository.findDistinctFinancialYearPeriods()).contains("JAN_JUN_2026");
     }
 
@@ -100,8 +100,7 @@ class DashboardFilterOptionsRepositoryAdapterTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,

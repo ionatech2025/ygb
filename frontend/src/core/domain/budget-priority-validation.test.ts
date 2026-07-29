@@ -9,7 +9,7 @@ import {
 const validDemographics = {
   fullName: 'Jane Citizen',
   phoneNumber: '0772123456',
-  ageGroup: 'AGE_20_24' as const,
+  ageGroup: 'AGE_18_24' as const,
   gender: 'FEMALE' as const,
   districtId: 'district-1',
 };

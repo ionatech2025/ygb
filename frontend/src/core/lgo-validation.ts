@@ -8,7 +8,8 @@ import type { RespondentFields } from './domain/respondent-fields.model';
 import type { AgeGroup } from './domain/form-validation.model';
 import type { FiscalYearRecordPayload } from './domain/submission-payload.model';
 import { normalizeUgandaPhoneLocal } from './utils/phone-utils';
-import { validateNarrativeText, validatePhone, validateRequired } from './form-validation';
+import { validateNarrativeText } from './form-validation';
+import { formatRespondentName, validateRespondentDemographics } from './respondent-validation';
 
 export type LgoFormErrors = Record<string, string>;
 
@@ -18,18 +19,7 @@ export interface LgoFormState {
 }
 
 function validateRespondent(respondent: RespondentFields, errors: LgoFormErrors): void {
-  if (!validateRequired(respondent.respondentName).valid) {
-    errors.respondentName = 'Name of respondent is required.';
-  }
-  if (!validatePhone(respondent.respondentPhone).valid) {
-    errors.respondentPhone = validatePhone(respondent.respondentPhone).message ?? 'Invalid phone number.';
-  }
-  if (!respondent.respondentGender) errors.respondentGender = 'Gender is required.';
-  if (!respondent.respondentAgeGroup) errors.respondentAgeGroup = 'Age group is required.';
-  if (!respondent.districtId) errors.districtId = 'District is required.';
-  if (!respondent.subcountyId) errors.subcountyId = 'Sub-county is required.';
-  if (!respondent.parishId) errors.parishId = 'Parish is required.';
-  if (!respondent.villageId) errors.villageId = 'Village is required.';
+  validateRespondentDemographics(respondent, errors);
 }
 
 export function parseNonNegativeInteger(value: string): number | null {
@@ -161,7 +151,7 @@ export function buildLgoSubmissionPayload(
     subcountyId: respondent.subcountyId,
     parishId: respondent.parishId,
     villageId: respondent.villageId,
-    respondentName: respondent.respondentName.trim(),
+    respondentName: formatRespondentName(respondent.respondentName),
     respondentPhone: normalizeUgandaPhoneLocal(respondent.respondentPhone),
     respondentGender: respondent.respondentGender,
     respondentAgeGroup: respondent.respondentAgeGroup as AgeGroup,

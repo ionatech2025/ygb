@@ -80,8 +80,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -109,8 +108,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -132,8 +130,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -173,6 +170,104 @@ class SubmissionControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldAcceptBlankRespondentNameOnBypSubmit() throws Exception {
+        BypSubmissionRequestDto requestDto = new BypSubmissionRequestDto(
+                "BYP",
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                "Provide more technical support."
+        );
+
+        UUID testCollectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        BypSubmitCommand command = new BypSubmitCommand(
+                testCollectorId,
+                deviceSubmissionId,
+                completedAt,
+                districtId,
+                subcountyId,
+                parishId,
+                villageId,
+                "",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                "Provide more technical support."
+        );
+
+        BypSubmission dummyByp = new BypSubmission(
+                UUID.randomUUID(),
+                new SubmissionMetadata(testCollectorId, deviceSubmissionId, completedAt),
+                new Location(districtId, subcountyId, parishId, villageId),
+                "",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+
+        SubmissionResponseDto responseDto = new SubmissionResponseDto(
+                dummyByp.getId(),
+                "BYP",
+                "",
+                "PENDING",
+                completedAt
+        );
+
+        when(submissionRestMapper.toCommand(any(BypSubmissionRequestDto.class), eq(testCollectorId))).thenReturn(command);
+        when(submitSubmissionUseCase.submit(command)).thenReturn(dummyByp);
+        when(submissionRestMapper.toResponse(dummyByp)).thenReturn(responseDto);
+
+        mockMvc.perform(post("/api/v1/submissions")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.respondentName").value(""));
+    }
+
+    @Test
     @WithMockUser(roles = "ADMIN")
     void shouldReturnForbiddenWhenUserIsAdmin() throws Exception {
         BypSubmissionRequestDto requestDto = new BypSubmissionRequestDto(
@@ -186,8 +281,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -224,8 +318,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -301,8 +394,7 @@ class SubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                22,
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -321,7 +413,7 @@ class SubmissionControllerTest {
         BypSubmitCommand command = new BypSubmitCommand(
                 testCollectorId, deviceSubmissionId, completedAt,
                 districtId, subcountyId, parishId, villageId,
-                "Jane Doe", "0772111222", "FEMALE", AgeGroup.AGE_20_24, 22,
+                "Jane Doe", "0772111222", "FEMALE", AgeGroup.AGE_18_24,
                 "ONE_WEEK", null, true, 500000L, "MONTHLY", null,
                 Rating.VERY_GOOD, Rating.GOOD, true, true,
                 List.of("TRAINING"), "Provide more technical support."
