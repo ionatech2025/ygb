@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { CalendarRange, CheckCircle2, Loader2 } from 'lucide-react';
 import {
-  fetchAdminActiveFiscalYear,
+  fetchPublicActiveFiscalYear,
   setAdminActiveFiscalYear,
 } from '../../../secondary/api/fiscal-year-settings-api.adapter';
+import { ApiError } from '../../../../core/api/api-client';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import type { ActiveFiscalYearSetting } from '../../../../core/domain/active-fiscal-year.model';
 import { FormField, formControlClassName } from '../components/forms';
@@ -11,6 +12,7 @@ import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.t
 
 export function AdminFiscalYearSettingsPanel() {
   const getAccessToken = useAuthStore((state) => state.getAccessToken);
+  const checkSilentRefresh = useAuthStore((state) => state.checkSilentRefresh);
   const [setting, setSetting] = useState<ActiveFiscalYearSetting | null>(null);
   const [selectedLabel, setSelectedLabel] = useState('');
   const [loading, setLoading] = useState(true);
@@ -20,14 +22,8 @@ export function AdminFiscalYearSettingsPanel() {
 
   useEffect(() => {
     let cancelled = false;
-    const token = useAuthStore.getState().getAccessToken();
-    if (!token) {
-      setError('You must be signed in as an administrator.');
-      setLoading(false);
-      return;
-    }
 
-    fetchAdminActiveFiscalYear(token)
+    fetchPublicActiveFiscalYear()
       .then((activeSetting) => {
         if (cancelled) return;
         setSetting(activeSetting);
@@ -36,6 +32,10 @@ export function AdminFiscalYearSettingsPanel() {
       })
       .catch((err) => {
         if (cancelled) return;
+        if (err instanceof ApiError && err.status === 404) {
+          setError('Fiscal year settings are not available yet. Deploy the latest backend and try again.');
+          return;
+        }
         setError(err instanceof Error ? err.message : 'Unable to load fiscal year settings.');
       })
       .finally(() => {
@@ -51,18 +51,32 @@ export function AdminFiscalYearSettingsPanel() {
 
   const handleSave = async () => {
     const token = getAccessToken();
-    if (!token || !selectedLabel) return;
+    if (!token || !selectedLabel) {
+      setError('You must be signed in as an administrator.');
+      return;
+    }
 
     setSaving(true);
     setError('');
     setSuccessMessage('');
     try {
-      const updated = await setAdminActiveFiscalYear(selectedLabel, token);
+      await checkSilentRefresh();
+      const refreshedToken = getAccessToken();
+      if (!refreshedToken) {
+        setError('Your session has expired. Sign out and sign in again, then retry.');
+        return;
+      }
+
+      const updated = await setAdminActiveFiscalYear(selectedLabel, refreshedToken);
       setSetting(updated);
       setSelectedLabel(updated.fiscalYearLabel);
       setSuccessMessage(`Active fiscal year updated to ${updated.fiscalYearLabel}.`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to update fiscal year setting.');
+      if (err instanceof ApiError && err.status === 403) {
+        setError('You do not have permission to update fiscal year settings. Sign out and sign in again as an administrator.');
+      } else {
+        setError(err instanceof Error ? err.message : 'Unable to update fiscal year setting.');
+      }
     } finally {
       setSaving(false);
     }

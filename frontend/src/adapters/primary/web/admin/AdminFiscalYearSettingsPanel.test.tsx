@@ -9,7 +9,7 @@ const activeFiscalYear = {
   supportedLabels: ['2025/26', '2024/25', '2023/24'],
 };
 
-const fetchAdminActiveFiscalYearMock = vi.fn().mockResolvedValue(activeFiscalYear);
+const fetchPublicActiveFiscalYearMock = vi.fn().mockResolvedValue(activeFiscalYear);
 const setAdminActiveFiscalYearMock = vi.fn().mockResolvedValue({
   fiscalYearLabel: '2024/25',
   priorFiscalYearLabel: '2023/24',
@@ -17,11 +17,14 @@ const setAdminActiveFiscalYearMock = vi.fn().mockResolvedValue({
 });
 
 vi.mock('../../../secondary/api/fiscal-year-settings-api.adapter', () => ({
-  fetchAdminActiveFiscalYear: (...args: unknown[]) => fetchAdminActiveFiscalYearMock(...args),
+  fetchPublicActiveFiscalYear: () => fetchPublicActiveFiscalYearMock(),
   setAdminActiveFiscalYear: (...args: unknown[]) => setAdminActiveFiscalYearMock(...args),
 }));
 
-const authState = { getAccessToken: () => 'admin-token' };
+const authState = {
+  getAccessToken: () => 'admin-token',
+  checkSilentRefresh: vi.fn().mockResolvedValue(undefined),
+};
 
 vi.mock('../../../../core/store/useAuthStore', () => ({
   useAuthStore: Object.assign(
@@ -32,9 +35,10 @@ vi.mock('../../../../core/store/useAuthStore', () => ({
 
 describe('AdminFiscalYearSettingsPanel', () => {
   beforeEach(() => {
-    fetchAdminActiveFiscalYearMock.mockClear();
+    fetchPublicActiveFiscalYearMock.mockClear();
     setAdminActiveFiscalYearMock.mockClear();
-    fetchAdminActiveFiscalYearMock.mockResolvedValue(activeFiscalYear);
+    authState.checkSilentRefresh.mockClear();
+    fetchPublicActiveFiscalYearMock.mockResolvedValue(activeFiscalYear);
     setAdminActiveFiscalYearMock.mockResolvedValue({
       fiscalYearLabel: '2024/25',
       priorFiscalYearLabel: '2023/24',
@@ -42,11 +46,11 @@ describe('AdminFiscalYearSettingsPanel', () => {
     });
   });
 
-  it('loads the current fiscal year setting for admin users', async () => {
+  it('loads the current fiscal year setting from the public settings API', async () => {
     render(<AdminFiscalYearSettingsPanel />);
 
     await waitFor(() => {
-      expect(fetchAdminActiveFiscalYearMock).toHaveBeenCalledWith('admin-token');
+      expect(fetchPublicActiveFiscalYearMock).toHaveBeenCalledTimes(1);
       expect(screen.getByLabelText(/Current active fiscal year/i)).toHaveValue('2025/26');
     });
   });
@@ -62,6 +66,7 @@ describe('AdminFiscalYearSettingsPanel', () => {
     await user.click(screen.getByRole('button', { name: /Save fiscal year/i }));
 
     await waitFor(() => {
+      expect(authState.checkSilentRefresh).toHaveBeenCalledTimes(1);
       expect(setAdminActiveFiscalYearMock).toHaveBeenCalledWith('2024/25', 'admin-token');
       expect(screen.getByText(/Active fiscal year updated to 2024\/25/i)).toBeInTheDocument();
     });
