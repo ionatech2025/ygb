@@ -61,4 +61,17 @@ describe('PortalLogin', () => {
 
     expect(screen.getByRole('button', { name: 'Show password' })).toBeInTheDocument();
   });
+
+  it('renders the informational brand panel with app theme copy', () => {
+    render(
+      <MemoryRouter>
+        <PortalLogin />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('region', { name: /about the youth go budget app/i })).toBeInTheDocument();
+    expect(screen.getByText(/staff portal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Collecting insights to drive active community action/i)).toBeInTheDocument();
+    expect(screen.getByText(/Works Anywhere/i)).toBeInTheDocument();
+  });
 });

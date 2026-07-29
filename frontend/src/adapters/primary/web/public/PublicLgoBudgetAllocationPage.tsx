@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart3, ClipboardList, LayoutDashboard, ShieldCheck, Sparkles } from 'lucide-react';
+import { usePageMeta } from '../../../../core/hooks/usePageMeta';
+import { PAGE_META } from '../../../../core/seo/site-meta';
 import { LGO_BUDGET_ALLOCATION_ROUTES } from '../../../../core/domain/lgo-budget-allocation.routes';
 import { lgoBudgetAllocationClasses } from '../../../../core/domain/lgo-budget-allocation.theme';
 import { HttpLgoBudgetAllocationDashboardAdapter } from '../../../secondary/api/lgo-budget-allocation-dashboard-api.adapter';
@@ -11,6 +13,7 @@ import { LgoBudgetAllocationExportToolbar } from './LgoBudgetAllocationExportToo
 
 export function PublicLgoBudgetAllocationPage() {
   const dashboardApi = useMemo(() => new HttpLgoBudgetAllocationDashboardAdapter(), []);
+  usePageMeta(PAGE_META.lgoBudgetDashboard);
 
   return (
     <div className={lgoBudgetAllocationClasses.dashboardPage} data-testid="public-lgo-budget-allocation-dashboard">

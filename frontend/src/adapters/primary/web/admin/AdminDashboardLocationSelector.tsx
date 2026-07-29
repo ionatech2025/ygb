@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Loader2, MapPin } from 'lucide-react';
-import { FormField, formControlClassName } from '../components/forms/FormField';
+import { FormField, FormSelect } from '../components/forms';
 import type { LocationFields } from '../../../../core/domain/admin-location.model';
 import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
 
@@ -29,20 +29,17 @@ function LocationSelect({
 }) {
   return (
     <FormField label={label} htmlFor={id}>
-      <select
+      <FormSelect
         id={id}
         value={value}
         disabled={disabled}
-        onChange={(e) => onSelect(e.target.value)}
-        className={`${formControlClassName} disabled:cursor-not-allowed disabled:opacity-60`}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option.id} value={option.id}>
-            {option.name}
-          </option>
-        ))}
-      </select>
+        onChange={onSelect}
+        placeholder={placeholder}
+        options={[
+          { value: '', label: placeholder },
+          ...options.map((option) => ({ value: option.id, label: option.name })),
+        ]}
+      />
     </FormField>
   );
 }

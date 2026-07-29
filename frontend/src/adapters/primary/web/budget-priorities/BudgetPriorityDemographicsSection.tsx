@@ -11,7 +11,7 @@ import { EMPTY_LOCATION_FIELDS } from '../../../../core/domain/admin-location.mo
 import { useCascadingLocation } from '../../../../core/hooks/useCascadingLocation';
 import { UGANDA_PHONE_HINT } from '../../../../core/form-validation';
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
-import { FormField, formControlClassName } from '../components/forms/FormField';
+import { FormField, FormSelect, formControlClassName } from '../components/forms';
 import { FormSection } from '../components/forms/FormSection';
 import type { BudgetPriorityFormErrors } from '../../../../core/domain/budget-priority-validation';
 import { Loader2 } from 'lucide-react';
@@ -76,6 +76,7 @@ export function BudgetPriorityDemographicsSection({
           required
           error={errors.phoneNumber}
           hint={UGANDA_PHONE_HINT}
+          hintPosition="below"
         >
           <input
             id="bpPhoneNumber"
@@ -90,70 +91,63 @@ export function BudgetPriorityDemographicsSection({
         </FormField>
 
         <FormField label="Gender" htmlFor="bpGender" required error={errors.gender}>
-          <select
+          <FormSelect
             id="bpGender"
             value={value.gender}
-            onChange={(e) => patch({ gender: e.target.value as Gender | '' })}
-            className={formControlClassName}
+            onChange={(gender) => patch({ gender: gender as Gender | '' })}
             required
-          >
-            <option value="">Select gender…</option>
-            {GENDER_OPTIONS.map((gender) => (
-              <option key={gender.value} value={gender.value}>
-                {gender.label}
-              </option>
-            ))}
-          </select>
+            placeholder="Select gender…"
+            options={[
+              { value: '', label: 'Select gender…' },
+              ...GENDER_OPTIONS.map((gender) => ({ value: gender.value, label: gender.label })),
+            ]}
+          />
         </FormField>
 
         <FormField label="Age group" htmlFor="bpAgeGroup" required error={errors.ageGroup}>
-          <select
+          <FormSelect
             id="bpAgeGroup"
             value={value.ageGroup}
-            onChange={(e) => patch({ ageGroup: e.target.value as AgeGroup })}
-            className={formControlClassName}
+            onChange={(ageGroup) => patch({ ageGroup: ageGroup as AgeGroup })}
             required
-          >
-            <option value="">Select age group…</option>
-            {AGE_GROUP_VALUES.map((group) => (
-              <option key={group} value={group}>
-                {AGE_GROUP_LABELS[group]}
-              </option>
-            ))}
-          </select>
+            placeholder="Select age group…"
+            options={[
+              { value: '', label: 'Select age group…' },
+              ...AGE_GROUP_VALUES.map((group) => ({ value: group, label: AGE_GROUP_LABELS[group] })),
+            ]}
+          />
         </FormField>
 
-        <FormField label="District" htmlFor="bpDistrict" required error={errors.districtId}>
-          {loading && (
-            <p className="mb-2 flex items-center gap-2 text-xs text-text-muted">
-              <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
-              Loading districts…
-            </p>
-          )}
-          {!loading && !ready && (
-            <p className="mb-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/40 dark:text-amber-200">
-              {loadError === 'fetch-failed'
-                ? 'Unable to load districts. Check your connection and refresh the page.'
-                : 'District list is unavailable offline. Connect once while online to download location data.'}
-            </p>
-          )}
-          <select
-            id="bpDistrict"
-            value={value.districtId}
-            onChange={(e) => setDistrict(e.target.value)}
-            className={`${formControlClassName} disabled:cursor-not-allowed disabled:opacity-60`}
-            disabled={districtDisabled}
-            required
-            data-testid="budget-priority-district-select"
-          >
-            <option value="">{loading ? 'Loading districts…' : 'Select district…'}</option>
-            {districts.map((district) => (
-              <option key={district.id} value={district.id}>
-                {district.name}
-              </option>
-            ))}
-          </select>
-        </FormField>
+        <div className="sm:col-span-2">
+          <FormField label="District" htmlFor="bpDistrict" required error={errors.districtId}>
+            {loading && (
+              <p className="mb-2 flex items-center gap-2 text-xs text-text-muted">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                Loading districts…
+              </p>
+            )}
+            {!loading && !ready && (
+              <p className="mb-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/40 dark:text-amber-200">
+                {loadError === 'fetch-failed'
+                  ? 'Unable to load districts. Check your connection and refresh the page.'
+                  : 'District list is unavailable offline. Connect once while online to download location data.'}
+              </p>
+            )}
+            <FormSelect
+              id="bpDistrict"
+              testId="budget-priority-district-select"
+              value={value.districtId}
+              onChange={setDistrict}
+              disabled={districtDisabled}
+              required
+              placeholder={loading ? 'Loading districts…' : 'Select district…'}
+              options={[
+                { value: '', label: loading ? 'Loading districts…' : 'Select district…' },
+                ...districts.map((district) => ({ value: district.id, label: district.name })),
+              ]}
+            />
+          </FormField>
+        </div>
       </div>
     </FormSection>
   );

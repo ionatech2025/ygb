@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { chooseFormOptionByValue } from '../../../../test-utils/choose-form-option';
 import { CollectorTrackerPage } from './CollectorTrackerPage';
 import { CollectorTrackerService } from '../../../../core/CollectorTrackerService';
 import { EMPTY_DASHBOARD_FILTER } from '../../../../core/domain/dashboard-filter.model';
@@ -114,7 +115,7 @@ describe('CollectorTrackerPage', () => {
     });
 
     await user.click(screen.getByRole('button', { name: /^Filters/i }));
-    await user.selectOptions(screen.getByTestId('filter-financial-year'), 'JAN_JUN_2026');
+    await chooseFormOptionByValue(user, /Financial year period/i, 'JAN_JUN_2026');
 
     await waitFor(() => {
       expect(fetchLeaderboard).toHaveBeenCalledWith(

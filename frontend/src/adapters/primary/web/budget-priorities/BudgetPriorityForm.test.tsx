@@ -8,8 +8,7 @@ import type { IBudgetPriorityApiPort } from '../../../../ports/budget-priority-a
 import type { ILocationRepositoryPort } from '../../../../ports/location-repository.port';
 import { BudgetPriorityForm } from './BudgetPriorityForm';
 import { BudgetPrioritySuccessPage } from './BudgetPrioritySuccessPage';
-import { chooseFormOptionByValue } from '../../../../test-utils/choose-form-option';
-
+import { chooseFormOptionById, chooseFormOptionByValue } from '../../../../test-utils/choose-form-option';
 vi.mock('../../../../core/LocationService', () => ({
   locationService: {
     ensureLoaded: vi.fn().mockResolvedValue(undefined),
@@ -52,8 +51,7 @@ async function fillValidHealthForm(user: ReturnType<typeof userEvent.setup>) {
   await chooseFormOptionByValue(user, /^gender/i, 'FEMALE');
   await chooseFormOptionByValue(user, /age group/i, 'AGE_18_24');
 
-  const districtSelect = await screen.findByTestId('budget-priority-district-select');
-  await user.selectOptions(districtSelect, 'district-1');
+  await chooseFormOptionById(user, 'bpDistrict', 'district-1');
 
   await user.click(screen.getByLabelText(/primary health care/i));
 }

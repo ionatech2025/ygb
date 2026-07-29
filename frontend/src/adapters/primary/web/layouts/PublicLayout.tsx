@@ -7,6 +7,7 @@ import { useLgoBudgetAllocationDashboardFilterUrlSync } from '../../../../core/h
 import { ThemeToggle } from '../components/ThemeToggle';
 import { publicLayoutClasses } from '../../../../core/domain/public-dashboard.theme';
 import { PublicNav } from './PublicNav';
+import { PublicSeoJsonLd } from '../components/PublicSeoJsonLd';
 
 function StaffSignInLink({ onNavigate, className = '' }: { onNavigate?: () => void; className?: string }) {
   return (
@@ -31,6 +32,7 @@ export function PublicLayout() {
 
   return (
     <div className="public-layout-bg flex min-h-dvh flex-col">
+      <PublicSeoJsonLd />
       <header className="sticky top-0 z-50 border-b border-border/80 bg-surface/90 shadow-sm backdrop-blur-lg">
         <div className="h-1 bg-gradient-to-r from-nac-blue via-brand to-nac-orange" aria-hidden="true" />
 

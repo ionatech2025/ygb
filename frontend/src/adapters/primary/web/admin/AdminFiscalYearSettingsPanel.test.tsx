@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { chooseFormOptionByValue } from '../../../../test-utils/choose-form-option';
 import { AdminFiscalYearSettingsPanel } from './AdminFiscalYearSettingsPanel';
 
 const activeFiscalYear = {
@@ -51,7 +52,7 @@ describe('AdminFiscalYearSettingsPanel', () => {
 
     await waitFor(() => {
       expect(fetchPublicActiveFiscalYearMock).toHaveBeenCalledTimes(1);
-      expect(screen.getByLabelText(/Current active fiscal year/i)).toHaveValue('2025/26');
+      expect(screen.getByLabelText(/Current active fiscal year/i)).toHaveTextContent('FY 2025/26');
     });
   });
 
@@ -59,10 +60,10 @@ describe('AdminFiscalYearSettingsPanel', () => {
     const user = userEvent.setup();
     render(<AdminFiscalYearSettingsPanel />);
 
-    const select = await screen.findByLabelText(/Current active fiscal year/i);
-    await waitFor(() => expect(select).toHaveValue('2025/26'));
+    const field = await screen.findByLabelText(/Current active fiscal year/i);
+    await waitFor(() => expect(field).toHaveTextContent('FY 2025/26'));
 
-    await user.selectOptions(select, '2024/25');
+    await chooseFormOptionByValue(user, /Current active fiscal year/i, '2024/25');
     await user.click(screen.getByRole('button', { name: /Save fiscal year/i }));
 
     await waitFor(() => {

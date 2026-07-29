@@ -1,4 +1,4 @@
-import { FormField, formControlClassName } from '../components/forms/FormField';
+import { FormField, FormSelect, formControlClassName } from '../components/forms';
 import { FORM_TYPE_OPTIONS } from '../../../../core/domain/form-type.model';
 import {
   AGE_GROUP_LABELS,
@@ -34,20 +34,17 @@ export function PublicDashboardScalarFilters({
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <FormField label="Form type" htmlFor="public-filter-form-type">
-        <select
+        <FormSelect
           id="public-filter-form-type"
-          data-testid="filter-form-type"
+          testId="filter-form-type"
           value={filter.formType}
-          onChange={(e) => onChange({ formType: e.target.value as typeof filter.formType })}
-          className={formControlClassName}
-        >
-          <option value="">All form types</option>
-          {FORM_TYPE_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => onChange({ formType: value as typeof filter.formType })}
+          options={[
+            { value: '', label: 'All form types' },
+            ...FORM_TYPE_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
+          ]}
+          placeholder="All form types"
+        />
       </FormField>
 
       <FormField label="Date from" htmlFor="public-filter-date-from">
@@ -73,54 +70,48 @@ export function PublicDashboardScalarFilters({
       </FormField>
 
       <FormField label="Gender" htmlFor="public-filter-gender">
-        <select
+        <FormSelect
           id="public-filter-gender"
-          data-testid="filter-gender"
+          testId="filter-gender"
           value={filter.gender}
-          onChange={(e) => onChange({ gender: e.target.value as typeof filter.gender })}
-          className={formControlClassName}
-        >
-          <option value="">All genders</option>
-          {GENDER_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => onChange({ gender: value as typeof filter.gender })}
+          options={[
+            { value: '', label: 'All genders' },
+            ...GENDER_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
+          ]}
+          placeholder="All genders"
+        />
       </FormField>
 
       <FormField label="Age group" htmlFor="public-filter-age-group">
-        <select
+        <FormSelect
           id="public-filter-age-group"
-          data-testid="filter-age-group"
+          testId="filter-age-group"
           value={filter.ageGroup}
-          onChange={(e) => onChange({ ageGroup: e.target.value as typeof filter.ageGroup })}
-          className={formControlClassName}
-        >
-          <option value="">All age groups</option>
-          {AGE_GROUP_VALUES.map((value) => (
-            <option key={value} value={value}>
-              {AGE_GROUP_LABELS[value]}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => onChange({ ageGroup: value as typeof filter.ageGroup })}
+          options={[
+            { value: '', label: 'All age groups' },
+            ...AGE_GROUP_VALUES.map((value) => ({ value, label: AGE_GROUP_LABELS[value] })),
+          ]}
+          placeholder="All age groups"
+        />
       </FormField>
 
       <FormField label="Financial year period" htmlFor="public-filter-financial-year">
-        <select
+        <FormSelect
           id="public-filter-financial-year"
-          data-testid="filter-financial-year"
+          testId="filter-financial-year"
           value={filter.financialYearPeriod}
-          onChange={(e) => onChange({ financialYearPeriod: e.target.value })}
-          className={formControlClassName}
-        >
-          <option value="">All periods</option>
-          {financialYearPeriods.map((period) => (
-            <option key={period} value={period}>
-              {labelFromFinancialYearPeriodKey(period)}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => onChange({ financialYearPeriod: value })}
+          options={[
+            { value: '', label: 'All periods' },
+            ...financialYearPeriods.map((period) => ({
+              value: period,
+              label: labelFromFinancialYearPeriodKey(period),
+            })),
+          ]}
+          placeholder="All periods"
+        />
       </FormField>
     </div>
   );

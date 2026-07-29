@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /collector
+Disallow: /login
+
+Sitemap: https://youthgobudgetapp.org/sitemap.xml

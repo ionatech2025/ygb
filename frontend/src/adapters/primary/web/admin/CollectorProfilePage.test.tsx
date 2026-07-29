@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { chooseFormOptionById } from '../../../../test-utils/choose-form-option';
 import { CollectorProfilePage } from './CollectorProfilePage';
 import { KAMPALA_DISTRICT_ID } from '../../../../core/domain/location-seed.constants';
 import type { IUserRepositoryPort } from '../../../../ports/user-repository.port';
@@ -115,7 +116,7 @@ describe('CollectorProfilePage', () => {
       expect(getCollectorSubmissions).toHaveBeenCalled();
     });
 
-    await user.selectOptions(screen.getByTestId('collector-profile-district'), KAMPALA_DISTRICT_ID);
+    await chooseFormOptionById(user, 'profile-district', KAMPALA_DISTRICT_ID);
 
     await waitFor(() => {
       expect(getCollectorSubmissions).toHaveBeenCalledWith(

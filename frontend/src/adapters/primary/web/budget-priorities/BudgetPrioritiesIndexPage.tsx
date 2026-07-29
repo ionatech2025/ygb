@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { usePageMeta } from '../../../../core/hooks/usePageMeta';
+import { PAGE_META } from '../../../../core/seo/site-meta';
 import {
   ArrowRight,
   BarChart3,
@@ -28,6 +30,7 @@ const SECTION_ICONS: Record<BudgetPrioritySection, LucideIcon> = {
 };
 
 export function BudgetPrioritiesIndexPage() {
+  usePageMeta(PAGE_META.budgetPrioritiesHub);
   return (
     <div className={budgetPrioritiesClasses.page} data-testid="budget-priorities-index">
       <header className={budgetPrioritiesClasses.hero} data-testid="budget-priorities-hero">

@@ -81,15 +81,27 @@ export const loginPortalClasses = {
   ambientGlowLeft: 'absolute -left-32 top-0 h-96 w-96 rounded-full bg-brand/10 blur-3xl dark:bg-brand/5',
   ambientGlowRight: 'absolute bottom-0 right-0 h-80 w-80 rounded-full bg-nac-orange/10 blur-3xl dark:bg-nac-orange/5',
   brandPanel: [
-    'relative order-1 flex flex-col overflow-hidden',
-    'bg-gradient-to-br from-nac-blue via-nac-blue-dark to-slate-950',
-    'px-5 py-10 text-white lg:min-h-dvh lg:flex-1 lg:justify-between lg:px-12 lg:py-14',
+    'relative order-1 flex flex-col overflow-hidden bg-surface',
+    'border-b border-border/80 px-5 py-10 lg:min-h-dvh lg:flex-1 lg:justify-between lg:border-b-0 lg:border-r lg:px-12 lg:py-14',
   ].join(' '),
-  brandGrid:
-    'pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[2.5rem_2.5rem] mask-[radial-gradient(ellipse_at_center,black_30%,transparent_80%)]',
-  brandRadial: 'pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_45%)]',
-  featureCard:
-    'flex gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-sm transition hover:border-white/20 hover:bg-white/10',
+  brandAccent: 'pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-nac-blue via-brand to-nac-orange',
+  brandEyebrow: 'text-[10px] font-bold uppercase tracking-widest text-nac-orange',
+  brandSubtitle: 'text-[10px] font-semibold uppercase tracking-widest text-text-muted',
+  brandMonogram:
+    'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-nac-blue text-sm font-black tracking-wider text-white shadow-md shadow-brand/20',
+  officialBadge:
+    'inline-flex items-center rounded-full border border-brand/25 bg-brand-light/50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand dark:bg-brand/10',
+  headline: 'text-2xl font-black leading-tight tracking-tight text-text sm:text-3xl lg:text-4xl',
+  lead: 'max-w-lg text-sm leading-relaxed text-text-muted',
+  featureCard: [
+    'flex gap-3 rounded-2xl border border-border/80 bg-surface-muted/50 p-4 ring-1 ring-black/[0.02]',
+    'transition hover:border-brand/25 hover:bg-surface-muted dark:ring-white/[0.03]',
+  ].join(' '),
+  featureIcon:
+    'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-light/60 text-brand dark:bg-brand/15',
+  featureTitle: 'text-sm font-semibold text-text',
+  featureDetail: 'mt-0.5 text-xs leading-relaxed text-text-muted',
+  footerCopy: 'text-xs text-text-muted',
   formPanel: 'order-2 flex scroll-mt-4 items-center justify-center px-4 py-8 lg:min-h-dvh lg:flex-1 lg:px-10',
   formCard: [
     'rounded-2xl border border-border/80 bg-surface p-6 shadow-sm ring-1 ring-black/[0.03]',
@@ -100,4 +112,6 @@ export const loginPortalClasses = {
   testAccountCard: 'rounded-xl border border-border/80 bg-surface-muted/60 px-3 py-2.5 text-center',
   publicLink:
     'inline-flex min-h-10 items-center gap-1.5 text-sm font-semibold text-brand transition hover:text-brand-hover',
+  mobileSignInButton:
+    'inline-flex min-h-10 shrink-0 items-center rounded-xl border border-border bg-surface px-4 text-xs font-bold text-text transition hover:bg-surface-muted lg:hidden',
 } as const;

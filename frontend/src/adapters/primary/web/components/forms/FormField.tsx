@@ -6,10 +6,19 @@ export interface FormFieldProps {
   required?: boolean;
   error?: string;
   hint?: string;
+  hintPosition?: 'above' | 'below';
   children: ReactNode;
 }
 
-export function FormField({ label, htmlFor, required, error, hint, children }: FormFieldProps) {
+export function FormField({
+  label,
+  htmlFor,
+  required,
+  error,
+  hint,
+  hintPosition = 'above',
+  children,
+}: FormFieldProps) {
   const errorId = error ? `${htmlFor}-error` : undefined;
   const hintId = hint ? `${htmlFor}-hint` : undefined;
 
@@ -24,7 +33,7 @@ export function FormField({ label, htmlFor, required, error, hint, children }: F
         )}
         {required && <span className="sr-only"> (required)</span>}
       </label>
-      {hint && (
+      {hint && hintPosition === 'above' && (
         <p id={hintId} className="text-[11px] text-text-muted">
           {hint}
         </p>
@@ -34,6 +43,11 @@ export function FormField({ label, htmlFor, required, error, hint, children }: F
         aria-invalid={error ? true : undefined}
       >
         {children}
+        {hint && hintPosition === 'below' && (
+          <p id={hintId} className="mt-1.5 text-[11px] text-text-muted">
+            {hint}
+          </p>
+        )}
       </div>
       {error && (
         <p id={errorId} className="text-[11px] text-rose-600" role="alert">
@@ -45,7 +59,7 @@ export function FormField({ label, htmlFor, required, error, hint, children }: F
 }
 
 export const formControlClassName =
-  'w-full min-h-11 px-3 py-2.5 text-sm text-text bg-surface border border-border rounded-xl ' +
+  'box-border w-full h-11 min-h-11 px-3 py-2.5 text-sm text-text bg-surface border border-border rounded-xl ' +
   'transition-[border-color,box-shadow] duration-150 ' +
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand ' +
   'disabled:bg-surface-muted disabled:text-text-muted';
