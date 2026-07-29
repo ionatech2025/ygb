@@ -48,13 +48,11 @@ public abstract class SubmissionMapper {
     @Mapping(target = "subcountyId", source = "location.subcountyId")
     @Mapping(target = "parishId", source = "location.parishId")
     @Mapping(target = "villageId", source = "location.villageId")
-    @Mapping(target = "exactAge", source = "exactAge.value")
     @Mapping(target = "improvementSuggestion", source = "improvementSuggestion.value")
     protected abstract BypSubmissionJpaEntity toBypEntity(BypSubmission submission);
 
     @Mapping(target = "metadata", expression = "java(mapMetadata(entity))")
     @Mapping(target = "location", expression = "java(mapLocation(entity))")
-    @Mapping(target = "exactAge", expression = "java(new Age(entity.getExactAge()))")
     @Mapping(target = "improvementSuggestion", expression = "java(new NarrativeText(entity.getImprovementSuggestion()))")
     protected abstract BypSubmission toBypDomain(BypSubmissionJpaEntity entity);
 
@@ -136,6 +134,7 @@ public abstract class SubmissionMapper {
     @Mapping(target = "monitoringMethod", source = "monitoringMethod.value")
     @Mapping(target = "improvementsSeenExplanation", expression = "java(submission.getImprovementsSeenExplanation() != null ? submission.getImprovementsSeenExplanation().getValue() : null)")
     @Mapping(target = "progressReportsSubmittedExplanation", expression = "java(submission.getProgressReportsSubmittedExplanation() != null ? submission.getProgressReportsSubmittedExplanation().getValue() : null)")
+    @Mapping(target = "programmeImprovementSuggestion", source = "programmeImprovementSuggestion.value")
     protected abstract PcSubmissionJpaEntity toPcEntity(PcSubmission submission);
 
     @Mapping(target = "metadata", expression = "java(mapMetadata(entity))")
@@ -144,6 +143,7 @@ public abstract class SubmissionMapper {
     @Mapping(target = "monitoringMethod", expression = "java(new NarrativeText(entity.getMonitoringMethod()))")
     @Mapping(target = "improvementsSeenExplanation", expression = "java(entity.getImprovementsSeenExplanation() != null ? new NarrativeText(entity.getImprovementsSeenExplanation()) : null)")
     @Mapping(target = "progressReportsSubmittedExplanation", expression = "java(entity.getProgressReportsSubmittedExplanation() != null ? new NarrativeText(entity.getProgressReportsSubmittedExplanation()) : null)")
+    @Mapping(target = "programmeImprovementSuggestion", expression = "java(new NarrativeText(entity.getProgrammeImprovementSuggestion()))")
     protected abstract PcSubmission toPcDomain(PcSubmissionJpaEntity entity);
 
     // ==========================================

@@ -18,6 +18,7 @@ import { PcAccessSection } from './PcAccessSection';
 import { PcPdcSection } from './PcPdcSection';
 import { PcMonitoringSection } from './PcMonitoringSection';
 import { PcSelfRelianceSection } from './PcSelfRelianceSection';
+import { PcFeedbackSection } from './PcFeedbackSection';
 
 export interface PcFormProps {
   onSubmitted?: () => void;
@@ -116,6 +117,7 @@ export function PcForm({ onSubmitted }: PcFormProps) {
       <PcPdcSection value={pc} onChange={setPc} errors={errors} />
       <PcMonitoringSection value={pc} onChange={setPc} errors={errors} />
       <PcSelfRelianceSection value={pc} onChange={setPc} errors={errors} />
+      <PcFeedbackSection value={pc} onChange={setPc} errors={errors} />
 
       <button
         type="submit"

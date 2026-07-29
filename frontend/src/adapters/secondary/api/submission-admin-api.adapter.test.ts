@@ -69,4 +69,32 @@ describe('submission-admin-api.adapter', () => {
     expect(headers.get('Authorization')).toBe('Bearer admin-token');
     expect(fetchMock.mock.calls[0]?.[0]).toContain('/api/v1/admin/submissions/submission-1');
   });
+
+  it('maps collector attribution fields from admin detail API response', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          id: 'submission-1',
+          collectorId: '22222222-2222-2222-2222-222222222222',
+          collectorName: 'Default Collector',
+          status: 'SYNCED',
+          formCompletedAt: '2026-03-15T10:00:00',
+          syncedAt: '2026-03-15T10:05:00',
+          financialYearPeriod: 'JAN_JUN_2026',
+          payload: { formType: 'PC', respondentName: 'Parish Chief Name' },
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const adapter = new HttpSubmissionAdminAdapter(() => 'admin-token');
+    const detail = await adapter.getSubmissionDetail('submission-1');
+
+    expect(detail.collectorId).toBe('22222222-2222-2222-2222-222222222222');
+    expect(detail.collectorName).toBe('Default Collector');
+    expect(detail.payload.formType).toBe('PC');
+    expect(detail.formCompletedAt).toBe('2026-03-15T10:00:00');
+    expect(detail.syncedAt).toBe('2026-03-15T10:05:00');
+  });
 });

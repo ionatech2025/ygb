@@ -42,6 +42,20 @@ describe('MultiCheckboxGroup', () => {
     expect(screen.getByRole('checkbox', { name: 'Television' })).toBeChecked();
   });
 
+  it('shows multi-select hint when provided', () => {
+    render(
+      <MultiCheckboxGroup
+        legend="Information channels"
+        hint="(select all that apply)"
+        options={options}
+        selected={[]}
+        onChange={() => undefined}
+      />
+    );
+
+    expect(screen.getByText('(select all that apply)')).toBeInTheDocument();
+  });
+
   it('shows and requires a specify field when Others is checked', () => {
     render(
       <MultiCheckboxGroup

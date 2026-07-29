@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { PDC_EFFECTIVENESS_OPTIONS } from '../../../../../core/domain/pc-form.model';
 import { PcForm } from './PcForm';
 
 vi.mock('../../../../../core/LocationService', () => ({
@@ -38,15 +39,15 @@ vi.mock('../../../../../core/submission-submit.service', () => ({
 }));
 
 vi.mock('../../../../../core/store/useAuthStore', () => ({
-  useAuthStore: (selector: (state: { user: { id: string } }) => unknown) =>
-    selector({ user: { id: '22222222-2222-2222-2222-222222222222' } }),
+  useAuthStore: (selector: (state: { user: { id: string }; isOnline: boolean }) => unknown) =>
+    selector({ user: { id: '22222222-2222-2222-2222-222222222222' }, isOnline: true }),
 }));
 
 async function fillRespondent(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/name of respondent/i), 'Parish Chief Name');
   await user.type(screen.getByLabelText(/phone number/i), '0772111555');
   await user.selectOptions(screen.getByLabelText(/^gender/i), 'MALE');
-  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_30_AND_ABOVE');
+  await user.selectOptions(screen.getByLabelText(/age group/i), 'AGE_ABOVE_35');
 
   await waitFor(() => expect(document.getElementById('district')).not.toBeDisabled());
   await user.selectOptions(document.getElementById('district')!, 'district-1');
@@ -59,40 +60,62 @@ async function fillRespondent(user: ReturnType<typeof userEvent.setup>) {
 }
 
 async function fillFundsReceipt(user: ReturnType<typeof userEvent.setup>) {
-  await user.type(screen.getByLabelText(/Amount expected/i), '1500000');
-  await user.type(screen.getByLabelText(/Amount received/i), '1500000');
-  await user.type(screen.getByLabelText(/^Total beneficiaries/i), '100');
-  await user.type(screen.getByLabelText(/^Young people under 30/i), '40');
-  await user.type(screen.getByLabelText(/^Young women under 30/i), '30');
+  await user.type(screen.getByLabelText(/Q1\. Amount of PDM fund expected/i), '1500000');
+  await user.type(screen.getByLabelText(/Q2\. Actual amount PDM fund received/i), '1500000');
+}
+
+async function fillAccessSection(user: ReturnType<typeof userEvent.setup>) {
+  await user.type(screen.getByLabelText(/Q3\. Total number of beneficiaries/i), '100');
+  await user.type(screen.getByLabelText(/Q4\. Total number of beneficiaries under 30/i), '40');
+  await user.type(screen.getByLabelText(/Q5\. Total number of young women under 30/i), '22');
+  await user.type(screen.getByLabelText(/Q6\. Total number of young men under 30/i), '18');
+  await user.type(
+    screen.getByLabelText(/Q7\. What obstacles constrain the ability of the beneficiaries/i),
+    'Lack of transport equipment is the main obstacle.'
+  );
+  await user.click(document.getElementById('spendingTargetedToMostInNeed-yes')!);
 }
 
 async function fillMinimalValidForm(user: ReturnType<typeof userEvent.setup>) {
   await fillRespondent(user);
   await fillFundsReceipt(user);
+  await fillAccessSection(user);
 
+  await user.type(screen.getByLabelText(/Q9\. Total number of committee members/i), '7');
+  await user.type(screen.getByLabelText(/Q10\. Number of youth representatives/i), '3');
   await user.type(
-    screen.getByLabelText(/Obstacles faced in accessing the fund/i),
-    'Lack of transport equipment is the main obstacle.'
+    screen.getByLabelText(/Q11\. Total number of young women aged 30 years below coopted as committee members/i),
+    '4'
   );
-  await user.click(document.getElementById('spendingTargetedToMostInNeed-yes')!);
-
-  await user.type(screen.getByLabelText(/^Total PDC members/i), '7');
-  await user.type(screen.getByLabelText(/^Youth members/i), '3');
-  await user.type(screen.getByLabelText(/^Women members/i), '4');
   await user.click(document.getElementById('pdcTrainingReceived-no')!);
-  await user.selectOptions(screen.getByLabelText(/PDC effectiveness rating/i), 'FULLY');
+  await user.selectOptions(
+    screen.getByLabelText(/Q14\. How effective are the PDC members in fulfilling their responsibilities/i),
+    'VERY_EFFECTIVE'
+  );
 
   await user.click(screen.getByLabelText(/^CAO$/i));
   await user.type(
-    screen.getByLabelText(/Monitoring method/i),
+    screen.getByLabelText(/Q17\. How was the monitoring carried out/i),
     'Regular field checks performed by the parish team.'
   );
   await user.click(document.getElementById('reportSharedWithRespondent-yes')!);
-
   await user.click(document.getElementById('improvementsSeen-no')!);
+
   await user.click(document.getElementById('progressReportsSubmitted-no')!);
-  await user.type(screen.getByLabelText(/Self-reliant beneficiaries count/i), '10');
-  await user.type(screen.getByLabelText(/Self-reliance group projects count/i), '8');
+  await user.type(
+    screen.getByLabelText(/Q23\. The number of young people who benefited from the PDM and started agricultural enterprises/i),
+    '10'
+  );
+  await user.type(
+    screen.getByLabelText(
+      /Q26\. The number of youth-led enterprises established with support from the PDM and remained active after the support/i
+    ),
+    '8'
+  );
+  await user.type(
+    screen.getByLabelText(/What do you think should be improved to make the PDM programme more efficient and effective/i),
+    'Provide more monitoring tools for parish chiefs.'
+  );
 }
 
 describe('PcForm', () => {
@@ -101,27 +124,57 @@ describe('PcForm', () => {
     Element.prototype.scrollIntoView = vi.fn();
   });
 
-  it('five sections render in correct order (TC-FORM-05-01)', () => {
+  it('questions display Q numbers 1–26 plus improvement question', () => {
     render(<PcForm />);
 
-    const headings = screen.getAllByRole('heading', { level: 3 }).map((node) => node.textContent);
-    const sectionTitles = headings.filter((title) =>
-      [
-        'PDM Funds Receipt',
-        'Access to PDM Fund',
-        'PDC',
-        'Monitoring & Oversight',
-        'Self-reliance',
-      ].includes(title ?? '')
-    );
+    for (let questionNumber = 1; questionNumber <= 26; questionNumber += 1) {
+      expect(screen.getByText(new RegExp(`Q${questionNumber}\\.`))).toBeInTheDocument();
+    }
 
-    expect(sectionTitles).toEqual([
-      'PDM Funds Receipt',
-      'Access to PDM Fund',
-      'PDC',
-      'Monitoring & Oversight',
-      'Self-reliance',
-    ]);
+    expect(
+      screen.getByLabelText(
+        /What do you think should be improved to make the PDM programme more efficient and effective in your community/i
+      )
+    ).toBeInTheDocument();
+  });
+
+  it('Section D title is PDM Programme Monitoring and Oversight', () => {
+    render(<PcForm />);
+    expect(screen.getByRole('heading', { name: 'PDM Programme Monitoring and Oversight' })).toBeInTheDocument();
+  });
+
+  it('effectiveness dropdown shows five new labels only', () => {
+    render(<PcForm />);
+
+    const select = screen.getByLabelText(/Q14\. How effective are the PDC members/i);
+    const optionLabels = Array.from(select.querySelectorAll('option'))
+      .map((option) => option.textContent?.trim())
+      .filter((label) => label && label !== 'Select rating…');
+
+    expect(optionLabels).toEqual(PDC_EFFECTIVENESS_OPTIONS.map((option) => option.label));
+  });
+
+  it('young men beneficiaries field visible in Section B', () => {
+    render(<PcForm />);
+    expect(screen.getByLabelText(/Q6\. Total number of young men under 30/i)).toBeInTheDocument();
+  });
+
+  it('monitoring question shows (select all that apply)', () => {
+    render(<PcForm />);
+    expect(screen.getByText(/Q16\. If yes, who monitored the programme\? \(select all that apply\)/i)).toBeInTheDocument();
+  });
+
+  it('self-reliance questions use full-sentence labels from client doc', () => {
+    render(<PcForm />);
+
+    expect(
+      screen.getByLabelText(/Q23\. The number of young people who benefited from the PDM and started agricultural enterprises/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(
+        /Q26\. The number of youth-led enterprises established with support from the PDM and remained active after the support/i
+      )
+    ).toBeInTheDocument();
   });
 
   it('PDC training = Yes requires at least one training area (TC-FORM-05-02)', async () => {
@@ -130,9 +183,10 @@ describe('PcForm', () => {
 
     await fillRespondent(user);
     await fillFundsReceipt(user);
+    await fillAccessSection(user);
     await user.click(document.getElementById('pdcTrainingReceived-yes')!);
 
-    expect(screen.getByText(/Training areas received/i)).toBeInTheDocument();
+    expect(screen.getByText(/Q13\. If yes, what specific areas did they receive training in/i)).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /Submit PC Survey/i }));
     expect(enqueueMock).not.toHaveBeenCalled();
@@ -168,7 +222,10 @@ describe('PcForm', () => {
     const payload = enqueueMock.mock.calls[0][0].payload;
     expect(payload.formType).toBe('PC');
     expect(payload.amountExpected).toBe(1500000);
+    expect(payload.youngMenBeneficiaries).toBe(18);
     expect(payload.monitoredBy).toEqual(['CAO']);
     expect(payload.pdcTrainingAreas).toBeNull();
+    expect(payload.pdcEffectivenessRating).toBe('VERY_EFFECTIVE');
+    expect(payload.programmeImprovementSuggestion).toBe('Provide more monitoring tools for parish chiefs.');
   }, 30_000);
 });

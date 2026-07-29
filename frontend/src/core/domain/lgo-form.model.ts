@@ -18,15 +18,18 @@ export interface FiscalYearRecordFields {
   expectedFunds: string;
   actualFunds: string;
   totalBeneficiaryCount: string;
-  youngPeopleCount: string;
-  youngWomenCount: string;
+  beneficiariesUnder30Count: string;
+  beneficiaryYoungWomenCount: string;
+  beneficiaryYoungMenCount: string;
   totalParishesCount: string;
   fundedParishesCount: string;
 }
 
 export interface LgoFormFields {
-  selectedFiscalYearLabel: string;
-  fiscalYearRecord: FiscalYearRecordFields;
+  reportingFiscalYearLabel: string;
+  priorFiscalYearLabel: string | null;
+  currentFiscalYearRecord: FiscalYearRecordFields;
+  priorFiscalYearRecord: FiscalYearRecordFields | null;
   fundsAllocatedEquitably: boolean | null;
   allocatedFundsSufficient: boolean | null;
   adequateUtilisationOversight: boolean | null;
@@ -44,16 +47,34 @@ export function createEmptyFiscalYearRecord(label: string): FiscalYearRecordFiel
     expectedFunds: '',
     actualFunds: '',
     totalBeneficiaryCount: '',
-    youngPeopleCount: '',
-    youngWomenCount: '',
+    beneficiariesUnder30Count: '',
+    beneficiaryYoungWomenCount: '',
+    beneficiaryYoungMenCount: '',
     totalParishesCount: '',
     fundedParishesCount: '',
   };
 }
 
+export function createLgoFieldsFromActiveFiscalYear(setting: {
+  fiscalYearLabel: string;
+  priorFiscalYearLabel: string | null;
+}): LgoFormFields {
+  return {
+    ...EMPTY_LGO_FIELDS,
+    reportingFiscalYearLabel: setting.fiscalYearLabel,
+    priorFiscalYearLabel: setting.priorFiscalYearLabel,
+    currentFiscalYearRecord: createEmptyFiscalYearRecord(setting.fiscalYearLabel),
+    priorFiscalYearRecord: setting.priorFiscalYearLabel
+      ? createEmptyFiscalYearRecord(setting.priorFiscalYearLabel)
+      : null,
+  };
+}
+
 export const EMPTY_LGO_FIELDS: LgoFormFields = {
-  selectedFiscalYearLabel: '',
-  fiscalYearRecord: createEmptyFiscalYearRecord(''),
+  reportingFiscalYearLabel: '',
+  priorFiscalYearLabel: null,
+  currentFiscalYearRecord: createEmptyFiscalYearRecord(''),
+  priorFiscalYearRecord: null,
   fundsAllocatedEquitably: null,
   allocatedFundsSufficient: null,
   adequateUtilisationOversight: null,

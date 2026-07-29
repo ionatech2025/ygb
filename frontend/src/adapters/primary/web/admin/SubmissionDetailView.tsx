@@ -25,6 +25,7 @@ export function SubmissionDetailView({ detail }: SubmissionDetailViewProps) {
           <DetailItem label="Form type" value={formatFormTypeLabel(detail.payload.formType)} />
           <DetailItem label="Status" value={formatSubmissionStatus(detail.status)} />
           <DetailItem label="Collector" value={detail.collectorName} />
+          <DetailItem label="Collector ID" value={detail.collectorId} />
           <DetailItem label="Financial year period" value={formatFinancialYearPeriodKey(detail.financialYearPeriod)} />
           <DetailItem label="Completed at" value={formatAdminTimestamp(detail.formCompletedAt)} />
           <DetailItem label="Synced at" value={formatAdminTimestamp(detail.syncedAt)} />

@@ -1,9 +1,9 @@
 export const PDC_EFFECTIVENESS_OPTIONS = [
-  { value: 'FULLY', label: 'Fully' },
-  { value: 'MOSTLY', label: 'Mostly' },
-  { value: 'SOME', label: 'Some' },
-  { value: 'HARDLY', label: 'Hardly' },
-  { value: 'NONE', label: 'None' },
+  { value: 'VERY_EFFECTIVE', label: 'Very effective' },
+  { value: 'EFFECTIVE', label: 'Effective' },
+  { value: 'MODERATELY_EFFECTIVE', label: 'Moderately effective' },
+  { value: 'SLIGHTLY_EFFECTIVE', label: 'Slightly effective' },
+  { value: 'NOT_EFFECTIVE_AT_ALL', label: 'Not effective at all' },
 ] as const;
 
 export const PDC_TRAINING_AREA_OPTIONS = [
@@ -39,6 +39,7 @@ export interface PcFormFields {
   totalBeneficiaries: string;
   youthBeneficiaries: string;
   youngWomenBeneficiaries: string;
+  youngMenBeneficiaries: string;
   obstaclesDescription: string;
   spendingTargetedToMostInNeed: boolean | null;
   pdcTotalMembers: string;
@@ -57,6 +58,7 @@ export interface PcFormFields {
   progressReportsSubmittedExplanation: string;
   selfRelianceBeneficiariesCount: string;
   selfRelianceGroupProjectsCount: string;
+  programmeImprovementSuggestion: string;
 }
 
 export const EMPTY_PC_FIELDS: PcFormFields = {
@@ -65,6 +67,7 @@ export const EMPTY_PC_FIELDS: PcFormFields = {
   totalBeneficiaries: '',
   youthBeneficiaries: '',
   youngWomenBeneficiaries: '',
+  youngMenBeneficiaries: '',
   obstaclesDescription: '',
   spendingTargetedToMostInNeed: null,
   pdcTotalMembers: '',
@@ -83,6 +86,7 @@ export const EMPTY_PC_FIELDS: PcFormFields = {
   progressReportsSubmittedExplanation: '',
   selfRelianceBeneficiariesCount: '',
   selfRelianceGroupProjectsCount: '',
+  programmeImprovementSuggestion: '',
 };
 
 export function requiresPdcTrainingAreas(pdcTrainingReceived: boolean | null): boolean {

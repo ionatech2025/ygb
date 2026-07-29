@@ -167,7 +167,7 @@ class SubmissionExportIntegrationTest {
                     "Bulk Respondent " + index,
                     "0772" + String.format("%07d", index),
                     "FEMALE",
-                    "AGE_20_24"
+                    "AGE_18_24"
             );
             jdbcTemplate.update(
                     """
@@ -219,8 +219,7 @@ class SubmissionExportIntegrationTest {
                 name,
                 "0772000" + deviceSubmissionId.toString().substring(0, 3),
                 gender,
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,
@@ -244,7 +243,7 @@ class SubmissionExportIntegrationTest {
                 name,
                 "0773000" + deviceSubmissionId.toString().substring(0, 3),
                 gender,
-                AgeGroup.AGE_15_19,
+                AgeGroup.AGE_18_24,
                 true,
                 true,
                 true,

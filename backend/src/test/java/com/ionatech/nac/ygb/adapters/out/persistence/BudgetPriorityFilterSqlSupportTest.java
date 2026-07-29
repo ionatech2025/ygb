@@ -24,7 +24,7 @@ class BudgetPriorityFilterSqlSupportTest {
                 LocalDate.of(2026, 3, 1),
                 LocalDate.of(2026, 3, 31),
                 "FEMALE",
-                "AGE_20_24",
+                "AGE_18_24",
                 "JAN_JUN_2026"
         );
 

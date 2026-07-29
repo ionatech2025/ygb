@@ -1,4 +1,5 @@
-import { validateNarrativeText, validatePhone, validateRequired } from '../form-validation';
+import { validateNarrativeText } from '../form-validation';
+import { validateRespondentDemographics } from '../respondent-validation';
 import { parseFundAmount } from '../lgo-validation';
 import type { RespondentFields } from './respondent-fields.model';
 import {
@@ -11,31 +12,7 @@ import {
 export type LgoBudgetAllocationFormErrors = Record<string, string>;
 
 function validateRespondent(respondent: RespondentFields, errors: LgoBudgetAllocationFormErrors): void {
-  if (!validateRequired(respondent.respondentName).valid) {
-    errors.respondentName = 'Name of respondent is required.';
-  }
-  const phoneResult = validatePhone(respondent.respondentPhone);
-  if (!phoneResult.valid) {
-    errors.respondentPhone = phoneResult.message ?? 'Invalid phone number.';
-  }
-  if (!respondent.respondentGender) {
-    errors.respondentGender = 'Gender is required.';
-  }
-  if (!respondent.respondentAgeGroup) {
-    errors.respondentAgeGroup = 'Age group is required.';
-  }
-  if (!respondent.districtId) {
-    errors.districtId = 'District is required.';
-  }
-  if (!respondent.subcountyId) {
-    errors.subcountyId = 'Sub-county is required.';
-  }
-  if (!respondent.parishId) {
-    errors.parishId = 'Parish is required.';
-  }
-  if (!respondent.villageId) {
-    errors.villageId = 'Village is required.';
-  }
+  validateRespondentDemographics(respondent, errors);
 }
 
 function validatePriorYearAllocations(

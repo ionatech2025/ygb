@@ -16,7 +16,7 @@ function validState(overrides: Partial<LgoBudgetAllocationFormState> = {}): LgoB
       respondentName: 'District Health Officer',
       respondentPhone: '0772555666',
       respondentGender: 'FEMALE',
-      respondentAgeGroup: 'AGE_30_AND_ABOVE',
+      respondentAgeGroup: 'AGE_ABOVE_35',
       districtId: 'district-1',
       subcountyId: 'subcounty-1',
       parishId: 'parish-1',

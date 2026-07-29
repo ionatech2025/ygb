@@ -123,7 +123,7 @@ public class LgoSubmission extends Submission {
     @Override
     public void validate() {
         for (FiscalYearRecord record : fiscalYearRecords) {
-            if (!LgoFiscalYearCatalog.SUPPORTED_LABELS.contains(record.fiscalYearLabel())) {
+            if (!LgoFiscalYearCatalog.isSupported(record.fiscalYearLabel())) {
                 throw new IllegalArgumentException("Unsupported fiscal year label: " + record.fiscalYearLabel());
             }
         }

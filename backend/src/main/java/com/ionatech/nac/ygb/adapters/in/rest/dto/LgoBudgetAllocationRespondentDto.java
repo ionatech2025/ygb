@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record LgoBudgetAllocationRespondentDto(
-        @NotBlank String name,
+        String name,
         @NotBlank String phone,
         @NotBlank String gender,
         @NotNull AgeGroup ageGroup,

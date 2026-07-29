@@ -49,7 +49,7 @@ describe('lgo-budget-allocation-api.adapter', () => {
         name: 'District Health Officer',
         phone: '0772555666',
         gender: 'FEMALE',
-        ageGroup: 'AGE_30_AND_ABOVE',
+        ageGroup: 'AGE_ABOVE_35',
         districtId: '22222222-2222-2222-2222-222222222222',
         subcountyId: '33333333-3333-3333-3333-333333333333',
         parishId: '44444444-4444-4444-4444-444444444444',

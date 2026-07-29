@@ -5,6 +5,7 @@ import com.ionatech.nac.ygb.application.ports.spi.*;
 import com.ionatech.nac.ygb.application.services.*;
 import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
 import com.ionatech.nac.ygb.domain.service.FinancialYearPeriodCalculator;
+import com.ionatech.nac.ygb.domain.service.LgoFiscalYearRecordsPolicy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,11 +48,22 @@ public class UseCaseConfig {
     }
 
     @Bean
+    public LgoFiscalYearRecordsPolicy lgoFiscalYearRecordsPolicy() {
+        return new LgoFiscalYearRecordsPolicy();
+    }
+
+    @Bean
     @Transactional
     public SubmitSubmissionUseCase submitSubmissionUseCase(
-            SubmissionRepositoryPort submissionRepositoryPort
+            SubmissionRepositoryPort submissionRepositoryPort,
+            GetActiveFiscalYearUseCase getActiveFiscalYearUseCase,
+            LgoFiscalYearRecordsPolicy lgoFiscalYearRecordsPolicy
     ) {
-        return new SubmitSubmissionService(submissionRepositoryPort);
+        return new SubmitSubmissionService(
+                submissionRepositoryPort,
+                getActiveFiscalYearUseCase,
+                lgoFiscalYearRecordsPolicy
+        );
     }
 
     @Bean
@@ -388,5 +400,21 @@ public class UseCaseConfig {
                 lgoBudgetAllocationExportGeneratorPort,
                 anonymisationProjector
         );
+    }
+
+    @Bean
+    public GetActiveFiscalYearUseCase getActiveFiscalYearUseCase(
+            ActiveFiscalYearSettingRepositoryPort activeFiscalYearSettingRepositoryPort
+    ) {
+        return new GetActiveFiscalYearService(activeFiscalYearSettingRepositoryPort);
+    }
+
+    @Bean
+    @Transactional
+    public SetActiveFiscalYearUseCase setActiveFiscalYearUseCase(
+            ActiveFiscalYearSettingRepositoryPort activeFiscalYearSettingRepositoryPort,
+            Clock clock
+    ) {
+        return new SetActiveFiscalYearService(activeFiscalYearSettingRepositoryPort, clock);
     }
 }

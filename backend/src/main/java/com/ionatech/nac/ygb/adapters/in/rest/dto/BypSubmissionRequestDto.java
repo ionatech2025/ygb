@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class BypSubmissionRequestDto extends SubmissionRequestDto {
-    private int exactAge;
     private String fundReceiptDuration;
     private String fundReceiptDurationSpecify;
     private Boolean receivedActualAmountRequested;
@@ -36,7 +35,6 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
             String respondentPhone,
             String respondentGender,
             AgeGroup respondentAgeGroup,
-            int exactAge,
             String fundReceiptDuration,
             String fundReceiptDurationSpecify,
             Boolean receivedActualAmountRequested,
@@ -51,7 +49,6 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
             String improvementSuggestion
     ) {
         super(formType, deviceSubmissionId, formCompletedAt, districtId, subcountyId, parishId, villageId, respondentName, respondentPhone, respondentGender, respondentAgeGroup);
-        this.exactAge = exactAge;
         this.fundReceiptDuration = fundReceiptDuration;
         this.fundReceiptDurationSpecify = fundReceiptDurationSpecify;
         this.receivedActualAmountRequested = receivedActualAmountRequested;
@@ -66,7 +63,6 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
         this.improvementSuggestion = improvementSuggestion;
     }
 
-    public int getExactAge() { return exactAge; }
     public String getFundReceiptDuration() { return fundReceiptDuration; }
     public String getFundReceiptDurationSpecify() { return fundReceiptDurationSpecify; }
     public Boolean getReceivedActualAmountRequested() { return receivedActualAmountRequested; }

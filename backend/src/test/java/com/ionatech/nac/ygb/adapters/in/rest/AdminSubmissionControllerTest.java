@@ -81,6 +81,7 @@ class AdminSubmissionControllerTest {
     void shouldReturnPaginatedSubmissionListForAdmin() throws Exception {
         UUID districtId = UUID.randomUUID();
         UUID submissionId = UUID.randomUUID();
+        UUID collectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
         SubmissionPage page = new SubmissionPage(
                 List.of(new SubmissionSummary(
                         submissionId,
@@ -88,7 +89,7 @@ class AdminSubmissionControllerTest {
                         "Jane Doe",
                         districtId,
                         "Arua",
-                        UUID.randomUUID(),
+                        collectorId,
                         "Default Collector",
                         LocalDateTime.of(2026, 3, 15, 10, 0),
                         LocalDateTime.of(2026, 3, 15, 10, 5),
@@ -109,7 +110,12 @@ class AdminSubmissionControllerTest {
                 .andExpect(jsonPath("$.totalElements").value(1))
                 .andExpect(jsonPath("$.items[0].id").value(submissionId.toString()))
                 .andExpect(jsonPath("$.items[0].respondentName").value("Jane Doe"))
-                .andExpect(jsonPath("$.items[0].districtName").value("Arua"));
+                .andExpect(jsonPath("$.items[0].districtName").value("Arua"))
+                .andExpect(jsonPath("$.items[0].collectorId").value(collectorId.toString()))
+                .andExpect(jsonPath("$.items[0].collectorName").value("Default Collector"))
+                .andExpect(jsonPath("$.items[0].formType").value("BYP"))
+                .andExpect(jsonPath("$.items[0].formCompletedAt").value("2026-03-15T10:00:00"))
+                .andExpect(jsonPath("$.items[0].syncedAt").value("2026-03-15T10:05:00"));
 
         verify(listSubmissionsQuery).list(any(DashboardFilter.class), eq(PageRequest.of(0, 25)));
     }
@@ -120,6 +126,7 @@ class AdminSubmissionControllerTest {
         UUID submissionId = UUID.randomUUID();
         UUID collectorId = UUID.fromString("22222222-2222-2222-2222-222222222222");
         BypSubmission submission = sampleByp(submissionId, collectorId);
+        submission.setStatus(SubmissionStatus.SYNCED);
         AdminSubmissionDetail detail = new AdminSubmissionDetail(
                 submission,
                 LocalDateTime.of(2026, 3, 15, 10, 5),
@@ -142,7 +149,11 @@ class AdminSubmissionControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(submissionId.toString()))
+                .andExpect(jsonPath("$.collectorId").value(collectorId.toString()))
                 .andExpect(jsonPath("$.collectorName").value("Default Collector"))
+                .andExpect(jsonPath("$.status").value("SYNCED"))
+                .andExpect(jsonPath("$.formCompletedAt").value("2026-03-15T10:00:00"))
+                .andExpect(jsonPath("$.syncedAt").value("2026-03-15T10:05:00"))
                 .andExpect(jsonPath("$.financialYearPeriod").value("JAN_JUN_2026"))
                 .andExpect(jsonPath("$.payload.formType").value("BYP"))
                 .andExpect(jsonPath("$.payload.respondentName").value("Jane Doe"));
@@ -234,8 +245,7 @@ class AdminSubmissionControllerTest {
                 "Jane Doe",
                 "0772111222",
                 "FEMALE",
-                AgeGroup.AGE_20_24,
-                new Age(22),
+                AgeGroup.AGE_18_24,
                 "ONE_WEEK",
                 null,
                 true,

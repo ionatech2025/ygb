@@ -35,9 +35,6 @@ public abstract class Submission {
         if (location == null) {
             throw new IllegalArgumentException("Location cannot be null");
         }
-        if (respondentName == null || respondentName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Respondent name cannot be null or blank");
-        }
         if (respondentPhone == null || respondentPhone.trim().isEmpty()) {
             throw new IllegalArgumentException("Respondent phone cannot be null or blank");
         }
@@ -47,11 +44,14 @@ public abstract class Submission {
         if (respondentAgeGroup == null) {
             throw new IllegalArgumentException("Respondent age group cannot be null");
         }
+        if (respondentAgeGroup.isOutOfProgrammeScope()) {
+            throw new IllegalArgumentException("Respondents below 18 are out of programme scope");
+        }
 
         this.id = id;
         this.metadata = metadata;
         this.location = location;
-        this.respondentName = respondentName;
+        this.respondentName = respondentName == null ? "" : respondentName.trim();
         this.respondentPhone = respondentPhone;
         this.respondentGender = respondentGender;
         this.respondentAgeGroup = respondentAgeGroup;

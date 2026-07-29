@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -47,14 +47,13 @@ function createSubmissionApi(
         respondentName: 'Jane Doe',
         respondentPhone: '0772111222',
         respondentGender: 'FEMALE',
-        respondentAgeGroup: 'AGE_20_24',
+        respondentAgeGroup: 'AGE_18_24',
         districtId: KAMPALA_DISTRICT_ID,
         subcountyId: 'subcounty-1',
         parishId: 'parish-1',
         villageId: 'village-1',
         deviceSubmissionId: '33333333-3333-3333-3333-333333333333',
         formCompletedAt: sampleRow.formCompletedAt,
-        exactAge: 22,
         improvementSuggestion: 'More support.',
       },
     }),
@@ -111,6 +110,8 @@ describe('SubmissionListPage', () => {
     );
     expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     expect(screen.getByText('Kampala')).toBeInTheDocument();
+    expect(screen.getByText('Default Collector')).toBeInTheDocument();
+    expect(screen.getByText('Beneficiary Young Person (BYP)')).toBeInTheDocument();
   });
 
   it('navigates to detail view when a row is clicked', async () => {
@@ -206,5 +207,12 @@ describe('SubmissionDetailPage', () => {
       `/admin/dashboard?districtId=${KAMPALA_DISTRICT_ID}&gender=FEMALE`
     );
     expect(screen.getByText('More support.')).toBeInTheDocument();
+    expect(screen.getByText('Default Collector')).toBeInTheDocument();
+    expect(screen.getByText(sampleRow.collectorId)).toBeInTheDocument();
+    expect(
+      within(screen.getByLabelText('Submission provenance')).getByText('Beneficiary Young Person (BYP)')
+    ).toBeInTheDocument();
+    expect(screen.getByText('Completed at')).toBeInTheDocument();
+    expect(screen.getByText('Synced at')).toBeInTheDocument();
   });
 });

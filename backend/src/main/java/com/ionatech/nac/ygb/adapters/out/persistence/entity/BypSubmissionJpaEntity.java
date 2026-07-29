@@ -19,9 +19,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class BypSubmissionJpaEntity extends SubmissionJpaEntity {
-    @Column(name = "exact_age", nullable = false)
-    private int exactAge;
-
     @Column(name = "fund_receipt_duration", nullable = false)
     private String fundReceiptDuration;
 

@@ -33,7 +33,6 @@ public class AdminSubmissionPayloadMapper {
                 submission.getRespondentPhone(),
                 submission.getRespondentGender(),
                 submission.getRespondentAgeGroup(),
-                submission.getExactAge().getValue(),
                 submission.getFundReceiptDuration(),
                 submission.getFundReceiptDurationSpecify(),
                 submission.getReceivedActualAmountRequested(),
@@ -119,6 +118,7 @@ public class AdminSubmissionPayloadMapper {
                 submission.getTotalBeneficiaries(),
                 submission.getYouthBeneficiaries(),
                 submission.getYoungWomenBeneficiaries(),
+                submission.getYoungMenBeneficiaries(),
                 narrativeValue(submission.getObstaclesDescription()),
                 submission.getSpendingTargetedToMostInNeed(),
                 submission.getPdcTotalMembers(),
@@ -136,7 +136,8 @@ public class AdminSubmissionPayloadMapper {
                 submission.getProgressReportsSubmitted(),
                 narrativeValue(submission.getProgressReportsSubmittedExplanation()),
                 submission.getSelfRelianceBeneficiariesCount(),
-                submission.getSelfRelianceGroupProjectsCount()
+                submission.getSelfRelianceGroupProjectsCount(),
+                narrativeValue(submission.getProgrammeImprovementSuggestion())
         );
     }
 

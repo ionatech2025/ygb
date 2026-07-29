@@ -120,7 +120,7 @@ export function BypForm({ onSubmitted }: BypFormProps) {
         <DuplicateRespondentAlert message={errors.respondentPhone!} />
       )}
 
-      <RespondentSection value={respondent} onChange={setRespondent} showExactAge errors={errors} />
+      <RespondentSection value={respondent} onChange={setRespondent} errors={errors} />
       <BypFundSection value={byp} onChange={setByp} errors={errors} />
       <BypRatingSection value={byp} onChange={setByp} errors={errors} />
       <BypBdsSection value={byp} onChange={setByp} errors={errors} />

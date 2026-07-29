@@ -14,7 +14,6 @@ import type { ILocationRepositoryPort } from '../../../../../ports/location-repo
 export interface RespondentSectionProps {
   value: RespondentFields;
   onChange: (value: RespondentFields) => void;
-  showExactAge?: boolean;
   errors?: Partial<Record<keyof RespondentFields, string>>;
   locationRepository?: ILocationRepositoryPort;
 }
@@ -22,7 +21,6 @@ export interface RespondentSectionProps {
 export function RespondentSection({
   value,
   onChange,
-  showExactAge = false,
   errors = {},
   locationRepository,
 }: RespondentSectionProps) {
@@ -33,13 +31,16 @@ export function RespondentSection({
   };
 
   return (
-    <FormSection title="Respondent details" description="Shared demographics captured for every PDM form.">
+    <FormSection
+      title="Respondent details"
+      description="Shared demographics captured for every PDM form. Name is optional when respondents prefer anonymity."
+    >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField
           label="Name of respondent"
           htmlFor="respondentName"
-          required
           error={errors.respondentName}
+          hint="Optional — leave blank if the respondent prefers not to be named."
         >
           <input
             id="respondentName"
@@ -48,7 +49,6 @@ export function RespondentSection({
             value={value.respondentName}
             onChange={(e) => patch({ respondentName: e.target.value })}
             className={formControlClassName}
-            required
           />
         </FormField>
 
@@ -104,23 +104,6 @@ export function RespondentSection({
             ))}
           </select>
         </FormField>
-
-        {showExactAge && (
-          <FormField label="Exact age" htmlFor="exactAge" required error={errors.exactAge as string | undefined}>
-            <input
-              id="exactAge"
-              type="number"
-              min={15}
-              inputMode="numeric"
-              value={value.exactAge ?? ''}
-              onChange={(e) =>
-                patch({ exactAge: e.target.value === '' ? undefined : Number(e.target.value) })
-              }
-              className={formControlClassName}
-              required
-            />
-          </FormField>
-        )}
       </div>
 
       <CascadingLocationSelector

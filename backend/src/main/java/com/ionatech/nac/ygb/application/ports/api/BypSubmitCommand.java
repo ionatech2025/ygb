@@ -19,7 +19,6 @@ public record BypSubmitCommand(
         String respondentPhone,
         String respondentGender,
         AgeGroup respondentAgeGroup,
-        int exactAge,
         String fundReceiptDuration,
         String fundReceiptDurationSpecify,
         Boolean receivedActualAmountRequested,

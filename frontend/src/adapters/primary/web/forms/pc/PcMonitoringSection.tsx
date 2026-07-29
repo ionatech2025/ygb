@@ -1,6 +1,7 @@
 import {
   MONITORED_BY_OPTIONS,
   MONITORED_BY_OTHER_VALUE,
+  requiresImprovementsSeenExplanation,
   type PcFormFields,
 } from '../../../../../core/domain/pc-form.model';
 import { FormSection, MultiCheckboxGroup, NarrativeTextarea, YesNoRadioGroup } from '../../components/forms';
@@ -15,9 +16,11 @@ export function PcMonitoringSection({ value, onChange, errors }: PcMonitoringSec
   const patch = (partial: Partial<PcFormFields>) => onChange({ ...value, ...partial });
 
   return (
-    <FormSection title="Monitoring & Oversight" description="Who monitored the programme and how">
+    <FormSection title="PDM Programme Monitoring and Oversight" description="Section D — Questions 15–20">
+      <p className="text-xs text-text-muted">Q15. Did anyone monitor the programme execution in your parish?</p>
+
       <MultiCheckboxGroup
-        legend="Who monitored the programme?"
+        legend="Q16. If yes, who monitored the programme? (select all that apply)"
         options={MONITORED_BY_OPTIONS.map((option) => ({
           value: option.value,
           label: option.label,
@@ -42,7 +45,7 @@ export function PcMonitoringSection({ value, onChange, errors }: PcMonitoringSec
 
       <NarrativeTextarea
         id="monitoringMethod"
-        label="Monitoring method"
+        label="Q17. How was the monitoring carried out?"
         value={value.monitoringMethod}
         onChange={(text) => patch({ monitoringMethod: text })}
         required
@@ -55,12 +58,47 @@ export function PcMonitoringSection({ value, onChange, errors }: PcMonitoringSec
 
       <YesNoRadioGroup
         name="reportSharedWithRespondent"
-        label="Was the monitoring report shared with the respondent?"
+        label="Q18. Was the monitoring report shared with you?"
         value={value.reportSharedWithRespondent}
         onChange={(choice) => patch({ reportSharedWithRespondent: choice })}
         required
         error={errors.reportSharedWithRespondent}
       />
+
+      <YesNoRadioGroup
+        name="improvementsSeen"
+        label="Q19. Did you see any improvements in the PDM programme service delivery with the monitoring recommendations?"
+        value={value.improvementsSeen}
+        onChange={(choice) =>
+          patch({
+            improvementsSeen: choice,
+            improvementsSeenExplanation: choice ? value.improvementsSeenExplanation : '',
+          })
+        }
+        required
+        error={errors.improvementsSeen}
+      />
+
+      {value.improvementsSeen !== true && (
+        <p className="text-xs text-text-muted">Q20. If yes, in what areas?</p>
+      )}
+
+      {requiresImprovementsSeenExplanation(value.improvementsSeen) && (
+        <>
+          <NarrativeTextarea
+            id="improvementsSeenExplanation"
+            label="Q20. If yes, in what areas?"
+            value={value.improvementsSeenExplanation}
+            onChange={(text) => patch({ improvementsSeenExplanation: text })}
+            required
+          />
+          {errors.improvementsSeenExplanation && (
+            <p className="text-[11px] text-rose-600" role="alert">
+              {errors.improvementsSeenExplanation}
+            </p>
+          )}
+        </>
+      )}
     </FormSection>
   );
 }
