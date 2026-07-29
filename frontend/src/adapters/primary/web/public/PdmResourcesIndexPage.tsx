@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Landmark, ListChecks, Wallet, type LucideIcon } from 'lucide-react';
+import { usePageMeta } from '../../../../core/hooks/usePageMeta';
+import { PAGE_META } from '../../../../core/seo/site-meta';
 import { PDM_RESOURCE_PAGES, type PdmResourceSlug } from '../../../../core/content/pdmPublicInfoSections';
 import {
   PUBLIC_RESOURCE_CARD_ACCENTS,
@@ -13,6 +15,7 @@ const RESOURCE_ICONS: Record<PdmResourceSlug, LucideIcon> = {
 };
 
 export function PdmResourcesIndexPage() {
+  usePageMeta(PAGE_META.resources);
   return (
     <div className={publicResourcesClasses.page} data-testid="pdm-resources-index">
       <header className={publicResourcesClasses.hero} data-testid="pdm-resources-hero">

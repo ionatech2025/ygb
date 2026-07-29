@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import { BarChart3, LayoutDashboard, ShieldCheck, Sparkles, Zap } from 'lucide-react';
+import { usePageMeta } from '../../../../core/hooks/usePageMeta';
+import { PAGE_META } from '../../../../core/seo/site-meta';
 import { publicDashboardClasses } from '../../../../core/domain/public-dashboard.theme';
 import { HttpPublicDashboardAdapter } from '../../../secondary/api/public-dashboard-api.adapter';
 import { PublicDashboardFilterPanel } from './PublicDashboardFilterPanel';
@@ -9,6 +11,7 @@ import { PublicDashboardCharts } from './PublicDashboardCharts';
 
 export function PublicDashboardHome() {
   const dashboardApi = useMemo(() => new HttpPublicDashboardAdapter(), []);
+  usePageMeta(PAGE_META.publicDashboard);
 
   return (
     <div className={publicDashboardClasses.page} data-testid="public-dashboard-home">

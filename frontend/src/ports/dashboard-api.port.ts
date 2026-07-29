@@ -8,7 +8,7 @@ export interface DashboardFilterOptions {
   formTypes: string[];
   genders: string[];
   ageGroups: string[];
-  collectors: Array<{ id: string; fullName: string }>;
+  collectors: Array<{ id: string; name: string }>;
   financialYearPeriods: string[];
 }
 

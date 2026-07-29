@@ -1,5 +1,6 @@
 import { ChevronDown } from 'lucide-react';
-import { useId, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type CSSProperties, type RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import { formControlClassName } from './FormField';
 
 export interface FormSelectOption {
@@ -15,9 +16,11 @@ export interface FormSelectProps {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
-  /** Collapsed trigger + expandable list — use for long option lists (e.g. locations). */
-  collapsible?: boolean;
+  testId?: string;
 }
+
+const OPTION_LIST_BASE_CLASS_NAME =
+  'z-50 overflow-y-auto overscroll-contain rounded-xl border border-border divide-y divide-border bg-surface shadow-lg';
 
 function optionRowClassName(selected: boolean, disabled?: boolean): string {
   return [
@@ -25,6 +28,14 @@ function optionRowClassName(selected: boolean, disabled?: boolean): string {
     disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:bg-surface-muted/80',
     selected ? 'bg-brand-light/40 dark:bg-brand/15' : 'bg-surface',
   ].join(' ');
+}
+
+function optionInputId(id: string, value: string): string {
+  return `${id}-opt-${value || '__empty__'}`;
+}
+
+function maxPanelHeight(): number {
+  return Math.min(280, window.innerHeight * 0.4);
 }
 
 function OptionList({
@@ -36,6 +47,8 @@ function OptionList({
   options,
   disabled,
   required,
+  listRef,
+  style,
 }: {
   id: string;
   containerId: string;
@@ -45,20 +58,24 @@ function OptionList({
   options: readonly FormSelectOption[];
   disabled?: boolean;
   required?: boolean;
+  listRef: RefObject<HTMLDivElement | null>;
+  style: CSSProperties;
 }) {
   return (
     <div
+      ref={listRef}
       id={containerId}
-      role="radiogroup"
+      role="listbox"
       aria-labelledby={`${id}-label`}
-      className="overflow-hidden rounded-xl border border-border divide-y divide-border"
+      className={OPTION_LIST_BASE_CLASS_NAME}
+      style={style}
       data-testid={`${id}-option-list`}
     >
       {options.map((option) => {
         const selected = value === option.value;
-        const inputId = `${id}-${option.value}`;
+        const inputId = optionInputId(id, option.value);
         return (
-          <label key={option.value} htmlFor={inputId} className={optionRowClassName(selected, disabled)}>
+          <label key={option.value || '__empty__'} htmlFor={inputId} className={optionRowClassName(selected, disabled)}>
             <input
               id={inputId}
               type="radio"
@@ -86,43 +103,104 @@ export function FormSelect({
   placeholder = 'Select…',
   disabled = false,
   required = false,
-  collapsible = false,
+  testId,
 }: FormSelectProps) {
   const groupName = useId();
   const listId = `${id}-listbox`;
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const [panelStyle, setPanelStyle] = useState<CSSProperties>({});
   const selectedLabel = options.find((option) => option.value === value)?.label;
+
+  const updatePanelPosition = useCallback(() => {
+    const trigger = triggerRef.current;
+    if (!trigger) {
+      return;
+    }
+
+    const rect = trigger.getBoundingClientRect();
+    const gap = 4;
+    const panelMaxHeight = maxPanelHeight();
+    const spaceBelow = window.innerHeight - rect.bottom - gap;
+    const spaceAbove = rect.top - gap;
+    const openUpward = spaceBelow < panelMaxHeight && spaceAbove > spaceBelow;
+    const availableHeight = openUpward ? spaceAbove : spaceBelow;
+
+    setPanelStyle({
+      position: 'fixed',
+      left: rect.left,
+      width: rect.width,
+      maxHeight: Math.max(120, Math.min(panelMaxHeight, availableHeight)),
+      ...(openUpward
+        ? { bottom: window.innerHeight - rect.top + gap }
+        : { top: rect.bottom + gap }),
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+
+    updatePanelPosition();
+
+    const onPointerDown = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (!triggerRef.current?.contains(target) && !listRef.current?.contains(target)) {
+        setOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    };
+    const onLayoutChange = () => updatePanelPosition();
+
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    window.addEventListener('resize', onLayoutChange);
+    window.addEventListener('scroll', onLayoutChange, true);
+
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('resize', onLayoutChange);
+      window.removeEventListener('scroll', onLayoutChange, true);
+    };
+  }, [open, updatePanelPosition]);
 
   const handleChange = (nextValue: string) => {
     onChange(nextValue);
-    if (collapsible) {
-      setOpen(false);
-    }
+    setOpen(false);
   };
 
-  if (collapsible) {
-    return (
-      <div className="space-y-2">
-        <button
-          type="button"
-          id={id}
-          role="combobox"
-          aria-expanded={open}
-          aria-controls={listId}
-          aria-labelledby={`${id}-label`}
-          disabled={disabled}
-          onClick={() => setOpen((current) => !current)}
-          className={`${formControlClassName} flex items-center justify-between gap-2 text-left disabled:cursor-not-allowed`}
-        >
-          <span className={`min-w-0 flex-1 truncate ${selectedLabel ? 'text-text' : 'text-text-muted'}`}>
-            {selectedLabel ?? placeholder}
-          </span>
-          <ChevronDown
-            className={`h-4 w-4 shrink-0 text-text-muted transition-transform ${open ? 'rotate-180' : ''}`}
-            aria-hidden="true"
-          />
-        </button>
-        {open && (
+  return (
+    <div className="relative">
+      <button
+        ref={triggerRef}
+        type="button"
+        id={id}
+        role="combobox"
+        aria-expanded={open}
+        aria-controls={listId}
+        aria-labelledby={`${id}-label`}
+        disabled={disabled}
+        data-testid={testId}
+        onClick={() => setOpen((current) => !current)}
+        className={`${formControlClassName} flex items-center justify-between gap-2 text-left disabled:cursor-not-allowed`}
+      >
+        <span className={`min-w-0 flex-1 truncate ${selectedLabel ? 'text-text' : 'text-text-muted'}`}>
+          {selectedLabel ?? placeholder}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-text-muted transition-transform ${open ? 'rotate-180' : ''}`}
+          aria-hidden="true"
+        />
+      </button>
+      {open &&
+        createPortal(
           <OptionList
             id={id}
             containerId={listId}
@@ -132,22 +210,11 @@ export function FormSelect({
             options={options}
             disabled={disabled}
             required={required}
-          />
+            listRef={listRef}
+            style={panelStyle}
+          />,
+          document.body
         )}
-      </div>
-    );
-  }
-
-  return (
-    <OptionList
-      id={id}
-      containerId={id}
-      groupName={groupName}
-      value={value}
-      onChange={handleChange}
-      options={options}
-      disabled={disabled}
-      required={required}
-    />
+    </div>
   );
 }

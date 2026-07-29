@@ -6,6 +6,7 @@ import { EMPTY_DASHBOARD_FILTER } from '../../../../core/domain/dashboard-filter
 import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
 import { useDashboardFilterStore } from '../../../../core/store/useDashboardFilterStore';
 
+import { chooseFormOptionById } from '../../../../test-utils/choose-form-option';
 import {
   KAMPALA_CENTRAL_DIVISION_ID,
   KAMPALA_CENTRAL_PARISH_ID,
@@ -28,7 +29,7 @@ function createDashboardApi(
       formTypes: ['BYP'],
       genders: ['MALE'],
       ageGroups: ['AGE_18_24'],
-      collectors: [{ id: 'c1', fullName: 'Jane Collector' }],
+      collectors: [{ id: 'c1', name: 'Jane Collector' }],
       financialYearPeriods: ['JAN_JUN_2026'],
     })),
     buildFilterQueryString: vi.fn(),
@@ -89,13 +90,14 @@ describe('DashboardFilterPanel', () => {
     render(<DashboardFilterPanel dashboardApi={dashboardApi} />);
 
     await waitFor(() => expect(screen.getByLabelText(/^District/i)).not.toBeDisabled());
-    await user.selectOptions(screen.getByLabelText(/^District/i), district.id);
+    await chooseFormOptionById(user, 'admin-filter-district', district.id);
 
     await waitFor(() => {
       expect(screen.getByLabelText(/Sub-county/i)).not.toBeDisabled();
     });
 
-    expect(screen.getByLabelText(/Sub-county/i)).toHaveTextContent('Kampala Central Division');
+    await user.click(screen.getByLabelText(/Sub-county/i));
+    expect(screen.getByRole('radio', { name: 'Kampala Central Division' })).toBeInTheDocument();
     expect(useDashboardFilterStore.getState().filter.districtId).toBe(district.id);
   });
 

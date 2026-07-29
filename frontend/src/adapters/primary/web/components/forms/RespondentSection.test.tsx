@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { AdminLocation } from '../../../../../core/domain/admin-location.model';
 import type { ILocationRepositoryPort } from '../../../../../ports/location-repository.port';
@@ -44,7 +45,8 @@ describe('RespondentSection', () => {
     expect(screen.getByLabelText(/age group/i)).toBeInTheDocument();
   });
 
-  it('renders programme target age brackets', () => {
+  it('renders programme target age brackets', async () => {
+    const user = userEvent.setup();
     render(
       <RespondentSection
         value={EMPTY_RESPONDENT_FIELDS}
@@ -54,6 +56,8 @@ describe('RespondentSection', () => {
     );
 
     const ageGroup = screen.getByLabelText(/age group/i);
+    await user.click(ageGroup);
+
     expect(screen.getByRole('radio', { name: '18-24' })).toBeInTheDocument();
     expect(screen.getByRole('radio', { name: '25-29' })).toBeInTheDocument();
     expect(screen.getByRole('radio', { name: '30-35' })).toBeInTheDocument();

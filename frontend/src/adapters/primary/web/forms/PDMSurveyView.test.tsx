@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
@@ -41,10 +41,14 @@ describe('PDMSurveyView', () => {
     useAuthStore.setState({ isInitialized: true });
   });
 
-  it('lists exactly BYP, IYP, LGO, PC in that order (TC-FORM-01-01)', () => {
+  it('lists exactly BYP, IYP, LGO, PC in that order (TC-FORM-01-01)', async () => {
+    const user = userEvent.setup();
     render(<PDMSurveyView />);
 
-    const options = screen.getAllByRole('radio');
+    const categoryField = screen.getByLabelText(/respondent category/i);
+    await user.click(categoryField);
+
+    const options = within(document.getElementById('pdm-category-listbox')!).getAllByRole('radio');
     expect(options).toHaveLength(4);
     expect(options.map((option) => option.closest('label')?.textContent?.trim())).toEqual(
       FORM_TYPE_OPTIONS.map((option) => option.label)

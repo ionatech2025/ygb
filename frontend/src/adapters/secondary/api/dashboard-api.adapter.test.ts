@@ -11,6 +11,32 @@ describe('dashboard-api.adapter', () => {
     vi.unstubAllGlobals();
   });
 
+  it('maps collector filter option name from the API response', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          districts: [],
+          subcounties: [],
+          parishes: [],
+          formTypes: [],
+          genders: [],
+          ageGroups: [],
+          collectors: [{ id: '22222222-2222-2222-2222-222222222222', name: 'Jane Collector' }],
+          financialYearPeriods: [],
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const adapter = new HttpDashboardAdapter(() => 'admin-token');
+    const options = await adapter.fetchFilterOptions();
+
+    expect(options.collectors).toEqual([
+      { id: '22222222-2222-2222-2222-222222222222', name: 'Jane Collector' },
+    ]);
+  });
+
   it('maps overTime bucketStart to date for chart rendering', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
