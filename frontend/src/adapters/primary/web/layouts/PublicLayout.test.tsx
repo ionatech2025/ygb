@@ -63,6 +63,7 @@ describe('PublicLayout', () => {
   it('renders Dashboard, Budget Priorities, LGO Budget, and Resources links without auth context', () => {
     renderPublicLayout();
 
+    expect(screen.getByTestId('public-seo-json-ld')).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Public sections' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
     expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveAttribute(

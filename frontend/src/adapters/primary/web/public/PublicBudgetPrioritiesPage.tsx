@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart3, ClipboardList, LayoutDashboard, ShieldCheck, Sparkles } from 'lucide-react';
+import { usePageMeta } from '../../../../core/hooks/usePageMeta';
+import { PAGE_META } from '../../../../core/seo/site-meta';
 import { BUDGET_PRIORITY_ROUTES } from '../../../../core/domain/budget-priority.routes';
 import { budgetPrioritiesClasses } from '../../../../core/domain/budget-priorities.theme';
 import { HttpBudgetPriorityDashboardAdapter } from '../../../secondary/api/budget-priority-dashboard-api.adapter';
@@ -11,6 +13,7 @@ import { BudgetPriorityExportToolbar } from './BudgetPriorityExportToolbar';
 
 export function PublicBudgetPrioritiesPage() {
   const dashboardApi = useMemo(() => new HttpBudgetPriorityDashboardAdapter(), []);
+  usePageMeta(PAGE_META.budgetPrioritiesDashboard);
 
   return (
     <div className={budgetPrioritiesClasses.dashboardPage} data-testid="public-budget-priorities-dashboard">

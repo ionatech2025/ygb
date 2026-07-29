@@ -1,4 +1,4 @@
-import { FormField, formControlClassName } from '../components/forms/FormField';
+import { FormField, FormSelect, formControlClassName } from '../components/forms';
 import {
   AGE_GROUP_LABELS,
   AGE_GROUP_VALUES,
@@ -55,54 +55,48 @@ export function LgoBudgetAllocationScalarFilters({
       </FormField>
 
       <FormField label="Gender" htmlFor="lgo-filter-gender">
-        <select
+        <FormSelect
           id="lgo-filter-gender"
-          data-testid="lgo-filter-gender"
+          testId="lgo-filter-gender"
           value={filter.gender}
-          onChange={(e) => onChange({ gender: e.target.value as typeof filter.gender })}
-          className={formControlClassName}
-        >
-          <option value="">All genders</option>
-          {GENDER_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => onChange({ gender: value as typeof filter.gender })}
+          options={[
+            { value: '', label: 'All genders' },
+            ...GENDER_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
+          ]}
+          placeholder="All genders"
+        />
       </FormField>
 
       <FormField label="Age group" htmlFor="lgo-filter-age-group">
-        <select
+        <FormSelect
           id="lgo-filter-age-group"
-          data-testid="lgo-filter-age-group"
+          testId="lgo-filter-age-group"
           value={filter.ageGroup}
-          onChange={(e) => onChange({ ageGroup: e.target.value as typeof filter.ageGroup })}
-          className={formControlClassName}
-        >
-          <option value="">All age groups</option>
-          {AGE_GROUP_VALUES.map((value) => (
-            <option key={value} value={value}>
-              {AGE_GROUP_LABELS[value]}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => onChange({ ageGroup: value as typeof filter.ageGroup })}
+          options={[
+            { value: '', label: 'All age groups' },
+            ...AGE_GROUP_VALUES.map((value) => ({ value, label: AGE_GROUP_LABELS[value] })),
+          ]}
+          placeholder="All age groups"
+        />
       </FormField>
 
       <FormField label="Financial year period" htmlFor="lgo-filter-financial-year">
-        <select
+        <FormSelect
           id="lgo-filter-financial-year"
-          data-testid="lgo-filter-financial-year"
+          testId="lgo-filter-financial-year"
           value={filter.financialYearPeriod}
-          onChange={(e) => onChange({ financialYearPeriod: e.target.value })}
-          className={formControlClassName}
-        >
-          <option value="">All periods</option>
-          {financialYearPeriods.map((period) => (
-            <option key={period} value={period}>
-              {labelFromFinancialYearPeriodKey(period)}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => onChange({ financialYearPeriod: value })}
+          options={[
+            { value: '', label: 'All periods' },
+            ...financialYearPeriods.map((period) => ({
+              value: period,
+              label: labelFromFinancialYearPeriodKey(period),
+            })),
+          ]}
+          placeholder="All periods"
+        />
       </FormField>
     </div>
   );

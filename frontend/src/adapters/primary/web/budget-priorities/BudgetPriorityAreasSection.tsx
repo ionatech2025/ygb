@@ -25,7 +25,7 @@ export function BudgetPriorityAreasSection({
       description="Select the budget areas that matter most to you. Choose at least one."
     >
       <MultiCheckboxGroup
-        legend="Which areas should receive priority funding?"
+        legend="Which areas should receive priority funding? (select all that apply)"
         options={config.priorityAreas}
         selected={rankedAreas}
         onChange={onChange}

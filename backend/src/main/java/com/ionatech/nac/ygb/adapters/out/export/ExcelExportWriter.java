@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.util.function.Consumer;
 public class ExcelExportWriter {
 
     void write(OutputStream output, Consumer<Consumer<SubmissionSummary>> summaryStream) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try (SXSSFWorkbook workbook = new SXSSFWorkbook(100)) {
             Sheet sheet = workbook.createSheet("Submissions");
             CreationHelper creationHelper = workbook.getCreationHelper();
@@ -37,9 +39,11 @@ public class ExcelExportWriter {
                 writeRow(row, summary, dateTimeStyle);
             });
 
-            workbook.write(output);
-            workbook.dispose();
+            workbook.write(buffer);
         }
+
+        buffer.writeTo(output);
+        output.flush();
     }
 
     private void writeRow(Row row, SubmissionSummary summary, CellStyle dateTimeStyle) {

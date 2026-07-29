@@ -30,8 +30,18 @@ interface BackendFilterOptionsResponse {
   formTypes: string[];
   genders: string[];
   ageGroups: string[];
-  collectors: Array<{ id: string; fullName: string }>;
+  collectors: Array<{ id: string; name: string }>;
   financialYearPeriods: string[];
+}
+
+function mapFilterOptionsResponse(response: BackendFilterOptionsResponse): DashboardFilterOptions {
+  return {
+    ...response,
+    collectors: response.collectors.map((collector) => ({
+      id: String(collector.id),
+      name: collector.name,
+    })),
+  };
 }
 
 export class HttpDashboardAdapter implements IDashboardApiPort {
@@ -52,10 +62,12 @@ export class HttpDashboardAdapter implements IDashboardApiPort {
     if (subcountyId) params.set('subcountyId', subcountyId);
     const query = params.toString();
 
-    return apiFetch<BackendFilterOptionsResponse>(
-      `/api/v1/admin/dashboard/filters/options${query ? `?${query}` : ''}`,
-      { method: 'GET' },
-      token
+    return mapFilterOptionsResponse(
+      await apiFetch<BackendFilterOptionsResponse>(
+        `/api/v1/admin/dashboard/filters/options${query ? `?${query}` : ''}`,
+        { method: 'GET' },
+        token
+      )
     );
   }
 

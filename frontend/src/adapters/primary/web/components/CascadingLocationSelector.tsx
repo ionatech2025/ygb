@@ -38,7 +38,6 @@ function LocationSelect({
         onChange={onSelect}
         options={options.map((option) => ({ value: option.id, label: option.name }))}
         placeholder={placeholder}
-        collapsible
         required
       />
     </FormField>

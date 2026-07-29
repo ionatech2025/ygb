@@ -7,7 +7,7 @@ import {
 import { ApiError } from '../../../../core/api/api-client';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import type { ActiveFiscalYearSetting } from '../../../../core/domain/active-fiscal-year.model';
-import { FormField, formControlClassName } from '../components/forms';
+import { FormField, FormSelect } from '../components/forms';
 import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 
 export function AdminFiscalYearSettingsPanel() {
@@ -121,18 +121,16 @@ export function AdminFiscalYearSettingsPanel() {
       {!loading && setting && (
         <>
           <FormField label="Current active fiscal year" htmlFor="adminActiveFiscalYearLabel" required>
-            <select
+            <FormSelect
               id="adminActiveFiscalYearLabel"
               value={selectedLabel}
-              onChange={(event) => setSelectedLabel(event.target.value)}
-              className={formControlClassName}
-            >
-              {setting.supportedLabels.map((label) => (
-                <option key={label} value={label}>
-                  FY {label}
-                </option>
-              ))}
-            </select>
+              onChange={setSelectedLabel}
+              required
+              options={setting.supportedLabels.map((label) => ({
+                value: label,
+                label: `FY ${label}`,
+              }))}
+            />
           </FormField>
 
           {setting.priorFiscalYearLabel && (

@@ -1,8 +1,10 @@
 package com.ionatech.nac.ygb.adapters.out.persistence;
 
+import com.ionatech.nac.ygb.adapters.out.export.AdminDashboardReportAssembler;
 import com.ionatech.nac.ygb.adapters.out.export.CsvExportWriter;
 import com.ionatech.nac.ygb.adapters.out.export.ExcelExportWriter;
 import com.ionatech.nac.ygb.adapters.out.export.PdfExportWriter;
+import com.ionatech.nac.ygb.adapters.out.export.PdfVectorChartRenderer;
 import com.ionatech.nac.ygb.adapters.out.export.SubmissionExportAdapter;
 import com.ionatech.nac.ygb.adapters.out.persistence.mapper.SubmissionMapper;
 import com.ionatech.nac.ygb.adapters.out.persistence.repository.SubmissionJpaRepository;
@@ -47,6 +49,8 @@ import static org.assertj.core.api.Assertions.assertThat;
         AdminSubmissionQueryJpaRepository.class,
         DashboardAggregationJpaRepository.class,
         DashboardAggregationRepositoryAdapter.class,
+        AdminDashboardReportAssembler.class,
+        PdfVectorChartRenderer.class,
         CsvExportWriter.class,
         ExcelExportWriter.class,
         PdfExportWriter.class,

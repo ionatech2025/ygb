@@ -18,7 +18,7 @@ import type { SubmissionSummary } from '../../../../core/domain/submission-admin
 import { HttpDashboardAdapter } from '../../../secondary/api/dashboard-api.adapter';
 import { HttpUserAdapter } from '../../../secondary/api/http-user.adapter';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
-import { FormField, formControlClassName } from '../components/forms/FormField';
+import { FormField, FormSelect, formControlClassName } from '../components/forms';
 import type { IUserRepositoryPort } from '../../../../ports/user-repository.port';
 import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
 
@@ -201,54 +201,48 @@ export function CollectorProfilePage({
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           <FormField label="Form type" htmlFor="profile-form-type">
-            <select
+            <FormSelect
               id="profile-form-type"
+              testId="collector-profile-form-type"
               value={filter.formType}
-              onChange={(e) => updateFilter({ formType: e.target.value as CollectorProfileFilter['formType'] })}
-              className={formControlClassName}
-              data-testid="collector-profile-form-type"
-            >
-              <option value="">All form types</option>
-              {FORM_TYPE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => updateFilter({ formType: value as CollectorProfileFilter['formType'] })}
+              options={[
+                { value: '', label: 'All form types' },
+                ...FORM_TYPE_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
+              ]}
+              placeholder="All form types"
+            />
           </FormField>
 
           <FormField label="District" htmlFor="profile-district">
-            <select
+            <FormSelect
               id="profile-district"
+              testId="collector-profile-district"
               value={filter.districtId}
-              onChange={(e) => updateFilter({ districtId: e.target.value })}
-              className={formControlClassName}
-              data-testid="collector-profile-district"
-            >
-              <option value="">All districts</option>
-              {districts.map((district) => (
-                <option key={district.id} value={district.id}>
-                  {district.name}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => updateFilter({ districtId: value })}
+              options={[
+                { value: '', label: 'All districts' },
+                ...districts.map((district) => ({ value: district.id, label: district.name })),
+              ]}
+              placeholder="All districts"
+            />
           </FormField>
 
           <FormField label="Financial year period" htmlFor="profile-fy-period">
-            <select
+            <FormSelect
               id="profile-fy-period"
+              testId="collector-profile-fy-period"
               value={filter.financialYearPeriod}
-              onChange={(e) => updateFilter({ financialYearPeriod: e.target.value })}
-              className={formControlClassName}
-              data-testid="collector-profile-fy-period"
-            >
-              <option value="">All periods</option>
-              {financialYearPeriods.map((period) => (
-                <option key={period} value={period}>
-                  {labelFromFinancialYearPeriodKey(period)}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => updateFilter({ financialYearPeriod: value })}
+              options={[
+                { value: '', label: 'All periods' },
+                ...financialYearPeriods.map((period) => ({
+                  value: period,
+                  label: labelFromFinancialYearPeriodKey(period),
+                })),
+              ]}
+              placeholder="All periods"
+            />
           </FormField>
 
           <FormField label="Date from" htmlFor="profile-date-from">

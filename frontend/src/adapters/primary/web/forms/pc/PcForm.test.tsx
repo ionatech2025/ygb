@@ -145,11 +145,14 @@ describe('PcForm', () => {
     expect(screen.getByRole('heading', { name: 'PDM Programme Monitoring and Oversight' })).toBeInTheDocument();
   });
 
-  it('effectiveness picker shows five new labels only', () => {
+  it('effectiveness picker shows five new labels only', async () => {
+    const user = userEvent.setup();
     render(<PcForm />);
 
     const effectivenessGroup = screen.getByLabelText(/Q14\. How effective are the PDC members/i);
-    const optionLabels = within(effectivenessGroup)
+    await user.click(effectivenessGroup);
+
+    const optionLabels = within(document.getElementById(`${effectivenessGroup.id}-listbox`)!)
       .getAllByRole('radio')
       .map((radio) => radio.closest('label')?.textContent?.trim())
       .filter(Boolean);

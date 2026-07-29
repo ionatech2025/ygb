@@ -6,6 +6,8 @@ import { loginPortalClasses } from '../../../../core/domain/admin-dashboard.them
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { isValidUgandaPhoneLocal } from '../../../../core/utils/phone-utils';
 import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
+import { usePageMeta } from '../../../../core/hooks/usePageMeta';
+import { PAGE_META } from '../../../../core/seo/site-meta';
 import { FormField, formControlClassName, PasswordInput } from '../components/forms';
 import { PwaInstallBanner } from '../components/PwaInstallBanner';
 import { ThemeToggle } from '../components/ThemeToggle';
@@ -47,6 +49,8 @@ export function PortalLogin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const formSectionRef = useRef<HTMLElement>(null);
+
+  usePageMeta(PAGE_META.login);
 
   const scrollToSignIn = () => {
     formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -90,55 +94,49 @@ export function PortalLogin() {
       </div>
 
       <div className="relative mx-auto flex max-w-6xl flex-col lg:min-h-dvh lg:flex-row">
-        <section className={loginPortalClasses.brandPanel}>
-          <div className={loginPortalClasses.brandRadial} />
-          <div className={loginPortalClasses.brandGrid} />
+        <section className={loginPortalClasses.brandPanel} aria-label="About the Youth Go Budget App">
+          <span className={loginPortalClasses.brandAccent} aria-hidden="true" />
 
           <div className="relative z-10 flex items-center justify-between gap-3 pt-8 lg:pt-0">
             <div className="flex min-w-0 items-center gap-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-nac-orange text-sm font-black tracking-wider shadow-lg shadow-nac-orange/25">
+              <span className={loginPortalClasses.brandMonogram} aria-hidden="true">
                 YGB
               </span>
               <div className="min-w-0">
-                <p className="truncate text-xs font-bold uppercase tracking-wide text-blue-100">Youth Go Budget App</p>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-orange-200/90">Survey Platform</p>
+                <p className={loginPortalClasses.brandEyebrow}>Staff portal</p>
+                <p className={loginPortalClasses.brandSubtitle}>Youth Go Budget App</p>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={scrollToSignIn}
-              className="inline-flex min-h-10 shrink-0 items-center rounded-xl border border-white/20 bg-white/10 px-4 text-xs font-bold text-white backdrop-blur-sm transition hover:border-white/30 hover:bg-white/15 lg:hidden"
-            >
+            <button type="button" onClick={scrollToSignIn} className={loginPortalClasses.mobileSignInButton}>
               Sign in
             </button>
           </div>
 
           <div className="relative z-10 my-8 max-w-xl space-y-6 lg:my-auto">
-            <span className="inline-flex items-center rounded-full border border-orange-400/30 bg-orange-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-orange-100 backdrop-blur-sm">
-              Official Portal
-            </span>
-            <h1 className="text-2xl font-black leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+            <span className={loginPortalClasses.officialBadge}>Official portal</span>
+            <h1 className={loginPortalClasses.headline}>
               Collecting insights to drive active community action.
             </h1>
-            <p className="max-w-lg text-sm leading-relaxed text-blue-100/90">
-              Welcome to the YGB Survey Tool. Collect feedback safely, manage field teams, and track progress across target communities.
+            <p className={loginPortalClasses.lead}>
+              Welcome to the YGB Survey Tool. Collect feedback safely, manage field teams, and track progress across
+              target communities.
             </p>
             <ul className="grid gap-3 sm:grid-cols-2">
               {FEATURES.map(({ icon: Icon, title, detail }) => (
                 <li key={title} className={loginPortalClasses.featureCard}>
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-nac-orange/20 text-nac-orange">
+                  <span className={loginPortalClasses.featureIcon}>
                     <Icon className="h-4 w-4" aria-hidden="true" />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-white">{title}</p>
-                    <p className="mt-0.5 text-xs leading-relaxed text-blue-100/80">{detail}</p>
+                    <p className={loginPortalClasses.featureTitle}>{title}</p>
+                    <p className={loginPortalClasses.featureDetail}>{detail}</p>
                   </div>
                 </li>
               ))}
             </ul>
           </div>
 
-          <p className="relative z-10 mt-6 hidden text-xs text-blue-200/70 lg:mt-0 lg:block">
+          <p className={`relative z-10 mt-6 hidden lg:mt-0 lg:block ${loginPortalClasses.footerCopy}`}>
             &copy; {new Date().getFullYear()} Youth Go Budget App
           </p>
         </section>
@@ -215,7 +213,7 @@ export function PortalLogin() {
           </div>
         </section>
 
-        <p className="order-3 px-4 pb-8 text-center text-xs text-text-muted lg:hidden">
+        <p className={`order-3 px-4 pb-8 text-center lg:hidden ${loginPortalClasses.footerCopy}`}>
           &copy; {new Date().getFullYear()} Youth Go Budget App
         </p>
       </div>

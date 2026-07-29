@@ -180,11 +180,7 @@ class AdminSubmissionControllerTest {
     void shouldReturnCsvExportWithCorrectHeaders() throws Exception {
         stubExport(ExportFormat.CSV, "ID,Form Type\n");
 
-        MvcResult asyncResult = mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "csv"))
-                .andExpect(request().asyncStarted())
-                .andReturn();
-
-        mockMvc.perform(asyncDispatch(asyncResult))
+        mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "csv"))
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("text/csv")))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString("attachment")))
@@ -196,11 +192,7 @@ class AdminSubmissionControllerTest {
     void shouldReturnExcelExportWithCorrectHeaders() throws Exception {
         stubExport(ExportFormat.XLSX, new byte[]{1, 2, 3});
 
-        MvcResult asyncResult = mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "xlsx"))
-                .andExpect(request().asyncStarted())
-                .andReturn();
-
-        mockMvc.perform(asyncDispatch(asyncResult))
+        mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "xlsx"))
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("spreadsheetml.sheet")))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".xlsx")));
@@ -211,11 +203,7 @@ class AdminSubmissionControllerTest {
     void shouldReturnPdfExportWithCorrectHeaders() throws Exception {
         stubExport(ExportFormat.PDF, "%PDF-1.4");
 
-        MvcResult asyncResult = mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "pdf"))
-                .andExpect(request().asyncStarted())
-                .andReturn();
-
-        mockMvc.perform(asyncDispatch(asyncResult))
+        mockMvc.perform(get("/api/v1/admin/submissions/export").param("format", "pdf"))
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("application/pdf")))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".pdf")));
