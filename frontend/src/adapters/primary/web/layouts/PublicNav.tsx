@@ -6,7 +6,7 @@ import { LGO_BUDGET_ALLOCATION_ROUTES } from '../../../../core/domain/lgo-budget
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: BUDGET_PRIORITY_ROUTES.index, label: 'Budget Priorities', icon: ClipboardList, end: false },
-  { to: LGO_BUDGET_ALLOCATION_ROUTES.dashboard, label: 'LGO Budget', icon: Landmark, end: true },
+  { to: LGO_BUDGET_ALLOCATION_ROUTES.dashboard, label: 'LG Budget', icon: Landmark, end: true },
   { to: '/resources', label: 'Resources', icon: BookOpen, end: true },
 ] as const;
 

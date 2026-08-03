@@ -60,7 +60,7 @@ function renderPublicLayout(initialPath = '/dashboard') {
 }
 
 describe('PublicLayout', () => {
-  it('renders Dashboard, Budget Priorities, LGO Budget, and Resources links without auth context', () => {
+  it('renders Dashboard, Budget Priorities, LG Budget, and Resources links without auth context', () => {
     renderPublicLayout();
 
     expect(screen.getByTestId('public-seo-json-ld')).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe('PublicLayout', () => {
       'href',
       '/budget-priorities'
     );
-    expect(screen.getByRole('link', { name: 'LGO Budget' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'LG Budget' })).toHaveAttribute(
       'href',
       '/dashboard/lgo-budget-allocation'
     );
@@ -88,9 +88,9 @@ describe('PublicLayout', () => {
     expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveClass('bg-surface');
   });
 
-  it('marks LGO Budget nav active on dashboard route', () => {
+  it('marks LG Budget nav active on dashboard route', () => {
     renderPublicLayout('/dashboard/lgo-budget-allocation');
-    expect(screen.getByRole('link', { name: 'LGO Budget' })).toHaveClass('bg-surface');
+    expect(screen.getByRole('link', { name: 'LG Budget' })).toHaveClass('bg-surface');
   });
 
   it('renders the active route outlet', () => {
@@ -112,7 +112,7 @@ describe('PublicLayout', () => {
     const mobileNav = screen.getByTestId('public-mobile-nav');
     expect(within(mobileNav).getByRole('link', { name: 'Staff sign in' })).toHaveAttribute('href', '/login');
     expect(within(mobileNav).getByRole('link', { name: 'Budget Priorities' })).toBeInTheDocument();
-    expect(within(mobileNav).getByRole('link', { name: 'LGO Budget' })).toBeInTheDocument();
+    expect(within(mobileNav).getByRole('link', { name: 'LG Budget' })).toBeInTheDocument();
   });
 
   it('includes YGB attribution in a content-width footer', () => {

@@ -66,7 +66,7 @@ describe('CollectorDashboard', () => {
 
     const entry = screen.getByTestId('lgo-budget-allocation-entry');
     expect(entry).toHaveAttribute('href', LGO_BUDGET_ALLOCATION_ROUTES.index);
-    expect(screen.getByText('LGO Budget Allocation')).toBeInTheDocument();
+    expect(screen.getByText('LG Budget Allocation')).toBeInTheDocument();
     expect(screen.getByText(/not the LGO Questionnaire/i)).toBeInTheDocument();
     expect(screen.getByTestId('pdm-survey-view')).toBeInTheDocument();
   });

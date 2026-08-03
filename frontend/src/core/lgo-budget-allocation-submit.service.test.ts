@@ -109,7 +109,7 @@ describe('submitLgoBudgetAllocation', () => {
   it('throws DuplicateRespondentError and skips enqueue when duplicate exists', async () => {
     validateMock.mockResolvedValueOnce({
       valid: false,
-      message: 'LGO Budget Allocation form already submitted for this respondent in Jan–Jun 2026.',
+      message: 'LG Budget Allocation form already submitted for this respondent in Jan–Jun 2026.',
     });
 
     await expect(submitLgoBudgetAllocation(samplePayload, 'collector-1')).rejects.toBeInstanceOf(

@@ -1,8 +1,8 @@
 import type { CollectorBreakdown } from '../../../../core/domain/collector-tracker.model';
-import { FORM_TYPE_OPTIONS } from '../../../../core/domain/form-type.model';
+import { formatFormTypeDisplayLabel } from '../../../../core/domain/form-type.model';
 
 function formTypeLabel(formType: string): string {
-  return FORM_TYPE_OPTIONS.find((option) => option.value === formType)?.label ?? formType;
+  return formatFormTypeDisplayLabel(formType);
 }
 
 export interface CollectorBreakdownPanelProps {

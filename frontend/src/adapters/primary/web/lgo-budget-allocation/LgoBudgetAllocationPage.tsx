@@ -38,7 +38,7 @@ export function LgoBudgetAllocationPage() {
       <section
         className={`${lgoBudgetAllocationClasses.formPanel} relative`}
         data-testid="lgo-budget-allocation-form-slot"
-        aria-label="LGO budget allocation form"
+        aria-label="LG budget allocation form"
       >
         <span className={lgoBudgetAllocationClasses.formPanelAccent} aria-hidden="true" />
         <LgoBudgetAllocationForm />

@@ -23,7 +23,7 @@ function SummaryCardsSkeleton() {
       data-testid="lgo-dashboard-summary-skeleton"
       className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
       aria-busy="true"
-      aria-label="Loading LGO budget allocation summary statistics"
+      aria-label="Loading LG budget allocation summary statistics"
     >
       {Array.from({ length: 3 }).map((_, index) => (
         <div key={index} className={`animate-pulse ${publicDashboardClasses.statCard}`}>
@@ -65,7 +65,7 @@ export function LgoBudgetAllocationSummaryCards({ dashboardApi }: LgoBudgetAlloc
           const message =
             err instanceof ApiError || err instanceof Error
               ? err.message
-              : 'Failed to load LGO budget allocation summary.';
+              : 'Failed to load LG budget allocation summary.';
 
           if (isDashboardLocationFilterError(message)) {
             setLocationFilterError(formatLocationFilterRecoveryMessage(message));
@@ -95,7 +95,7 @@ export function LgoBudgetAllocationSummaryCards({ dashboardApi }: LgoBudgetAlloc
   }
 
   return (
-    <section aria-label="LGO budget allocation summary statistics" data-testid="lgo-budget-allocation-summary-cards">
+    <section aria-label="LG budget allocation summary statistics" data-testid="lgo-budget-allocation-summary-cards">
       {error && (
         <div
           role="alert"
@@ -113,7 +113,7 @@ export function LgoBudgetAllocationSummaryCards({ dashboardApi }: LgoBudgetAlloc
           data-testid="lgo-dashboard-empty-state"
           role="status"
         >
-          No LGO budget allocation submissions match the current filters yet. Try clearing filters or check back
+          No LG budget allocation submissions match the current filters yet. Try clearing filters or check back
           later.
         </p>
       )}

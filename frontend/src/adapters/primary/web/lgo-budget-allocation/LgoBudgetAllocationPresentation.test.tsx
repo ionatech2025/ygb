@@ -27,7 +27,7 @@ vi.mock('../../../secondary/api/lgo-budget-allocation-dashboard-api.adapter', ()
 
 vi.mock('../public/LgoBudgetAllocationDashboardFilterPanel', () => ({
   LgoBudgetAllocationDashboardFilterPanel: () => (
-    <section aria-label="LGO budget allocation filters" data-testid="lgo-budget-allocation-dashboard-filter-panel">
+    <section aria-label="LG budget allocation filters" data-testid="lgo-budget-allocation-dashboard-filter-panel">
       <button type="button" className="min-h-11">
         Filters
       </button>
@@ -47,7 +47,7 @@ vi.mock('../public/LgoBudgetAllocationExportToolbar', () => ({
 
 vi.mock('../public/LgoBudgetAllocationSummaryCards', () => ({
   LgoBudgetAllocationSummaryCards: () => (
-    <section aria-label="LGO budget allocation summary statistics" data-testid="lgo-budget-allocation-summary-cards">
+    <section aria-label="LG budget allocation summary statistics" data-testid="lgo-budget-allocation-summary-cards">
       <article data-testid="stat-card-total-submissions">
         <h4>Total submissions</h4>
         <p>24</p>
@@ -97,7 +97,7 @@ function accessibleName(element: HTMLElement): string {
   );
 }
 
-describe('LGO Budget Allocation presentation (US-LGOB-01 / US-LGOB-02)', () => {
+describe('LG Budget Allocation presentation (US-LGOB-01 / US-LGOB-02)', () => {
   it('renders collector form hero and themed form panel', () => {
     renderLgoCollectorForm();
 
@@ -115,7 +115,7 @@ describe('LGO Budget Allocation presentation (US-LGOB-01 / US-LGOB-02)', () => {
     );
 
     expect(screen.getByTestId('lgo-dashboard-hero')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 1, name: /LGO Budget Allocation Insights/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /LG Budget Allocation Insights/i })).toBeInTheDocument();
     expect(screen.getByTestId('lgo-dashboard-filters-section')).toBeInTheDocument();
     expect(screen.getByTestId('lgo-dashboard-export-section')).toBeInTheDocument();
     expect(screen.getByTestId('lgo-dashboard-summary-section')).toBeInTheDocument();
@@ -153,13 +153,13 @@ describe('LGO Budget Allocation presentation (US-LGOB-01 / US-LGOB-02)', () => {
     expect(screen.getByRole('navigation', { name: /Public sections/i })).toBeInTheDocument();
     expect(screen.getByRole('main')).toBeInTheDocument();
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 1, name: /LGO Budget Allocation Insights/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /LG Budget Allocation Insights/i })).toBeInTheDocument();
   });
 
-  it('highlights LGO Budget nav on dashboard route in public layout', () => {
+  it('highlights LG Budget nav on dashboard route in public layout', () => {
     renderLgoDashboard();
 
-    const navLink = screen.getByRole('link', { name: 'LGO Budget' });
+    const navLink = screen.getByRole('link', { name: 'LG Budget' });
     expect(navLink).toHaveClass('bg-surface');
   });
 });
