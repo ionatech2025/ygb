@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AppRouter } from './AppRouter';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
+import { syncWhenConnectivityAllows } from '../../../../core/connectivity-sync';
 
 vi.mock('../../../../core/LocationService', () => ({
   locationService: {
@@ -9,9 +10,13 @@ vi.mock('../../../../core/LocationService', () => ({
   },
 }));
 
+vi.mock('../../../../core/connectivity-sync', () => ({
+  syncWhenConnectivityAllows: vi.fn().mockResolvedValue(undefined),
+}));
+
 vi.mock('../../../../core/store/useSyncStore', () => {
   const state = {
-    initialize: vi.fn(),
+    initialize: vi.fn().mockResolvedValue(undefined),
     triggerSync: vi.fn(),
     pendingCount: 0,
     lastSyncedAt: null,
@@ -156,6 +161,23 @@ describe('AppRouter public dashboard routes', () => {
       isAuthenticated: false,
       isInitialized: true,
       isOnline: true,
+    });
+    vi.mocked(syncWhenConnectivityAllows).mockClear();
+  });
+
+  it('auto-syncs on boot and when the browser reports online again', async () => {
+    window.history.pushState({}, '', '/dashboard');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(syncWhenConnectivityAllows).toHaveBeenCalled();
+    });
+
+    vi.mocked(syncWhenConnectivityAllows).mockClear();
+    window.dispatchEvent(new Event('online'));
+
+    await waitFor(() => {
+      expect(syncWhenConnectivityAllows).toHaveBeenCalled();
     });
   });
 

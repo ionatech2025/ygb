@@ -1,12 +1,14 @@
 import {
+  encodeBdsServices,
+  requiresBdsOthersSpecify,
   requiresFundDurationSpecify,
-  requiresInstalmentSpecify,
+  requiresLoanRepaymentDuration,
   type BypFormFields,
 } from './domain/byp-form.model';
 import type { RespondentFields } from './domain/respondent-fields.model';
 import type { AgeGroup, Rating } from './domain/form-validation.model';
 import { normalizeUgandaPhoneLocal } from './utils/phone-utils';
-import { validateNarrativeText } from './form-validation';
+import { validateDurationText, validateNarrativeText, validateRequired } from './form-validation';
 import { formatRespondentName, validateRespondentDemographics } from './respondent-validation';
 
 export type BypFormErrors = Record<string, string>;
@@ -24,8 +26,8 @@ export function validateBypForm(state: BypFormState): BypFormErrors {
 
   if (!byp.fundReceiptDuration) errors.fundReceiptDuration = 'Fund receipt duration is required.';
   if (requiresFundDurationSpecify(byp.fundReceiptDuration)) {
-    const spec = validateNarrativeText(byp.fundReceiptDurationSpecify, { required: true });
-    if (!spec.valid) errors.fundReceiptDurationSpecify = spec.message ?? 'Please specify (min 10 characters).';
+    const spec = validateDurationText(byp.fundReceiptDurationSpecify, { required: true });
+    if (!spec.valid) errors.fundReceiptDurationSpecify = spec.message ?? 'Please specify (min 5 characters).';
   }
 
   if (byp.receivedActualAmountRequested == null) {
@@ -37,13 +39,26 @@ export function validateBypForm(state: BypFormState): BypFormErrors {
     errors.cashAmountReceived = 'Enter a valid cash amount received.';
   }
 
-  if (!byp.instalmentPeriod) errors.instalmentPeriod = 'Instalment period is required.';
-  if (requiresInstalmentSpecify(byp.instalmentPeriod)) {
-    const spec = validateNarrativeText(byp.instalmentPeriodSpecify, { required: true });
-    if (!spec.valid) errors.instalmentPeriodSpecify = spec.message ?? 'Please specify (min 10 characters).';
+  const waitAfterApplied = validateDurationText(byp.fundsReceiptWaitAfterApplied, { required: true });
+  if (!waitAfterApplied.valid) {
+    errors.fundsReceiptWaitAfterApplied =
+      waitAfterApplied.message ?? 'Please describe how long it took (min 5 characters).';
+  }
+
+  const moneyUsedFor = validateNarrativeText(byp.moneyUsedFor, { required: true });
+  if (!moneyUsedFor.valid) {
+    errors.moneyUsedFor = moneyUsedFor.message ?? 'Please describe what the money was used for (min 10 characters).';
   }
 
   if (!byp.serviceRating) errors.serviceRating = 'Service rating is required.';
+
+  if (byp.loanRepaid == null) {
+    errors.loanRepaid = 'Please indicate if you have repaid the loan.';
+  }
+  if (requiresLoanRepaymentDuration(byp.loanRepaid) && !byp.loanRepaymentDuration) {
+    errors.loanRepaymentDuration = 'Select how long it took to repay the loan.';
+  }
+
   if (!byp.performanceRating) errors.performanceRating = 'Performance rating is required.';
   if (byp.groupOrganizedTransparently == null) {
     errors.groupOrganizedTransparently = 'Please answer the transparency question.';
@@ -51,6 +66,12 @@ export function validateBypForm(state: BypFormState): BypFormErrors {
   if (byp.receivedBds == null) errors.receivedBds = 'Please indicate if BDS was received.';
   if (byp.receivedBds === true && byp.bdsServices.length === 0) {
     errors.bdsServices = 'Select at least one business development service.';
+  }
+  if (byp.receivedBds === true && requiresBdsOthersSpecify(byp.bdsServices)) {
+    const specify = validateRequired(byp.bdsServicesOthersSpecify);
+    if (!specify.valid) {
+      errors.bdsServicesOthersSpecify = 'Please specify the other business development service.';
+    }
   }
 
   const narrative = validateNarrativeText(byp.improvementSuggestion, { required: true });
@@ -85,15 +106,19 @@ export function buildBypSubmissionPayload(
       : null,
     receivedActualAmountRequested: byp.receivedActualAmountRequested as boolean,
     cashAmountReceived: Number(byp.cashAmountReceived),
-    instalmentPeriod: byp.instalmentPeriod,
-    instalmentPeriodSpecify: requiresInstalmentSpecify(byp.instalmentPeriod)
-      ? byp.instalmentPeriodSpecify.trim()
-      : null,
+    fundsReceiptWaitAfterApplied: byp.fundsReceiptWaitAfterApplied.trim(),
+    moneyUsedFor: byp.moneyUsedFor.trim(),
     serviceRating: byp.serviceRating as Rating,
+    loanRepaid: byp.loanRepaid as boolean,
+    loanRepaymentDuration: requiresLoanRepaymentDuration(byp.loanRepaid)
+      ? byp.loanRepaymentDuration
+      : null,
     performanceRating: byp.performanceRating as Rating,
     groupOrganizedTransparently: byp.groupOrganizedTransparently as boolean,
     receivedBds: byp.receivedBds as boolean,
-    bdsServices: byp.receivedBds ? byp.bdsServices : null,
+    bdsServices: byp.receivedBds
+      ? encodeBdsServices(byp.bdsServices, byp.bdsServicesOthersSpecify)
+      : null,
     improvementSuggestion: byp.improvementSuggestion.trim(),
   };
 }

@@ -1,4 +1,8 @@
-import { BDS_SERVICE_OPTIONS, type BypFormFields } from '../../../../../core/domain/byp-form.model';
+import {
+  BDS_OTHERS_OPTION_VALUE,
+  BDS_SERVICE_OPTIONS,
+  type BypFormFields,
+} from '../../../../../core/domain/byp-form.model';
 import { FormSection, MultiCheckboxGroup, YesNoRadioGroup } from '../../components/forms';
 
 export interface BypBdsSectionProps {
@@ -20,6 +24,7 @@ export function BypBdsSection({ value, onChange, errors }: BypBdsSectionProps) {
           patch({
             receivedBds: choice,
             bdsServices: choice ? value.bdsServices : [],
+            bdsServicesOthersSpecify: choice ? value.bdsServicesOthersSpecify : '',
           })
         }
         required
@@ -35,7 +40,19 @@ export function BypBdsSection({ value, onChange, errors }: BypBdsSectionProps) {
             label: option.label,
           }))}
           selected={value.bdsServices}
-          onChange={(selected) => patch({ bdsServices: selected as BypFormFields['bdsServices'] })}
+          onChange={(selected) =>
+            patch({
+              bdsServices: selected as BypFormFields['bdsServices'],
+              bdsServicesOthersSpecify: selected.includes(BDS_OTHERS_OPTION_VALUE)
+                ? value.bdsServicesOthersSpecify
+                : '',
+            })
+          }
+          otherOptionValue={BDS_OTHERS_OPTION_VALUE}
+          otherSpecifyValue={value.bdsServicesOthersSpecify}
+          onOtherSpecifyChange={(text) => patch({ bdsServicesOthersSpecify: text })}
+          otherSpecifyLabel="Please specify the other business development service"
+          otherSpecifyError={errors.bdsServicesOthersSpecify}
           required
           error={errors.bdsServices}
         />

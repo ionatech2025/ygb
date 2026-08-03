@@ -39,7 +39,7 @@ export function BypForm({ onSubmitted }: BypFormProps) {
     {
       fundReceiptDurationSpecify:
         byp.fundReceiptDuration === 'MORE_THAN_WEEK_LESS_THAN_MONTH' || byp.fundReceiptDuration === 'MONTHS',
-      instalmentPeriodSpecify: byp.instalmentPeriod === 'OTHERS',
+      loanRepaymentDuration: byp.loanRepaid === true,
     }
   );
 

@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { useSyncStore } from '../../../../core/store/useSyncStore';
 import { useSubmissionCountStore } from '../../../../core/store/useSubmissionCountStore';
+import { syncWhenConnectivityAllows } from '../../../../core/connectivity-sync';
 import { locationService } from '../../../../core/LocationService';
 import { PdmResourceDetailPage } from '../public/PdmResourceDetailPage';
 import { PdmResourcesIndexPage } from '../public/PdmResourcesIndexPage';
@@ -35,29 +36,44 @@ export function AppRouter() {
   useEffect(() => {
     initialize();
     void locationService.ensureLoaded();
-    void useSyncStore.getState().initialize();
-    void useSubmissionCountStore.getState().initialize();
+    void (async () => {
+      await useSyncStore.getState().initialize();
+      await useSubmissionCountStore.getState().initialize();
+      await syncWhenConnectivityAllows();
+    })();
   }, [initialize]);
 
   useEffect(() => {
     const handleOnline = () => {
       setOnlineStatus(true);
       void locationService.ensureLoaded();
-      void useSyncStore.getState().triggerSync();
-      const token = useAuthStore.getState().getAccessToken();
-      if (token) {
-        void useSubmissionCountStore.getState().reconcileWithServer(token);
-      }
+      void syncWhenConnectivityAllows();
     };
     const handleOffline = () => setOnlineStatus(false);
+    const handleResume = () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+        return;
+      }
+      if (!navigator.onLine) {
+        return;
+      }
+      setOnlineStatus(true);
+      void syncWhenConnectivityAllows();
+    };
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    window.addEventListener('pageshow', handleResume);
+    document.addEventListener('visibilitychange', handleResume);
+
     const refreshTimer = setInterval(() => {
       void checkSilentRefresh();
     }, 60_000);
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('pageshow', handleResume);
+      document.removeEventListener('visibilitychange', handleResume);
       clearInterval(refreshTimer);
     };
   }, [setOnlineStatus, checkSilentRefresh]);
