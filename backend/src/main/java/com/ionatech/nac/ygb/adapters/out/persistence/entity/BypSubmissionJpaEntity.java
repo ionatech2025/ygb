@@ -31,7 +31,13 @@ public class BypSubmissionJpaEntity extends SubmissionJpaEntity {
     @Column(name = "cash_amount_received", nullable = false)
     private Long cashAmountReceived;
 
-    @Column(name = "instalment_period", nullable = false)
+    @Column(name = "funds_receipt_wait_after_applied", nullable = false)
+    private String fundsReceiptWaitAfterApplied;
+
+    @Column(name = "money_used_for", nullable = false)
+    private String moneyUsedFor;
+
+    @Column(name = "instalment_period")
     private String instalmentPeriod;
 
     @Column(name = "instalment_period_specify")
@@ -39,6 +45,12 @@ public class BypSubmissionJpaEntity extends SubmissionJpaEntity {
 
     @Column(name = "service_rating", nullable = false)
     private String serviceRating;
+
+    @Column(name = "loan_repaid", nullable = false)
+    private Boolean loanRepaid;
+
+    @Column(name = "loan_repayment_duration")
+    private String loanRepaymentDuration;
 
     @Column(name = "performance_rating", nullable = false)
     private String performanceRating;

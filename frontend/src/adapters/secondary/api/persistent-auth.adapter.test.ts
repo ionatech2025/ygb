@@ -94,4 +94,26 @@ describe('PersistentAuthAdapter', () => {
     expect(offlineUser.fullName).toBe('Jane Nakato');
     expect(offlineUser.fullName).not.toBe('Field Collector');
   });
+
+  it('getCachedTokens returns tokens stored during online login', async () => {
+    const tokens = {
+      accessToken: TEST_TOKEN,
+      refreshToken: '',
+      issuedAt: Date.now(),
+      expiresAt: Date.now() + 60_000,
+    };
+
+    await adapter.cacheCredentials(
+      {
+        id: COLLECTOR_ID,
+        fullName: 'Jane Nakato',
+        phoneNumber: '0771111111',
+        role: 'DATA_COLLECTOR',
+      },
+      'password',
+      tokens
+    );
+
+    await expect(adapter.getCachedTokens('0771111111')).resolves.toEqual(tokens);
+  });
 });

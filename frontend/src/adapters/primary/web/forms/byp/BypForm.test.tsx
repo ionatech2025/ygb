@@ -70,13 +70,13 @@ describe('BypForm', () => {
     ).toBeInTheDocument();
   });
 
-  it('Q4 label clarifies instalment period for receiving funds', () => {
+  it('Q4 asks how long it took to receive PDM funds after applying', () => {
     render(<BypForm />);
 
     expect(
-      screen.getByLabelText(/Q4\. What is the instalment period for receiving funds/i)
+      screen.getByLabelText(/Q4\. How long did it take you to receive the PDM funds after you applied/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/how often you receive PDM funds, not how you repay a loan/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/What did you use the money for/i)).toBeInTheDocument();
   });
 
   it('Q5 spells out Parish Development Committee', () => {
@@ -85,24 +85,21 @@ describe('BypForm', () => {
     expect(screen.getByLabelText(/Parish Development Committee \(PDC\)/i)).toBeInTheDocument();
   });
 
+  it('shows loan repayment duration when the loan has been repaid', async () => {
+    const user = userEvent.setup();
+    render(<BypForm />);
+
+    expect(screen.queryByLabelText(/How long did it take you to repay/i)).not.toBeInTheDocument();
+    await user.click(document.getElementById('loanRepaid-yes')!);
+    expect(screen.getByLabelText(/How long did it take you to repay/i)).toBeInTheDocument();
+  });
+
   it('Q8 shows multi-select hint when business development services are received', async () => {
     const user = userEvent.setup();
     render(<BypForm />);
 
     await user.click(document.getElementById('receivedBds-yes')!);
     expect(screen.getByText(/\(select all that apply\)/i)).toBeInTheDocument();
-  });
-
-  it('shows specify field when Q4 Other is selected', async () => {
-    const user = userEvent.setup();
-    render(<BypForm />);
-
-    await chooseFormOptionByValue(
-      user,
-      /Q4\. What is the instalment period for receiving funds/i,
-      'OTHERS'
-    );
-    expect(screen.getByLabelText(/Please specify the instalment period for receiving funds/i)).toBeInTheDocument();
   });
 
   it('shows specify field when Q1 is Months (specify) (TC-FORM-02-02)', async () => {
@@ -125,10 +122,26 @@ describe('BypForm', () => {
     expect(yes).toBeTruthy();
     await user.click(yes!);
     expect(screen.getByText(/Select the business development services you received/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Others \(specify\)$/i)).toBeInTheDocument();
 
     const no = document.getElementById('receivedBds-no');
     await user.click(no!);
     expect(screen.queryByText(/Select the business development services you received/i)).not.toBeInTheDocument();
+  });
+
+  it('shows specify field when Others BDS option is selected', async () => {
+    const user = userEvent.setup();
+    render(<BypForm />);
+
+    await user.click(document.getElementById('receivedBds-yes')!);
+    expect(
+      screen.queryByLabelText(/Please specify the other business development service/i)
+    ).not.toBeInTheDocument();
+
+    await user.click(screen.getByLabelText(/^Others \(specify\)$/i));
+    expect(
+      screen.getByLabelText(/Please specify the other business development service/i)
+    ).toBeInTheDocument();
   });
 
   it('allows submit with blank respondent name', async () => {
@@ -162,8 +175,10 @@ describe('BypForm', () => {
           fundReceiptDuration: 'ONE_WEEK',
           receivedActualAmountRequested: true,
           cashAmountReceived: 500000,
-          instalmentPeriod: 'MONTHLY',
+          fundsReceiptWaitAfterApplied: 'It took about three weeks after I applied.',
+          moneyUsedFor: 'I used the money to buy farming inputs and livestock feed.',
           serviceRating: 'VERY_GOOD',
+          loanRepaid: false,
           performanceRating: 'GOOD',
           groupOrganizedTransparently: true,
           receivedBds: true,
@@ -179,6 +194,7 @@ describe('BypForm', () => {
     );
 
     expect(payload).not.toHaveProperty('exactAge');
+    expect(payload).not.toHaveProperty('instalmentPeriod');
     expect(payload.formType).toBe('BYP');
   });
 
@@ -211,16 +227,20 @@ describe('BypForm', () => {
     );
     await user.click(document.getElementById('receivedActualAmountRequested-yes')!);
     await user.type(screen.getByLabelText(/Q3\. How much cash did you get/i), '500000');
-    await chooseFormOptionByValue(
-      user,
-      /Q4\. What is the instalment period for receiving funds/i,
-      'MONTHLY'
+    await user.type(
+      screen.getByLabelText(/Q4\. How long did it take you to receive the PDM funds after you applied/i),
+      'It took about three weeks after I applied.'
+    );
+    await user.type(
+      screen.getByLabelText(/What did you use the money for/i),
+      'I used the money to buy farming inputs and livestock feed.'
     );
     await chooseFormOptionByValue(
       user,
       /Parish Development Committee \(PDC\)/i,
       'VERY_GOOD'
     );
+    await user.click(document.getElementById('loanRepaid-no')!);
     await chooseFormOptionByValue(
       user,
       /Q6\. What do you think about the performance of PDM in this parish/i,
@@ -274,16 +294,20 @@ describe('BypForm', () => {
     );
     await user.click(document.getElementById('receivedActualAmountRequested-yes')!);
     await user.type(screen.getByLabelText(/Q3\. How much cash did you get/i), '500000');
-    await chooseFormOptionByValue(
-      user,
-      /Q4\. What is the instalment period for receiving funds/i,
-      'MONTHLY'
+    await user.type(
+      screen.getByLabelText(/Q4\. How long did it take you to receive the PDM funds after you applied/i),
+      'It took about three weeks after I applied.'
+    );
+    await user.type(
+      screen.getByLabelText(/What did you use the money for/i),
+      'I used the money to buy farming inputs and livestock feed.'
     );
     await chooseFormOptionByValue(
       user,
       /Parish Development Committee \(PDC\)/i,
       'VERY_GOOD'
     );
+    await user.click(document.getElementById('loanRepaid-no')!);
     await chooseFormOptionByValue(
       user,
       /Q6\. What do you think about the performance of PDM in this parish/i,

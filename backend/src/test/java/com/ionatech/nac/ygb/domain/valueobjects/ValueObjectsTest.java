@@ -52,6 +52,19 @@ class ValueObjectsTest {
     }
 
     @Test
+    void durationNarrativeTextAcceptsFiveCharacters() {
+        NarrativeText text = NarrativeText.duration("2 days");
+        assertThat(text.getValue()).isEqualTo("2 days");
+    }
+
+    @Test
+    void durationNarrativeTextRejectsFewerThanFiveCharacters() {
+        assertThatThrownBy(() -> NarrativeText.duration("4"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Text must be at least 5 characters");
+    }
+
+    @Test
     void financialYearPeriodShouldDeriveCorrectly() {
         // First period: Jan 1 - Jun 30
         LocalDateTime dateTimeJan = LocalDateTime.of(2026, 1, 15, 12, 0);

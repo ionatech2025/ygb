@@ -1,5 +1,8 @@
 export const MIN_NARRATIVE_LENGTH = 10;
 
+/** Short duration answers such as "2 days" or "10 months". */
+export const MIN_DURATION_TEXT_LENGTH = 5;
+
 /** Programme target brackets (18–35 focus) for PDM collector forms — Jul 2026 client change. */
 export const AGE_GROUP_VALUES = [
   'AGE_18_24',

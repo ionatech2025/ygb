@@ -14,6 +14,7 @@ export interface IAuthRepositoryPort {
   loginOnline(credentials: LoginCredentials): Promise<AuthResponse>;
   loginOffline(credentials: LoginCredentials): Promise<AuthenticatedUser>;
   cacheCredentials(user: AuthenticatedUser, passwordPlain: string, tokens: TokenPair): Promise<void>;
+  getCachedTokens(phoneNumber: string): Promise<TokenPair | null>;
   refreshSession(refreshToken: string): Promise<TokenPair>;
   hasOfflineProfile(phoneNumber: string): Promise<boolean>;
 }

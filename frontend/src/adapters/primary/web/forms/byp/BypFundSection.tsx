@@ -1,11 +1,15 @@
 import {
   FUND_RECEIPT_DURATION_OPTIONS,
   requiresFundDurationSpecify,
-  requiresInstalmentSpecify,
-  INSTALMENT_PERIOD_OPTIONS,
   type BypFormFields,
 } from '../../../../../core/domain/byp-form.model';
-import { FormField, formControlClassName, FormSection, FormSelect, YesNoRadioGroup } from '../../components/forms';
+import {
+  FormField,
+  formControlClassName,
+  FormSection,
+  FormSelect,
+  YesNoRadioGroup,
+} from '../../components/forms';
 
 export interface BypFundSectionProps {
   value: BypFormFields;
@@ -17,7 +21,7 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
   const patch = (partial: Partial<BypFormFields>) => onChange({ ...value, ...partial });
 
   return (
-    <FormSection title="Fund acquisition & disbursement" description="Questions 1–4">
+    <FormSection title="Fund acquisition & disbursement" description="Questions 1–4 and fund use">
       <FormField
         label="Q1. How long did it take you to receive your funds?"
         htmlFor="fundReceiptDuration"
@@ -45,6 +49,7 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
           htmlFor="fundReceiptDurationSpecify"
           required
           error={errors.fundReceiptDurationSpecify}
+          hint="Minimum 5 characters (e.g. 2 days)."
         >
           <input
             id="fundReceiptDurationSpecify"
@@ -87,44 +92,38 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
       </FormField>
 
       <FormField
-        label="Q4. What is the instalment period for receiving funds?"
-        htmlFor="instalmentPeriod"
+        label="Q4. How long did it take you to receive the PDM funds after you applied?"
+        htmlFor="fundsReceiptWaitAfterApplied"
         required
-        error={errors.instalmentPeriod}
-        hint="This refers to how often you receive PDM funds, not how you repay a loan."
+        error={errors.fundsReceiptWaitAfterApplied}
+        hint="Minimum 5 characters (e.g. 2 days)."
       >
-        <FormSelect
-          id="instalmentPeriod"
-          value={value.instalmentPeriod}
-          onChange={(next) =>
-            patch({
-              instalmentPeriod: next as BypFormFields['instalmentPeriod'],
-              instalmentPeriodSpecify: '',
-            })
-          }
-          options={INSTALMENT_PERIOD_OPTIONS}
-          placeholder="Select period…"
+        <textarea
+          id="fundsReceiptWaitAfterApplied"
+          value={value.fundsReceiptWaitAfterApplied}
+          onChange={(e) => patch({ fundsReceiptWaitAfterApplied: e.target.value })}
+          rows={4}
+          className={`${formControlClassName} min-h-[6rem] resize-y`}
           required
         />
       </FormField>
 
-      {requiresInstalmentSpecify(value.instalmentPeriod) && (
-        <FormField
-          label="Please specify the instalment period for receiving funds"
-          htmlFor="instalmentPeriodSpecify"
+      <FormField
+        label="What did you use the money for?"
+        htmlFor="moneyUsedFor"
+        required
+        error={errors.moneyUsedFor}
+        hint="Minimum 10 characters."
+      >
+        <textarea
+          id="moneyUsedFor"
+          value={value.moneyUsedFor}
+          onChange={(e) => patch({ moneyUsedFor: e.target.value })}
+          rows={4}
+          className={`${formControlClassName} min-h-[6rem] resize-y`}
           required
-          error={errors.instalmentPeriodSpecify}
-        >
-          <input
-            id="instalmentPeriodSpecify"
-            type="text"
-            value={value.instalmentPeriodSpecify}
-            onChange={(e) => patch({ instalmentPeriodSpecify: e.target.value })}
-            className={formControlClassName}
-            required
-          />
-        </FormField>
-      )}
+        />
+      </FormField>
     </FormSection>
   );
 }

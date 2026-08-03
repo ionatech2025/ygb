@@ -1,5 +1,5 @@
 export const PWA_INSTALL_DISMISS_STORAGE_KEY = 'ygb-pwa-install-dismissed';
-export const PWA_INSTALL_DISMISS_DAYS = 7;
+export const PWA_INSTALL_DISMISS_MINUTES = 30;
 
 export type PwaInstallMode = 'deferred' | 'ios' | 'browser';
 
@@ -80,6 +80,68 @@ export function isDismissed(storage: StorageLike, now: Date): boolean {
 
 export function recordDismiss(storage: StorageLike, now: Date): void {
   const dismissedUntil = new Date(now);
-  dismissedUntil.setDate(dismissedUntil.getDate() + PWA_INSTALL_DISMISS_DAYS);
+  dismissedUntil.setMinutes(dismissedUntil.getMinutes() + PWA_INSTALL_DISMISS_MINUTES);
   storage.setItem(PWA_INSTALL_DISMISS_STORAGE_KEY, dismissedUntil.toISOString());
+}
+
+export interface PwaInstallGuideSection {
+  browser: string;
+  steps: string[];
+}
+
+export function getPwaInstallGuideSections(options: {
+  isAndroid: boolean;
+  isIosLike: boolean;
+}): PwaInstallGuideSection[] {
+  if (options.isIosLike) {
+    return [
+      {
+        browser: 'Safari (iPhone / iPad)',
+        steps: [
+          'Open this page in Safari (not Chrome or another browser).',
+          'Tap the Share button at the bottom of the screen.',
+          'Scroll down and choose Add to Home Screen, then tap Add.',
+        ],
+      },
+    ];
+  }
+
+  if (options.isAndroid) {
+    return [
+      {
+        browser: 'Chrome (Android)',
+        steps: [
+          'Open the browser menu (three dots).',
+          'Tap Install app or Add to Home screen.',
+          'Confirm to add Youth Go Budget App to your home screen.',
+        ],
+      },
+    ];
+  }
+
+  return [
+    {
+      browser: 'Chrome',
+      steps: [
+        'Look for the install icon in the address bar (⊕ or computer icon).',
+        'Click it, then confirm Install Youth Go Budget App.',
+      ],
+    },
+    {
+      browser: 'Edge',
+      steps: [
+        'Open the browser menu (⋯).',
+        'Choose More tools → Apps → Install Youth Go Budget App.',
+        'Confirm the install prompt to add the app to your device.',
+      ],
+    },
+    {
+      browser: 'Safari',
+      steps: [
+        'On a Mac, open this page in Safari.',
+        'From the File menu, choose Add to Dock (or use Share → Add to Dock).',
+        'Confirm to keep Youth Go Budget App in your Dock for offline access.',
+      ],
+    },
+  ];
 }

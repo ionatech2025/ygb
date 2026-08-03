@@ -123,6 +123,39 @@ describe('usePwaInstallPrompt', () => {
     expect(storage.get(PWA_INSTALL_DISMISS_STORAGE_KEY)).toBeTruthy();
   });
 
+  it('shows the banner again after the thirty-minute dismiss window expires', () => {
+    const { result, rerender } = renderHook(
+      ({ now }) =>
+        usePwaInstallPrompt({
+          storage: {
+            getItem: (key) => storage.get(key) ?? null,
+            setItem: (key, value) => storage.set(key, value),
+          },
+          now,
+        }),
+      { initialProps: { now: () => new Date('2026-03-15T10:00:00Z') } }
+    );
+
+    act(() => {
+      result.current.dismiss();
+    });
+    expect(result.current.shouldShow).toBe(false);
+
+    rerender({ now: () => new Date('2026-03-15T10:30:00Z') });
+
+    const { result: resumed } = renderHook(() =>
+      usePwaInstallPrompt({
+        storage: {
+          getItem: (key) => storage.get(key) ?? null,
+          setItem: (key, value) => storage.set(key, value),
+        },
+        now: () => new Date('2026-03-15T10:30:00Z'),
+      })
+    );
+
+    expect(resumed.current.shouldShow).toBe(true);
+  });
+
   it('falls back to the install guide when native prompt fails', async () => {
     const deferredPrompt = createDeferredPrompt();
     deferredPrompt.prompt.mockRejectedValueOnce(new Error('prompt unavailable'));

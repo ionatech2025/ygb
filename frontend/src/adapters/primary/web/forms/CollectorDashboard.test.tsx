@@ -5,6 +5,10 @@ import { LGO_BUDGET_ALLOCATION_ROUTES } from '../../../../core/domain/lgo-budget
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { CollectorDashboard } from './CollectorDashboard';
 
+vi.mock('../../../../core/connectivity-sync', () => ({
+  syncWhenConnectivityAllows: vi.fn().mockResolvedValue(undefined),
+}));
+
 vi.mock('../../../../core/store/useSyncStore', () => ({
   useSyncStore: (selector: (state: Record<string, unknown>) => unknown) =>
     selector({

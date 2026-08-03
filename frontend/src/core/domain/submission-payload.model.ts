@@ -28,9 +28,11 @@ export interface BypSubmissionPayload extends SubmissionPayloadBase {
   fundReceiptDurationSpecify?: string | null;
   receivedActualAmountRequested: boolean;
   cashAmountReceived?: number | null;
-  instalmentPeriod: string;
-  instalmentPeriodSpecify?: string | null;
+  fundsReceiptWaitAfterApplied: string;
+  moneyUsedFor: string;
   serviceRating: Rating;
+  loanRepaid: boolean;
+  loanRepaymentDuration?: string | null;
   performanceRating: Rating;
   groupOrganizedTransparently: boolean;
   receivedBds: boolean;

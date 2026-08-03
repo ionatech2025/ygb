@@ -1,6 +1,10 @@
 import type { Rating } from '../../../../../core/domain/form-validation.model';
-import type { BypFormFields } from '../../../../../core/domain/byp-form.model';
-import { FormSection, RatingSelect, YesNoRadioGroup } from '../../components/forms';
+import {
+  LOAN_REPAYMENT_DURATION_OPTIONS,
+  requiresLoanRepaymentDuration,
+  type BypFormFields,
+} from '../../../../../core/domain/byp-form.model';
+import { FormField, FormSection, FormSelect, RatingSelect, YesNoRadioGroup } from '../../components/forms';
 
 export interface BypRatingSectionProps {
   value: BypFormFields;
@@ -21,6 +25,41 @@ export function BypRatingSection({ value, onChange, errors }: BypRatingSectionPr
         required
         error={errors.serviceRating}
       />
+
+      <YesNoRadioGroup
+        name="loanRepaid"
+        label="Have you repaid the loan?"
+        value={value.loanRepaid}
+        onChange={(choice) =>
+          patch({
+            loanRepaid: choice,
+            loanRepaymentDuration: choice === true ? value.loanRepaymentDuration : '',
+          })
+        }
+        required
+        error={errors.loanRepaid}
+      />
+
+      {requiresLoanRepaymentDuration(value.loanRepaid) && (
+        <FormField
+          label="How long did it take you to repay?"
+          htmlFor="loanRepaymentDuration"
+          required
+          error={errors.loanRepaymentDuration}
+        >
+          <FormSelect
+            id="loanRepaymentDuration"
+            value={value.loanRepaymentDuration}
+            onChange={(next) =>
+              patch({ loanRepaymentDuration: next as BypFormFields['loanRepaymentDuration'] })
+            }
+            options={LOAN_REPAYMENT_DURATION_OPTIONS}
+            placeholder="Select repayment duration…"
+            required
+          />
+        </FormField>
+      )}
+
       <RatingSelect
         id="performanceRating"
         label="Q6. What do you think about the performance of PDM in this parish?"
