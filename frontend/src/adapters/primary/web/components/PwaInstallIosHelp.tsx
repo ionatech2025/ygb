@@ -1,4 +1,5 @@
 import { Smartphone } from 'lucide-react';
+import { getPwaInstallGuideSections } from '../../../../core/domain/pwa-install-prompt.model';
 
 interface PwaInstallIosHelpProps {
   open: boolean;
@@ -9,6 +10,8 @@ export function PwaInstallIosHelp({ open, onClose }: PwaInstallIosHelpProps) {
   if (!open) {
     return null;
   }
+
+  const [section] = getPwaInstallGuideSections({ isAndroid: false, isIosLike: true });
 
   return (
     <div
@@ -27,10 +30,13 @@ export function PwaInstallIosHelp({ open, onClose }: PwaInstallIosHelpProps) {
             <h2 id="pwa-ios-help-title" className="text-base font-bold text-text">
               Add YGB to your home screen
             </h2>
-            <ol className="mt-3 space-y-2 text-sm text-text-muted">
-              <li>1. Tap the Share button in Safari.</li>
-              <li>2. Scroll down and choose Add to Home Screen.</li>
-              <li>3. Confirm the name, then tap Add.</li>
+            <p className="mt-2 text-sm font-semibold text-text">{section.browser}</p>
+            <ol className="mt-1.5 space-y-2 text-sm text-text-muted">
+              {section.steps.map((step, index) => (
+                <li key={step}>
+                  {index + 1}. {step}
+                </li>
+              ))}
             </ol>
           </div>
         </div>

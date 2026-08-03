@@ -114,6 +114,12 @@ export class PersistentAuthAdapter implements IAuthRepositoryPort {
     });
   }
 
+  async getCachedTokens(phoneNumber: string): Promise<TokenPair | null> {
+    const normalized = normalizeUgandaPhoneLocal(phoneNumber);
+    const cached = await db.cachedUsers.get(normalized);
+    return cached?.cachedTokens ?? null;
+  }
+
   async loginOffline(credentials: LoginCredentials): Promise<AuthenticatedUser> {
     const phoneNumber = normalizeUgandaPhoneLocal(credentials.phoneNumber);
     const cachedProfile = await db.cachedUsers.get(phoneNumber);

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, CloudUpload, Hash, Landmark, RefreshCw } from 'lucide-react';
 import { LGO_BUDGET_ALLOCATION_ROUTES } from '../../../../core/domain/lgo-budget-allocation.routes';
 import { lgoBudgetAllocationClasses } from '../../../../core/domain/lgo-budget-allocation.theme';
+import { syncWhenConnectivityAllows } from '../../../../core/connectivity-sync';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { useSubmissionCountStore } from '../../../../core/store/useSubmissionCountStore';
 import { useSyncStore } from '../../../../core/store/useSyncStore';
@@ -39,11 +40,11 @@ export function CollectorDashboard() {
   }, [initializeSync, refreshFromLocal]);
 
   useEffect(() => {
-    const token = getAccessToken();
-    if (isOnline && token) {
-      void reconcileWithServer(token);
+    if (!isOnline) {
+      return;
     }
-  }, [isOnline, getAccessToken, reconcileWithServer]);
+    void syncWhenConnectivityAllows();
+  }, [isOnline]);
 
   const handleRefresh = () => {
     void refreshFromLocal();

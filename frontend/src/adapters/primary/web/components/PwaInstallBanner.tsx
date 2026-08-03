@@ -10,7 +10,6 @@ interface PwaInstallBannerProps {
 export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps) {
   const {
     shouldShow,
-    canNativeInstall,
     iosHelpOpen,
     setIosHelpOpen,
     browserHelpOpen,
@@ -46,31 +45,23 @@ export function PwaInstallBanner({ placement = 'inline' }: PwaInstallBannerProps
               : 'mx-auto flex max-w-lg items-center gap-2'
           }
         >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand text-white">
+          <button
+            type="button"
+            onClick={() => void promptInstall()}
+            aria-label="Install"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand text-white transition hover:bg-brand-dark"
+          >
             <Download className="h-3.5 w-3.5" aria-hidden="true" />
-          </span>
+          </button>
           <p className="min-w-0 flex-1 text-xs leading-snug text-text">
             <span className="font-semibold">Install YGB</span>
             <span className="text-text-muted"> · Offline field access</span>
           </p>
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
-            {canNativeInstall && (
-              <button
-                type="button"
-                onClick={() => void promptInstall()}
-                className="inline-flex min-h-9 items-center justify-center rounded-lg bg-brand px-2.5 text-xs font-semibold text-white transition hover:bg-brand-dark"
-              >
-                Install
-              </button>
-            )}
             <button
               type="button"
               onClick={showInstallGuide}
-              className={
-                canNativeInstall
-                  ? 'inline-flex min-h-9 items-center justify-center rounded-lg border border-border bg-surface px-2.5 text-xs font-semibold text-text transition hover:bg-surface-muted'
-                  : 'inline-flex min-h-9 items-center justify-center rounded-lg bg-brand px-2.5 text-xs font-semibold text-white transition hover:bg-brand-dark'
-              }
+              className="inline-flex min-h-9 items-center justify-center rounded-lg bg-brand px-2.5 text-xs font-semibold text-white transition hover:bg-brand-dark"
             >
               How to install
             </button>

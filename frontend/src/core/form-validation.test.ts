@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  validateDurationText,
   validateNarrativeText,
   validatePhone,
   validateRequired,
@@ -12,6 +13,13 @@ describe('form-validation', () => {
 
   it('accepts narrative text with at least 10 characters', () => {
     expect(validateNarrativeText('Hello world!').valid).toBe(true);
+  });
+
+  it('accepts duration text with at least 5 characters', () => {
+    expect(validateDurationText('4').valid).toBe(false);
+    expect(validateDurationText('2dy').valid).toBe(false);
+    expect(validateDurationText('2 days').valid).toBe(true);
+    expect(validateDurationText('10 months').valid).toBe(true);
   });
 
   it('rejects empty required values', () => {

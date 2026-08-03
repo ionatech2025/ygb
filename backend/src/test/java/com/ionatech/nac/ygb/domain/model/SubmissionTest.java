@@ -39,9 +39,13 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
+                new NarrativeText("It took about three weeks after I applied."),
+                new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
                 Rating.VERY_GOOD,
+                false,
+                null,
                 Rating.GOOD,
                 true,
                 true,
@@ -69,9 +73,13 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
+                new NarrativeText("It took about three weeks after I applied."),
+                new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
                 Rating.VERY_GOOD,
+                false,
+                null,
                 Rating.GOOD,
                 true,
                 true,
@@ -96,9 +104,13 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
+                new NarrativeText("It took about three weeks after I applied."),
+                new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
                 Rating.VERY_GOOD,
+                false,
+                null,
                 Rating.GOOD,
                 true,
                 true,
@@ -123,9 +135,13 @@ class SubmissionTest {
                 null, // missing specify
                 true,
                 500000L,
+                new NarrativeText("It took about three weeks after I applied."),
+                new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
                 Rating.VERY_GOOD,
+                false,
+                null,
                 Rating.GOOD,
                 true,
                 true,
@@ -139,7 +155,41 @@ class SubmissionTest {
     }
 
     @Test
-    void bypShouldThrowWhenInstalmentPeriodRequiresSpecifyButNull() {
+    void bypShouldAcceptShortDurationSpecifyAnswers() {
+        BypSubmission byp = new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "MONTHS",
+                "4 mos",
+                true,
+                500000L,
+                NarrativeText.duration("2 days"),
+                new NarrativeText("I used the money to buy farming inputs."),
+                null,
+                null,
+                Rating.VERY_GOOD,
+                false,
+                null,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING"),
+                new NarrativeText("Provide more technical support.")
+        );
+
+        byp.validate();
+
+        assertThat(byp.getFundReceiptDurationSpecify()).isEqualTo("4 mos");
+        assertThat(byp.getFundsReceiptWaitAfterApplied().getValue()).isEqualTo("2 days");
+    }
+
+    @Test
+    void bypShouldThrowWhenLoanRepaidRequiresDurationButMissing() {
         BypSubmission byp = new BypSubmission(
                 UUID.randomUUID(),
                 createMetadata(),
@@ -152,9 +202,13 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                "OTHERS", // requires specify
-                null, // missing specify
+                new NarrativeText("It took about three weeks after I applied."),
+                new NarrativeText("I used the money to buy farming inputs."),
+                "MONTHLY",
+                null,
                 Rating.VERY_GOOD,
+                true, // loan repaid
+                null, // missing repayment duration
                 Rating.GOOD,
                 true,
                 true,
@@ -164,7 +218,7 @@ class SubmissionTest {
 
         assertThatThrownBy(byp::validate)
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("instalmentPeriodSpecify is required when period is OTHERS");
+                .hasMessageContaining("loanRepaymentDuration is required when loanRepaid is true");
     }
 
     @Test
@@ -181,9 +235,13 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
+                new NarrativeText("It took about three weeks after I applied."),
+                new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
                 Rating.VERY_GOOD,
+                false,
+                null,
                 Rating.GOOD,
                 true,
                 true, // received BDS
@@ -194,6 +252,72 @@ class SubmissionTest {
         assertThatThrownBy(byp::validate)
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("BDS services list cannot be empty when receivedBds is true");
+    }
+
+    @Test
+    void bypShouldAcceptEncodedOthersBdsService() {
+        BypSubmission byp = new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                new NarrativeText("It took about three weeks after I applied."),
+                new NarrativeText("I used the money to buy farming inputs."),
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                false,
+                null,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("TRAINING", "OTHERS:Mentorship from parish enterprise coaches"),
+                new NarrativeText("Provide more technical support.")
+        );
+
+        byp.validate();
+
+        assertThat(byp.getBdsServices()).contains("OTHERS:Mentorship from parish enterprise coaches");
+    }
+
+    @Test
+    void bypShouldThrowWhenOthersBdsServiceHasNoSpecifyText() {
+        BypSubmission byp = new BypSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Jane Doe",
+                "0772111222",
+                "FEMALE",
+                AgeGroup.AGE_18_24,
+                "ONE_WEEK",
+                null,
+                true,
+                500000L,
+                new NarrativeText("It took about three weeks after I applied."),
+                new NarrativeText("I used the money to buy farming inputs."),
+                "MONTHLY",
+                null,
+                Rating.VERY_GOOD,
+                false,
+                null,
+                Rating.GOOD,
+                true,
+                true,
+                List.of("OTHERS"),
+                new NarrativeText("Provide more technical support.")
+        );
+
+        assertThatThrownBy(byp::validate)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("OTHERS");
     }
 
     // ==========================================

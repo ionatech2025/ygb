@@ -1,6 +1,7 @@
 import type { SubmissionPayload, DetailFieldRow, DetailFieldSection } from '../domain/submission-admin.model';
 import { FORM_TYPE_OPTIONS } from './form-type.model';
 import { GENDER_OPTIONS } from './form-validation.model';
+import { LOAN_REPAYMENT_DURATION_OPTIONS } from './byp-form.model';
 import { formatFinancialYearPeriodLabel } from '../financial-year-period';
 import type { FinancialYearPeriodHalf } from './financial-year-period.model';
 
@@ -10,6 +11,10 @@ const FORM_TYPE_LABELS = Object.fromEntries(
 
 const GENDER_LABELS = Object.fromEntries(
   GENDER_OPTIONS.map((option) => [option.value, option.label])
+) as Record<string, string>;
+
+const LOAN_REPAYMENT_DURATION_LABELS = Object.fromEntries(
+  LOAN_REPAYMENT_DURATION_OPTIONS.map((option) => [option.value, option.label])
 ) as Record<string, string>;
 
 const COMMON_FIELD_LABELS: Record<string, string> = {
@@ -24,6 +29,10 @@ const COMMON_FIELD_LABELS: Record<string, string> = {
   respondentPhone: 'Respondent phone',
   respondentGender: 'Gender',
   respondentAgeGroup: 'Age group',
+  fundsReceiptWaitAfterApplied: 'How long to receive PDM funds after applying',
+  moneyUsedFor: 'What the money was used for',
+  loanRepaid: 'Have you repaid the loan?',
+  loanRepaymentDuration: 'How long it took to repay',
 };
 
 const HIDDEN_PAYLOAD_KEYS = new Set(['formType']);
@@ -60,6 +69,9 @@ function formatFieldValue(key: string, value: unknown): string {
   if (key === 'respondentGender' && typeof value === 'string') {
     return GENDER_LABELS[value] ?? value;
   }
+  if (key === 'loanRepaymentDuration' && typeof value === 'string') {
+    return LOAN_REPAYMENT_DURATION_LABELS[value] ?? value;
+  }
   if (typeof value === 'object') {
     return JSON.stringify(value, null, 2);
   }
@@ -81,9 +93,13 @@ const FORM_SPECIFIC_KEYS: Record<string, string[]> = {
     'fundReceiptDurationSpecify',
     'receivedActualAmountRequested',
     'cashAmountReceived',
+    'fundsReceiptWaitAfterApplied',
+    'moneyUsedFor',
     'instalmentPeriod',
     'instalmentPeriodSpecify',
     'serviceRating',
+    'loanRepaid',
+    'loanRepaymentDuration',
     'performanceRating',
     'groupOrganizedTransparently',
     'receivedBds',

@@ -12,9 +12,13 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
     private String fundReceiptDurationSpecify;
     private Boolean receivedActualAmountRequested;
     private Long cashAmountReceived;
+    private String fundsReceiptWaitAfterApplied;
+    private String moneyUsedFor;
     private String instalmentPeriod;
     private String instalmentPeriodSpecify;
     private Rating serviceRating;
+    private Boolean loanRepaid;
+    private String loanRepaymentDuration;
     private Rating performanceRating;
     private Boolean groupOrganizedTransparently;
     private Boolean receivedBds;
@@ -39,9 +43,13 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
             String fundReceiptDurationSpecify,
             Boolean receivedActualAmountRequested,
             Long cashAmountReceived,
+            String fundsReceiptWaitAfterApplied,
+            String moneyUsedFor,
             String instalmentPeriod,
             String instalmentPeriodSpecify,
             Rating serviceRating,
+            Boolean loanRepaid,
+            String loanRepaymentDuration,
             Rating performanceRating,
             Boolean groupOrganizedTransparently,
             Boolean receivedBds,
@@ -53,9 +61,13 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
         this.fundReceiptDurationSpecify = fundReceiptDurationSpecify;
         this.receivedActualAmountRequested = receivedActualAmountRequested;
         this.cashAmountReceived = cashAmountReceived;
+        this.fundsReceiptWaitAfterApplied = fundsReceiptWaitAfterApplied;
+        this.moneyUsedFor = moneyUsedFor;
         this.instalmentPeriod = instalmentPeriod;
         this.instalmentPeriodSpecify = instalmentPeriodSpecify;
         this.serviceRating = serviceRating;
+        this.loanRepaid = loanRepaid;
+        this.loanRepaymentDuration = loanRepaymentDuration;
         this.performanceRating = performanceRating;
         this.groupOrganizedTransparently = groupOrganizedTransparently;
         this.receivedBds = receivedBds;
@@ -67,9 +79,13 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
     public String getFundReceiptDurationSpecify() { return fundReceiptDurationSpecify; }
     public Boolean getReceivedActualAmountRequested() { return receivedActualAmountRequested; }
     public Long getCashAmountReceived() { return cashAmountReceived; }
+    public String getFundsReceiptWaitAfterApplied() { return fundsReceiptWaitAfterApplied; }
+    public String getMoneyUsedFor() { return moneyUsedFor; }
     public String getInstalmentPeriod() { return instalmentPeriod; }
     public String getInstalmentPeriodSpecify() { return instalmentPeriodSpecify; }
     public Rating getServiceRating() { return serviceRating; }
+    public Boolean getLoanRepaid() { return loanRepaid; }
+    public String getLoanRepaymentDuration() { return loanRepaymentDuration; }
     public Rating getPerformanceRating() { return performanceRating; }
     public Boolean getGroupOrganizedTransparently() { return groupOrganizedTransparently; }
     public Boolean getReceivedBds() { return receivedBds; }

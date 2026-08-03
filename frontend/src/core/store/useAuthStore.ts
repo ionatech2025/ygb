@@ -17,6 +17,7 @@ interface AuthStoreActions extends AuthState {
   logout(): void;
   initialize(): void;
   checkSilentRefresh(): Promise<void>;
+  restoreCachedTokensIfNeeded(): Promise<void>;
   setOnlineStatus(status: boolean): void;
   getAccessToken(): string | null;
 }
@@ -112,5 +113,20 @@ export const useAuthStore = create<AuthStoreActions>((set, get) => ({
         get().logout();
       }
     }
+  },
+
+  restoreCachedTokensIfNeeded: async () => {
+    const { user, tokens, isOnline } = get();
+    if (!isOnline || !user || tokens?.accessToken) {
+      return;
+    }
+
+    const cachedTokens = await authRepo.getCachedTokens(user.phoneNumber);
+    if (!cachedTokens?.accessToken) {
+      return;
+    }
+
+    writeSession(user, cachedTokens);
+    set({ tokens: cachedTokens });
   },
 }));
