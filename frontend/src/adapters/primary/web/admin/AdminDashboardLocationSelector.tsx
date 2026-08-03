@@ -35,10 +35,7 @@ function LocationSelect({
         disabled={disabled}
         onChange={onSelect}
         placeholder={placeholder}
-        options={[
-          { value: '', label: placeholder },
-          ...options.map((option) => ({ value: option.id, label: option.name })),
-        ]}
+        options={options.map((option) => ({ value: option.id, label: option.name }))}
       />
     </FormField>
   );

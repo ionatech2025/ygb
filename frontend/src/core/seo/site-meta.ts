@@ -1,7 +1,7 @@
 export const SITE_NAME = 'Youth Go Budget App';
 export const SITE_ORIGIN = import.meta.env.VITE_APP_ORIGIN ?? 'https://youthgobudgetapp.org';
 export const DEFAULT_DESCRIPTION =
-  'Explore anonymised Parish Development Model data, community budget priorities, and LGO allocations across Uganda. Built for transparency, youth participation, and programme accountability.';
+  'Explore anonymised Parish Development Model data, community budget priorities, and LG allocations across Uganda. Built for transparency, youth participation, and programme accountability.';
 export const DEFAULT_OG_IMAGE = '/pwa-512.png';
 
 export interface PageMetaDefinition {
@@ -35,7 +35,7 @@ export const PAGE_META = {
     canonicalPath: '/dashboard/budget-priorities',
   },
   lgoBudgetDashboard: {
-    title: 'LGO Budget Allocations Dashboard',
+    title: 'LG Budget Allocations Dashboard',
     description: 'Explore local government budget allocation submissions and anonymised programme insights.',
     canonicalPath: '/dashboard/lgo-budget-allocation',
   },

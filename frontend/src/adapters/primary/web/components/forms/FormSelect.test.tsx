@@ -87,7 +87,36 @@ describe('FormSelect', () => {
     await user.click(screen.getByRole('combobox', { name: /district/i }));
     const list = screen.getByTestId('district-scroll-option-list');
     expect(list).toHaveClass('overflow-y-auto');
-    expect(within(list).getAllByRole('radio')).toHaveLength(30);
+    expect(within(list).getAllByRole('radio')).toHaveLength(31);
+  });
+
+  it('prepends Select All for optional dropdowns and clears the value when chosen', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+
+    render(
+      <FormField label="Form type" htmlFor="filter-type">
+        <FormSelect id="filter-type" value="BYP" onChange={onChange} options={OPTIONS} />
+      </FormField>
+    );
+
+    await user.click(screen.getByRole('combobox', { name: /form type/i }));
+    await user.click(screen.getByRole('radio', { name: /^Select All$/i }));
+    expect(onChange).toHaveBeenCalledWith('');
+  });
+
+  it('does not prepend Select All for required dropdowns', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <FormField label="Gender" htmlFor="gender-required" required>
+        <FormSelect id="gender-required" value="" onChange={() => undefined} options={OPTIONS} required />
+      </FormField>
+    );
+
+    await user.click(screen.getByRole('combobox', { name: /gender/i }));
+    expect(screen.queryByRole('radio', { name: /^Select All$/i })).not.toBeInTheDocument();
+    expect(within(screen.getByTestId('gender-required-option-list')).getAllByRole('radio')).toHaveLength(2);
   });
 
   it('closes when clicking outside', async () => {

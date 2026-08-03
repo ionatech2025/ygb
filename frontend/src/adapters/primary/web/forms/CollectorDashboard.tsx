@@ -118,7 +118,7 @@ export function CollectorDashboard() {
             <Landmark className="h-5 w-5" aria-hidden="true" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className={lgoBudgetAllocationClasses.dashboardEntryTitle}>LGO Budget Allocation</p>
+            <p className={lgoBudgetAllocationClasses.dashboardEntryTitle}>LG Budget Allocation</p>
             <p className={lgoBudgetAllocationClasses.dashboardEntrySummary}>
               Prior-FY sector allocations, rationale, and recommendations — not the LGO Questionnaire.
             </p>

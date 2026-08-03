@@ -10,6 +10,8 @@ export interface CascadingLocationSelectorProps {
   repository?: ILocationRepositoryPort;
   /** When false, parish is the deepest level (admin dashboard filters). Default true. */
   includeVillage?: boolean;
+  /** When false (filters), fields are optional and include a Select All choice. Default true. */
+  required?: boolean;
 }
 
 function LocationSelect({
@@ -20,6 +22,7 @@ function LocationSelect({
   onSelect,
   disabled,
   placeholder,
+  required,
 }: {
   id: string;
   label: string;
@@ -28,9 +31,10 @@ function LocationSelect({
   onSelect: (id: string) => void;
   disabled?: boolean;
   placeholder: string;
+  required: boolean;
 }) {
   return (
-    <FormField label={label} htmlFor={id} required>
+    <FormField label={label} htmlFor={id} required={required}>
       <FormSelect
         id={id}
         value={value}
@@ -38,7 +42,7 @@ function LocationSelect({
         onChange={onSelect}
         options={options.map((option) => ({ value: option.id, label: option.name }))}
         placeholder={placeholder}
-        required
+        required={required}
       />
     </FormField>
   );
@@ -49,6 +53,7 @@ export function CascadingLocationSelector({
   onChange,
   repository,
   includeVillage = true,
+  required = true,
 }: CascadingLocationSelectorProps) {
   const {
     loading,
@@ -97,6 +102,7 @@ export function CascadingLocationSelector({
           onSelect={setDistrict}
           disabled={locationDisabled}
           placeholder="Select district…"
+          required={required}
         />
         <LocationSelect
           id="subcounty"
@@ -106,6 +112,7 @@ export function CascadingLocationSelector({
           onSelect={setSubcounty}
           disabled={locationDisabled || !value.districtId}
           placeholder="Select sub-county…"
+          required={required}
         />
         <LocationSelect
           id="parish"
@@ -115,6 +122,7 @@ export function CascadingLocationSelector({
           onSelect={setParish}
           disabled={locationDisabled || !value.subcountyId}
           placeholder="Select parish…"
+          required={required}
         />
         {includeVillage && (
           <LocationSelect
@@ -125,6 +133,7 @@ export function CascadingLocationSelector({
             onSelect={setVillage}
             disabled={locationDisabled || !value.parishId}
             placeholder="Select village…"
+            required={required}
           />
         )}
       </div>

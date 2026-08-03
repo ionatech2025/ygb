@@ -144,6 +144,7 @@ export function BudgetPriorityDashboardFilterPanel({
               }
               repository={locationRepo}
               includeVillage={false}
+              required={false}
             />
           </div>
 

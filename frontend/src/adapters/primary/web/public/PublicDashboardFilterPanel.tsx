@@ -144,6 +144,7 @@ export function PublicDashboardFilterPanel({
               }
               repository={locationRepo}
               includeVillage={false}
+              required={false}
             />
           </div>
 

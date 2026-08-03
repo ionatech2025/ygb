@@ -37,6 +37,15 @@ describe('mapPublicSummaryToSummaryCards', () => {
     ]);
     expect(cards[3]?.items).toEqual([{ label: 'Jan–Jun 2026', value: '42' }]);
   });
+
+  it('labels LGO budget allocation without using the raw enum code', () => {
+    const cards = mapPublicSummaryToSummaryCards({
+      ...sampleSummary,
+      byFormType: [{ formType: 'LGO_BUDGET_ALLOCATION', count: 6 }],
+    });
+
+    expect(cards[1]?.items).toEqual([{ label: 'LG Budget Allocation', value: '6' }]);
+  });
 });
 
 describe('mapPublicChartSeriesToViewModel', () => {

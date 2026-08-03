@@ -51,7 +51,7 @@ public class RecordLgoBudgetAllocationService implements RecordLgoBudgetAllocati
         var user = userRepositoryPort.findById(collectorUserId)
                 .orElseThrow(() -> new UserNotFoundException(collectorUserId));
         if (user.getRole() != Role.DATA_COLLECTOR) {
-            throw new InvalidUserOperationException("Only data collectors can record LGO budget allocations.");
+            throw new InvalidUserOperationException("Only data collectors can record LG budget allocations.");
         }
     }
 

@@ -206,11 +206,8 @@ export function CollectorProfilePage({
               testId="collector-profile-form-type"
               value={filter.formType}
               onChange={(value) => updateFilter({ formType: value as CollectorProfileFilter['formType'] })}
-              options={[
-                { value: '', label: 'All form types' },
-                ...FORM_TYPE_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
-              ]}
-              placeholder="All form types"
+              options={FORM_TYPE_OPTIONS.map((option) => ({ value: option.value, label: option.label }))}
+              placeholder="Select All"
             />
           </FormField>
 
@@ -220,11 +217,8 @@ export function CollectorProfilePage({
               testId="collector-profile-district"
               value={filter.districtId}
               onChange={(value) => updateFilter({ districtId: value })}
-              options={[
-                { value: '', label: 'All districts' },
-                ...districts.map((district) => ({ value: district.id, label: district.name })),
-              ]}
-              placeholder="All districts"
+              options={districts.map((district) => ({ value: district.id, label: district.name }))}
+              placeholder="Select All"
             />
           </FormField>
 
@@ -234,14 +228,11 @@ export function CollectorProfilePage({
               testId="collector-profile-fy-period"
               value={filter.financialYearPeriod}
               onChange={(value) => updateFilter({ financialYearPeriod: value })}
-              options={[
-                { value: '', label: 'All periods' },
-                ...financialYearPeriods.map((period) => ({
-                  value: period,
-                  label: labelFromFinancialYearPeriodKey(period),
-                })),
-              ]}
-              placeholder="All periods"
+              options={financialYearPeriods.map((period) => ({
+                value: period,
+                label: labelFromFinancialYearPeriodKey(period),
+              }))}
+              placeholder="Select All"
             />
           </FormField>
 

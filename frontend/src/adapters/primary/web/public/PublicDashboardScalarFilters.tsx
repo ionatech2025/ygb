@@ -39,11 +39,8 @@ export function PublicDashboardScalarFilters({
           testId="filter-form-type"
           value={filter.formType}
           onChange={(value) => onChange({ formType: value as typeof filter.formType })}
-          options={[
-            { value: '', label: 'All form types' },
-            ...FORM_TYPE_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
-          ]}
-          placeholder="All form types"
+          options={FORM_TYPE_OPTIONS.map((option) => ({ value: option.value, label: option.label }))}
+          placeholder="Select All"
         />
       </FormField>
 
@@ -75,11 +72,8 @@ export function PublicDashboardScalarFilters({
           testId="filter-gender"
           value={filter.gender}
           onChange={(value) => onChange({ gender: value as typeof filter.gender })}
-          options={[
-            { value: '', label: 'All genders' },
-            ...GENDER_OPTIONS.map((option) => ({ value: option.value, label: option.label })),
-          ]}
-          placeholder="All genders"
+          options={GENDER_OPTIONS.map((option) => ({ value: option.value, label: option.label }))}
+          placeholder="Select All"
         />
       </FormField>
 
@@ -89,11 +83,8 @@ export function PublicDashboardScalarFilters({
           testId="filter-age-group"
           value={filter.ageGroup}
           onChange={(value) => onChange({ ageGroup: value as typeof filter.ageGroup })}
-          options={[
-            { value: '', label: 'All age groups' },
-            ...AGE_GROUP_VALUES.map((value) => ({ value, label: AGE_GROUP_LABELS[value] })),
-          ]}
-          placeholder="All age groups"
+          options={AGE_GROUP_VALUES.map((value) => ({ value, label: AGE_GROUP_LABELS[value] }))}
+          placeholder="Select All"
         />
       </FormField>
 
@@ -103,14 +94,11 @@ export function PublicDashboardScalarFilters({
           testId="filter-financial-year"
           value={filter.financialYearPeriod}
           onChange={(value) => onChange({ financialYearPeriod: value })}
-          options={[
-            { value: '', label: 'All periods' },
-            ...financialYearPeriods.map((period) => ({
-              value: period,
-              label: labelFromFinancialYearPeriodKey(period),
-            })),
-          ]}
-          placeholder="All periods"
+          options={financialYearPeriods.map((period) => ({
+            value: period,
+            label: labelFromFinancialYearPeriodKey(period),
+          }))}
+          placeholder="Select All"
         />
       </FormField>
     </div>

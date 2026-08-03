@@ -21,7 +21,7 @@ function SummaryCardsSkeleton() {
   return (
     <div
       data-testid="public-dashboard-summary-skeleton"
-      className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+      className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6"
       aria-busy="true"
       aria-label="Loading summary statistics"
     >
@@ -106,9 +106,18 @@ export function PublicDashboardSummaryCards({ dashboardApi }: PublicDashboardSum
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6">
         {cards.map((card, index) => (
-          <PublicStatCard key={card.id} card={card} accentIndex={index} />
+          <PublicStatCard
+            key={card.id}
+            card={card}
+            accentIndex={index}
+            className={
+              card.id === 'by-form-type' || card.id === 'by-financial-year'
+                ? 'sm:col-span-2 xl:col-span-2'
+                : 'xl:col-span-1'
+            }
+          />
         ))}
       </div>
     </section>

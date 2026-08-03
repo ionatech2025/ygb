@@ -6,15 +6,11 @@ import type {
   PublicDashboardChartsViewModel,
   PublicHeatmapEntry,
 } from './domain/public-dashboard-charts.model';
-import { FORM_TYPE_OPTIONS } from './domain/form-type.model';
+import { formatFormTypeDisplayLabel } from './domain/form-type.model';
 import { formatAgeGroupLabel, GENDER_OPTIONS } from './domain/form-validation.model';
 import type { FinancialYearPeriodHalf } from './domain/financial-year-period.model';
 import { formatFinancialYearPeriodLabel } from './financial-year-period';
 import type { IPublicDashboardApiPort } from '../ports/public-dashboard-api.port';
-
-const FORM_TYPE_LABELS = Object.fromEntries(
-  FORM_TYPE_OPTIONS.map((option) => [option.value, option.label])
-) as Record<string, string>;
 
 const GENDER_LABELS = Object.fromEntries(
   GENDER_OPTIONS.map((option) => [option.value, option.label])
@@ -95,7 +91,7 @@ export function mapPublicSummaryToSummaryCards(summary: PublicDashboardSummary):
       id: 'by-form-type',
       title: 'By form type',
       items: summary.byFormType.map((entry) => ({
-        label: FORM_TYPE_LABELS[entry.formType] ?? entry.formType,
+        label: formatFormTypeDisplayLabel(entry.formType),
         value: formatCount(entry.count),
       })),
     },

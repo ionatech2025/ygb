@@ -8,6 +8,9 @@ export interface FormSelectOption {
   label: string;
 }
 
+export const FORM_SELECT_ALL_VALUE = '';
+export const FORM_SELECT_ALL_LABEL = 'Select All';
+
 export interface FormSelectProps {
   id: string;
   value: string;
@@ -16,7 +19,23 @@ export interface FormSelectProps {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
+  /**
+   * When true, prepends a clearing option labeled "Select All".
+   * Defaults to true for optional selects and false for required selects.
+   */
+  includeSelectAll?: boolean;
   testId?: string;
+}
+
+export function withSelectAllOption(
+  options: readonly FormSelectOption[],
+  includeSelectAll: boolean
+): FormSelectOption[] {
+  if (!includeSelectAll) {
+    return [...options];
+  }
+  const withoutEmpty = options.filter((option) => option.value !== FORM_SELECT_ALL_VALUE);
+  return [{ value: FORM_SELECT_ALL_VALUE, label: FORM_SELECT_ALL_LABEL }, ...withoutEmpty];
 }
 
 const OPTION_LIST_BASE_CLASS_NAME =
@@ -103,6 +122,7 @@ export function FormSelect({
   placeholder = 'Select…',
   disabled = false,
   required = false,
+  includeSelectAll = !required,
   testId,
 }: FormSelectProps) {
   const groupName = useId();
@@ -111,7 +131,8 @@ export function FormSelect({
   const listRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [panelStyle, setPanelStyle] = useState<CSSProperties>({});
-  const selectedLabel = options.find((option) => option.value === value)?.label;
+  const resolvedOptions = withSelectAllOption(options, includeSelectAll);
+  const selectedLabel = resolvedOptions.find((option) => option.value === value)?.label;
 
   const updatePanelPosition = useCallback(() => {
     const trigger = triggerRef.current;
@@ -207,7 +228,7 @@ export function FormSelect({
             groupName={groupName}
             value={value}
             onChange={handleChange}
-            options={options}
+            options={resolvedOptions}
             disabled={disabled}
             required={required}
             listRef={listRef}
