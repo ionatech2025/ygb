@@ -144,6 +144,7 @@ export function LgoBudgetAllocationDashboardFilterPanel({
               }
               repository={locationRepo}
               includeVillage={false}
+              required={false}
             />
           </div>
 
