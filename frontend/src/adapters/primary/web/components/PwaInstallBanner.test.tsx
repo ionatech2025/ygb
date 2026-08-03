@@ -68,24 +68,50 @@ describe('PwaInstallBanner', () => {
     expect(promptInstall).toHaveBeenCalledTimes(1);
   });
 
+  it('keeps the download icon as an active install control when native install is unavailable', async () => {
+    const promptInstall = vi.fn().mockResolvedValue(undefined);
+    mockHook({
+      canNativeInstall: false,
+      installMode: 'ios',
+      isIos: true,
+      promptInstall,
+    });
+    const user = userEvent.setup();
+
+    render(<PwaInstallBanner />);
+
+    const installControl = screen.getByRole('button', { name: 'Install' });
+    expect(installControl).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();
+
+    await user.click(installControl);
+    expect(promptInstall).toHaveBeenCalledTimes(1);
+  });
+
   it('opens iOS install help when How to install is clicked on iOS', () => {
     const showInstallGuide = vi.fn();
     mockHook({ isIos: true, installMode: 'ios', canNativeInstall: false, showInstallGuide, iosHelpOpen: true });
     render(<PwaInstallBanner />);
 
     expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Install' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Install' })).toBeInTheDocument();
     expect(screen.getByTestId('pwa-ios-help')).toBeInTheDocument();
+    expect(screen.getByText(/Safari \(iPhone \/ iPad\)/i)).toBeInTheDocument();
     expect(screen.getByText(/Add to Home Screen/i)).toBeInTheDocument();
   });
 
   it('opens browser install help when How to install is clicked in browser mode', () => {
-    mockHook({ installMode: 'browser', canNativeInstall: false, browserHelpOpen: true, isAndroid: true });
+    mockHook({ installMode: 'browser', canNativeInstall: false, browserHelpOpen: true, isAndroid: false });
     render(<PwaInstallBanner />);
 
     expect(screen.getByRole('button', { name: 'How to install' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Install' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Install' })).toBeInTheDocument();
     expect(screen.getByTestId('pwa-browser-help')).toBeInTheDocument();
+    expect(screen.getByText('Chrome')).toBeInTheDocument();
+    expect(screen.getByText('Edge')).toBeInTheDocument();
+    expect(screen.getByText('Safari')).toBeInTheDocument();
+    expect(screen.getByText(/More tools/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Install Youth Go Budget App/i).length).toBeGreaterThanOrEqual(1);
   });
 
   it('dismisses when Not now is clicked', async () => {

@@ -1,4 +1,5 @@
 import { Download } from 'lucide-react';
+import { getPwaInstallGuideSections } from '../../../../core/domain/pwa-install-prompt.model';
 
 interface PwaInstallBrowserHelpProps {
   open: boolean;
@@ -11,17 +12,7 @@ export function PwaInstallBrowserHelp({ open, onClose, isAndroid }: PwaInstallBr
     return null;
   }
 
-  const steps = isAndroid
-    ? [
-        'Open the browser menu (three dots).',
-        'Tap Install app or Add to Home screen.',
-        'Confirm to add YGB to your home screen.',
-      ]
-    : [
-        'Look for the install icon in the address bar (⊕ or computer icon).',
-        'Or open the browser menu and choose Install Youth Go Budget / Install app.',
-        'Confirm the install prompt to add YGB to your device.',
-      ];
+  const sections = getPwaInstallGuideSections({ isAndroid, isIosLike: false });
 
   return (
     <div
@@ -40,13 +31,20 @@ export function PwaInstallBrowserHelp({ open, onClose, isAndroid }: PwaInstallBr
             <h2 id="pwa-browser-help-title" className="text-base font-bold text-text">
               Install YGB on this device
             </h2>
-            <ol className="mt-3 space-y-2 text-sm text-text-muted">
-              {steps.map((step, index) => (
-                <li key={step}>
-                  {index + 1}. {step}
-                </li>
+            <div className="mt-3 space-y-4">
+              {sections.map((section) => (
+                <div key={section.browser}>
+                  <p className="text-sm font-semibold text-text">{section.browser}</p>
+                  <ol className="mt-1.5 space-y-1.5 text-sm text-text-muted">
+                    {section.steps.map((step, index) => (
+                      <li key={step}>
+                        {index + 1}. {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
               ))}
-            </ol>
+            </div>
           </div>
         </div>
         <button

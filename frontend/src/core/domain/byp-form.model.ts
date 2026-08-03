@@ -10,7 +10,7 @@ export const FUND_RECEIPT_DURATION_OPTIONS = [
 export const INSTALMENT_PERIOD_OPTIONS = [
   { value: 'MONTHLY', label: 'Monthly' },
   { value: 'QUARTERLY', label: 'Quarterly' },
-  { value: 'BIANNUALLY', label: 'Biennially' },
+  { value: 'BIANNUALLY', label: 'Biannually' },
   { value: 'ANNUAL', label: 'Annual' },
   { value: 'OTHERS', label: 'Other (specify)' },
 ] as const;

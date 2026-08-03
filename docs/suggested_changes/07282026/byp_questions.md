@@ -40,7 +40,7 @@
 
    (b) Quarterly
 
-   (c) Biennially
+   (c) Biannually
 
    (d) Annual
 
