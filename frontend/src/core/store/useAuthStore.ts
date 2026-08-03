@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { AuthState, AuthenticatedUser, TokenPair } from '../domain/auth.model';
+import { isNetworkAuthFailure } from '../domain/auth-network';
 import { PersistentAuthAdapter } from '../../adapters/secondary/api/persistent-auth.adapter';
 
 const SESSION_KEY = 'ygb-auth-session';
@@ -24,8 +25,20 @@ interface AuthStoreActions extends AuthState {
 
 function readSession(): PersistedSession | null {
   try {
-    const raw = sessionStorage.getItem(SESSION_KEY);
-    return raw ? (JSON.parse(raw) as PersistedSession) : null;
+    const fromLocal = localStorage.getItem(SESSION_KEY);
+    if (fromLocal) {
+      return JSON.parse(fromLocal) as PersistedSession;
+    }
+
+    // Migrate older sessionStorage sessions (cleared when PWA is fully closed).
+    const fromSession = sessionStorage.getItem(SESSION_KEY);
+    if (fromSession) {
+      localStorage.setItem(SESSION_KEY, fromSession);
+      sessionStorage.removeItem(SESSION_KEY);
+      return JSON.parse(fromSession) as PersistedSession;
+    }
+
+    return null;
   } catch {
     return null;
   }
@@ -33,10 +46,33 @@ function readSession(): PersistedSession | null {
 
 function writeSession(user: AuthenticatedUser | null, tokens: TokenPair | null): void {
   if (!user) {
+    localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(SESSION_KEY);
     return;
   }
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify({ user, tokens }));
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ user, tokens }));
+  sessionStorage.removeItem(SESSION_KEY);
+}
+
+async function completeOfflineLogin(
+  phoneNumber: string,
+  passwordPlain: string,
+  set: (partial: Partial<AuthStoreActions>) => void
+): Promise<void> {
+  const hasLocalProfile = await authRepo.hasOfflineProfile(phoneNumber);
+  if (!hasLocalProfile) {
+    throw new Error('Initial online login required on this device');
+  }
+
+  const offlineUser = await authRepo.loginOffline({ phoneNumber, passwordPlain });
+  const cachedTokens = await authRepo.getCachedTokens(offlineUser.phoneNumber);
+  writeSession(offlineUser, cachedTokens);
+  set({
+    user: offlineUser,
+    tokens: cachedTokens,
+    isAuthenticated: true,
+    isOnline: false,
+  });
 }
 
 export const useAuthStore = create<AuthStoreActions>((set, get) => ({
@@ -77,21 +113,23 @@ export const useAuthStore = create<AuthStoreActions>((set, get) => ({
     const { isOnline } = get();
 
     if (isOnline) {
-      const response = await authRepo.loginOnline({ phoneNumber, passwordPlain });
-      await authRepo.cacheCredentials(response.user, passwordPlain, response.tokens);
-      writeSession(response.user, response.tokens);
-      set({ user: response.user, tokens: response.tokens, isAuthenticated: true });
-      return;
+      try {
+        const response = await authRepo.loginOnline({ phoneNumber, passwordPlain });
+        await authRepo.cacheCredentials(response.user, passwordPlain, response.tokens);
+        writeSession(response.user, response.tokens);
+        set({ user: response.user, tokens: response.tokens, isAuthenticated: true });
+        return;
+      } catch (error) {
+        if (!isNetworkAuthFailure(error)) {
+          throw error;
+        }
+        // Browser reported online, but the API was unreachable (common on mobile/PWA).
+        await completeOfflineLogin(phoneNumber, passwordPlain, set);
+        return;
+      }
     }
 
-    const hasLocalProfile = await authRepo.hasOfflineProfile(phoneNumber);
-    if (!hasLocalProfile) {
-      throw new Error('Initial online login required on this device');
-    }
-
-    const offlineUser = await authRepo.loginOffline({ phoneNumber, passwordPlain });
-    writeSession(offlineUser, null);
-    set({ user: offlineUser, tokens: null, isAuthenticated: true });
+    await completeOfflineLogin(phoneNumber, passwordPlain, set);
   },
 
   checkSilentRefresh: async () => {
