@@ -83,7 +83,7 @@ export function LgoBudgetAllocationExportToolbar({
   return (
     <div className={`${publicDashboardClasses.panel} p-4 sm:p-5`} data-testid="lgo-budget-allocation-export-toolbar">
       <p className="mb-4 text-sm leading-relaxed text-text-muted">
-        Download the currently filtered anonymised LGO Budget Allocation dataset.
+        Download the currently filtered anonymised LG Budget Allocation dataset.
       </p>
       {button}
       {error && (

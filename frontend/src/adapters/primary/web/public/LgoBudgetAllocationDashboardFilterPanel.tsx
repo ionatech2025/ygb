@@ -88,7 +88,7 @@ export function LgoBudgetAllocationDashboardFilterPanel({
 
   return (
     <section
-      aria-label="LGO budget allocation dashboard filters"
+      aria-label="LG budget allocation dashboard filters"
       data-testid="lgo-budget-allocation-dashboard-filter-panel"
       className={`${publicDashboardClasses.panel} overflow-hidden`}
     >

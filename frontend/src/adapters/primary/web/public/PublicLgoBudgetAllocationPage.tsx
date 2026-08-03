@@ -28,7 +28,7 @@ export function PublicLgoBudgetAllocationPage() {
             <p className={lgoBudgetAllocationClasses.heroEyebrow}>Public dashboard</p>
             <h1 className={`${lgoBudgetAllocationClasses.heroTitle} flex items-center gap-3`}>
               <LayoutDashboard className="h-7 w-7 shrink-0 text-brand sm:h-8 sm:w-8" aria-hidden="true" />
-              LGO Budget Allocation Insights
+              LG Budget Allocation Insights
             </h1>
             <p className={lgoBudgetAllocationClasses.heroLead}>
               Explore anonymised local government budget allocation interviews by district, sector, and financial

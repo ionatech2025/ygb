@@ -16,7 +16,7 @@ export function LgoBudgetAllocationSuccessBanner({ isOnline }: LgoBudgetAllocati
       <span>
         {isOnline
           ? 'Submission saved and syncing to the server.'
-          : 'Saved locally. Your LGO budget allocation will sync when online.'}
+          : 'Saved locally. Your LG budget allocation will sync when online.'}
       </span>
     </div>
   );

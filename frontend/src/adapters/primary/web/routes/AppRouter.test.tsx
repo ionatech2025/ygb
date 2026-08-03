@@ -202,7 +202,7 @@ describe('AppRouter public dashboard routes', () => {
         '/budget-priorities'
       );
       expect(screen.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources');
-      expect(screen.queryByRole('link', { name: 'LGO Budget Allocation' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: 'LG Budget Allocation' })).not.toBeInTheDocument();
     });
   });
 

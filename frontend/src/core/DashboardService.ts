@@ -2,17 +2,13 @@ import type { DashboardAggregates } from './domain/dashboard-aggregates.model';
 import type { DashboardChartsViewModel } from './domain/dashboard-charts.model';
 import type { DashboardFilter } from './domain/dashboard-filter.model';
 import type { StatCardViewModel } from './domain/dashboard-summary.model';
-import { FORM_TYPE_OPTIONS } from './domain/form-type.model';
+import { formatFormTypeDisplayLabel } from './domain/form-type.model';
 import { GENDER_OPTIONS } from './domain/form-validation.model';
 import type { FinancialYearPeriodHalf } from './domain/financial-year-period.model';
 import { formatFinancialYearPeriodLabel } from './financial-year-period';
 import type { IDashboardApiPort } from '../ports/dashboard-api.port';
 
 export const TOP_DISTRICTS_LIMIT = 5;
-
-const FORM_TYPE_LABELS = Object.fromEntries(
-  FORM_TYPE_OPTIONS.map((option) => [option.value, option.label])
-) as Record<string, string>;
 
 const GENDER_LABELS = Object.fromEntries(
   GENDER_OPTIONS.map((option) => [option.value, option.label])
@@ -48,7 +44,7 @@ export function mapAggregatesToSummaryCards(aggregates: DashboardAggregates): St
       id: 'by-form-type',
       title: 'By form type',
       items: aggregates.byFormType.map((entry) => ({
-        label: FORM_TYPE_LABELS[entry.formType] ?? entry.formType,
+        label: formatFormTypeDisplayLabel(entry.formType),
         value: formatCount(entry.count),
       })),
     },

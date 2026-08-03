@@ -28,7 +28,7 @@ function ChartsSkeleton() {
       data-testid="lgo-dashboard-charts-skeleton"
       className="grid grid-cols-1 gap-4 lg:grid-cols-2"
       aria-busy="true"
-      aria-label="Loading LGO budget allocation charts"
+      aria-label="Loading LG budget allocation charts"
     >
       {Array.from({ length: 3 }).map((_, index) => (
         <div
@@ -89,7 +89,7 @@ export function LgoBudgetAllocationCharts({ dashboardApi }: LgoBudgetAllocationC
           const message =
             err instanceof ApiError || err instanceof Error
               ? err.message
-              : 'Failed to load LGO budget allocation charts.';
+              : 'Failed to load LG budget allocation charts.';
 
           if (isDashboardLocationFilterError(message)) {
             setLocationFilterError(formatLocationFilterRecoveryMessage(message));
@@ -145,7 +145,7 @@ export function LgoBudgetAllocationCharts({ dashboardApi }: LgoBudgetAllocationC
 
       <div
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        aria-label="LGO budget allocation charts"
+        aria-label="LG budget allocation charts"
         data-testid="lgo-budget-allocation-charts"
       >
         <ChartPanel
@@ -157,7 +157,7 @@ export function LgoBudgetAllocationCharts({ dashboardApi }: LgoBudgetAllocationC
             data={charts.byDistrict}
             emptyTestId="chart-by-district-empty"
             chartTestId="chart-by-district"
-            ariaLabel="Bar chart comparing LGO budget allocation submissions across districts"
+            ariaLabel="Bar chart comparing LG budget allocation submissions across districts"
             emptyMessage="No district comparison data for the current filters."
           />
         </ChartPanel>

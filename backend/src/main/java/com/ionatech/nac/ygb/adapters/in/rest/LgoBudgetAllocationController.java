@@ -53,7 +53,7 @@ public class LgoBudgetAllocationController {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ProblemDetail> handleValidation(IllegalArgumentException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
-        problem.setTitle("Invalid LGO Budget Allocation Submission");
+        problem.setTitle("Invalid LG Budget Allocation Submission");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }
 }
