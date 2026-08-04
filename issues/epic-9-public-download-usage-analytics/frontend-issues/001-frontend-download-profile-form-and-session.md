@@ -17,11 +17,11 @@ Build the public **download profile form** UI (country, gender, age, field of op
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Component tests: submit disabled until required fields + consent valid.
-- [ ] Invalid email blocked client-side.
-- [ ] Successful submit stores session token/expiry.
-- [ ] Expired session cleared and form required again.
-- [ ] Privacy/purpose notice visible with consent checkbox.
+- [x] Component tests: submit disabled until required fields + consent valid.
+- [x] Invalid email blocked client-side.
+- [x] Successful submit stores session token/expiry.
+- [x] Expired session cleared and form required again.
+- [x] Privacy/purpose notice visible with consent checkbox.
 
 ## Blocked by
 
