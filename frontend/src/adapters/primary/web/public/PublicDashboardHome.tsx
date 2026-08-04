@@ -8,6 +8,7 @@ import { PublicDashboardFilterPanel } from './PublicDashboardFilterPanel';
 import { PublicDashboardExportToolbar } from './PublicDashboardExportToolbar';
 import { PublicDashboardSummaryCards } from './PublicDashboardSummaryCards';
 import { PublicDashboardCharts } from './PublicDashboardCharts';
+import { PublicDownloadUsageSection } from './PublicDownloadUsageSection';
 
 export function PublicDashboardHome() {
   const dashboardApi = useMemo(() => new HttpPublicDashboardAdapter(), []);
@@ -74,6 +75,7 @@ export function PublicDashboardHome() {
       </section>
 
       <PublicDashboardCharts dashboardApi={dashboardApi} />
+      <PublicDownloadUsageSection />
     </div>
   );
 }

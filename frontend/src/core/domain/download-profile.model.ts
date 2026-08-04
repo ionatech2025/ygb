@@ -51,7 +51,7 @@ export interface RegisterDownloadProfileRequest {
 }
 
 export const DOWNLOAD_PROFILE_PRIVACY_NOTICE =
-  'We collect this information to understand who uses Youth Gender Budget open data. ' +
+  'We collect this information to understand who uses Youth Go Budget App open data. ' +
   'Your details support programme analytics and may appear in admin reports. ' +
   'Public charts and donor PDFs use aggregates only — email and name are never shown there.';
 

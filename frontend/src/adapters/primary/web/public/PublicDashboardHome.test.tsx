@@ -18,8 +18,12 @@ vi.mock('./PublicDashboardCharts', () => ({
   PublicDashboardCharts: () => <div data-testid="public-dashboard-charts-section" />,
 }));
 
+vi.mock('./PublicDownloadUsageSection', () => ({
+  PublicDownloadUsageSection: () => <div data-testid="public-download-usage-section" />,
+}));
+
 describe('PublicDashboardHome', () => {
-  it('renders hero and section regions for filters, export, summary, and charts', () => {
+  it('renders hero and section regions for filters, export, summary, charts, and public download usage', () => {
     render(<PublicDashboardHome />);
 
     expect(screen.getByTestId('public-dashboard-home')).toBeInTheDocument();
@@ -31,5 +35,6 @@ describe('PublicDashboardHome', () => {
     expect(screen.getByTestId('public-dashboard-export-toolbar')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-summary-cards')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-charts-section')).toBeInTheDocument();
+    expect(screen.getByTestId('public-download-usage-section')).toBeInTheDocument();
   });
 });
