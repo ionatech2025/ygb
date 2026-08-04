@@ -47,6 +47,26 @@ public class PdfVectorChartRenderer {
         );
     }
 
+    PdfPTable createDownloadsByDatasetChart(List<ReportLabelCount> rows) throws DocumentException {
+        return createHorizontalBarChart(
+                "Public Downloads by Dataset",
+                rows,
+                PdfReportTheme.BRAND_GREEN
+        );
+    }
+
+    PdfPTable createDownloadsOverTimeChart(List<ReportLabelCount> points) throws DocumentException {
+        return createVerticalBarChart(
+                "Public Downloads Over Time",
+                ReportChartDataPreparer.prepareTimeSeries(points),
+                PdfReportTheme.BRAND_BLUE
+        );
+    }
+
+    PdfPTable createDownloaderGenderChart(List<ReportLabelCount> rows) throws DocumentException {
+        return createVerticalBarChart("Downloaders by Gender", rows, PdfReportTheme.BRAND_BLUE);
+    }
+
     private PdfPTable createVerticalBarChart(String title, List<ReportLabelCount> rows, Color seriesColor)
             throws DocumentException {
         PdfPTable wrapper = chartWrapper(title);

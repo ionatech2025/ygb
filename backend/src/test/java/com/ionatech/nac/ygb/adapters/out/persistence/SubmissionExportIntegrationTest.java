@@ -49,6 +49,8 @@ import static org.assertj.core.api.Assertions.assertThat;
         AdminSubmissionQueryJpaRepository.class,
         DashboardAggregationJpaRepository.class,
         DashboardAggregationRepositoryAdapter.class,
+        DownloadUsageAnalyticsJpaRepository.class,
+        DownloadUsageAnalyticsRepositoryAdapter.class,
         AdminDashboardReportAssembler.class,
         PdfVectorChartRenderer.class,
         CsvExportWriter.class,

@@ -15,10 +15,10 @@ Extend the **admin PDF report** with aggregate sections for site visitors and pu
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] PDF text/section titles include visitor and download usage headings.
-- [ ] PDF contains aggregate figures/charts for usage; extracted text has no sample email addresses from fixtures unless accidentally in other sections.
-- [ ] Unit tests for usage section model assembly; integration/PDF generation smoke test.
-- [ ] Existing submission PDF sections remain intact.
+- [x] PDF text/section titles include visitor and download usage headings.
+- [x] PDF contains aggregate figures/charts for usage; extracted text has no sample email addresses from fixtures unless accidentally in other sections.
+- [x] Unit tests for usage section model assembly; integration/PDF generation smoke test.
+- [x] Existing submission PDF sections remain intact.
 
 ## Blocked by
 
