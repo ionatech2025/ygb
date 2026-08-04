@@ -8,6 +8,7 @@ import com.ionatech.nac.ygb.domain.valueobjects.DownloaderPage;
 import com.ionatech.nac.ygb.domain.valueobjects.DownloaderSummary;
 import com.ionatech.nac.ygb.domain.valueobjects.GenderCount;
 import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
+import com.ionatech.nac.ygb.domain.valueobjects.PublicDownloadUsageAggregates;
 import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesGranularity;
 import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesPoint;
 import com.ionatech.nac.ygb.domain.valueobjects.VisitsVsDownloadsComparison;
@@ -148,6 +149,38 @@ class DownloadUsageAnalyticsJpaRepository {
         );
     }
 
+    PublicDownloadUsageAggregates getPublicDownloadUsageAggregates(
+            LocalDate dateFrom,
+            LocalDate dateTo,
+            TimeSeriesGranularity granularity
+    ) {
+        Map<String, Object> params = new HashMap<>();
+        String where = eventsOnlyWhereClause(dateFrom, dateTo, params);
+
+        long totalDownloads = ((Number) bind(entityManager.createNativeQuery(
+                "SELECT COUNT(e.id) FROM download_events e " + where
+        ), params).getSingleResult()).longValue();
+
+        List<DatasetDownloadCount> byDataset = mapLabelCounts(
+                "SELECT e.dataset, COUNT(e.id) FROM download_events e "
+                        + where + " GROUP BY e.dataset ORDER BY COUNT(e.id) DESC",
+                params,
+                DatasetDownloadCount::new
+        );
+
+        String bucketExpression = bucketExpression(granularity, "e.downloaded_at");
+        @SuppressWarnings("unchecked")
+        List<Object[]> overTimeRows = bind(entityManager.createNativeQuery(
+                "SELECT " + bucketExpression + ", COUNT(e.id) FROM download_events e "
+                        + where + " GROUP BY 1 ORDER BY 1 ASC"
+        ), params).getResultList();
+        List<TimeSeriesPoint> overTime = overTimeRows.stream()
+                .map(row -> new TimeSeriesPoint(toLocalDate(row[0]), ((Number) row[1]).longValue()))
+                .toList();
+
+        return new PublicDownloadUsageAggregates(totalDownloads, byDataset, overTime);
+    }
+
     VisitsVsDownloadsComparison getVisitsVsDownloads(
             DownloadUsageFilter filter,
             TimeSeriesGranularity granularity
@@ -277,6 +310,19 @@ class DownloadUsageAnalyticsJpaRepository {
         if (filter.dateTo() != null) {
             where.append(" AND v.visited_at < :visitDateToExclusive");
             params.put("visitDateToExclusive", filter.dateTo().plusDays(1).atStartOfDay());
+        }
+        return where.toString();
+    }
+
+    private static String eventsOnlyWhereClause(LocalDate dateFrom, LocalDate dateTo, Map<String, Object> params) {
+        StringBuilder where = new StringBuilder(" WHERE 1=1");
+        if (dateFrom != null) {
+            where.append(" AND e.downloaded_at >= :dateFrom");
+            params.put("dateFrom", dateFrom.atStartOfDay());
+        }
+        if (dateTo != null) {
+            where.append(" AND e.downloaded_at < :dateToExclusive");
+            params.put("dateToExclusive", dateTo.plusDays(1).atStartOfDay());
         }
         return where.toString();
     }

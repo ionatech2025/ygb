@@ -28,6 +28,7 @@ import com.ionatech.nac.ygb.domain.valueobjects.Gender;
 import com.ionatech.nac.ygb.domain.valueobjects.IsoCountryCode;
 import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicDownloadDataset;
+import com.ionatech.nac.ygb.domain.valueobjects.PublicDownloadUsageAggregates;
 import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesGranularity;
 import com.ionatech.nac.ygb.domain.valueobjects.VisitsVsDownloadsComparison;
 import org.junit.jupiter.api.BeforeEach;
@@ -148,6 +149,33 @@ class DownloadUsageAnalyticsRepositoryAdapterTest {
         assertThat(comparison.totalUniqueDownloaders()).isEqualTo(1);
         assertThat(comparison.overTime()).isNotEmpty();
         assertThat(comparison.overTime().getFirst().bucketStart()).isEqualTo(LocalDate.of(2026, 8, 4));
+    }
+
+    @Test
+    void shouldAggregatePublicDownloadUsageWithoutJoiningProfiles() {
+        LocalDateTime now = LocalDateTime.parse("2026-08-04T12:00:00");
+        DownloadProfile profile = saveProfile("public@example.com", Gender.FEMALE, AgeGroup.AGE_18_24, now);
+        DownloadSession session = sessionRepository.save(DownloadSession.issue(profile.getId(), "tok-public", now));
+        eventRepository.save(DownloadEvent.recordNew(
+                profile.getId(), session.getId(), PublicDownloadDataset.PDM, ExportFormat.CSV, now, null
+        ));
+        eventRepository.save(DownloadEvent.recordNew(
+                profile.getId(), session.getId(), PublicDownloadDataset.BUDGET_PRIORITIES, ExportFormat.XLSX, now, null
+        ));
+        eventRepository.save(DownloadEvent.recordNew(
+                profile.getId(), session.getId(), PublicDownloadDataset.LGO_BUDGET_ALLOCATION, ExportFormat.CSV, now, null
+        ));
+
+        PublicDownloadUsageAggregates publicAggregates = analyticsRepository.getPublicDownloadUsageAggregates(
+                null,
+                null,
+                TimeSeriesGranularity.DAY
+        );
+
+        assertThat(publicAggregates.totalDownloads()).isEqualTo(3);
+        assertThat(publicAggregates.byDataset()).extracting(d -> d.dataset())
+                .contains("PDM", "BUDGET_PRIORITIES", "LGO_BUDGET_ALLOCATION");
+        assertThat(publicAggregates.downloadsOverTime()).isNotEmpty();
     }
 
     private DownloadProfile saveProfile(String email, Gender gender, AgeGroup ageGroup, LocalDateTime createdAt) {

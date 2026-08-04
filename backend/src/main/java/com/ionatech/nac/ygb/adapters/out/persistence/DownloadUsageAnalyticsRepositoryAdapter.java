@@ -5,9 +5,12 @@ import com.ionatech.nac.ygb.domain.valueobjects.DownloadUsageAggregates;
 import com.ionatech.nac.ygb.domain.valueobjects.DownloadUsageFilter;
 import com.ionatech.nac.ygb.domain.valueobjects.DownloaderPage;
 import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
+import com.ionatech.nac.ygb.domain.valueobjects.PublicDownloadUsageAggregates;
 import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesGranularity;
 import com.ionatech.nac.ygb.domain.valueobjects.VisitsVsDownloadsComparison;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class DownloadUsageAnalyticsRepositoryAdapter implements DownloadUsageAnalyticsRepositoryPort {
@@ -37,5 +40,14 @@ public class DownloadUsageAnalyticsRepositoryAdapter implements DownloadUsageAna
             TimeSeriesGranularity granularity
     ) {
         return jpaRepository.getVisitsVsDownloads(filter, granularity);
+    }
+
+    @Override
+    public PublicDownloadUsageAggregates getPublicDownloadUsageAggregates(
+            LocalDate dateFrom,
+            LocalDate dateTo,
+            TimeSeriesGranularity granularity
+    ) {
+        return jpaRepository.getPublicDownloadUsageAggregates(dateFrom, dateTo, granularity);
     }
 }

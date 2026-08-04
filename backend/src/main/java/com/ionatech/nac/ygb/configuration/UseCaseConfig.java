@@ -461,4 +461,11 @@ public class UseCaseConfig {
     ) {
         return new DownloadUsageAnalyticsService(downloadUsageAnalyticsRepositoryPort);
     }
+
+    @Bean
+    public GetPublicDownloadUsageAggregatesQuery getPublicDownloadUsageAggregatesQuery(
+            DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepositoryPort
+    ) {
+        return new GetPublicDownloadUsageAggregatesService(downloadUsageAnalyticsRepositoryPort);
+    }
 }

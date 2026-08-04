@@ -14,10 +14,10 @@ Expose **public, anonymised** download-usage aggregates for dashboard charts (do
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Public endpoint returns series suitable for “downloads over time”.
-- [ ] Public endpoint returns per-dataset comparison (PDM vs Budget Priorities vs LGO).
-- [ ] Controller/integration assertion: JSON has no PII keys.
-- [ ] No auth required.
+- [x] Public endpoint returns series suitable for “downloads over time”.
+- [x] Public endpoint returns per-dataset comparison (PDM vs Budget Priorities vs LGO).
+- [x] Controller/integration assertion: JSON has no PII keys.
+- [x] No auth required.
 
 ## Blocked by
 
