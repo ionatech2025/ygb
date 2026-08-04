@@ -1,11 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
-import { apiClient } from '../../../core/api/api-client';
+import { apiFetch } from '../../../core/api/api-client';
 import { HttpPublicDownloadUsageAdapter } from './public-download-usage-api.adapter';
 
 vi.mock('../../../core/api/api-client', () => ({
-  apiClient: {
-    get: vi.fn(),
-  },
+  apiFetch: vi.fn(),
 }));
 
 describe('HttpPublicDownloadUsageAdapter', () => {
@@ -22,12 +20,12 @@ describe('HttpPublicDownloadUsageAdapter', () => {
         { bucketStart: '2026-08-02', count: 27 },
       ],
     };
-    vi.mocked(apiClient.get).mockResolvedValueOnce(mockData);
+    vi.mocked(apiFetch).mockResolvedValueOnce(mockData);
 
     const adapter = new HttpPublicDownloadUsageAdapter();
     const result = await adapter.fetchPublicDownloadUsage();
 
-    expect(apiClient.get).toHaveBeenCalledWith('/api/v1/public/dashboard/download-usage');
+    expect(apiFetch).toHaveBeenCalledWith('/api/v1/public/dashboard/download-usage');
     expect(result).toEqual(mockData);
   });
 });
