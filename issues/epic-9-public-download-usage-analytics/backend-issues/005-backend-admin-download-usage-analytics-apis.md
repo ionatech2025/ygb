@@ -16,11 +16,11 @@ Provide **ADMIN** APIs for downloader listing (with PII) and graphical aggregate
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Unauthorized/non-admin → 401/403.
-- [ ] Downloader list includes email, optional name, country, gender, age, field of operation, download counts/timestamps.
-- [ ] Aggregate endpoints respect age + gender filters.
-- [ ] Visitors vs downloaders returns comparable series/totals for charting.
-- [ ] Application tests with mocked SPI; controller tests for filter query params.
+- [x] Unauthorized/non-admin → 401/403.
+- [x] Downloader list includes email, optional name, country, gender, age, field of operation, download counts/timestamps.
+- [x] Aggregate endpoints respect age + gender filters.
+- [x] Visitors vs downloaders returns comparable series/totals for charting.
+- [x] Application tests with mocked SPI; controller tests for filter query params.
 
 ## Blocked by
 

@@ -454,4 +454,11 @@ public class UseCaseConfig {
     ) {
         return new RecordPublicVisitService(publicVisitEventRepositoryPort, clock);
     }
+
+    @Bean
+    public DownloadUsageAnalyticsService downloadUsageAnalyticsService(
+            DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepositoryPort
+    ) {
+        return new DownloadUsageAnalyticsService(downloadUsageAnalyticsRepositoryPort);
+    }
 }
