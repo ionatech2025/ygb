@@ -40,12 +40,12 @@ Screenshot: Q1–3 section header visible with admin FY label when online; offli
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] **Adapter / unit test:** successful `fetchPublicActiveFiscalYear` persists setting for later reads.
-- [ ] **Adapter / unit test:** when `apiFetch` rejects with a network failure and cache is present, loader returns cached `ActiveFiscalYearSetting`.
-- [ ] **Adapter / unit test:** when network fails and cache is empty, error still propagates (no silent empty FY).
-- [ ] **Component test (`LgoForm`):** offline (mocked fetch rejection + seeded cache) renders Q1–3 blocks for admin-set + prior FY; no “Failed to fetch” alert; submit not disabled solely due to FY load error.
-- [ ] **Component test:** offline with empty cache still shows a clear load error (cannot invent FY).
-- [ ] **Regression:** online path still fetches live setting and updates Q1–3 labels after admin change (when collector has connectivity).
+- [x] **Adapter / unit test:** successful `fetchPublicActiveFiscalYear` persists setting for later reads.
+- [x] **Adapter / unit test:** when `apiFetch` rejects with a network failure and cache is present, loader returns cached `ActiveFiscalYearSetting`.
+- [x] **Adapter / unit test:** when network fails and cache is empty, error still propagates (no silent empty FY).
+- [x] **Component test (`LgoForm`):** offline (mocked fetch rejection + seeded cache) renders Q1–3 blocks for admin-set + prior FY; no “Failed to fetch” alert; submit not disabled solely due to FY load error.
+- [x] **Component test:** offline with empty cache still shows a clear load error (cannot invent FY).
+- [x] **Regression:** online path still fetches live setting and updates Q1–3 labels after admin change (when collector has connectivity).
 - [ ] Manual QA (PWA): go online once → open LGO → go offline → reopen LGO → Q1–3 editable and submittable to offline queue.
 
 ## Out of scope
