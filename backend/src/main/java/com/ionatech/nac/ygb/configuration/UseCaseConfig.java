@@ -431,4 +431,18 @@ public class UseCaseConfig {
                 clock
         );
     }
+
+    @Bean
+    @Transactional
+    public AuthorizePublicDownloadUseCase authorizePublicDownloadUseCase(
+            DownloadSessionRepositoryPort downloadSessionRepositoryPort,
+            DownloadEventRepositoryPort downloadEventRepositoryPort,
+            Clock clock
+    ) {
+        return new AuthorizePublicDownloadService(
+                downloadSessionRepositoryPort,
+                downloadEventRepositoryPort,
+                clock
+        );
+    }
 }

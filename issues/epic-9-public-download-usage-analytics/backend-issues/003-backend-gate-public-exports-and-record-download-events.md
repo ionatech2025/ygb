@@ -16,11 +16,11 @@ Require a valid **download session** on all public anonymised export endpoints (
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Integration/controller: export without session → rejected; with valid session → 200 + file body.
-- [ ] Integration: expired/unknown session rejected.
-- [ ] Integration: successful CSV and XLSX each create a download event with correct dataset + format.
-- [ ] Existing filter semantics of exports unchanged when session is valid.
-- [ ] Regression: admin authenticated exports (if any separate path) unaffected.
+- [x] Integration/controller: export without session → rejected; with valid session → 200 + file body.
+- [x] Integration: expired/unknown session rejected.
+- [x] Integration: successful CSV and XLSX each create a download event with correct dataset + format.
+- [x] Existing filter semantics of exports unchanged when session is valid.
+- [x] Regression: admin authenticated exports (if any separate path) unaffected.
 
 ## Blocked by
 

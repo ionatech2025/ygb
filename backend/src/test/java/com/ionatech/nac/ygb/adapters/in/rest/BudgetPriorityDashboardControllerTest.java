@@ -6,13 +6,17 @@ import com.ionatech.nac.ygb.adapters.in.rest.mapper.BudgetPriorityDashboardFilte
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.BudgetPriorityDashboardRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.security.JwtAuthenticationFilter;
 import com.ionatech.nac.ygb.adapters.in.rest.security.SecurityConfig;
+import com.ionatech.nac.ygb.application.ports.api.AuthorizePublicDownloadUseCase;
 import com.ionatech.nac.ygb.application.ports.api.ExportBudgetPriorityDatasetQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetBudgetPriorityChartsQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetBudgetPriorityFilterOptionsQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetBudgetPrioritySummaryQuery;
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
+import com.ionatech.nac.ygb.domain.exceptions.InvalidDownloadSessionException;
+import com.ionatech.nac.ygb.domain.model.DownloadSession;
 import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,12 +31,14 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.io.OutputStream;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -47,9 +53,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         SecurityConfig.class,
         JwtAuthenticationFilter.class,
         AnonymisationProjector.class,
-        BudgetPriorityDashboardFilterRequestMapper.class
+        BudgetPriorityDashboardFilterRequestMapper.class,
+        DownloadSessionExceptionHandler.class
 })
 class BudgetPriorityDashboardControllerTest {
+
+    private static final String VALID_SESSION = "valid-download-session";
 
     @Autowired
     private MockMvc mockMvc;
@@ -67,6 +76,9 @@ class BudgetPriorityDashboardControllerTest {
     private ExportBudgetPriorityDatasetQuery exportBudgetPriorityDatasetQuery;
 
     @MockBean
+    private AuthorizePublicDownloadUseCase authorizePublicDownloadUseCase;
+
+    @MockBean
     private BudgetPriorityDashboardFilterOptionsRestMapper filterOptionsRestMapper;
 
     @MockBean
@@ -74,6 +86,29 @@ class BudgetPriorityDashboardControllerTest {
 
     @MockBean
     private TokenProviderPort tokenProviderPort;
+
+    @BeforeEach
+    void stubDownloadSessionAuthorization() {
+        when(authorizePublicDownloadUseCase.authorizeAndRecord(any(), any(), any(), any()))
+                .thenAnswer(invocation -> {
+                    String token = invocation.getArgument(0);
+                    if (token == null || token.isBlank()) {
+                        throw new InvalidDownloadSessionException(
+                                "Download session required. Register a download profile first.");
+                    }
+                    if ("unknown-token".equals(token) || "expired-token".equals(token)) {
+                        throw new InvalidDownloadSessionException(
+                                "unknown-token".equals(token)
+                                        ? "Unknown or invalid download session."
+                                        : "Download session has expired. Register again to continue.");
+                    }
+                    return DownloadSession.issue(
+                            UUID.randomUUID(),
+                            token,
+                            LocalDateTime.of(2026, 8, 4, 12, 0)
+                    );
+                });
+    }
 
     @Test
     void shouldReturnSummaryWithoutAuthentication() throws Exception {
@@ -180,10 +215,11 @@ class BudgetPriorityDashboardControllerTest {
     }
 
     @Test
-    void shouldReturnCsvDownloadWithoutAuthentication() throws Exception {
+    void shouldReturnCsvDownloadWithValidSession() throws Exception {
         stubExport(ExportFormat.CSV, "ID,Section\n");
 
-        MvcResult asyncResult = mockMvc.perform(get("/api/v1/public/dashboard/budget-priorities/download/csv"))
+        MvcResult asyncResult = mockMvc.perform(get("/api/v1/public/dashboard/budget-priorities/download/csv")
+                        .header(DownloadSessionHeaders.HEADER, VALID_SESSION))
                 .andExpect(request().asyncStarted())
                 .andReturn();
 
@@ -192,13 +228,17 @@ class BudgetPriorityDashboardControllerTest {
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("text/csv")))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString("attachment")))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".csv")));
+
+        verify(authorizePublicDownloadUseCase).authorizeAndRecord(
+                VALID_SESSION, PublicDownloadDataset.BUDGET_PRIORITIES, ExportFormat.CSV, null);
     }
 
     @Test
-    void shouldReturnExcelDownloadWithoutAuthentication() throws Exception {
+    void shouldReturnExcelDownloadWithValidSession() throws Exception {
         stubExport(ExportFormat.XLSX, new byte[]{1, 2, 3});
 
-        MvcResult asyncResult = mockMvc.perform(get("/api/v1/public/dashboard/budget-priorities/download/excel"))
+        MvcResult asyncResult = mockMvc.perform(get("/api/v1/public/dashboard/budget-priorities/download/excel")
+                        .header(DownloadSessionHeaders.HEADER, VALID_SESSION))
                 .andExpect(request().asyncStarted())
                 .andReturn();
 
@@ -206,6 +246,23 @@ class BudgetPriorityDashboardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, org.hamcrest.Matchers.containsString("spreadsheetml.sheet")))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, org.hamcrest.Matchers.containsString(".xlsx")));
+
+        verify(authorizePublicDownloadUseCase).authorizeAndRecord(
+                VALID_SESSION, PublicDownloadDataset.BUDGET_PRIORITIES, ExportFormat.XLSX, null);
+    }
+
+    @Test
+    void shouldRejectCsvDownloadWithoutSession() throws Exception {
+        mockMvc.perform(get("/api/v1/public/dashboard/budget-priorities/download/csv"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.title").value("Download Session Required"));
+    }
+
+    @Test
+    void shouldRejectCsvDownloadWithExpiredSession() throws Exception {
+        mockMvc.perform(get("/api/v1/public/dashboard/budget-priorities/download/csv")
+                        .header(DownloadSessionHeaders.HEADER, "expired-token"))
+                .andExpect(status().isUnauthorized());
     }
 
     private void stubExport(ExportFormat format, String content) throws Exception {

@@ -9,6 +9,7 @@ import com.ionatech.nac.ygb.adapters.in.rest.dto.PublicSummaryResponseDto;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.PublicDashboardFilterOptionsRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.PublicDashboardFilterRequestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.PublicDashboardRestMapper;
+import com.ionatech.nac.ygb.application.ports.api.AuthorizePublicDownloadUseCase;
 import com.ionatech.nac.ygb.application.ports.api.ExportPublicDatasetQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetPublicDashboardChartQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetPublicDashboardFilterOptionsQuery;
@@ -24,6 +25,7 @@ import com.ionatech.nac.ygb.domain.valueobjects.PublicChartType;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicDashboardFilter;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicDashboardFilterOptions;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicDashboardSummary;
+import com.ionatech.nac.ygb.domain.valueobjects.PublicDownloadDataset;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicHeatmap;
 import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesGranularity;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +37,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,6 +56,7 @@ public class PublicDashboardController {
     private final GetPublicDashboardChartQuery getPublicDashboardChartQuery;
     private final GetPublicDashboardHeatmapQuery getPublicDashboardHeatmapQuery;
     private final ExportPublicDatasetQuery exportPublicDatasetQuery;
+    private final AuthorizePublicDownloadUseCase authorizePublicDownloadUseCase;
     private final PublicDashboardFilterRequestMapper filterRequestMapper;
     private final PublicDashboardFilterOptionsRestMapper filterOptionsRestMapper;
     private final PublicDashboardRestMapper restMapper;
@@ -64,6 +68,7 @@ public class PublicDashboardController {
             GetPublicDashboardChartQuery getPublicDashboardChartQuery,
             GetPublicDashboardHeatmapQuery getPublicDashboardHeatmapQuery,
             ExportPublicDatasetQuery exportPublicDatasetQuery,
+            AuthorizePublicDownloadUseCase authorizePublicDownloadUseCase,
             PublicDashboardFilterRequestMapper filterRequestMapper,
             PublicDashboardFilterOptionsRestMapper filterOptionsRestMapper,
             PublicDashboardRestMapper restMapper,
@@ -74,6 +79,7 @@ public class PublicDashboardController {
         this.getPublicDashboardChartQuery = getPublicDashboardChartQuery;
         this.getPublicDashboardHeatmapQuery = getPublicDashboardHeatmapQuery;
         this.exportPublicDatasetQuery = exportPublicDatasetQuery;
+        this.authorizePublicDownloadUseCase = authorizePublicDownloadUseCase;
         this.filterRequestMapper = filterRequestMapper;
         this.filterOptionsRestMapper = filterOptionsRestMapper;
         this.restMapper = restMapper;
@@ -167,6 +173,7 @@ public class PublicDashboardController {
 
     @GetMapping("/download/csv")
     public ResponseEntity<StreamingResponseBody> downloadCsv(
+            @RequestHeader(value = DownloadSessionHeaders.HEADER, required = false) String downloadSession,
             @RequestParam(value = "districtId", required = false) UUID districtId,
             @RequestParam(value = "subcountyId", required = false) UUID subcountyId,
             @RequestParam(value = "parishId", required = false) UUID parishId,
@@ -178,6 +185,7 @@ public class PublicDashboardController {
             @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
     ) {
         return exportDownload(
+                downloadSession,
                 filterRequestMapper.toFilter(
                         districtId, subcountyId, parishId, formType, dateFrom, dateTo,
                         gender, ageGroup, financialYearPeriod
@@ -188,6 +196,7 @@ public class PublicDashboardController {
 
     @GetMapping("/download/excel")
     public ResponseEntity<StreamingResponseBody> downloadExcel(
+            @RequestHeader(value = DownloadSessionHeaders.HEADER, required = false) String downloadSession,
             @RequestParam(value = "districtId", required = false) UUID districtId,
             @RequestParam(value = "subcountyId", required = false) UUID subcountyId,
             @RequestParam(value = "parishId", required = false) UUID parishId,
@@ -199,6 +208,7 @@ public class PublicDashboardController {
             @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
     ) {
         return exportDownload(
+                downloadSession,
                 filterRequestMapper.toFilter(
                         districtId, subcountyId, parishId, formType, dateFrom, dateTo,
                         gender, ageGroup, financialYearPeriod
@@ -217,7 +227,17 @@ public class PublicDashboardController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
     }
 
-    private ResponseEntity<StreamingResponseBody> exportDownload(PublicDashboardFilter filter, ExportFormat format) {
+    private ResponseEntity<StreamingResponseBody> exportDownload(
+            String downloadSession,
+            PublicDashboardFilter filter,
+            ExportFormat format
+    ) {
+        authorizePublicDownloadUseCase.authorizeAndRecord(
+                downloadSession,
+                PublicDownloadDataset.PDM,
+                format,
+                null
+        );
         anonymisationProjector.assertExportHeadersSafe();
         StreamingResponseBody body = output -> exportPublicDatasetQuery.export(filter, format, output);
         return ResponseEntity.ok()
