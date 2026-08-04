@@ -15,9 +15,9 @@ Emit anonymous **visit beacons** from public routes (dashboard, resources, budge
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Public dashboard mount sends beacon (mocked adapter assertion).
-- [ ] Repeat navigations within same anonymous session follow dedupe rule under test.
-- [ ] Collector dashboard does not send public visit beacon.
+- [x] Public dashboard mount sends beacon (mocked adapter assertion).
+- [x] Repeat navigations within same anonymous session follow dedupe rule under test.
+- [x] Collector dashboard does not send public visit beacon.
 
 ## Blocked by
 
