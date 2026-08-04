@@ -5,6 +5,7 @@ import {
   createLgoFieldsFromActiveFiscalYear,
   EMPTY_LGO_FIELDS,
 } from '../../../../../core/domain/lgo-form.model';
+import { isNetworkAuthFailure } from '../../../../../core/domain/auth-network';
 import { EMPTY_RESPONDENT_FIELDS } from '../../../../../core/domain/respondent-fields.model';
 import { buildLgoSubmissionPayload, validateLgoForm, type LgoFormErrors } from '../../../../../core/lgo-validation';
 import { useAuthStore } from '../../../../../core/store/useAuthStore';
@@ -24,6 +25,16 @@ import { LgoFeedbackSection } from './LgoFeedbackSection';
 
 export interface LgoFormProps {
   onSubmitted?: () => void;
+}
+
+function fiscalYearLoadFailureMessage(error: unknown): string {
+  if (isNetworkAuthFailure(error)) {
+    return 'Unable to load the active fiscal year offline. Connect once while online to download it, then try again.';
+  }
+  if (error instanceof Error && error.message.trim()) {
+    return error.message;
+  }
+  return 'Unable to load the active fiscal year. Try again or contact your administrator.';
 }
 
 export function LgoForm({ onSubmitted }: LgoFormProps) {
@@ -49,11 +60,7 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
       })
       .catch((error) => {
         if (cancelled) return;
-        setFiscalYearLoadError(
-          error instanceof Error
-            ? error.message
-            : 'Unable to load the active fiscal year. Try again or contact your administrator.'
-        );
+        setFiscalYearLoadError(fiscalYearLoadFailureMessage(error));
       })
       .finally(() => {
         if (!cancelled) {
@@ -90,9 +97,7 @@ export function LgoForm({ onSubmitted }: LgoFormProps) {
       })
       .catch((error) => {
         setLgo(EMPTY_LGO_FIELDS);
-        setFiscalYearLoadError(
-          error instanceof Error ? error.message : 'Unable to reload the active fiscal year.'
-        );
+        setFiscalYearLoadError(fiscalYearLoadFailureMessage(error));
       })
       .finally(() => setFiscalYearLoading(false));
   };
