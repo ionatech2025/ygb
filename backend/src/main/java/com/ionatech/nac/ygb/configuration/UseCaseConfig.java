@@ -417,4 +417,18 @@ public class UseCaseConfig {
     ) {
         return new SetActiveFiscalYearService(activeFiscalYearSettingRepositoryPort, clock);
     }
+
+    @Bean
+    @Transactional
+    public RegisterDownloadProfileUseCase registerDownloadProfileUseCase(
+            DownloadProfileRepositoryPort downloadProfileRepositoryPort,
+            DownloadSessionRepositoryPort downloadSessionRepositoryPort,
+            Clock clock
+    ) {
+        return new RegisterDownloadProfileService(
+                downloadProfileRepositoryPort,
+                downloadSessionRepositoryPort,
+                clock
+        );
+    }
 }
