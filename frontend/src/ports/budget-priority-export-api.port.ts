@@ -2,5 +2,9 @@ import type { BudgetPriorityDashboardFilter } from '../core/domain/budget-priori
 import type { PublicExportFormat } from '../core/domain/public-export.model';
 
 export interface IBudgetPriorityExportApiPort {
-  downloadExport(format: PublicExportFormat, filter: BudgetPriorityDashboardFilter): Promise<void>;
+  downloadExport(
+    format: PublicExportFormat,
+    filter: BudgetPriorityDashboardFilter,
+    sessionToken: string
+  ): Promise<void>;
 }

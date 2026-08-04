@@ -60,17 +60,21 @@ describe('budget-priority-export-api.adapter', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const adapter = new HttpBudgetPriorityExportAdapter();
-    await adapter.downloadExport('csv', {
-      ...EMPTY_BUDGET_PRIORITY_DASHBOARD_FILTER,
-      section: 'health',
-      districtId: KAMPALA_DISTRICT_ID,
-    });
+    await adapter.downloadExport(
+      'csv',
+      {
+        ...EMPTY_BUDGET_PRIORITY_DASHBOARD_FILTER,
+        section: 'health',
+        districtId: KAMPALA_DISTRICT_ID,
+      },
+      'opaque-download-token'
+    );
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
     expect(url).toContain('/api/v1/public/dashboard/budget-priorities/download/csv');
     expect(url).toContain('section=health');
-    expect(init.headers).toBeUndefined();
+    expect(init.headers).toEqual({ 'X-Download-Session': 'opaque-download-token' });
 
     expect(click).toHaveBeenCalled();
     expect(createObjectURL).toHaveBeenCalled();
@@ -110,7 +114,7 @@ describe('budget-priority-export-api.adapter', () => {
     });
 
     const adapter = new HttpBudgetPriorityExportAdapter();
-    await adapter.downloadExport('xlsx', EMPTY_BUDGET_PRIORITY_DASHBOARD_FILTER);
+    await adapter.downloadExport('xlsx', EMPTY_BUDGET_PRIORITY_DASHBOARD_FILTER, 'opaque-download-token');
 
     expect(capturedDownload).toBe('budget-priorities-all-sectors-20260723.xlsx');
   });
