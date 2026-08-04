@@ -445,4 +445,13 @@ public class UseCaseConfig {
                 clock
         );
     }
+
+    @Bean
+    @Transactional
+    public RecordPublicVisitUseCase recordPublicVisitUseCase(
+            PublicVisitEventRepositoryPort publicVisitEventRepositoryPort,
+            Clock clock
+    ) {
+        return new RecordPublicVisitService(publicVisitEventRepositoryPort, clock);
+    }
 }

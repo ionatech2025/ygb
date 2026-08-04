@@ -6,6 +6,8 @@ import com.ionatech.nac.ygb.application.ports.spi.PublicVisitEventRepositoryPort
 import com.ionatech.nac.ygb.domain.model.PublicVisitEvent;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class PublicVisitEventRepositoryAdapter implements PublicVisitEventRepositoryPort {
 
@@ -23,5 +25,18 @@ public class PublicVisitEventRepositoryAdapter implements PublicVisitEventReposi
     @Override
     public PublicVisitEvent save(PublicVisitEvent event) {
         return mapper.toDomain(jpaRepository.save(mapper.toEntity(event)));
+    }
+
+    @Override
+    public boolean existsByAnonymousSessionIdAndRouteGroupSince(
+            String anonymousSessionId,
+            String routeGroup,
+            LocalDateTime since
+    ) {
+        return jpaRepository.existsByAnonymousSessionIdAndRouteGroupAndVisitedAtGreaterThanEqual(
+                anonymousSessionId,
+                routeGroup,
+                since
+        );
     }
 }
