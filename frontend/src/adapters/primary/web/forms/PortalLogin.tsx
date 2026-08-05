@@ -35,10 +35,6 @@ const FEATURES: { icon: LucideIcon; title: string; detail: string }[] = [
   },
 ];
 
-const TEST_ACCOUNTS = [
-  { role: 'Administrator', phone: '0770000000', accent: 'text-brand' },
-  { role: 'Data Collector', phone: '0771111111', accent: 'text-nac-orange' },
-] as const;
 
 export function PortalLogin() {
   const login = useAuthStore((state) => state.login);
@@ -80,11 +76,6 @@ export function PortalLogin() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleSelectTestAccount = (testPhone: string) => {
-    setPhone(testPhone);
-    setError('');
   };
 
   return (
