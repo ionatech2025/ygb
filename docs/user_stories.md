@@ -18,7 +18,7 @@ Date: July 2026
 
 This backlog translates the YGB Survey Tool SRS (v1.1, the authoritative, client-approved version) and the source PDM paper forms into development-ready user stories. Each story includes a role/goal/benefit statement, Given/When/Then acceptance criteria, and an explicit test-case table (ID, description, steps, expected result) that QA and developers can use directly for test-driven development and sprint planning.
 
-**Scope note:** Epics 1–6 are Phase 1 MVP (Must/Should Have, per SRS v1.1 §8 Phasing Summary). Epics 7–8 (Budget Priorities module and LGO Budget Allocation form) are Phase 2 and are included for backlog/roadmap visibility only — they are out of scope for the current sprint cycle.
+**Scope note:** Epics 1–6 are Phase 1 MVP (Must/Should Have, per SRS v1.1 §8 Phasing Summary). Epics 7–8 (Budget Priorities module and LGO Budget Allocation form) are Phase 2. **Epic 9** (public download profile gating & usage analytics) is a post-MVP open-data adoption epic — see [`issues/epic-9-public-download-usage-analytics`](../issues/epic-9-public-download-usage-analytics/README.md).
 
 **Traceability:** Each story references its originating SRS requirement ID(s) (e.g. AUTH-01, FORM-02, SYNC-03) so it can be cross-checked against the SRS during review.
 
@@ -902,19 +902,21 @@ This backlog translates the YGB Survey Tool SRS (v1.1, the authoritative, client
 
 *As a **data analyst / researcher / donor**, I want **to download the currently filtered or full PDM dataset as CSV or Excel directly from the public dashboard, with no authentication**, so that **I can perform my own independent analysis outside the platform**.*
 
+> **Epic 9 update:** Download remains available **without creating a login account**, but visitors must complete a **download profile** (US-DL-01) before CSV/Excel files are issued. See Epic 9.
+
 ### Acceptance Criteria
 
-- Given the public dashboard with any combination of filters applied, when I click 'Download CSV' (or Excel), then a file downloads containing the filtered dataset in aggregated/anonymised form — no PII fields.
-- Given no filters are applied, when I click download, then the full anonymised dataset downloads.
-- Given this action is performed by an unauthenticated visitor, when the download completes, then no login prompt or account creation was required at any point.
+- Given the public dashboard with any combination of filters applied, when I click 'Download CSV' (or Excel) and I have a valid download session, then a file downloads containing the filtered dataset in aggregated/anonymised form — no PII fields.
+- Given no filters are applied, when I click download with a valid session, then the full anonymised dataset downloads.
+- Given this action is performed by an unauthenticated visitor, when the download completes, then no **login account** was required (profile form per US-DL-01 may be required).
 
 ### Test Cases
 
 | **Test ID** | **Description** | **Steps** | **Expected Result** |
 |-------------|-----------------|-----------|---------------------|
-| TC-PUB-04-01 | Filtered download | Apply District filter, click Download CSV | CSV contains only that district's aggregated/anonymised data. |
-| TC-PUB-04-02 | Full download with no filters | Clear all filters, click Download Excel | Full anonymised dataset downloads as .xlsx. |
-| TC-PUB-04-03 | No auth required | Perform the download flow in an incognito/unauthenticated session | No login prompt appears at any step; download completes. |
+| TC-PUB-04-01 | Filtered download | Apply District filter, complete download profile if needed, click Download CSV | CSV contains only that district's aggregated/anonymised data. |
+| TC-PUB-04-02 | Full download with no filters | Clear all filters, click Download Excel (with session) | Full anonymised dataset downloads as .xlsx. |
+| TC-PUB-04-03 | No login account required | Perform the download flow in an incognito session | No admin/collector login prompt; profile form may appear; download completes. |
 | TC-PUB-04-04 | No PII in downloaded file | Inspect the downloaded CSV/Excel columns | No respondent name/phone or collector PII columns present. |
 
 ---
@@ -1053,3 +1055,118 @@ This backlog translates the YGB Survey Tool SRS (v1.1, the authoritative, client
 |-------------|-----------------|-----------|---------------------|
 | TC-LGOB-02-01 | Comparative view exists | Open the LGO Budget Allocation section of the public dashboard | Cross-district comparison visualisation is shown. |
 | TC-LGOB-02-02 | CSV download | Click download | CSV file with LGO Budget Allocation data downloads. |
+
+---
+
+# EPIC 9 — Public download gating & usage analytics
+
+*Open-data adoption: require a download profile before public CSV/Excel, record downloads and anonymous visits, and surface usage analytics for admins, the public (aggregates), and donor PDFs. Implementation backlog: [`issues/epic-9-public-download-usage-analytics`](../issues/epic-9-public-download-usage-analytics/README.md).*
+
+## US-DL-01 — Public user completes a profile before downloading open data
+
+**Priority: Must Have** *Epic 9*
+
+*As a **public user**, I want **to provide my country of residence, gender, age bracket, field of operation, email, optional name, and consent**, so that **I can download publicly available PDM, Budget Priorities, and LGO Budget Allocation data as CSV or Excel without creating a login account**.*
+
+### Acceptance Criteria
+
+- Given I click Download CSV or Excel on a public dashboard export, when I have no valid download session, then I must complete the profile form (required fields + consent) before the file is issued.
+- Given I submit a valid profile, when registration succeeds, then I receive a short-lived session that unlocks PDM, Budget Priorities, and LGO Budget Allocation downloads for the same visit (~1 hour).
+- Given my email is malformed, when I submit, then the form is rejected with a validation error (no OTP required).
+- Given I choose field of operation “Other”, when I submit without specify text, then the form is rejected.
+- Given I have a valid session, when I download multiple files, then each successful download is recorded server-side.
+
+### Test Cases
+
+| **Test ID** | **Description** | **Steps** | **Expected Result** |
+|-------------|-----------------|-----------|---------------------|
+| TC-DL-01-01 | Form required | Clear session, click Download CSV | Profile form shown; export not called until submit. |
+| TC-DL-01-02 | Session unlocks all datasets | Complete form, download PDM then Budget Priorities | Second download does not re-open form within session. |
+| TC-DL-01-03 | Invalid email blocked | Enter `not-an-email`, submit | Validation error; no session. |
+| TC-DL-01-04 | Consent required | Leave consent unchecked, submit | Validation error; no session. |
+
+---
+
+## US-DL-02 — Admin views downloaders and demographic charts
+
+**Priority: Must Have** *Epic 9*
+
+*As an **Administrator**, I want **to see who downloaded public datasets and view their data graphically with filters by age bracket and gender**, so that **I can understand the audience for open data**.*
+
+### Acceptance Criteria
+
+- Given I am an Admin, when I open usage analytics, then I see a table of downloaders including optional name, email, country, gender, age bracket, field of operation, and download activity.
+- Given aggregate charts, when I filter by age bracket and/or gender, then charts update to the filtered population.
+- Given a non-admin user, when they request admin analytics APIs/UI, then access is denied.
+- Given the public dashboard, when any visitor views usage charts, then emails and names are never shown (see US-DL-05).
+
+### Test Cases
+
+| **Test ID** | **Description** | **Steps** | **Expected Result** |
+|-------------|-----------------|-----------|---------------------|
+| TC-DL-02-01 | Downloader table | Admin opens analytics after test downloads | Rows show email and demographics. |
+| TC-DL-02-02 | Age/gender filter | Apply Female + 18–24 | Charts/table reflect filter. |
+| TC-DL-02-03 | Non-admin denied | Call admin analytics as collector/public | 401/403 or redirect. |
+
+---
+
+## US-DL-03 — Admin compares site visitors with downloaders
+
+**Priority: Must Have** *Epic 9*
+
+*As an **Administrator**, I want **to see how many people visit the site and graphically compare them with those who downloaded public data**, so that **I can judge engagement versus data uptake**.*
+
+### Acceptance Criteria
+
+- Given public routes are visited, when beacons are accepted, then anonymous visit events are stored (no email/name in the beacon).
+- Given admin analytics, when I view visitors vs downloaders, then I see comparable totals/series suitable for charting.
+- Given the collector or admin authenticated app shell, when I navigate those areas, then public visit beacons are not required for those routes.
+
+### Test Cases
+
+| **Test ID** | **Description** | **Steps** | **Expected Result** |
+|-------------|-----------------|-----------|---------------------|
+| TC-DL-03-01 | Beacon recorded | Open public dashboard as anonymous user | Visit event stored. |
+| TC-DL-03-02 | Comparison chart | Admin opens visitors vs downloaders | Both metrics visible for comparison. |
+
+---
+
+## US-DL-04 — Admin PDF includes visitor and download usage aggregates
+
+**Priority: Must Have** *Epic 9*
+
+*As an **Administrator**, I want **visitor and public CSV/Excel download usage included in the generated PDF report**, so that **I can share open-data adoption evidence with donors without attaching a contact list**.*
+
+### Acceptance Criteria
+
+- Given I generate an admin PDF report, when generation completes, then the PDF includes aggregate sections for site visitors and downloads (including by dataset where data exists).
+- Given the PDF, when inspected, then it does **not** include a downloader email/name appendix.
+- Given existing submission/dashboard PDF sections, when usage sections are added, then prior content still generates successfully.
+
+### Test Cases
+
+| **Test ID** | **Description** | **Steps** | **Expected Result** |
+|-------------|-----------------|-----------|---------------------|
+| TC-DL-04-01 | Usage sections present | Generate PDF after visits/downloads exist | PDF contains visitor/download usage headings and aggregates. |
+| TC-DL-04-02 | No contact appendix | Search PDF text for fixture emails used only in downloader table | Emails from downloader PII not listed in PDF usage appendix. |
+
+---
+
+## US-DL-05 — Public user sees anonymised open-data usage charts
+
+**Priority: Should Have** *Epic 9*
+
+*As a **public user**, I want **to see graphically how widely public dashboard data is downloaded for PDM and Budget Priorities (and LGO), and compare them**, so that **open-data use is transparent without exposing anyone’s identity**.*
+
+### Acceptance Criteria
+
+- Given the public dashboard, when I view the usage section, then I see anonymised downloads-over-time and per-dataset comparison charts.
+- Given that section, when rendered, then no downloader emails, names, or identifiable visitor records are shown.
+- Given I am unauthenticated, when I open the section, then it loads without login.
+
+### Test Cases
+
+| **Test ID** | **Description** | **Steps** | **Expected Result** |
+|-------------|-----------------|-----------|---------------------|
+| TC-DL-05-01 | Charts render | Open public usage section with download events present | Over-time and dataset comparison charts visible. |
+| TC-DL-05-02 | No PII | Inspect UI and public API payload | No email/name fields. |

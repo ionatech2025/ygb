@@ -417,4 +417,55 @@ public class UseCaseConfig {
     ) {
         return new SetActiveFiscalYearService(activeFiscalYearSettingRepositoryPort, clock);
     }
+
+    @Bean
+    @Transactional
+    public RegisterDownloadProfileUseCase registerDownloadProfileUseCase(
+            DownloadProfileRepositoryPort downloadProfileRepositoryPort,
+            DownloadSessionRepositoryPort downloadSessionRepositoryPort,
+            Clock clock
+    ) {
+        return new RegisterDownloadProfileService(
+                downloadProfileRepositoryPort,
+                downloadSessionRepositoryPort,
+                clock
+        );
+    }
+
+    @Bean
+    @Transactional
+    public AuthorizePublicDownloadUseCase authorizePublicDownloadUseCase(
+            DownloadSessionRepositoryPort downloadSessionRepositoryPort,
+            DownloadEventRepositoryPort downloadEventRepositoryPort,
+            Clock clock
+    ) {
+        return new AuthorizePublicDownloadService(
+                downloadSessionRepositoryPort,
+                downloadEventRepositoryPort,
+                clock
+        );
+    }
+
+    @Bean
+    @Transactional
+    public RecordPublicVisitUseCase recordPublicVisitUseCase(
+            PublicVisitEventRepositoryPort publicVisitEventRepositoryPort,
+            Clock clock
+    ) {
+        return new RecordPublicVisitService(publicVisitEventRepositoryPort, clock);
+    }
+
+    @Bean
+    public DownloadUsageAnalyticsService downloadUsageAnalyticsService(
+            DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepositoryPort
+    ) {
+        return new DownloadUsageAnalyticsService(downloadUsageAnalyticsRepositoryPort);
+    }
+
+    @Bean
+    public GetPublicDownloadUsageAggregatesQuery getPublicDownloadUsageAggregatesQuery(
+            DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepositoryPort
+    ) {
+        return new GetPublicDownloadUsageAggregatesService(downloadUsageAnalyticsRepositoryPort);
+    }
 }

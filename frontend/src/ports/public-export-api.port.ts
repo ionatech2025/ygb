@@ -2,5 +2,9 @@ import type { PublicDashboardFilter } from '../core/domain/public-dashboard-filt
 import type { PublicExportFormat } from '../core/domain/public-export.model';
 
 export interface IPublicExportApiPort {
-  downloadExport(format: PublicExportFormat, filter: PublicDashboardFilter): Promise<void>;
+  downloadExport(
+    format: PublicExportFormat,
+    filter: PublicDashboardFilter,
+    sessionToken: string
+  ): Promise<void>;
 }

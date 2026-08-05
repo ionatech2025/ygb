@@ -49,7 +49,7 @@ describe('public-export-api.adapter', () => {
     expect(url).toContain('gender=FEMALE');
   });
 
-  it('requests export without an auth header and triggers browser download', async () => {
+  it('requests export with download session header (no auth) and triggers browser download', async () => {
     const headerLine = PUBLIC_EXPORT_ALLOWED_HEADERS.join(',');
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(`${headerLine}\n1,BYP`, {
@@ -63,13 +63,18 @@ describe('public-export-api.adapter', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const adapter = new HttpPublicExportAdapter();
-    await adapter.downloadExport('csv', { ...EMPTY_PUBLIC_DASHBOARD_FILTER, districtId: KAMPALA_DISTRICT_ID });
+    await adapter.downloadExport(
+      'csv',
+      { ...EMPTY_PUBLIC_DASHBOARD_FILTER, districtId: KAMPALA_DISTRICT_ID },
+      'opaque-download-token'
+    );
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
     expect(url).toContain('/api/v1/public/dashboard/download/csv');
     expect(url).toContain(`districtId=${KAMPALA_DISTRICT_ID}`);
-    expect(init.headers).toBeUndefined();
+    expect(init.headers).toEqual({ 'X-Download-Session': 'opaque-download-token' });
+    expect(init.headers).not.toHaveProperty('Authorization');
 
     expect(click).toHaveBeenCalled();
     expect(createObjectURL).toHaveBeenCalled();
@@ -109,7 +114,7 @@ describe('public-export-api.adapter', () => {
     });
 
     const adapter = new HttpPublicExportAdapter();
-    await adapter.downloadExport('xlsx', EMPTY_PUBLIC_DASHBOARD_FILTER);
+    await adapter.downloadExport('xlsx', EMPTY_PUBLIC_DASHBOARD_FILTER, 'opaque-download-token');
 
     expect(capturedDownload).toBe('public-dataset-export-20260315.xlsx');
   });

@@ -35,10 +35,6 @@ const FEATURES: { icon: LucideIcon; title: string; detail: string }[] = [
   },
 ];
 
-const TEST_ACCOUNTS = [
-  { role: 'Administrator', phone: '0770000000', accent: 'text-brand' },
-  { role: 'Data Collector', phone: '0771111111', accent: 'text-nac-orange' },
-] as const;
 
 export function PortalLogin() {
   const login = useAuthStore((state) => state.login);
@@ -84,20 +80,24 @@ export function PortalLogin() {
 
   return (
     <div className={loginPortalClasses.shell}>
+      {/* Background ambient lighting effects */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className={loginPortalClasses.ambientGlowLeft} />
         <div className={loginPortalClasses.ambientGlowRight} />
+        <div className={loginPortalClasses.ambientGlowCenter} />
+        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:24px_24px] opacity-40 dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)]" />
       </div>
 
-      <div className="absolute right-4 top-4 z-20">
+      <div className="absolute right-4 top-4 z-20 flex items-center gap-3">
         <ThemeToggle />
       </div>
 
       <div className="relative mx-auto flex max-w-6xl flex-col lg:min-h-dvh lg:flex-row">
+        {/* Brand Information Panel */}
         <section className={loginPortalClasses.brandPanel} aria-label="About the Youth Go Budget App">
           <span className={loginPortalClasses.brandAccent} aria-hidden="true" />
 
-          <div className="relative z-10 flex items-center justify-between gap-3 pt-8 lg:pt-0">
+          <div className="relative z-10 flex items-center justify-between gap-3 pt-6 lg:pt-0">
             <div className="flex min-w-0 items-center gap-3">
               <span className={loginPortalClasses.brandMonogram} aria-hidden="true">
                 YGB
@@ -113,7 +113,17 @@ export function PortalLogin() {
           </div>
 
           <div className="relative z-10 my-8 max-w-xl space-y-6 lg:my-auto">
-            <span className={loginPortalClasses.officialBadge}>Official portal</span>
+            <div className="flex items-center gap-2">
+              <span className={loginPortalClasses.officialBadge}>
+                <span className="h-1.5 w-1.5 rounded-full bg-brand animate-pulse" />
+                Official portal
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                Offline Ready
+              </span>
+            </div>
+
             <h1 className={loginPortalClasses.headline}>
               Collecting insights to drive active community action.
             </h1>
@@ -121,6 +131,7 @@ export function PortalLogin() {
               Welcome to the YGB Survey Tool. Collect feedback safely, manage field teams, and track progress across
               target communities.
             </p>
+
             <ul className="grid gap-3 sm:grid-cols-2">
               {FEATURES.map(({ icon: Icon, title, detail }) => (
                 <li key={title} className={loginPortalClasses.featureCard}>
@@ -141,21 +152,22 @@ export function PortalLogin() {
           </p>
         </section>
 
+        {/* Login Form Panel */}
         <section ref={formSectionRef} id="login-form" className={loginPortalClasses.formPanel}>
           <div className="w-full max-w-md">
             <div className={loginPortalClasses.formCard}>
-              <div className="mb-6 space-y-1.5">
-                <Link to="/" className={`${loginPortalClasses.publicLink} mb-4`}>
-                  <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              <div className="mb-6 space-y-2">
+                <Link to="/" className={loginPortalClasses.publicLink}>
+                  <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
                   Back to public dashboard
                 </Link>
-                <h2 className="text-xl font-bold tracking-tight text-text sm:text-2xl">Sign in</h2>
-                <p className="text-sm text-text-muted">Use your phone number and password to open your portal.</p>
+                <h2 className="text-2xl font-black tracking-tight text-text sm:text-3xl">Sign in</h2>
+                <p className="text-xs leading-relaxed text-text-muted">Use your registered phone number and password to open your portal.</p>
               </div>
 
               {error && (
                 <div
-                  className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2.5 text-xs font-medium text-rose-700 dark:border-rose-900/60 dark:bg-rose-950/50 dark:text-rose-300"
+                  className="mb-5 rounded-2xl border border-rose-200 bg-rose-50/90 px-4 py-3 text-xs font-medium text-rose-700 backdrop-blur-md dark:border-rose-900/60 dark:bg-rose-950/60 dark:text-rose-300"
                   role="alert"
                 >
                   {error}
@@ -194,21 +206,6 @@ export function PortalLogin() {
                   {loading ? 'Signing in…' : 'Open My Portal'}
                 </button>
               </form>
-
-              <div className="mt-6 border-t border-border/60 pt-5">
-                <p className="mb-3 text-center text-[10px] font-bold uppercase tracking-wider text-text-muted">
-                  Backend test accounts
-                </p>
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {TEST_ACCOUNTS.map(({ role, phone: testPhone, accent }) => (
-                    <div key={role} className={loginPortalClasses.testAccountCard}>
-                      <p className={`text-xs font-bold ${accent}`}>{role}</p>
-                      <p className="mt-1 font-mono text-[11px] text-text">{testPhone}</p>
-                      <p className="font-mono text-[11px] text-text-muted">password</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </section>

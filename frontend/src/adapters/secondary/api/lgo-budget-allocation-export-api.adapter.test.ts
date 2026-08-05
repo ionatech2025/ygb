@@ -48,7 +48,7 @@ describe('lgo-budget-allocation-export-api.adapter', () => {
     expect(url).toContain('financialYearPeriod=JAN_JUN_2026');
   });
 
-  it('requests export without an auth header and triggers browser download', async () => {
+  it('requests export with download session header (no auth) and triggers browser download', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response('id,district,count\n1,Kampala,1', {
         status: 200,
@@ -61,16 +61,19 @@ describe('lgo-budget-allocation-export-api.adapter', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const adapter = new HttpLgoBudgetAllocationExportAdapter();
-    await adapter.downloadCsv({
-      ...EMPTY_LGO_BUDGET_ALLOCATION_DASHBOARD_FILTER,
-      districtId: KAMPALA_DISTRICT_ID,
-    });
+    await adapter.downloadCsv(
+      {
+        ...EMPTY_LGO_BUDGET_ALLOCATION_DASHBOARD_FILTER,
+        districtId: KAMPALA_DISTRICT_ID,
+      },
+      'opaque-download-token'
+    );
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
     expect(url).toContain(LGO_BUDGET_ALLOCATION_EXPORT_CSV_PATH);
     expect(url).toContain(`districtId=${KAMPALA_DISTRICT_ID}`);
-    expect(init.headers).toBeUndefined();
+    expect(init.headers).toEqual({ 'X-Download-Session': 'opaque-download-token' });
 
     expect(click).toHaveBeenCalled();
     expect(createObjectURL).toHaveBeenCalled();
@@ -110,7 +113,7 @@ describe('lgo-budget-allocation-export-api.adapter', () => {
     });
 
     const adapter = new HttpLgoBudgetAllocationExportAdapter();
-    await adapter.downloadCsv(EMPTY_LGO_BUDGET_ALLOCATION_DASHBOARD_FILTER);
+    await adapter.downloadCsv(EMPTY_LGO_BUDGET_ALLOCATION_DASHBOARD_FILTER, 'opaque-download-token');
 
     expect(capturedDownload).toBe('ygb-lgo-budget-allocation-20260723.csv');
   });

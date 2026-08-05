@@ -1,11 +1,13 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PublicLayout } from './PublicLayout';
 import { BudgetPrioritiesIndexPage } from '../budget-priorities/BudgetPrioritiesIndexPage';
 import { PublicBudgetPrioritiesPage } from '../public/PublicBudgetPrioritiesPage';
 import { PublicLgoBudgetAllocationPage } from '../public/PublicLgoBudgetAllocationPage';
+import type { IPublicVisitBeaconApiPort } from '../../../../ports/public-visit-beacon-api.port';
+import { clearPublicVisitBeaconState } from '../../../secondary/storage/public-visit-session.store';
 
 vi.mock('../components/ThemeToggle', () => ({
   ThemeToggle: () => <div data-testid="theme-toggle" />,
@@ -43,11 +45,14 @@ vi.mock('../public/LgoBudgetAllocationExportToolbar', () => ({
   LgoBudgetAllocationExportToolbar: () => <div data-testid="lgo-budget-allocation-export-toolbar" />,
 }));
 
-function renderPublicLayout(initialPath = '/dashboard') {
+function renderPublicLayout(
+  initialPath = '/dashboard',
+  visitBeaconApi?: IPublicVisitBeaconApiPort
+) {
   return render(
     <MemoryRouter initialEntries={[initialPath]}>
       <Routes>
-        <Route element={<PublicLayout />}>
+        <Route element={<PublicLayout visitBeaconApi={visitBeaconApi} />}>
           <Route path="/dashboard" element={<div>Dashboard page</div>} />
           <Route path="/dashboard/budget-priorities" element={<PublicBudgetPrioritiesPage />} />
           <Route path="/dashboard/lgo-budget-allocation" element={<PublicLgoBudgetAllocationPage />} />
@@ -60,8 +65,30 @@ function renderPublicLayout(initialPath = '/dashboard') {
 }
 
 describe('PublicLayout', () => {
+  beforeEach(() => {
+    sessionStorage.clear();
+    clearPublicVisitBeaconState();
+    vi.clearAllMocks();
+  });
+
+  it('sends a visit beacon when the public dashboard mounts', async () => {
+    const recordVisit = vi.fn().mockResolvedValue(undefined);
+    renderPublicLayout('/dashboard', { recordVisit });
+
+    await waitFor(() => {
+      expect(recordVisit).toHaveBeenCalledWith(
+        expect.objectContaining({ routeGroup: 'public-dashboard' })
+      );
+    });
+  });
+
+  it('shows a short anonymous visit privacy notice in the footer', () => {
+    renderPublicLayout('/dashboard', { recordVisit: vi.fn().mockResolvedValue(undefined) });
+    expect(screen.getByTestId('public-visit-privacy-notice')).toHaveTextContent(/anonymous page views/i);
+  });
+
   it('renders Dashboard, Budget Priorities, LG Budget, and Resources links without auth context', () => {
-    renderPublicLayout();
+    renderPublicLayout('/dashboard', { recordVisit: vi.fn().mockResolvedValue(undefined) });
 
     expect(screen.getByTestId('public-seo-json-ld')).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Public sections' })).toBeInTheDocument();
@@ -80,27 +107,30 @@ describe('PublicLayout', () => {
   });
 
   it('marks Budget Priorities nav active on index and dashboard routes', () => {
-    const { unmount } = renderPublicLayout('/budget-priorities');
+    const api = { recordVisit: vi.fn().mockResolvedValue(undefined) };
+    const { unmount } = renderPublicLayout('/budget-priorities', api);
     expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveClass('bg-surface');
     unmount();
 
-    renderPublicLayout('/dashboard/budget-priorities');
+    renderPublicLayout('/dashboard/budget-priorities', api);
     expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveClass('bg-surface');
   });
 
   it('marks LG Budget nav active on dashboard route', () => {
-    renderPublicLayout('/dashboard/lgo-budget-allocation');
+    renderPublicLayout('/dashboard/lgo-budget-allocation', {
+      recordVisit: vi.fn().mockResolvedValue(undefined),
+    });
     expect(screen.getByRole('link', { name: 'LG Budget' })).toHaveClass('bg-surface');
   });
 
   it('renders the active route outlet', () => {
-    renderPublicLayout('/resources');
+    renderPublicLayout('/resources', { recordVisit: vi.fn().mockResolvedValue(undefined) });
     expect(screen.getByText('Resources page')).toBeInTheDocument();
   });
 
   it('opens mobile navigation menu on small screens', async () => {
     const user = userEvent.setup();
-    renderPublicLayout();
+    renderPublicLayout('/dashboard', { recordVisit: vi.fn().mockResolvedValue(undefined) });
 
     const menuButton = screen.getByRole('button', { name: 'Open menu' });
     expect(screen.queryByTestId('public-mobile-nav')).not.toBeInTheDocument();
@@ -116,7 +146,7 @@ describe('PublicLayout', () => {
   });
 
   it('includes YGB attribution in a content-width footer', () => {
-    renderPublicLayout();
+    renderPublicLayout('/dashboard', { recordVisit: vi.fn().mockResolvedValue(undefined) });
     expect(screen.getByText(/Youth Go Budget App \(YGB\)/i)).toBeInTheDocument();
     expect(screen.getByText(/Youth Go Budget App \(YGB\)/i).parentElement).toHaveClass('max-w-md');
   });

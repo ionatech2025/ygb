@@ -15,6 +15,7 @@ import { CollectorDashboard } from '../forms/CollectorDashboard';
 import { AdminDashboardHome } from '../admin/AdminDashboardHome';
 import { AdminCollectorTrackerPage } from '../admin/AdminCollectorTrackerPage';
 import { AdminSyncStatusPage } from '../admin/AdminSyncStatusPage';
+import { AdminDownloadUsagePage } from '../admin/AdminDownloadUsagePage';
 import { SubmissionDetailPage } from '../admin/SubmissionDetailPage';
 import { SubmissionListPage } from '../admin/SubmissionListPage';
 import { AdminLayout } from '../layouts/AdminLayout';
@@ -101,6 +102,7 @@ export function AppRouter() {
         <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboardHome />} />
+            <Route path="/admin/download-usage" element={<AdminDownloadUsagePage />} />
             <Route path="/admin/submissions" element={<SubmissionListPage />} />
             <Route path="/admin/submissions/:id" element={<SubmissionDetailPage />} />
             <Route path="/admin/users" element={<ManageUsers />} />

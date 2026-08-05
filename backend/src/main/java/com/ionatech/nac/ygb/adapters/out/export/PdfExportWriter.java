@@ -1,7 +1,12 @@
 package com.ionatech.nac.ygb.adapters.out.export;
 
+import com.ionatech.nac.ygb.application.ports.spi.DownloadUsageAnalyticsRepositoryPort;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardAggregates;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
+import com.ionatech.nac.ygb.domain.valueobjects.DownloadUsageAggregates;
+import com.ionatech.nac.ygb.domain.valueobjects.DownloadUsageFilter;
+import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesGranularity;
+import com.ionatech.nac.ygb.domain.valueobjects.VisitsVsDownloadsComparison;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -30,14 +35,37 @@ public class PdfExportWriter {
 
     private final AdminDashboardReportAssembler reportAssembler;
     private final PdfVectorChartRenderer chartRenderer;
+    private final DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepository;
 
-    public PdfExportWriter(AdminDashboardReportAssembler reportAssembler, PdfVectorChartRenderer chartRenderer) {
+    public PdfExportWriter(
+            AdminDashboardReportAssembler reportAssembler,
+            PdfVectorChartRenderer chartRenderer,
+            DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepository
+    ) {
         this.reportAssembler = reportAssembler;
         this.chartRenderer = chartRenderer;
+        this.downloadUsageAnalyticsRepository = downloadUsageAnalyticsRepository;
     }
 
-    void write(OutputStream output, DashboardFilter filter, DashboardAggregates aggregates) throws DocumentException, IOException {
-        AdminDashboardReportModel report = reportAssembler.assemble(filter, aggregates, LocalDateTime.now());
+    void write(OutputStream output, DashboardFilter filter, DashboardAggregates aggregates)
+            throws DocumentException, IOException {
+        DownloadUsageFilter usageFilter = AdminDashboardReportAssembler.toUsageFilter(filter);
+        DownloadUsageAggregates downloadUsage = downloadUsageAnalyticsRepository.getDownloadUsageAggregates(
+                usageFilter,
+                TimeSeriesGranularity.DAY
+        );
+        VisitsVsDownloadsComparison visitsVsDownloads = downloadUsageAnalyticsRepository.getVisitsVsDownloads(
+                usageFilter,
+                TimeSeriesGranularity.DAY
+        );
+
+        AdminDashboardReportModel report = reportAssembler.assemble(
+                filter,
+                aggregates,
+                downloadUsage,
+                visitsVsDownloads,
+                LocalDateTime.now()
+        );
         Document document = new Document(PageSize.A4, 42, 42, 48, 48);
         PdfWriter writer = PdfWriter.getInstance(document, output);
         writer.setPageEvent(new PdfReportFooterEvent());
@@ -50,6 +78,8 @@ public class PdfExportWriter {
         addChartsSection(document, report);
         document.newPage();
         addBreakdownTables(document, report);
+        document.newPage();
+        addOpenDataUsageSection(document, report);
 
         document.close();
     }
@@ -119,6 +149,40 @@ public class PdfExportWriter {
         addBreakdownTable(document, "Top Districts", report.topDistricts(), PdfReportTheme.BRAND_ORANGE);
         if (!report.financialYearPeriods().isEmpty()) {
             addBreakdownTable(document, "By Financial Year Period", report.financialYearPeriods(), PdfReportTheme.BRAND_GREEN);
+        }
+    }
+
+    private void addOpenDataUsageSection(Document document, AdminDashboardReportModel report) throws DocumentException {
+        OpenDataUsageReportSection usage = report.openDataUsage();
+        document.add(sectionHeading("Open Data Usage"));
+        document.add(new Paragraph(
+                "Aggregate site visitors and public CSV/Excel downloads. Contact details are not included.",
+                bodyFont()
+        ));
+        document.add(new Paragraph(" ", bodyFont()));
+
+        PdfPTable kpiTable = new PdfPTable(3);
+        kpiTable.setWidthPercentage(100);
+        kpiTable.setSpacingBefore(8);
+        addKpiCell(kpiTable, "Unique site visitors", Long.toString(usage.totalUniqueVisitors()), PdfReportTheme.BRAND_BLUE);
+        addKpiCell(kpiTable, "Unique downloaders", Long.toString(usage.totalUniqueDownloaders()), PdfReportTheme.BRAND_GREEN);
+        addKpiCell(kpiTable, "Total public downloads", Long.toString(usage.totalDownloads()), PdfReportTheme.BRAND_ORANGE);
+        document.add(kpiTable);
+        document.add(new Paragraph(" ", bodyFont()));
+
+        if (!usage.byDataset().isEmpty()) {
+            document.add(chartRenderer.createDownloadsByDatasetChart(usage.byDataset()));
+            addBreakdownTable(document, "Downloads by Dataset", usage.byDataset(), PdfReportTheme.BRAND_GREEN);
+        }
+        if (!usage.byGender().isEmpty()) {
+            document.add(chartRenderer.createDownloaderGenderChart(usage.byGender()));
+            addBreakdownTable(document, "Downloaders by Gender", usage.byGender(), PdfReportTheme.BRAND_BLUE);
+        }
+        if (!usage.byAgeGroup().isEmpty()) {
+            addBreakdownTable(document, "Downloaders by Age Group", usage.byAgeGroup(), PdfReportTheme.BRAND_ORANGE);
+        }
+        if (!usage.downloadsOverTime().isEmpty()) {
+            document.add(chartRenderer.createDownloadsOverTimeChart(usage.downloadsOverTime()));
         }
     }
 
