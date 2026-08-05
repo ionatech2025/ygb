@@ -15,10 +15,10 @@ Add an **admin** analytics view: downloader table (PII), charts filterable by ag
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Admin can open usage analytics and see downloader rows with email/optional name.
-- [ ] Changing age/gender filters refreshes charts/table.
-- [ ] Visitors vs downloaders chart/section renders from API data.
-- [ ] Non-admin cannot access the route (redirect/forbidden).
+- [x] Admin can open usage analytics and see downloader rows with email/optional name.
+- [x] Changing age/gender filters refreshes charts/table.
+- [x] Visitors vs downloaders chart/section renders from API data.
+- [x] Non-admin cannot access the route (redirect/forbidden).
 
 ## Blocked by
 

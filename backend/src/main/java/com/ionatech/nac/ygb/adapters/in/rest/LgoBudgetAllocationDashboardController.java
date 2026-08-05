@@ -3,6 +3,7 @@ package com.ionatech.nac.ygb.adapters.in.rest;
 import com.ionatech.nac.ygb.adapters.in.rest.dto.*;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.LgoBudgetAllocationDashboardFilterRequestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.LgoBudgetAllocationDashboardRestMapper;
+import com.ionatech.nac.ygb.application.ports.api.AuthorizePublicDownloadUseCase;
 import com.ionatech.nac.ygb.application.ports.api.ExportLgoBudgetAllocationDatasetUseCase;
 import com.ionatech.nac.ygb.application.ports.api.GetLgoBudgetAllocationChartDataQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetLgoBudgetAllocationDashboardSummaryQuery;
@@ -32,6 +33,7 @@ public class LgoBudgetAllocationDashboardController {
     private final GetLgoBudgetAllocationDashboardSummaryQuery getSummaryQuery;
     private final GetLgoBudgetAllocationChartDataQuery getChartDataQuery;
     private final ExportLgoBudgetAllocationDatasetUseCase exportLgoBudgetAllocationDatasetUseCase;
+    private final AuthorizePublicDownloadUseCase authorizePublicDownloadUseCase;
     private final LgoBudgetAllocationDashboardFilterRequestMapper filterRequestMapper;
     private final LgoBudgetAllocationDashboardRestMapper restMapper;
     private final AnonymisationProjector anonymisationProjector;
@@ -41,6 +43,7 @@ public class LgoBudgetAllocationDashboardController {
             GetLgoBudgetAllocationDashboardSummaryQuery getLgoBudgetAllocationDashboardSummaryQuery,
             GetLgoBudgetAllocationChartDataQuery getLgoBudgetAllocationChartDataQuery,
             ExportLgoBudgetAllocationDatasetUseCase exportLgoBudgetAllocationDatasetUseCase,
+            AuthorizePublicDownloadUseCase authorizePublicDownloadUseCase,
             LgoBudgetAllocationDashboardFilterRequestMapper filterRequestMapper,
             LgoBudgetAllocationDashboardRestMapper restMapper,
             AnonymisationProjector anonymisationProjector
@@ -49,6 +52,7 @@ public class LgoBudgetAllocationDashboardController {
         this.getSummaryQuery = getLgoBudgetAllocationDashboardSummaryQuery;
         this.getChartDataQuery = getLgoBudgetAllocationChartDataQuery;
         this.exportLgoBudgetAllocationDatasetUseCase = exportLgoBudgetAllocationDatasetUseCase;
+        this.authorizePublicDownloadUseCase = authorizePublicDownloadUseCase;
         this.filterRequestMapper = filterRequestMapper;
         this.restMapper = restMapper;
         this.anonymisationProjector = anonymisationProjector;
@@ -114,6 +118,7 @@ public class LgoBudgetAllocationDashboardController {
 
     @GetMapping("/download/csv")
     public ResponseEntity<StreamingResponseBody> downloadCsv(
+            @RequestHeader(value = DownloadSessionHeaders.HEADER, required = false) String downloadSession,
             @RequestParam(value = "districtId", required = false) UUID districtId,
             @RequestParam(value = "subcountyId", required = false) UUID subcountyId,
             @RequestParam(value = "parishId", required = false) UUID parishId,
@@ -123,6 +128,12 @@ public class LgoBudgetAllocationDashboardController {
             @RequestParam(value = "ageGroup", required = false) String ageGroup,
             @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
     ) {
+        authorizePublicDownloadUseCase.authorizeAndRecord(
+                downloadSession,
+                PublicDownloadDataset.LGO_BUDGET_ALLOCATION,
+                ExportFormat.CSV,
+                null
+        );
         LgoBudgetAllocationDashboardFilter filter = filterRequestMapper.toFilter(
                 districtId, subcountyId, parishId, dateFrom, dateTo, gender, ageGroup, financialYearPeriod
         );

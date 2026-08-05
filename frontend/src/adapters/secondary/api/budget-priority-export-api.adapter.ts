@@ -1,5 +1,6 @@
 import { API_BASE } from '../../../core/api/api-base';
 import { ApiError } from '../../../core/api/api-client';
+import { buildDownloadSessionHeaders } from '../../../core/domain/download-session-headers';
 import { buildBudgetPriorityDashboardFilterQueryString } from '../../../core/domain/budget-priority-dashboard-filter.model';
 import type { BudgetPriorityDashboardFilter } from '../../../core/domain/budget-priority-dashboard-filter.model';
 import {
@@ -24,23 +25,32 @@ export function buildBudgetPriorityExportUrl(
   return `${API_BASE}${EXPORT_PATHS[format]}${suffix}`;
 }
 
+function readExportErrorMessage(text: string, fallback: string): string {
+  let message = text || fallback;
+  try {
+    const json = JSON.parse(text) as { message?: string; detail?: string };
+    if (json.detail) message = json.detail;
+    else if (json.message) message = json.message;
+  } catch {
+    // plain-text error body
+  }
+  return message;
+}
+
 export class HttpBudgetPriorityExportAdapter implements IBudgetPriorityExportApiPort {
-  async downloadExport(format: PublicExportFormat, filter: BudgetPriorityDashboardFilter): Promise<void> {
+  async downloadExport(
+    format: PublicExportFormat,
+    filter: BudgetPriorityDashboardFilter,
+    sessionToken: string
+  ): Promise<void> {
     const response = await fetch(buildBudgetPriorityExportUrl(format, filter), {
       method: 'GET',
+      headers: buildDownloadSessionHeaders(sessionToken),
     });
 
     if (!response.ok) {
       const text = await response.text();
-      let message = text || response.statusText;
-      try {
-        const json = JSON.parse(text) as { message?: string; detail?: string };
-        if (json.detail) message = json.detail;
-        else if (json.message) message = json.message;
-      } catch {
-        // plain-text error body
-      }
-      throw new ApiError(message, response.status);
+      throw new ApiError(readExportErrorMessage(text, response.statusText), response.status);
     }
 
     const blob = await response.blob();

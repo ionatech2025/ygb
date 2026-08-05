@@ -12,7 +12,8 @@ public record AdminDashboardReportModel(
         List<ReportLabelCount> genders,
         List<ReportLabelCount> topDistricts,
         List<ReportLabelCount> financialYearPeriods,
-        List<ReportLabelCount> submissionsOverTime
+        List<ReportLabelCount> submissionsOverTime,
+        OpenDataUsageReportSection openDataUsage
 ) {
     public AdminDashboardReportModel {
         formTypes = List.copyOf(formTypes);
@@ -20,5 +21,8 @@ public record AdminDashboardReportModel(
         topDistricts = List.copyOf(topDistricts);
         financialYearPeriods = List.copyOf(financialYearPeriods);
         submissionsOverTime = List.copyOf(submissionsOverTime);
+        if (openDataUsage == null) {
+            openDataUsage = OpenDataUsageReportSection.empty();
+        }
     }
 }

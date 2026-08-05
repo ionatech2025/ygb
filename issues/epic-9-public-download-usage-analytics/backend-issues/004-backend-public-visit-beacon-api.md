@@ -16,9 +16,9 @@ Accept anonymous **visit beacons** from public routes so admins can compare site
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Application/adapter test: valid beacon persists a visit event.
-- [ ] Reject payloads that attempt to send email/name (ignore unknown fields or 400 — pick one and test).
-- [ ] WebMvc: no auth required; returns 202/204 quickly.
+- [x] Application/adapter test: valid beacon persists a visit event.
+- [x] Reject payloads that attempt to send email/name (ignore unknown fields or 400 — pick one and test).
+- [x] WebMvc: no auth required; returns 202/204 quickly.
 
 ## Blocked by
 

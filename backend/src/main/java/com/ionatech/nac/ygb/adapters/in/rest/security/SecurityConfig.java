@@ -39,6 +39,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/public/dashboard/**").permitAll()
                 .requestMatchers("/api/v1/public/budget-priorities/**").permitAll()
                 .requestMatchers("/api/v1/public/settings/**").permitAll()
+                .requestMatchers("/api/v1/public/download-profile/**").permitAll()
+                .requestMatchers("/api/v1/public/analytics/**").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/submissions").hasRole("DATA_COLLECTOR")
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/submissions/lgo-budget-allocation").hasRole("DATA_COLLECTOR")
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/my-count").hasRole("DATA_COLLECTOR")

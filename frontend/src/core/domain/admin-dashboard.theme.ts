@@ -77,41 +77,42 @@ export const adminDashboardClasses = {
 } as const;
 
 export const loginPortalClasses = {
-  shell: 'relative min-h-dvh bg-surface-muted',
-  ambientGlowLeft: 'absolute -left-32 top-0 h-96 w-96 rounded-full bg-brand/10 blur-3xl dark:bg-brand/5',
-  ambientGlowRight: 'absolute bottom-0 right-0 h-80 w-80 rounded-full bg-nac-orange/10 blur-3xl dark:bg-nac-orange/5',
+  shell: 'relative min-h-dvh bg-surface-muted overflow-hidden selection:bg-brand/20 selection:text-brand',
+  ambientGlowLeft: 'pointer-events-none absolute -left-32 -top-32 h-[500px] w-[500px] rounded-full bg-brand/10 blur-[120px] dark:bg-brand/15',
+  ambientGlowRight: 'pointer-events-none absolute -bottom-32 -right-32 h-[500px] w-[500px] rounded-full bg-nac-orange/10 blur-[120px] dark:bg-nac-orange/15',
+  ambientGlowCenter: 'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-nac-blue/5 blur-[140px] dark:bg-nac-blue/10',
   brandPanel: [
-    'relative order-1 flex flex-col overflow-hidden bg-surface',
-    'border-b border-border/80 px-5 py-10 lg:min-h-dvh lg:flex-1 lg:justify-between lg:border-b-0 lg:border-r lg:px-12 lg:py-14',
+    'relative order-1 flex flex-col justify-between overflow-hidden bg-surface/70 backdrop-blur-xl',
+    'border-b border-border/80 px-6 py-10 lg:min-h-dvh lg:flex-1 lg:border-b-0 lg:border-r lg:px-12 lg:py-14',
   ].join(' '),
   brandAccent: 'pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-nac-blue via-brand to-nac-orange',
-  brandEyebrow: 'text-[10px] font-bold uppercase tracking-widest text-nac-orange',
+  brandEyebrow: 'text-[11px] font-bold uppercase tracking-widest text-nac-orange',
   brandSubtitle: 'text-[10px] font-semibold uppercase tracking-widest text-text-muted',
   brandMonogram:
-    'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-nac-blue text-sm font-black tracking-wider text-white shadow-md shadow-brand/20',
+    'flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-brand via-nac-orange to-nac-blue text-base font-black tracking-wider text-white shadow-lg shadow-brand/25 ring-1 ring-white/20 transition-transform duration-300 hover:scale-105',
   officialBadge:
-    'inline-flex items-center rounded-full border border-brand/25 bg-brand-light/50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand dark:bg-brand/10',
+    'inline-flex items-center gap-1.5 rounded-full border border-brand/25 bg-brand-light/60 px-3.5 py-1 text-[11px] font-bold uppercase tracking-widest text-brand backdrop-blur-md dark:bg-brand/15 dark:border-brand/30',
   headline: 'text-2xl font-black leading-tight tracking-tight text-text sm:text-3xl lg:text-4xl',
-  lead: 'max-w-lg text-sm leading-relaxed text-text-muted',
+  lead: 'max-w-lg text-sm leading-relaxed text-text-muted sm:text-base',
   featureCard: [
-    'flex gap-3 rounded-2xl border border-border/80 bg-surface-muted/50 p-4 ring-1 ring-black/[0.02]',
-    'transition hover:border-brand/25 hover:bg-surface-muted dark:ring-white/[0.03]',
+    'group flex gap-3.5 rounded-2xl border border-border/80 bg-surface/80 p-4 shadow-xs ring-1 ring-black/[0.02]',
+    'transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/35 hover:bg-surface hover:shadow-md dark:ring-white/[0.04]',
   ].join(' '),
   featureIcon:
-    'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-light/60 text-brand dark:bg-brand/15',
-  featureTitle: 'text-sm font-semibold text-text',
+    'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-light to-brand/10 text-brand shadow-xs transition-transform duration-300 group-hover:scale-110 dark:from-brand/20 dark:to-brand/5 dark:text-brand',
+  featureTitle: 'text-sm font-bold text-text group-hover:text-brand transition-colors',
   featureDetail: 'mt-0.5 text-xs leading-relaxed text-text-muted',
-  footerCopy: 'text-xs text-text-muted',
-  formPanel: 'order-2 flex scroll-mt-4 items-center justify-center px-4 py-8 lg:min-h-dvh lg:flex-1 lg:px-10',
+  footerCopy: 'text-xs font-medium text-text-muted/80',
+  formPanel: 'order-2 flex scroll-mt-4 items-center justify-center px-4 py-10 lg:min-h-dvh lg:flex-1 lg:px-12',
   formCard: [
-    'rounded-2xl border border-border/80 bg-surface p-6 shadow-sm ring-1 ring-black/[0.03]',
-    'sm:p-8 dark:ring-white/[0.04]',
+    'w-full rounded-3xl border border-border/80 bg-surface/90 p-6 shadow-xl backdrop-blur-xl ring-1 ring-black/[0.04]',
+    'sm:p-9 dark:ring-white/[0.06] dark:bg-surface/80',
   ].join(' '),
   submitButton:
-    'inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-nac-orange text-sm font-bold text-white shadow-sm shadow-nac-orange/20 transition hover:bg-nac-orange-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-text-muted disabled:shadow-none',
-  testAccountCard: 'rounded-xl border border-border/80 bg-surface-muted/60 px-3 py-2.5 text-center',
+    'inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-nac-orange to-brand px-6 text-sm font-bold text-white shadow-md shadow-nac-orange/20 transition-all duration-200 hover:opacity-95 hover:shadow-lg hover:shadow-nac-orange/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none',
+  testAccountCard: 'group rounded-xl border border-border/80 bg-surface-muted/50 p-2.5 text-left transition duration-200 hover:border-brand/30 hover:bg-surface-muted',
   publicLink:
-    'inline-flex min-h-10 items-center gap-1.5 text-sm font-semibold text-brand transition hover:text-brand-hover',
+    'inline-flex min-h-10 items-center gap-2 text-xs font-bold uppercase tracking-wider text-text-muted transition-colors hover:text-brand',
   mobileSignInButton:
-    'inline-flex min-h-10 shrink-0 items-center rounded-xl border border-border bg-surface px-4 text-xs font-bold text-text transition hover:bg-surface-muted lg:hidden',
+    'inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-xl border border-border bg-surface px-4 text-xs font-bold text-text shadow-xs transition hover:bg-surface-muted lg:hidden',
 } as const;

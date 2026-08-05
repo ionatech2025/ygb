@@ -14,10 +14,10 @@ Show **public** anonymised charts for how widely open data is downloaded — ove
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Public user sees downloads-over-time chart from API.
-- [ ] Public user sees dataset comparison (PDM vs Budget Priorities vs LGO).
-- [ ] Rendered UI/copy does not surface PII fields from fixtures.
-- [ ] Section loads without login.
+- [x] Public user sees downloads-over-time chart from API.
+- [x] Public user sees dataset comparison (PDM vs Budget Priorities vs LGO).
+- [x] Rendered UI/copy does not surface PII fields from fixtures.
+- [x] Section loads without login.
 
 ## Blocked by
 

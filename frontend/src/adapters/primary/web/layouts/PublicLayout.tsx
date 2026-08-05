@@ -4,10 +4,13 @@ import { LogIn, Menu, X } from 'lucide-react';
 import { usePublicDashboardFilterUrlSync } from '../../../../core/hooks/usePublicDashboardFilterUrlSync';
 import { useBudgetPriorityDashboardFilterUrlSync } from '../../../../core/hooks/useBudgetPriorityDashboardFilterUrlSync';
 import { useLgoBudgetAllocationDashboardFilterUrlSync } from '../../../../core/hooks/useLgoBudgetAllocationDashboardFilterUrlSync';
+import { usePublicVisitBeacon } from '../public/usePublicVisitBeacon';
+import { PUBLIC_VISIT_PRIVACY_NOTICE } from '../../../../core/domain/public-visit.model';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { publicLayoutClasses } from '../../../../core/domain/public-dashboard.theme';
 import { PublicNav } from './PublicNav';
 import { PublicSeoJsonLd } from '../components/PublicSeoJsonLd';
+import type { IPublicVisitBeaconApiPort } from '../../../../ports/public-visit-beacon-api.port';
 
 function StaffSignInLink({ onNavigate, className = '' }: { onNavigate?: () => void; className?: string }) {
   return (
@@ -22,10 +25,16 @@ function StaffSignInLink({ onNavigate, className = '' }: { onNavigate?: () => vo
   );
 }
 
-export function PublicLayout() {
+export interface PublicLayoutProps {
+  /** Optional injection for visit beacon tests. */
+  visitBeaconApi?: IPublicVisitBeaconApiPort;
+}
+
+export function PublicLayout({ visitBeaconApi }: PublicLayoutProps = {}) {
   usePublicDashboardFilterUrlSync();
   useBudgetPriorityDashboardFilterUrlSync();
   useLgoBudgetAllocationDashboardFilterUrlSync();
+  usePublicVisitBeacon(visitBeaconApi);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
@@ -91,6 +100,12 @@ export function PublicLayout() {
             <p className="text-sm font-medium text-text">Survey Tool — Youth Go Budget App (YGB)</p>
             <p className="mt-2 text-xs leading-relaxed text-text-muted">
               Anonymised public data for transparency and programme accountability.
+            </p>
+            <p
+              className="mt-3 text-xs leading-relaxed text-text-muted"
+              data-testid="public-visit-privacy-notice"
+            >
+              {PUBLIC_VISIT_PRIVACY_NOTICE}
             </p>
           </div>
         </div>

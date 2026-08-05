@@ -23,6 +23,7 @@ function renderAdminLayout(initialPath = '/admin/dashboard') {
           <Route path="/admin/users" element={<div>Users page</div>} />
           <Route path="/admin/users/:id" element={<div>Collector profile page</div>} />
           <Route path="/admin/collectors" element={<div>Collectors page</div>} />
+          <Route path="/admin/download-usage" element={<div>Download usage page</div>} />
           <Route path="/admin/sync-status" element={<div>Sync page</div>} />
         </Route>
       </Routes>
@@ -46,6 +47,7 @@ describe('AdminLayout', () => {
     renderAdminLayout();
 
     expect(screen.getAllByRole('link', { name: 'Dashboard' }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('link', { name: 'Download usage' }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole('link', { name: 'Users' }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole('link', { name: 'Collector Tracker' }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole('link', { name: 'Sync Status' }).length).toBeGreaterThan(0);

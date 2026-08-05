@@ -1,6 +1,6 @@
 ## Objective
 
-Wire **PDM**, **Budget Priorities**, and **LGO Budget Allocation** public export toolbars so CSV/Excel actions open the profile form when no valid session exists, then call exports with the session token and proceed with the file download.
+Wire **PDM**, **Budget Priorities**, and **LGO Budget Allocation** public export toolbars so CSV/Excel actions open the profile form as a modal when no valid session exists, then call exports with the session token and proceed with the file download.
 
 ## Architectural Context
 
@@ -15,10 +15,10 @@ Wire **PDM**, **Budget Priorities**, and **LGO Budget Allocation** public export
 
 ## Acceptance Criteria & TDD Checklist
 
-- [ ] Without session: clicking Download CSV/Excel opens profile form (no naked export call).
-- [ ] With valid session: export proceeds for PDM, BP, and LGO without re-showing the form.
-- [ ] After form success, original requested download continues (or user can click again — prefer auto-continue).
-- [ ] Tests cover at least one toolbar end-to-end with mocked APIs; spot-check other two share the gate.
+- [x] Without session: clicking Download CSV/Excel opens profile form (no naked export call).
+- [x] With valid session: export proceeds for PDM, BP, and LGO without re-showing the form.
+- [x] After form success, original requested download continues (or user can click again — prefer auto-continue).
+- [x] Tests cover at least one toolbar end-to-end with mocked APIs; spot-check other two share the gate.
 
 ## Blocked by
 
