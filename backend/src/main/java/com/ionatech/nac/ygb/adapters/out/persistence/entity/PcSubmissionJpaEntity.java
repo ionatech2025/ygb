@@ -66,6 +66,9 @@ public class PcSubmissionJpaEntity extends SubmissionJpaEntity {
     @Column(name = "pdc_effectiveness_rating", nullable = false)
     private PdcEffectivenessRating pdcEffectivenessRating;
 
+    @Column(name = "programme_monitored", nullable = false)
+    private Boolean programmeMonitored;
+
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "monitored_by", nullable = false)
     private List<String> monitoredBy;
@@ -93,6 +96,12 @@ public class PcSubmissionJpaEntity extends SubmissionJpaEntity {
 
     @Column(name = "self_reliance_beneficiaries_count", nullable = false)
     private Integer selfRelianceBeneficiariesCount;
+
+    @Column(name = "self_reliance_stable_income_count", nullable = false)
+    private Integer selfRelianceStableIncomeCount;
+
+    @Column(name = "self_reliance_trained_count", nullable = false)
+    private Integer selfRelianceTrainedCount;
 
     @Column(name = "self_reliance_group_projects_count", nullable = false)
     private Integer selfRelianceGroupProjectsCount;

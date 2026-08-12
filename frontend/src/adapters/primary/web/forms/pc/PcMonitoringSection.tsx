@@ -2,6 +2,7 @@ import {
   MONITORED_BY_OPTIONS,
   MONITORED_BY_OTHER_VALUE,
   requiresImprovementsSeenExplanation,
+  requiresMonitoredBy,
   type PcFormFields,
 } from '../../../../../core/domain/pc-form.model';
 import { FormSection, MultiCheckboxGroup, NarrativeTextarea, YesNoRadioGroup } from '../../components/forms';
@@ -17,31 +18,51 @@ export function PcMonitoringSection({ value, onChange, errors }: PcMonitoringSec
 
   return (
     <FormSection title="PDM Programme Monitoring and Oversight" description="Section D — Questions 15–20">
-      <p className="text-xs text-text-muted">Q15. Did anyone monitor the programme execution in your parish?</p>
-
-      <MultiCheckboxGroup
-        legend="Q16. If yes, who monitored the programme? (select all that apply)"
-        options={MONITORED_BY_OPTIONS.map((option) => ({
-          value: option.value,
-          label: option.label,
-        }))}
-        selected={value.monitoredBy}
-        onChange={(selected) =>
+      <YesNoRadioGroup
+        name="programmeMonitored"
+        label="Q15. Did anyone monitor the programme execution in your parish?"
+        value={value.programmeMonitored}
+        onChange={(choice) =>
           patch({
-            monitoredBy: selected as PcFormFields['monitoredBy'],
-            monitoredByOthersSpecify: selected.includes(MONITORED_BY_OTHER_VALUE)
-              ? value.monitoredByOthersSpecify
-              : '',
+            programmeMonitored: choice,
+            monitoredBy: choice === true ? value.monitoredBy : [],
+            monitoredByOthersSpecify: choice === true ? value.monitoredByOthersSpecify : '',
           })
         }
-        otherOptionValue={MONITORED_BY_OTHER_VALUE}
-        otherSpecifyValue={value.monitoredByOthersSpecify}
-        onOtherSpecifyChange={(text) => patch({ monitoredByOthersSpecify: text })}
-        otherSpecifyLabel="Specify who monitored the programme"
-        otherSpecifyError={errors.monitoredByOthersSpecify}
         required
-        error={errors.monitoredBy}
+        error={errors.programmeMonitored}
       />
+
+      {value.programmeMonitored !== true && (
+        <p className="text-xs text-text-muted">Q16. If yes, who monitored the programme?</p>
+      )}
+
+      {requiresMonitoredBy(value.programmeMonitored) && (
+        <MultiCheckboxGroup
+          legend="Q16. If yes, who monitored the programme? (select all that apply)"
+          options={MONITORED_BY_OPTIONS.map((option) => ({
+            value: option.value,
+            label: option.label,
+          }))}
+          selected={value.monitoredBy}
+          onChange={(selected) =>
+            patch({
+              monitoredBy: selected as PcFormFields['monitoredBy'],
+              monitoredByOthersSpecify: selected.includes(MONITORED_BY_OTHER_VALUE)
+                ? value.monitoredByOthersSpecify
+                : '',
+            })
+          }
+          otherOptionValue={MONITORED_BY_OTHER_VALUE}
+          otherSpecifyValue={value.monitoredByOthersSpecify}
+          onOtherSpecifyChange={(text) => patch({ monitoredByOthersSpecify: text })}
+          otherSpecifyLabel="Specify who monitored the programme"
+          otherSpecifyError={errors.monitoredByOthersSpecify}
+          required
+          error={errors.monitoredBy}
+        />
+      )}
+
 
       <NarrativeTextarea
         id="monitoringMethod"

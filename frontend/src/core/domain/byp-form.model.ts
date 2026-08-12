@@ -36,7 +36,6 @@ export interface BypFormFields {
   fundReceiptDurationSpecify: string;
   receivedActualAmountRequested: boolean | null;
   cashAmountReceived: number | '';
-  fundsReceiptWaitAfterApplied: string;
   moneyUsedFor: string;
   serviceRating: Rating | '';
   loanRepaid: boolean | null;
@@ -54,7 +53,6 @@ export const EMPTY_BYP_FIELDS: BypFormFields = {
   fundReceiptDurationSpecify: '',
   receivedActualAmountRequested: null,
   cashAmountReceived: '',
-  fundsReceiptWaitAfterApplied: '',
   moneyUsedFor: '',
   serviceRating: '',
   loanRepaid: null,

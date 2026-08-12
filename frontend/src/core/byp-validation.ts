@@ -39,12 +39,6 @@ export function validateBypForm(state: BypFormState): BypFormErrors {
     errors.cashAmountReceived = 'Enter a valid cash amount received.';
   }
 
-  const waitAfterApplied = validateDurationText(byp.fundsReceiptWaitAfterApplied, { required: true });
-  if (!waitAfterApplied.valid) {
-    errors.fundsReceiptWaitAfterApplied =
-      waitAfterApplied.message ?? 'Please describe how long it took (min 5 characters).';
-  }
-
   const moneyUsedFor = validateNarrativeText(byp.moneyUsedFor, { required: true });
   if (!moneyUsedFor.valid) {
     errors.moneyUsedFor = moneyUsedFor.message ?? 'Please describe what the money was used for (min 10 characters).';
@@ -106,7 +100,6 @@ export function buildBypSubmissionPayload(
       : null,
     receivedActualAmountRequested: byp.receivedActualAmountRequested as boolean,
     cashAmountReceived: Number(byp.cashAmountReceived),
-    fundsReceiptWaitAfterApplied: byp.fundsReceiptWaitAfterApplied.trim(),
     moneyUsedFor: byp.moneyUsedFor.trim(),
     serviceRating: byp.serviceRating as Rating,
     loanRepaid: byp.loanRepaid as boolean,

@@ -39,7 +39,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -73,7 +72,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -104,7 +102,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -135,7 +132,6 @@ class SubmissionTest {
                 null, // missing specify
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -168,7 +164,6 @@ class SubmissionTest {
                 "4 mos",
                 true,
                 500000L,
-                NarrativeText.duration("2 days"),
                 new NarrativeText("I used the money to buy farming inputs."),
                 null,
                 null,
@@ -185,7 +180,6 @@ class SubmissionTest {
         byp.validate();
 
         assertThat(byp.getFundReceiptDurationSpecify()).isEqualTo("4 mos");
-        assertThat(byp.getFundsReceiptWaitAfterApplied().getValue()).isEqualTo("2 days");
     }
 
     @Test
@@ -202,7 +196,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -235,7 +228,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -268,7 +260,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -301,7 +292,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -578,6 +568,7 @@ class SubmissionTest {
                 true,
                 List.of("FINANCIAL_LITERACY", "BUSINESS_PLANNING"),
                 PdcEffectivenessRating.VERY_EFFECTIVE,
+                true,
                 List.of("CAO", "PDM_SECRETARIAT"),
                 null,
                 new NarrativeText("Regular fields checks performed."),
@@ -587,6 +578,8 @@ class SubmissionTest {
                 true,
                 new NarrativeText("Reports submitted quarterly to the CAO office."),
                 10,
+                12,
+                15,
                 8,
                 new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
@@ -595,6 +588,9 @@ class SubmissionTest {
         assertThat(pc.getAmountExpected()).isEqualTo(1500000L);
         assertThat(pc.getYoungMenBeneficiaries()).isEqualTo(10);
         assertThat(pc.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.VERY_EFFECTIVE);
+        assertThat(pc.getProgrammeMonitored()).isTrue();
+        assertThat(pc.getSelfRelianceStableIncomeCount()).isEqualTo(12);
+        assertThat(pc.getSelfRelianceTrainedCount()).isEqualTo(15);
     }
 
     @Test
@@ -621,6 +617,7 @@ class SubmissionTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 null,
+                true,
                 List.of("CAO"),
                 null,
                 new NarrativeText("Regular fields checks performed."),
@@ -630,6 +627,8 @@ class SubmissionTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
+                12,
+                15,
                 8,
                 new NarrativeText("Provide more monitoring tools for parish chiefs.")
         ))
@@ -661,6 +660,7 @@ class SubmissionTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 PdcEffectivenessRating.EFFECTIVE,
+                true,
                 List.of("CAO"),
                 null,
                 new NarrativeText("Regular fields checks performed."),
@@ -670,6 +670,8 @@ class SubmissionTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
+                12,
+                15,
                 8,
                 new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
@@ -703,6 +705,7 @@ class SubmissionTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 PdcEffectivenessRating.MODERATELY_EFFECTIVE,
+                true,
                 List.of("OTHERS"),
                 null,
                 new NarrativeText("Regular fields checks performed."),
@@ -712,6 +715,8 @@ class SubmissionTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
+                12,
+                15,
                 8,
                 new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
@@ -719,5 +724,50 @@ class SubmissionTest {
         assertThatThrownBy(pc::validate)
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("monitoredByOthersSpecify is required when monitoredBy contains OTHERS");
+    }
+
+    @Test
+    void pcShouldAllowEmptyMonitoredByWhenProgrammeNotMonitored() {
+        PcSubmission pc = new PcSubmission(
+                UUID.randomUUID(),
+                createMetadata(),
+                createLocation(),
+                "Parish Chief Name",
+                "0772111555",
+                "MALE",
+                AgeGroup.AGE_ABOVE_35,
+                1500000L,
+                1500000L,
+                100,
+                40,
+                30,
+                10,
+                new NarrativeText("Lack of transport equipment is the main obstacle."),
+                true,
+                7,
+                3,
+                4,
+                true,
+                List.of("FINANCIAL_LITERACY"),
+                PdcEffectivenessRating.MODERATELY_EFFECTIVE,
+                false,
+                List.of(),
+                null,
+                new NarrativeText("Regular fields checks performed."),
+                true,
+                true,
+                new NarrativeText("Improvements seen in poultry sectors."),
+                true,
+                new NarrativeText("Reports submitted quarterly."),
+                10,
+                12,
+                15,
+                8,
+                new NarrativeText("Provide more monitoring tools for parish chiefs.")
+        );
+
+        pc.validate();
+        assertThat(pc.getProgrammeMonitored()).isFalse();
+        assertThat(pc.getMonitoredBy()).isEmpty();
     }
 }

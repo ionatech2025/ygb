@@ -166,7 +166,6 @@ class EnumeratorAttributionIntegrationTest {
                 null,
                 true,
                 500000L,
-                "It took about three weeks after I applied.",
                 "I used the money to buy farming inputs.",
                 "MONTHLY",
                 null,
@@ -263,6 +262,7 @@ class EnumeratorAttributionIntegrationTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 PdcEffectivenessRating.VERY_EFFECTIVE,
+                true,
                 List.of("CAO"),
                 null,
                 "Regular field checks performed by the parish team.",
@@ -272,6 +272,8 @@ class EnumeratorAttributionIntegrationTest {
                 true,
                 "Reports submitted quarterly.",
                 10,
+                12,
+                15,
                 8,
                 "Provide more monitoring tools for parish chiefs."
         );

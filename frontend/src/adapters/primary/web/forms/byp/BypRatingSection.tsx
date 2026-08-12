@@ -16,10 +16,10 @@ export function BypRatingSection({ value, onChange, errors }: BypRatingSectionPr
   const patch = (partial: Partial<BypFormFields>) => onChange({ ...value, ...partial });
 
   return (
-    <FormSection title="Service quality & governance" description="Questions 5–7">
+    <FormSection title="Service quality & governance" description="Questions 4–6">
       <RatingSelect
         id="serviceRating"
-        label="Q5. How would you rate the quality of services provided by the Parish Chief/Town Agent and Parish Development Committee (PDC) at the parish or ward level?"
+        label="Q4. How would you rate the quality of services provided by the Parish Chief/Town Agent and Parish Development Committee (PDC) at the parish or ward level?"
         value={value.serviceRating}
         onChange={(rating: Rating) => patch({ serviceRating: rating })}
         required
@@ -62,7 +62,7 @@ export function BypRatingSection({ value, onChange, errors }: BypRatingSectionPr
 
       <RatingSelect
         id="performanceRating"
-        label="Q6. What do you think about the performance of PDM in this parish?"
+        label="Q5. What do you think about the performance of PDM in this parish?"
         value={value.performanceRating}
         onChange={(rating: Rating) => patch({ performanceRating: rating })}
         required
@@ -70,7 +70,7 @@ export function BypRatingSection({ value, onChange, errors }: BypRatingSectionPr
       />
       <YesNoRadioGroup
         name="groupOrganizedTransparently"
-        label="Q7. Do you think your group was organized transparently?"
+        label="Q6. Do you think your group was organized transparently?"
         value={value.groupOrganizedTransparently}
         onChange={(choice) => patch({ groupOrganizedTransparently: choice })}
         required

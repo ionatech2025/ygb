@@ -22,6 +22,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     private Boolean pdcTrainingReceived;
     private List<String> pdcTrainingAreas;
     private PdcEffectivenessRating pdcEffectivenessRating;
+    private Boolean programmeMonitored;
     private List<String> monitoredBy;
     private String monitoredByOthersSpecify;
     private String monitoringMethod;
@@ -31,6 +32,8 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     private Boolean progressReportsSubmitted;
     private String progressReportsSubmittedExplanation;
     private Integer selfRelianceBeneficiariesCount;
+    private Integer selfRelianceStableIncomeCount;
+    private Integer selfRelianceTrainedCount;
     private Integer selfRelianceGroupProjectsCount;
     private String programmeImprovementSuggestion;
 
@@ -62,6 +65,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
             Boolean pdcTrainingReceived,
             List<String> pdcTrainingAreas,
             PdcEffectivenessRating pdcEffectivenessRating,
+            Boolean programmeMonitored,
             List<String> monitoredBy,
             String monitoredByOthersSpecify,
             String monitoringMethod,
@@ -71,6 +75,8 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
             Boolean progressReportsSubmitted,
             String progressReportsSubmittedExplanation,
             Integer selfRelianceBeneficiariesCount,
+            Integer selfRelianceStableIncomeCount,
+            Integer selfRelianceTrainedCount,
             Integer selfRelianceGroupProjectsCount,
             String programmeImprovementSuggestion
     ) {
@@ -89,6 +95,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
         this.pdcTrainingReceived = pdcTrainingReceived;
         this.pdcTrainingAreas = pdcTrainingAreas;
         this.pdcEffectivenessRating = pdcEffectivenessRating;
+        this.programmeMonitored = programmeMonitored;
         this.monitoredBy = monitoredBy;
         this.monitoredByOthersSpecify = monitoredByOthersSpecify;
         this.monitoringMethod = monitoringMethod;
@@ -98,6 +105,8 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
         this.progressReportsSubmitted = progressReportsSubmitted;
         this.progressReportsSubmittedExplanation = progressReportsSubmittedExplanation;
         this.selfRelianceBeneficiariesCount = selfRelianceBeneficiariesCount;
+        this.selfRelianceStableIncomeCount = selfRelianceStableIncomeCount;
+        this.selfRelianceTrainedCount = selfRelianceTrainedCount;
         this.selfRelianceGroupProjectsCount = selfRelianceGroupProjectsCount;
         this.programmeImprovementSuggestion = programmeImprovementSuggestion;
     }
@@ -116,6 +125,7 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     public Boolean getPdcTrainingReceived() { return pdcTrainingReceived; }
     public List<String> getPdcTrainingAreas() { return pdcTrainingAreas; }
     public PdcEffectivenessRating getPdcEffectivenessRating() { return pdcEffectivenessRating; }
+    public Boolean getProgrammeMonitored() { return programmeMonitored; }
     public List<String> getMonitoredBy() { return monitoredBy; }
     public String getMonitoredByOthersSpecify() { return monitoredByOthersSpecify; }
     public String getMonitoringMethod() { return monitoringMethod; }
@@ -125,6 +135,8 @@ public class PcSubmissionRequestDto extends SubmissionRequestDto {
     public Boolean getProgressReportsSubmitted() { return progressReportsSubmitted; }
     public String getProgressReportsSubmittedExplanation() { return progressReportsSubmittedExplanation; }
     public Integer getSelfRelianceBeneficiariesCount() { return selfRelianceBeneficiariesCount; }
+    public Integer getSelfRelianceStableIncomeCount() { return selfRelianceStableIncomeCount; }
+    public Integer getSelfRelianceTrainedCount() { return selfRelianceTrainedCount; }
     public Integer getSelfRelianceGroupProjectsCount() { return selfRelianceGroupProjectsCount; }
     public String getProgrammeImprovementSuggestion() { return programmeImprovementSuggestion; }
 }

@@ -23,7 +23,6 @@ public record BypSubmitCommand(
         String fundReceiptDurationSpecify,
         Boolean receivedActualAmountRequested,
         Long cashAmountReceived,
-        String fundsReceiptWaitAfterApplied,
         String moneyUsedFor,
         String instalmentPeriod,
         String instalmentPeriodSpecify,

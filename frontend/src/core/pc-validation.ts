@@ -1,6 +1,7 @@
 import {
   PDC_EFFECTIVENESS_OPTIONS,
   requiresImprovementsSeenExplanation,
+  requiresMonitoredBy,
   requiresMonitoredByOthersSpecify,
   requiresPdcTrainingAreas,
   requiresProgressReportsExplanation,
@@ -86,13 +87,18 @@ export function validatePcForm(state: PcFormState): PcFormErrors {
     errors.pdcEffectivenessRating = 'Select a valid PDC effectiveness rating.';
   }
 
-  if (pc.monitoredBy.length === 0) {
-    errors.monitoredBy = 'Select at least one monitoring actor.';
+  if (pc.programmeMonitored == null) {
+    errors.programmeMonitored = 'Please indicate if anyone monitored the programme execution.';
   }
-  if (requiresMonitoredByOthersSpecify(pc.monitoredBy)) {
-    const specify = validateRequired(pc.monitoredByOthersSpecify);
-    if (!specify.valid) {
-      errors.monitoredByOthersSpecify = 'Please specify who monitored the programme.';
+  if (requiresMonitoredBy(pc.programmeMonitored)) {
+    if (pc.monitoredBy.length === 0) {
+      errors.monitoredBy = 'Select at least one monitoring actor.';
+    }
+    if (requiresMonitoredByOthersSpecify(pc.monitoredBy)) {
+      const specify = validateRequired(pc.monitoredByOthersSpecify);
+      if (!specify.valid) {
+        errors.monitoredByOthersSpecify = 'Please specify who monitored the programme.';
+      }
     }
   }
 
@@ -127,6 +133,8 @@ export function validatePcForm(state: PcFormState): PcFormErrors {
   }
 
   validateCountField(pc.selfRelianceBeneficiariesCount, 'selfRelianceBeneficiariesCount', errors);
+  validateCountField(pc.selfRelianceStableIncomeCount, 'selfRelianceStableIncomeCount', errors);
+  validateCountField(pc.selfRelianceTrainedCount, 'selfRelianceTrainedCount', errors);
   validateCountField(pc.selfRelianceGroupProjectsCount, 'selfRelianceGroupProjectsCount', errors);
 
   const improvement = validateNarrativeText(pc.programmeImprovementSuggestion, { required: true });
@@ -170,10 +178,12 @@ export function buildPcSubmissionPayload(
     pdcTrainingReceived: pc.pdcTrainingReceived as boolean,
     pdcTrainingAreas: requiresPdcTrainingAreas(pc.pdcTrainingReceived) ? pc.pdcTrainingAreas : null,
     pdcEffectivenessRating: pc.pdcEffectivenessRating,
-    monitoredBy: pc.monitoredBy,
-    monitoredByOthersSpecify: requiresMonitoredByOthersSpecify(pc.monitoredBy)
-      ? pc.monitoredByOthersSpecify.trim()
-      : null,
+    programmeMonitored: pc.programmeMonitored as boolean,
+    monitoredBy: pc.programmeMonitored === true ? pc.monitoredBy : [],
+    monitoredByOthersSpecify:
+      pc.programmeMonitored === true && requiresMonitoredByOthersSpecify(pc.monitoredBy)
+        ? pc.monitoredByOthersSpecify.trim()
+        : null,
     monitoringMethod: pc.monitoringMethod.trim(),
     reportSharedWithRespondent: pc.reportSharedWithRespondent as boolean,
     improvementsSeen: pc.improvementsSeen as boolean,
@@ -185,7 +195,10 @@ export function buildPcSubmissionPayload(
       ? pc.progressReportsSubmittedExplanation.trim()
       : null,
     selfRelianceBeneficiariesCount: parseNonNegativeInteger(pc.selfRelianceBeneficiariesCount) ?? 0,
+    selfRelianceStableIncomeCount: parseNonNegativeInteger(pc.selfRelianceStableIncomeCount) ?? 0,
+    selfRelianceTrainedCount: parseNonNegativeInteger(pc.selfRelianceTrainedCount) ?? 0,
     selfRelianceGroupProjectsCount: parseNonNegativeInteger(pc.selfRelianceGroupProjectsCount) ?? 0,
     programmeImprovementSuggestion: pc.programmeImprovementSuggestion.trim(),
   };
 }
+

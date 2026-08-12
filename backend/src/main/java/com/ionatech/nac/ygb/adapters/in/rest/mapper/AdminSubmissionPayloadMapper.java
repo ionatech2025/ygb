@@ -37,7 +37,6 @@ public class AdminSubmissionPayloadMapper {
                 submission.getFundReceiptDurationSpecify(),
                 submission.getReceivedActualAmountRequested(),
                 submission.getCashAmountReceived(),
-                narrativeValue(submission.getFundsReceiptWaitAfterApplied()),
                 narrativeValue(submission.getMoneyUsedFor()),
                 submission.getInstalmentPeriod(),
                 submission.getInstalmentPeriodSpecify(),
@@ -131,6 +130,7 @@ public class AdminSubmissionPayloadMapper {
                 submission.getPdcTrainingReceived(),
                 copyList(submission.getPdcTrainingAreas()),
                 submission.getPdcEffectivenessRating(),
+                submission.getProgrammeMonitored(),
                 submission.getMonitoredBy(),
                 submission.getMonitoredByOthersSpecify(),
                 narrativeValue(submission.getMonitoringMethod()),
@@ -140,6 +140,8 @@ public class AdminSubmissionPayloadMapper {
                 submission.getProgressReportsSubmitted(),
                 narrativeValue(submission.getProgressReportsSubmittedExplanation()),
                 submission.getSelfRelianceBeneficiariesCount(),
+                submission.getSelfRelianceStableIncomeCount(),
+                submission.getSelfRelianceTrainedCount(),
                 submission.getSelfRelianceGroupProjectsCount(),
                 narrativeValue(submission.getProgrammeImprovementSuggestion())
         );

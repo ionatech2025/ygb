@@ -32,6 +32,7 @@ describe('pc-validation', () => {
     pdcTrainingReceived: true,
     pdcTrainingAreas: ['FINANCIAL_LITERACY', 'BUSINESS_PLANNING'],
     pdcEffectivenessRating: 'VERY_EFFECTIVE',
+    programmeMonitored: true,
     monitoredBy: ['CAO', 'PDM_SECRETARIAT'],
     monitoredByOthersSpecify: '',
     monitoringMethod: 'Regular field checks performed by the parish team.',
@@ -41,11 +42,13 @@ describe('pc-validation', () => {
     progressReportsSubmitted: false,
     progressReportsSubmittedExplanation: '',
     selfRelianceBeneficiariesCount: '10',
+    selfRelianceStableIncomeCount: '6',
+    selfRelianceTrainedCount: '12',
     selfRelianceGroupProjectsCount: '8',
     programmeImprovementSuggestion: 'Provide more monitoring tools for parish chiefs.',
   };
 
-  it('payload includes programme improvement narrative and new enum', () => {
+  it('payload includes Q15, Q24, Q25 fields and programme improvement narrative', () => {
     const payload = buildPcSubmissionPayload(
       { respondent: validRespondent, pc: validPc },
       {
@@ -57,10 +60,38 @@ describe('pc-validation', () => {
 
     expect(payload.youngMenBeneficiaries).toBe(18);
     expect(payload.pdcEffectivenessRating).toBe('VERY_EFFECTIVE');
+    expect(payload.programmeMonitored).toBe(true);
+    expect(payload.selfRelianceStableIncomeCount).toBe(6);
+    expect(payload.selfRelianceTrainedCount).toBe(12);
     expect(payload.programmeImprovementSuggestion).toBe('Provide more monitoring tools for parish chiefs.');
   });
 
-  it('monitoredBy array persisted with all checked values', () => {
+  it('monitoredBy array empty when programmeMonitored is false', () => {
+    const payload = buildPcSubmissionPayload(
+      { respondent: validRespondent, pc: { ...validPc, programmeMonitored: false, monitoredBy: ['CAO'] } },
+      {
+        deviceSubmissionId: '11111111-1111-1111-1111-111111111111',
+        formCompletedAt: '2026-07-20T10:00:00.000Z',
+        collectorId: 'collector-1',
+      }
+    );
+
+    expect(payload.programmeMonitored).toBe(false);
+    expect(payload.monitoredBy).toEqual([]);
+  });
+
+  it('requires programmeMonitored answer Q15', () => {
+    const errors = validatePcForm({
+      respondent: validRespondent,
+      pc: {
+        ...validPc,
+        programmeMonitored: null,
+      },
+    });
+    expect(errors.programmeMonitored).toBeTruthy();
+  });
+
+  it('monitoredBy array persisted with all checked values when programmeMonitored is true', () => {
     const payload = buildPcSubmissionPayload(
       { respondent: validRespondent, pc: validPc },
       {
@@ -87,16 +118,30 @@ describe('pc-validation', () => {
     expect(errors.monitoringMethod).toBeTruthy();
   });
 
-  it('requires monitoredByOthersSpecify when OTHERS is selected', () => {
+  it('requires monitoredByOthersSpecify when OTHERS is selected and programmeMonitored is true', () => {
     const errors = validatePcForm({
       respondent: validRespondent,
       pc: {
         ...validPc,
+        programmeMonitored: true,
         monitoredBy: ['OTHERS'],
         monitoredByOthersSpecify: '',
       },
     });
     expect(errors.monitoredByOthersSpecify).toBeTruthy();
+  });
+
+  it('validates Q24 and Q25 whole numbers', () => {
+    const errors = validatePcForm({
+      respondent: validRespondent,
+      pc: {
+        ...validPc,
+        selfRelianceStableIncomeCount: 'invalid',
+        selfRelianceTrainedCount: '-5',
+      },
+    });
+    expect(errors.selfRelianceStableIncomeCount).toBeTruthy();
+    expect(errors.selfRelianceTrainedCount).toBeTruthy();
   });
 
   it('rejects young women and young men counts that exceed youth beneficiaries', () => {
@@ -112,3 +157,4 @@ describe('pc-validation', () => {
     expect(errors.youngMenBeneficiaries).toBeTruthy();
   });
 });
+
