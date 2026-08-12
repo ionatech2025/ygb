@@ -33,6 +33,7 @@ public record PcSubmitCommand(
         Boolean pdcTrainingReceived,
         List<String> pdcTrainingAreas,
         PdcEffectivenessRating pdcEffectivenessRating,
+        Boolean programmeMonitored,
         List<String> monitoredBy,
         String monitoredByOthersSpecify,
         String monitoringMethod,
@@ -42,6 +43,8 @@ public record PcSubmitCommand(
         Boolean progressReportsSubmitted,
         String progressReportsSubmittedExplanation,
         Integer selfRelianceBeneficiariesCount,
+        Integer selfRelianceStableIncomeCount,
+        Integer selfRelianceTrainedCount,
         Integer selfRelianceGroupProjectsCount,
         String programmeImprovementSuggestion
 ) implements SubmitSubmissionCommand {}

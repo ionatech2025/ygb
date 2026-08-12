@@ -106,6 +106,9 @@ class GetSubmissionDetailServiceTest {
         assertThat(pcDto.getMonitoredBy()).containsExactly("CAO");
         assertThat(pcDto.getYoungMenBeneficiaries()).isEqualTo(8);
         assertThat(pcDto.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.EFFECTIVE);
+        assertThat(pcDto.getProgrammeMonitored()).isTrue();
+        assertThat(pcDto.getSelfRelianceStableIncomeCount()).isEqualTo(12);
+        assertThat(pcDto.getSelfRelianceTrainedCount()).isEqualTo(15);
         assertThat(pcDto.getProgrammeImprovementSuggestion()).isEqualTo("Improve parish-level PDM monitoring.");
     }
 
@@ -211,6 +214,7 @@ class GetSubmissionDetailServiceTest {
                 true,
                 List.of("FINANCIAL_MANAGEMENT"),
                 PdcEffectivenessRating.EFFECTIVE,
+                true,
                 List.of("CAO"),
                 null,
                 new NarrativeText("Regular field checks performed."),
@@ -220,6 +224,8 @@ class GetSubmissionDetailServiceTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
+                12,
+                15,
                 8,
                 new NarrativeText("Improve parish-level PDM monitoring.")
         );

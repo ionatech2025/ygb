@@ -356,6 +356,7 @@ class SubmitSubmissionServiceTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 PdcEffectivenessRating.VERY_EFFECTIVE,
+                true,
                 List.of("CAO"),
                 null,
                 "Regular fields checks performed.",
@@ -365,6 +366,8 @@ class SubmitSubmissionServiceTest {
                 true,
                 "Reports submitted quarterly.",
                 10,
+                12,
+                15,
                 8,
                 "Provide more monitoring tools for parish chiefs."
         );
@@ -378,6 +381,9 @@ class SubmitSubmissionServiceTest {
         assertThat(pc.getAmountExpected()).isEqualTo(1500000L);
         assertThat(pc.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.VERY_EFFECTIVE);
         assertThat(pc.getYoungMenBeneficiaries()).isEqualTo(10);
+        assertThat(pc.getProgrammeMonitored()).isTrue();
+        assertThat(pc.getSelfRelianceStableIncomeCount()).isEqualTo(12);
+        assertThat(pc.getSelfRelianceTrainedCount()).isEqualTo(15);
 
         verify(repositoryPort, times(1)).save(any(Submission.class));
     }

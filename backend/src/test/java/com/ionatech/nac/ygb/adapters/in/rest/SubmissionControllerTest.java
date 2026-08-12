@@ -596,6 +596,7 @@ class SubmissionControllerTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 PdcEffectivenessRating.VERY_EFFECTIVE,
+                true,
                 List.of("CAO"),
                 null,
                 "Regular field checks performed.",
@@ -605,6 +606,8 @@ class SubmissionControllerTest {
                 true,
                 "Reports submitted quarterly.",
                 10,
+                12,
+                15,
                 8,
                 "Provide more monitoring tools for parish chiefs."
         );
@@ -636,6 +639,7 @@ class SubmissionControllerTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 PdcEffectivenessRating.VERY_EFFECTIVE,
+                true,
                 List.of("CAO"),
                 null,
                 "Regular field checks performed.",
@@ -645,6 +649,8 @@ class SubmissionControllerTest {
                 true,
                 "Reports submitted quarterly.",
                 10,
+                12,
+                15,
                 8,
                 "Provide more monitoring tools for parish chiefs."
         );
@@ -671,6 +677,7 @@ class SubmissionControllerTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 PdcEffectivenessRating.VERY_EFFECTIVE,
+                true,
                 List.of("CAO"),
                 null,
                 new NarrativeText("Regular field checks performed."),
@@ -680,6 +687,8 @@ class SubmissionControllerTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
+                12,
+                15,
                 8,
                 new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
@@ -730,6 +739,7 @@ class SubmissionControllerTest {
                   "pdcTrainingReceived": true,
                   "pdcTrainingAreas": ["FINANCIAL_LITERACY"],
                   "pdcEffectivenessRating": "FULLY",
+                  "programmeMonitored": true,
                   "monitoredBy": ["CAO"],
                   "monitoringMethod": "Regular field checks performed.",
                   "reportSharedWithRespondent": true,
@@ -738,6 +748,8 @@ class SubmissionControllerTest {
                   "progressReportsSubmitted": true,
                   "progressReportsSubmittedExplanation": "Reports submitted quarterly.",
                   "selfRelianceBeneficiariesCount": 10,
+                  "selfRelianceStableIncomeCount": 12,
+                  "selfRelianceTrainedCount": 15,
                   "selfRelianceGroupProjectsCount": 8,
                   "programmeImprovementSuggestion": "Provide more monitoring tools for parish chiefs."
                 }

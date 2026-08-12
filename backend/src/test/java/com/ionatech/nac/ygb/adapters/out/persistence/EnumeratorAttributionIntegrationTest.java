@@ -263,6 +263,7 @@ class EnumeratorAttributionIntegrationTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 PdcEffectivenessRating.VERY_EFFECTIVE,
+                true,
                 List.of("CAO"),
                 null,
                 "Regular field checks performed by the parish team.",
@@ -272,6 +273,8 @@ class EnumeratorAttributionIntegrationTest {
                 true,
                 "Reports submitted quarterly.",
                 10,
+                12,
+                15,
                 8,
                 "Provide more monitoring tools for parish chiefs."
         );
