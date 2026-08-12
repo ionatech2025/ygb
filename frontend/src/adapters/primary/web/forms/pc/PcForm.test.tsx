@@ -95,6 +95,7 @@ async function fillMinimalValidForm(user: ReturnType<typeof userEvent.setup>) {
     'VERY_EFFECTIVE'
   );
 
+  await user.click(document.getElementById('programmeMonitored-yes')!);
   await user.click(screen.getByLabelText(/^CAO$/i));
   await user.type(
     screen.getByLabelText(/Q17\. How was the monitoring carried out/i),
@@ -107,6 +108,14 @@ async function fillMinimalValidForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(
     screen.getByLabelText(/Q23\. The number of young people who benefited from the PDM and started agricultural enterprises/i),
     '10'
+  );
+  await user.type(
+    screen.getByLabelText(/Q24\. The number of young people who benefited from the PDM and had a stable income/i),
+    '6'
+  );
+  await user.type(
+    screen.getByLabelText(/Q25\. Number of beneficiary young people trained to improve productivity/i),
+    '12'
   );
   await user.type(
     screen.getByLabelText(
@@ -165,16 +174,31 @@ describe('PcForm', () => {
     expect(screen.getByLabelText(/Q6\. Total number of young men under 30/i)).toBeInTheDocument();
   });
 
-  it('monitoring question shows (select all that apply)', () => {
+  it('Q15 Yes shows Q16 checkboxes dynamically', async () => {
+    const user = userEvent.setup();
     render(<PcForm />);
+
+    expect(screen.queryByLabelText(/^CAO$/i)).not.toBeInTheDocument();
+
+    await user.click(document.getElementById('programmeMonitored-yes')!);
+    expect(screen.getByLabelText(/^CAO$/i)).toBeInTheDocument();
     expect(screen.getByText(/Q16\. If yes, who monitored the programme\? \(select all that apply\)/i)).toBeInTheDocument();
+
+    await user.click(document.getElementById('programmeMonitored-no')!);
+    expect(screen.queryByLabelText(/^CAO$/i)).not.toBeInTheDocument();
   });
 
-  it('self-reliance questions use full-sentence labels from client doc', () => {
+  it('self-reliance questions Q23-Q26 render numeric inputs with full-sentence labels', () => {
     render(<PcForm />);
 
     expect(
       screen.getByLabelText(/Q23\. The number of young people who benefited from the PDM and started agricultural enterprises/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(/Q24\. The number of young people who benefited from the PDM and had a stable income/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(/Q25\. Number of beneficiary young people trained to improve productivity/i)
     ).toBeInTheDocument();
     expect(
       screen.getByLabelText(
@@ -203,6 +227,7 @@ describe('PcForm', () => {
     const user = userEvent.setup();
     render(<PcForm />);
 
+    await user.click(document.getElementById('programmeMonitored-yes')!);
     await user.click(screen.getByLabelText(/Others \(specify\)/i));
     expect(screen.getByLabelText(/Specify who monitored the programme/i)).toBeInTheDocument();
 
@@ -229,9 +254,13 @@ describe('PcForm', () => {
     expect(payload.formType).toBe('PC');
     expect(payload.amountExpected).toBe(1500000);
     expect(payload.youngMenBeneficiaries).toBe(18);
+    expect(payload.programmeMonitored).toBe(true);
     expect(payload.monitoredBy).toEqual(['CAO']);
+    expect(payload.selfRelianceStableIncomeCount).toBe(6);
+    expect(payload.selfRelianceTrainedCount).toBe(12);
     expect(payload.pdcTrainingAreas).toBeNull();
     expect(payload.pdcEffectivenessRating).toBe('VERY_EFFECTIVE');
     expect(payload.programmeImprovementSuggestion).toBe('Provide more monitoring tools for parish chiefs.');
   }, 30_000);
 });
+

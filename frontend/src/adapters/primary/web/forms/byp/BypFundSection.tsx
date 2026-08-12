@@ -21,7 +21,7 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
   const patch = (partial: Partial<BypFormFields>) => onChange({ ...value, ...partial });
 
   return (
-    <FormSection title="Fund acquisition & disbursement" description="Questions 1–4 and fund use">
+    <FormSection title="Fund acquisition & disbursement" description="Questions 1–3 and fund use">
       <FormField
         label="Q1. How long did it take you to receive your funds?"
         htmlFor="fundReceiptDuration"
@@ -87,23 +87,6 @@ export function BypFundSection({ value, onChange, errors }: BypFundSectionProps)
             patch({ cashAmountReceived: e.target.value === '' ? '' : Number(e.target.value) })
           }
           className={formControlClassName}
-          required
-        />
-      </FormField>
-
-      <FormField
-        label="Q4. How long did it take you to receive the PDM funds after you applied?"
-        htmlFor="fundsReceiptWaitAfterApplied"
-        required
-        error={errors.fundsReceiptWaitAfterApplied}
-        hint="Minimum 5 characters (e.g. 2 days)."
-      >
-        <textarea
-          id="fundsReceiptWaitAfterApplied"
-          value={value.fundsReceiptWaitAfterApplied}
-          onChange={(e) => patch({ fundsReceiptWaitAfterApplied: e.target.value })}
-          rows={4}
-          className={`${formControlClassName} min-h-[6rem] resize-y`}
           required
         />
       </FormField>

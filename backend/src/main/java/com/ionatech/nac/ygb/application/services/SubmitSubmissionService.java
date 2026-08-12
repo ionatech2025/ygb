@@ -96,7 +96,6 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     byp.fundReceiptDurationSpecify(),
                     byp.receivedActualAmountRequested(),
                     byp.cashAmountReceived(),
-                    byp.fundsReceiptWaitAfterApplied() != null ? NarrativeText.duration(byp.fundsReceiptWaitAfterApplied()) : null,
                     byp.moneyUsedFor() != null ? new NarrativeText(byp.moneyUsedFor()) : null,
                     byp.instalmentPeriod(),
                     byp.instalmentPeriodSpecify(),
@@ -169,6 +168,7 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     pc.pdcTrainingReceived(),
                     pc.pdcTrainingAreas(),
                     pc.pdcEffectivenessRating(),
+                    pc.programmeMonitored(),
                     pc.monitoredBy(),
                     pc.monitoredByOthersSpecify(),
                     pc.monitoringMethod() != null ? new NarrativeText(pc.monitoringMethod()) : null,
@@ -178,6 +178,8 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     pc.progressReportsSubmitted(),
                     pc.progressReportsSubmittedExplanation() != null ? new NarrativeText(pc.progressReportsSubmittedExplanation()) : null,
                     pc.selfRelianceBeneficiariesCount(),
+                    pc.selfRelianceStableIncomeCount(),
+                    pc.selfRelianceTrainedCount(),
                     pc.selfRelianceGroupProjectsCount(),
                     pc.programmeImprovementSuggestion() != null ? new NarrativeText(pc.programmeImprovementSuggestion()) : null
             );

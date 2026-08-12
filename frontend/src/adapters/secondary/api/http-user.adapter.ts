@@ -6,7 +6,7 @@ import { IUserRepositoryPort, CreateCollectorPayload } from '../../../ports/user
 import { ResetPasswordResult, UserProfile } from '../../../core/domain/user.model';
 import { normalizeUgandaPhoneLocal } from '../../../core/utils/phone-utils';
 
-const DEFAULT_PAGE_SIZE = 25;
+const DEFAULT_PAGE_SIZE = 10;
 
 interface BackendUserResponse {
   id: string;

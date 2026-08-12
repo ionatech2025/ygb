@@ -9,10 +9,10 @@ export interface BypFeedbackSectionProps {
 
 export function BypFeedbackSection({ value, onChange, errors }: BypFeedbackSectionProps) {
   return (
-    <FormSection title="Feedback" description="Question 9">
+    <FormSection title="Feedback" description="Question 8">
       <NarrativeTextarea
         id="improvementSuggestion"
-        label="Q9. What do you think should be improved to make the PDM programme efficient and effective?"
+        label="Q8. What do you think should be improved to make the PDM programme efficient and effective?"
         value={value.improvementSuggestion}
         onChange={(text) => onChange({ ...value, improvementSuggestion: text })}
         required

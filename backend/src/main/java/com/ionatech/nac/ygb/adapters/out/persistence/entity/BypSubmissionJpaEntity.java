@@ -31,9 +31,6 @@ public class BypSubmissionJpaEntity extends SubmissionJpaEntity {
     @Column(name = "cash_amount_received", nullable = false)
     private Long cashAmountReceived;
 
-    @Column(name = "funds_receipt_wait_after_applied", nullable = false)
-    private String fundsReceiptWaitAfterApplied;
-
     @Column(name = "money_used_for", nullable = false)
     private String moneyUsedFor;
 

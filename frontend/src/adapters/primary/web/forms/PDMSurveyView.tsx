@@ -40,7 +40,7 @@ function ActiveFormPanel({
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-border bg-surface px-3 text-xs font-semibold text-text transition hover:bg-surface-muted"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-orange-600 bg-orange-500 px-3 text-xs font-semibold text-white transition hover:bg-orange-600 active:bg-orange-700"
         >
           <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
           Back to category selection

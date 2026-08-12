@@ -75,7 +75,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -203,6 +202,7 @@ class SubmissionRepositoryAdapterTest {
                 true,
                 List.of("FINANCIAL_LITERACY"),
                 PdcEffectivenessRating.VERY_EFFECTIVE,
+                true,
                 List.of("CAO"),
                 null,
                 new NarrativeText("Regular fields checks performed."),
@@ -212,6 +212,8 @@ class SubmissionRepositoryAdapterTest {
                 true,
                 new NarrativeText("Reports submitted quarterly."),
                 10,
+                12,
+                15,
                 8,
                 new NarrativeText("Provide more monitoring tools for parish chiefs.")
         );
@@ -229,6 +231,9 @@ class SubmissionRepositoryAdapterTest {
         assertThat(retrievedPc.getMonitoredBy()).containsExactly("CAO");
         assertThat(retrievedPc.getYoungMenBeneficiaries()).isEqualTo(10);
         assertThat(retrievedPc.getPdcEffectivenessRating()).isEqualTo(PdcEffectivenessRating.VERY_EFFECTIVE);
+        assertThat(retrievedPc.getProgrammeMonitored()).isTrue();
+        assertThat(retrievedPc.getSelfRelianceStableIncomeCount()).isEqualTo(12);
+        assertThat(retrievedPc.getSelfRelianceTrainedCount()).isEqualTo(15);
     }
 
     @Test
@@ -247,7 +252,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -273,7 +277,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -312,7 +315,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -338,7 +340,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -379,7 +380,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -432,7 +432,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -459,7 +458,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -496,7 +494,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -523,7 +520,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -560,7 +556,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -587,7 +582,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -628,7 +622,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -655,7 +648,6 @@ class SubmissionRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,

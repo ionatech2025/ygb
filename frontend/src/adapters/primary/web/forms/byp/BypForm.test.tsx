@@ -59,24 +59,13 @@ describe('BypForm', () => {
     expect(screen.getByText(/Beneficiary Young Person \(BYP\) Questionnaire/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/name of respondent/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Q1\. How long did it take you to receive your funds/i)).toBeInTheDocument();
-    expect(
-      screen.getByLabelText(/Q5\. How would you rate the quality of services provided by the Parish Chief/i)
-    ).toBeInTheDocument();
+    expect(screen.getByLabelText(/What did you use the money for/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Q8\. Did you receive any business development services\? If yes, specify/i)
     ).toBeInTheDocument();
     expect(
       screen.getByLabelText(/Q9\. What do you think should be improved to make the PDM programme efficient and effective/i)
     ).toBeInTheDocument();
-  });
-
-  it('Q4 asks how long it took to receive PDM funds after applying', () => {
-    render(<BypForm />);
-
-    expect(
-      screen.getByLabelText(/Q4\. How long did it take you to receive the PDM funds after you applied/i)
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText(/What did you use the money for/i)).toBeInTheDocument();
   });
 
   it('Q5 spells out Parish Development Committee', () => {
@@ -175,7 +164,6 @@ describe('BypForm', () => {
           fundReceiptDuration: 'ONE_WEEK',
           receivedActualAmountRequested: true,
           cashAmountReceived: 500000,
-          fundsReceiptWaitAfterApplied: 'It took about three weeks after I applied.',
           moneyUsedFor: 'I used the money to buy farming inputs and livestock feed.',
           serviceRating: 'VERY_GOOD',
           loanRepaid: false,
@@ -227,10 +215,6 @@ describe('BypForm', () => {
     );
     await user.click(document.getElementById('receivedActualAmountRequested-yes')!);
     await user.type(screen.getByLabelText(/Q3\. How much cash did you get/i), '500000');
-    await user.type(
-      screen.getByLabelText(/Q4\. How long did it take you to receive the PDM funds after you applied/i),
-      'It took about three weeks after I applied.'
-    );
     await user.type(
       screen.getByLabelText(/What did you use the money for/i),
       'I used the money to buy farming inputs and livestock feed.'
@@ -294,10 +278,6 @@ describe('BypForm', () => {
     );
     await user.click(document.getElementById('receivedActualAmountRequested-yes')!);
     await user.type(screen.getByLabelText(/Q3\. How much cash did you get/i), '500000');
-    await user.type(
-      screen.getByLabelText(/Q4\. How long did it take you to receive the PDM funds after you applied/i),
-      'It took about three weeks after I applied.'
-    );
     await user.type(
       screen.getByLabelText(/What did you use the money for/i),
       'I used the money to buy farming inputs and livestock feed.'

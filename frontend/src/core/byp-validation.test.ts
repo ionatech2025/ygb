@@ -19,7 +19,6 @@ const validByp = {
   fundReceiptDuration: 'ONE_WEEK' as const,
   receivedActualAmountRequested: true,
   cashAmountReceived: 500000,
-  fundsReceiptWaitAfterApplied: 'It took about three weeks after I applied.',
   moneyUsedFor: 'I used the money to buy farming inputs and livestock feed.',
   serviceRating: 'VERY_GOOD' as const,
   loanRepaid: true,
@@ -55,19 +54,17 @@ describe('byp-validation', () => {
     expect(payload).not.toHaveProperty('instalmentPeriodSpecify');
     expect(payload.respondentAgeGroup).toBe('AGE_18_24');
     expect(payload.respondentName).toBe('Jane Doe');
-    expect(payload.fundsReceiptWaitAfterApplied).toContain('three weeks');
     expect(payload.moneyUsedFor).toContain('farming inputs');
     expect(payload.loanRepaid).toBe(true);
     expect(payload.loanRepaymentDuration).toBe('TWELVE_TO_EIGHTEEN_MONTHS');
   });
 
-  it('requires core BYP survey fields including remodeled Q4 and loan repayment', () => {
+  it('requires core BYP survey fields including loan repayment', () => {
     const errors = validateBypForm({
       respondent: validRespondent,
       byp: EMPTY_BYP_FIELDS,
     });
     expect(errors.fundReceiptDuration).toBeTruthy();
-    expect(errors.fundsReceiptWaitAfterApplied).toBeTruthy();
     expect(errors.moneyUsedFor).toBeTruthy();
     expect(errors.loanRepaid).toBeTruthy();
     expect(errors.improvementSuggestion).toBeTruthy();
@@ -147,11 +144,9 @@ describe('byp-validation', () => {
         ...validByp,
         fundReceiptDuration: 'MONTHS',
         fundReceiptDurationSpecify: '4 mos',
-        fundsReceiptWaitAfterApplied: '2 days',
       },
     });
     expect(errors.fundReceiptDurationSpecify).toBeUndefined();
-    expect(errors.fundsReceiptWaitAfterApplied).toBeUndefined();
   });
 
   it('rejects duration answers shorter than 5 characters', () => {
@@ -161,10 +156,8 @@ describe('byp-validation', () => {
         ...validByp,
         fundReceiptDuration: 'MONTHS',
         fundReceiptDurationSpecify: '4',
-        fundsReceiptWaitAfterApplied: '10mo',
       },
     });
     expect(errors.fundReceiptDurationSpecify).toMatch(/at least 5/);
-    expect(errors.fundsReceiptWaitAfterApplied).toMatch(/at least 5/);
   });
 });

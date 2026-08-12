@@ -67,14 +67,40 @@ export function PcSelfRelianceSection({ value, onChange, errors }: PcSelfRelianc
         />
       </FormField>
 
-      <p className="text-xs text-text-muted">
-        Q24. The number of young people who benefited from the PDM and had a stable income from their enterprises
-        established
-      </p>
-      <p className="text-xs text-text-muted">
-        Q25. Number of beneficiary young people trained to improve productivity, efficiency, profitability, business
-        viability, and supply chain
-      </p>
+      <FormField
+        label="Q24. The number of young people who benefited from the PDM and had a stable income from their enterprises established"
+        htmlFor="selfRelianceStableIncomeCount"
+        required
+        error={errors.selfRelianceStableIncomeCount}
+      >
+        <input
+          id="selfRelianceStableIncomeCount"
+          type="text"
+          inputMode="numeric"
+          value={value.selfRelianceStableIncomeCount}
+          onChange={(e) => patch({ selfRelianceStableIncomeCount: e.target.value })}
+          className={formControlClassName}
+          required
+        />
+      </FormField>
+
+      <FormField
+        label="Q25. Number of beneficiary young people trained to improve productivity, efficiency, profitability, business viability, and supply chain"
+        htmlFor="selfRelianceTrainedCount"
+        required
+        error={errors.selfRelianceTrainedCount}
+      >
+        <input
+          id="selfRelianceTrainedCount"
+          type="text"
+          inputMode="numeric"
+          value={value.selfRelianceTrainedCount}
+          onChange={(e) => patch({ selfRelianceTrainedCount: e.target.value })}
+          className={formControlClassName}
+          required
+        />
+      </FormField>
+
 
       <FormField
         label="Q26. The number of youth-led enterprises established with support from the PDM and remained active after the support"
