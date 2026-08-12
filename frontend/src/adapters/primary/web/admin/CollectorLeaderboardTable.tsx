@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { BarChart2, ChevronDown, ChevronUp } from 'lucide-react';
 import type { CollectorLeaderboardEntry, LeaderboardSortDirection, LeaderboardSortKey } from '../../../../core/domain/collector-tracker.model';
 import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 
@@ -106,9 +106,10 @@ export function CollectorLeaderboardTable({
                       type="button"
                       onClick={() => onToggleExpand(row.collectorId)}
                       aria-expanded={expanded}
-                      className="inline-flex items-center gap-1 rounded-lg border border-border px-2.5 py-1 text-xs font-semibold text-brand hover:bg-surface-muted"
+                      className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-border/80 bg-surface px-3 py-1.5 text-xs font-semibold text-brand shadow-xs transition hover:border-brand/40 hover:bg-brand-light/40 hover:text-brand-hover active:scale-[0.97]"
                       data-testid={`leaderboard-expand-${row.collectorId}`}
                     >
+                      <BarChart2 className="h-3.5 w-3.5" aria-hidden="true" />
                       {expanded ? 'Hide' : 'Show'} breakdown
                       {expanded ? (
                         <ChevronUp className="h-3.5 w-3.5" aria-hidden="true" />

@@ -174,9 +174,12 @@ export function CollectorTrackerPage({
       {expandedCollectorId && expandedCollector && (
         <CollectorBreakdownPanel
           collectorName={expandedCollector.fullName}
+          rank={rows.findIndex((r) => r.collectorId === expandedCollectorId) + 1}
+          totalSubmissions={expandedCollector.totalCount}
           breakdown={breakdown}
           loading={breakdownLoading}
           error={breakdownError}
+          onClose={() => setExpandedCollectorId(null)}
         />
       )}
     </div>
