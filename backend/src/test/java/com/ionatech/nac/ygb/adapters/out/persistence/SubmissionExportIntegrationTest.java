@@ -179,17 +179,16 @@ class SubmissionExportIntegrationTest {
                     """
                             INSERT INTO byp_submissions (
                                 id, exact_age, fund_receipt_duration, received_actual_amount_requested,
-                                cash_amount_received, funds_receipt_wait_after_applied, money_used_for,
+                                cash_amount_received, money_used_for,
                                 instalment_period, service_rating, loan_repaid, performance_rating,
                                 group_organized_transparently, received_bds, improvement_suggestion
-                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                             """,
                     submissionId,
                     22,
                     "ONE_WEEK",
                     true,
                     500000L,
-                    "It took about three weeks after I applied.",
                     "I used the money to buy farming inputs.",
                     "MONTHLY",
                     "VERY_GOOD",
@@ -234,7 +233,6 @@ class SubmissionExportIntegrationTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,

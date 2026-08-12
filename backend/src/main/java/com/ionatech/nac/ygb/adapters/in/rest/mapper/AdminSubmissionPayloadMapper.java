@@ -37,7 +37,6 @@ public class AdminSubmissionPayloadMapper {
                 submission.getFundReceiptDurationSpecify(),
                 submission.getReceivedActualAmountRequested(),
                 submission.getCashAmountReceived(),
-                narrativeValue(submission.getFundsReceiptWaitAfterApplied()),
                 narrativeValue(submission.getMoneyUsedFor()),
                 submission.getInstalmentPeriod(),
                 submission.getInstalmentPeriodSpecify(),

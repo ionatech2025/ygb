@@ -166,7 +166,6 @@ class EnumeratorAttributionIntegrationTest {
                 null,
                 true,
                 500000L,
-                "It took about three weeks after I applied.",
                 "I used the money to buy farming inputs.",
                 "MONTHLY",
                 null,

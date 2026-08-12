@@ -180,7 +180,6 @@ class DashboardAggregationRepositoryAdapterTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,

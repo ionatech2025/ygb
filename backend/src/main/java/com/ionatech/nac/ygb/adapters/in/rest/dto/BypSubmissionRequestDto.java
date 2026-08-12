@@ -12,7 +12,6 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
     private String fundReceiptDurationSpecify;
     private Boolean receivedActualAmountRequested;
     private Long cashAmountReceived;
-    private String fundsReceiptWaitAfterApplied;
     private String moneyUsedFor;
     private String instalmentPeriod;
     private String instalmentPeriodSpecify;
@@ -43,7 +42,6 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
             String fundReceiptDurationSpecify,
             Boolean receivedActualAmountRequested,
             Long cashAmountReceived,
-            String fundsReceiptWaitAfterApplied,
             String moneyUsedFor,
             String instalmentPeriod,
             String instalmentPeriodSpecify,
@@ -61,7 +59,6 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
         this.fundReceiptDurationSpecify = fundReceiptDurationSpecify;
         this.receivedActualAmountRequested = receivedActualAmountRequested;
         this.cashAmountReceived = cashAmountReceived;
-        this.fundsReceiptWaitAfterApplied = fundsReceiptWaitAfterApplied;
         this.moneyUsedFor = moneyUsedFor;
         this.instalmentPeriod = instalmentPeriod;
         this.instalmentPeriodSpecify = instalmentPeriodSpecify;
@@ -79,7 +76,6 @@ public class BypSubmissionRequestDto extends SubmissionRequestDto {
     public String getFundReceiptDurationSpecify() { return fundReceiptDurationSpecify; }
     public Boolean getReceivedActualAmountRequested() { return receivedActualAmountRequested; }
     public Long getCashAmountReceived() { return cashAmountReceived; }
-    public String getFundsReceiptWaitAfterApplied() { return fundsReceiptWaitAfterApplied; }
     public String getMoneyUsedFor() { return moneyUsedFor; }
     public String getInstalmentPeriod() { return instalmentPeriod; }
     public String getInstalmentPeriodSpecify() { return instalmentPeriodSpecify; }

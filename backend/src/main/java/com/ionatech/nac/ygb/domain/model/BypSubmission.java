@@ -24,7 +24,6 @@ public class BypSubmission extends Submission {
     private final String fundReceiptDurationSpecify;
     private final Boolean receivedActualAmountRequested;
     private final Long cashAmountReceived;
-    private final NarrativeText fundsReceiptWaitAfterApplied;
     private final NarrativeText moneyUsedFor;
     private final String instalmentPeriod;
     private final String instalmentPeriodSpecify;
@@ -49,7 +48,6 @@ public class BypSubmission extends Submission {
             String fundReceiptDurationSpecify,
             Boolean receivedActualAmountRequested,
             Long cashAmountReceived,
-            NarrativeText fundsReceiptWaitAfterApplied,
             NarrativeText moneyUsedFor,
             String instalmentPeriod,
             String instalmentPeriodSpecify,
@@ -72,9 +70,6 @@ public class BypSubmission extends Submission {
         }
         if (cashAmountReceived == null || cashAmountReceived < 0) {
             throw new IllegalArgumentException("Cash amount received is required and must be positive");
-        }
-        if (fundsReceiptWaitAfterApplied == null) {
-            throw new IllegalArgumentException("Funds receipt wait after applied is required");
         }
         if (moneyUsedFor == null) {
             throw new IllegalArgumentException("Money used for is required");
@@ -102,7 +97,6 @@ public class BypSubmission extends Submission {
         this.fundReceiptDurationSpecify = fundReceiptDurationSpecify;
         this.receivedActualAmountRequested = receivedActualAmountRequested;
         this.cashAmountReceived = cashAmountReceived;
-        this.fundsReceiptWaitAfterApplied = fundsReceiptWaitAfterApplied;
         this.moneyUsedFor = moneyUsedFor;
         this.instalmentPeriod = instalmentPeriod;
         this.instalmentPeriodSpecify = instalmentPeriodSpecify;
@@ -132,13 +126,10 @@ public class BypSubmission extends Submission {
         return cashAmountReceived;
     }
 
-    public NarrativeText getFundsReceiptWaitAfterApplied() {
-        return fundsReceiptWaitAfterApplied;
-    }
-
     public NarrativeText getMoneyUsedFor() {
         return moneyUsedFor;
     }
+
 
     public String getInstalmentPeriod() {
         return instalmentPeriod;

@@ -15,10 +15,10 @@ export function BypBdsSection({ value, onChange, errors }: BypBdsSectionProps) {
   const patch = (partial: Partial<BypFormFields>) => onChange({ ...value, ...partial });
 
   return (
-    <FormSection title="Business development services" description="Question 8">
+    <FormSection title="Business development services" description="Question 7">
       <YesNoRadioGroup
         name="receivedBds"
-        label="Q8. Did you receive any business development services? If yes, specify:"
+        label="Q7. Did you receive any business development services? If yes, specify:"
         value={value.receivedBds}
         onChange={(choice) =>
           patch({

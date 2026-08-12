@@ -39,7 +39,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -73,7 +72,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -104,7 +102,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -135,7 +132,6 @@ class SubmissionTest {
                 null, // missing specify
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -168,7 +164,6 @@ class SubmissionTest {
                 "4 mos",
                 true,
                 500000L,
-                NarrativeText.duration("2 days"),
                 new NarrativeText("I used the money to buy farming inputs."),
                 null,
                 null,
@@ -185,7 +180,6 @@ class SubmissionTest {
         byp.validate();
 
         assertThat(byp.getFundReceiptDurationSpecify()).isEqualTo("4 mos");
-        assertThat(byp.getFundsReceiptWaitAfterApplied().getValue()).isEqualTo("2 days");
     }
 
     @Test
@@ -202,7 +196,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -235,7 +228,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -268,7 +260,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,
@@ -301,7 +292,6 @@ class SubmissionTest {
                 null,
                 true,
                 500000L,
-                new NarrativeText("It took about three weeks after I applied."),
                 new NarrativeText("I used the money to buy farming inputs."),
                 "MONTHLY",
                 null,

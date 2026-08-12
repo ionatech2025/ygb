@@ -96,7 +96,6 @@ public class SubmitSubmissionService implements SubmitSubmissionUseCase {
                     byp.fundReceiptDurationSpecify(),
                     byp.receivedActualAmountRequested(),
                     byp.cashAmountReceived(),
-                    byp.fundsReceiptWaitAfterApplied() != null ? NarrativeText.duration(byp.fundsReceiptWaitAfterApplied()) : null,
                     byp.moneyUsedFor() != null ? new NarrativeText(byp.moneyUsedFor()) : null,
                     byp.instalmentPeriod(),
                     byp.instalmentPeriodSpecify(),
