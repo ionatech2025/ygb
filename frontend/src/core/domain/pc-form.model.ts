@@ -48,6 +48,7 @@ export interface PcFormFields {
   pdcTrainingReceived: boolean | null;
   pdcTrainingAreas: PdcTrainingArea[];
   pdcEffectivenessRating: string;
+  programmeMonitored: boolean | null;
   monitoredBy: MonitoredByOption[];
   monitoredByOthersSpecify: string;
   monitoringMethod: string;
@@ -57,6 +58,8 @@ export interface PcFormFields {
   progressReportsSubmitted: boolean | null;
   progressReportsSubmittedExplanation: string;
   selfRelianceBeneficiariesCount: string;
+  selfRelianceStableIncomeCount: string;
+  selfRelianceTrainedCount: string;
   selfRelianceGroupProjectsCount: string;
   programmeImprovementSuggestion: string;
 }
@@ -76,6 +79,7 @@ export const EMPTY_PC_FIELDS: PcFormFields = {
   pdcTrainingReceived: null,
   pdcTrainingAreas: [],
   pdcEffectivenessRating: '',
+  programmeMonitored: null,
   monitoredBy: [],
   monitoredByOthersSpecify: '',
   monitoringMethod: '',
@@ -85,12 +89,18 @@ export const EMPTY_PC_FIELDS: PcFormFields = {
   progressReportsSubmitted: null,
   progressReportsSubmittedExplanation: '',
   selfRelianceBeneficiariesCount: '',
+  selfRelianceStableIncomeCount: '',
+  selfRelianceTrainedCount: '',
   selfRelianceGroupProjectsCount: '',
   programmeImprovementSuggestion: '',
 };
 
 export function requiresPdcTrainingAreas(pdcTrainingReceived: boolean | null): boolean {
   return pdcTrainingReceived === true;
+}
+
+export function requiresMonitoredBy(programmeMonitored: boolean | null): boolean {
+  return programmeMonitored === true;
 }
 
 export function requiresMonitoredByOthersSpecify(monitoredBy: MonitoredByOption[]): boolean {
@@ -104,3 +114,4 @@ export function requiresImprovementsSeenExplanation(improvementsSeen: boolean | 
 export function requiresProgressReportsExplanation(progressReportsSubmitted: boolean | null): boolean {
   return progressReportsSubmitted === true;
 }
+
