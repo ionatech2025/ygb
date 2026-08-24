@@ -41,4 +41,32 @@ describe('SubmissionQueueAdapter', () => {
     expect(await submissionQueue.countPending()).toBe(0);
     expect(await submissionQueue.getLastSyncedAt()).toBeInstanceOf(Date);
   });
+
+  it('lists pending and failed items without removing them', async () => {
+    await submissionQueue.enqueue({
+      ...BASE_FIELDS,
+      formType: 'BYP',
+      status: 'PENDING',
+    });
+    const failedId = await submissionQueue.enqueue({
+      ...BASE_FIELDS,
+      formType: 'IYP',
+      deviceSubmissionId: '33333333-3333-3333-3333-333333333333',
+      status: 'FAILED',
+      payload: { formType: 'IYP' },
+    });
+    await submissionQueue.enqueue({
+      ...BASE_FIELDS,
+      formType: 'PC',
+      deviceSubmissionId: '44444444-4444-4444-4444-444444444444',
+      status: 'SYNCED',
+      payload: { formType: 'PC' },
+    });
+
+    const listed = await submissionQueue.listPending();
+
+    expect(listed.map((item) => item.formType)).toEqual(['BYP', 'IYP']);
+    expect(listed.map((item) => item.localId)).toContain(failedId);
+    expect(await submissionQueue.countPending()).toBe(1);
+  });
 });

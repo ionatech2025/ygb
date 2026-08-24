@@ -49,6 +49,13 @@ export class SubmissionQueueAdapter implements ISubmissionQueuePort {
     if (timestamps.length === 0) return null;
     return new Date(Math.max(...timestamps));
   }
+
+  async listPending(): Promise<PendingSubmission[]> {
+    const entries = await submissionDb.pendingSubmissions.toArray();
+    return entries
+      .filter((entry) => entry.status === 'PENDING' || entry.status === 'FAILED')
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  }
 }
 
 export const submissionQueue = new SubmissionQueueAdapter();

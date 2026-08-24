@@ -12,6 +12,7 @@ import { PortalLogin } from '../forms/PortalLogin';
 import ManageUsers from '../forms/ManageUsers';
 import CollectorProfilePage from '../admin/CollectorProfilePage';
 import { CollectorDashboard } from '../forms/CollectorDashboard';
+import { CollectorSubmissionsHistoryPage } from '../forms/CollectorSubmissionsHistoryPage';
 import { AdminDashboardHome } from '../admin/AdminDashboardHome';
 import { AdminCollectorTrackerPage } from '../admin/AdminCollectorTrackerPage';
 import { AdminSyncStatusPage } from '../admin/AdminSyncStatusPage';
@@ -115,6 +116,7 @@ export function AppRouter() {
         <Route element={<ProtectedRoute allowedRoles={['DATA_COLLECTOR']} />}>
           <Route element={<CollectorLayout />}>
             <Route path="/collector/dashboard" element={<CollectorDashboard />} />
+            <Route path="/collector/submissions" element={<CollectorSubmissionsHistoryPage />} />
             <Route path="/collector/lgo-budget-allocation" element={<LgoBudgetAllocationPage />} />
           </Route>
         </Route>
