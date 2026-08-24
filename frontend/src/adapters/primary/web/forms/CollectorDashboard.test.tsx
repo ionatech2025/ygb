@@ -81,4 +81,16 @@ describe('CollectorDashboard', () => {
     expect(screen.getByText(/Welcome back, Default Collector\./i)).toBeInTheDocument();
     expect(screen.queryByText(/Welcome back, Field Collector\./i)).not.toBeInTheDocument();
   });
+
+  it('links to the collector submissions history', () => {
+    render(
+      <MemoryRouter>
+        <CollectorDashboard />
+      </MemoryRouter>
+    );
+
+    const entry = screen.getByTestId('collector-submissions-history-entry');
+    expect(entry).toHaveAttribute('href', '/collector/submissions');
+    expect(screen.getByText('My submissions')).toBeInTheDocument();
+  });
 });

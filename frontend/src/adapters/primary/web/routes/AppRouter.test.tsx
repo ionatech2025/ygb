@@ -97,6 +97,22 @@ vi.mock('../../../secondary/api/submission-admin-api.adapter', () => ({
   })),
 }));
 
+vi.mock('../../../secondary/api/collector-submissions-api.adapter', () => ({
+  HttpCollectorSubmissionsAdapter: vi.fn().mockImplementation(() => ({
+    fetchMine: vi.fn().mockResolvedValue({
+      items: [],
+      totalElements: 0,
+      page: 0,
+      size: 25,
+      totalPages: 0,
+    }),
+    fetchMineBreakdown: vi.fn().mockResolvedValue({
+      byFormType: [],
+      byDistrict: [],
+    }),
+  })),
+}));
+
 vi.mock('../../../secondary/api/budget-priority-dashboard-api.adapter', () => ({
   HttpBudgetPriorityDashboardAdapter: vi.fn().mockImplementation(() => ({
     buildFilterQueryString: vi.fn().mockReturnValue(''),
@@ -411,6 +427,67 @@ describe('AppRouter collector LGO budget allocation routes', () => {
       expect(screen.getByTestId('admin-dashboard-home')).toBeInTheDocument();
     });
     expect(screen.queryByTestId('lgo-budget-allocation-page')).not.toBeInTheDocument();
+  });
+});
+
+describe('AppRouter collector submissions history routes', () => {
+  beforeEach(() => {
+    useAuthStore.setState({
+      user: null,
+      tokens: null,
+      isAuthenticated: false,
+      isInitialized: true,
+      isOnline: true,
+    });
+  });
+
+  it('redirects unauthenticated visitors from /collector/submissions to login', async () => {
+    window.history.pushState({}, '', '/collector/submissions');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/login');
+      expect(screen.getByRole('heading', { name: 'Sign in' })).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('collector-submissions-history-page')).not.toBeInTheDocument();
+  });
+
+  it('loads the history page for authenticated DATA_COLLECTOR sessions', async () => {
+    useAuthStore.setState({
+      user: collectorUser,
+      tokens: adminTokens,
+      isAuthenticated: true,
+      isInitialized: true,
+      isOnline: true,
+      getAccessToken: () => adminTokens.accessToken,
+    });
+
+    window.history.pushState({}, '', '/collector/submissions');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('collector-submissions-history-page')).toBeInTheDocument();
+    });
+    expect(window.location.pathname).toBe('/collector/submissions');
+  });
+
+  it('redirects ADMIN users away from collector submissions history', async () => {
+    useAuthStore.setState({
+      user: adminUser,
+      tokens: adminTokens,
+      isAuthenticated: true,
+      isInitialized: true,
+      isOnline: true,
+    });
+
+    window.history.pushState({}, '', '/collector/submissions');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/admin/dashboard');
+      expect(screen.getByTestId('admin-dashboard-home')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('collector-submissions-history-page')).not.toBeInTheDocument();
   });
 });
 

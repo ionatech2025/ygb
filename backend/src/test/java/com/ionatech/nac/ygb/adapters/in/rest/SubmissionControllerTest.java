@@ -2,6 +2,10 @@ package com.ionatech.nac.ygb.adapters.in.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.dto.*;
+import com.ionatech.nac.ygb.adapters.in.rest.mapper.AdminSubmissionPayloadMapper;
+import com.ionatech.nac.ygb.adapters.in.rest.mapper.AdminSubmissionRestMapper;
+import com.ionatech.nac.ygb.adapters.in.rest.mapper.CollectorTrackerRestMapper;
+import com.ionatech.nac.ygb.adapters.in.rest.mapper.DashboardFilterRequestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.SubmissionRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.security.JwtAuthenticationFilter;
 import com.ionatech.nac.ygb.adapters.in.rest.security.SecurityConfig;
@@ -10,6 +14,7 @@ import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
 import com.ionatech.nac.ygb.domain.model.*;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,17 +29,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SubmissionController.class)
 @AutoConfigureMockMvc
-@Import({SecurityConfig.class, JwtAuthenticationFilter.class})
+@Import({
+        SecurityConfig.class,
+        JwtAuthenticationFilter.class,
+        DashboardFilterRequestMapper.class,
+        AdminSubmissionRestMapper.class,
+        AdminSubmissionPayloadMapper.class,
+        CollectorTrackerRestMapper.class
+})
 class SubmissionControllerTest {
 
     @Autowired
@@ -57,6 +71,12 @@ class SubmissionControllerTest {
 
     @MockBean
     private GetCollectorSyncStatusQuery getCollectorSyncStatusQuery;
+
+    @MockBean
+    private GetCollectorSubmissionsQuery getCollectorSubmissionsQuery;
+
+    @MockBean
+    private GetCollectorBreakdownQuery getCollectorBreakdownQuery;
 
     private final UUID collectorId = UUID.randomUUID();
     private final UUID deviceSubmissionId = UUID.randomUUID();
@@ -795,5 +815,145 @@ class SubmissionControllerTest {
                 .andExpect(status().isForbidden());
 
         verifyNoInteractions(getCollectorSyncStatusQuery);
+    }
+
+    @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldReturnOwnSubmissionsForDataCollector() throws Exception {
+        UUID principalId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        UUID submissionId = UUID.randomUUID();
+        UUID districtId = UUID.randomUUID();
+        SubmissionPage page = new SubmissionPage(
+                List.of(new SubmissionSummary(
+                        submissionId,
+                        FormType.BYP,
+                        "Jane Doe",
+                        districtId,
+                        "Arua",
+                        principalId,
+                        "Default Collector",
+                        LocalDateTime.of(2026, 3, 15, 10, 0),
+                        LocalDateTime.of(2026, 3, 15, 10, 5),
+                        "SYNCED",
+                        "JAN_JUN_2026"
+                )),
+                1L,
+                0,
+                25
+        );
+
+        when(getCollectorSubmissionsQuery.getSubmissions(
+                eq(principalId),
+                any(DashboardFilter.class),
+                eq(PageRequest.of(0, 25))
+        )).thenReturn(page);
+
+        mockMvc.perform(get("/api/v1/submissions/mine").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(submissionId.toString()))
+                .andExpect(jsonPath("$.items[0].collectorId").value(principalId.toString()))
+                .andExpect(jsonPath("$.items[0].respondentName").value("Jane Doe"))
+                .andExpect(jsonPath("$.items[0].formType").value("BYP"))
+                .andExpect(jsonPath("$.items[0].districtName").value("Arua"))
+                .andExpect(jsonPath("$.items[0].status").value("SYNCED"));
+
+        verify(getCollectorSubmissionsQuery).getSubmissions(
+                eq(principalId),
+                any(DashboardFilter.class),
+                eq(PageRequest.of(0, 25))
+        );
+    }
+
+    @Test
+    void shouldForbidUnauthenticatedAccessToOwnSubmissions() throws Exception {
+        mockMvc.perform(get("/api/v1/submissions/mine"))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(getCollectorSubmissionsQuery);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldForbidAdminAccessToCollectorOwnSubmissions() throws Exception {
+        mockMvc.perform(get("/api/v1/submissions/mine"))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(getCollectorSubmissionsQuery);
+    }
+
+    @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldForwardPaginationAndFormTypeUsingPrincipalIdNotQueryCollectorId() throws Exception {
+        UUID principalId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        UUID spoofedCollectorId = UUID.fromString("99999999-9999-9999-9999-999999999999");
+        SubmissionPage page = new SubmissionPage(List.of(), 0L, 1, 10);
+
+        when(getCollectorSubmissionsQuery.getSubmissions(
+                eq(principalId),
+                any(DashboardFilter.class),
+                eq(PageRequest.of(1, 10))
+        )).thenReturn(page);
+
+        mockMvc.perform(get("/api/v1/submissions/mine")
+                        .param("page", "1")
+                        .param("size", "10")
+                        .param("formType", "IYP")
+                        .param("collectorId", spoofedCollectorId.toString())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(0));
+
+        ArgumentCaptor<DashboardFilter> filterCaptor = ArgumentCaptor.forClass(DashboardFilter.class);
+        verify(getCollectorSubmissionsQuery).getSubmissions(
+                eq(principalId),
+                filterCaptor.capture(),
+                eq(PageRequest.of(1, 10))
+        );
+        DashboardFilter filter = filterCaptor.getValue();
+        assertThat(filter.formType()).isEqualTo(FormType.IYP);
+        assertThat(filter.collectorId()).isNull();
+    }
+
+    @Test
+    @WithMockUser(username = "22222222-2222-2222-2222-222222222222", roles = "DATA_COLLECTOR")
+    void shouldReturnOwnSubmissionBreakdownForDataCollector() throws Exception {
+        UUID principalId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        UUID districtId = UUID.randomUUID();
+        CollectorBreakdown breakdown = new CollectorBreakdown(
+                List.of(new FormTypeCount(FormType.BYP, 35L), new FormTypeCount(FormType.IYP, 29L)),
+                List.of(new DistrictCount("Kampala", districtId, 64L))
+        );
+
+        when(getCollectorBreakdownQuery.getBreakdown(eq(principalId), any(DashboardFilter.class)))
+                .thenReturn(breakdown);
+
+        mockMvc.perform(get("/api/v1/submissions/mine/breakdown").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.byFormType[0].formType").value("BYP"))
+                .andExpect(jsonPath("$.byFormType[0].count").value(35))
+                .andExpect(jsonPath("$.byFormType[1].formType").value("IYP"))
+                .andExpect(jsonPath("$.byFormType[1].count").value(29))
+                .andExpect(jsonPath("$.byDistrict[0].districtName").value("Kampala"))
+                .andExpect(jsonPath("$.byDistrict[0].count").value(64));
+
+        verify(getCollectorBreakdownQuery).getBreakdown(eq(principalId), any(DashboardFilter.class));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldForbidAdminAccessToCollectorOwnBreakdown() throws Exception {
+        mockMvc.perform(get("/api/v1/submissions/mine/breakdown"))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(getCollectorBreakdownQuery);
+    }
+
+    @Test
+    void shouldForbidUnauthenticatedAccessToOwnBreakdown() throws Exception {
+        mockMvc.perform(get("/api/v1/submissions/mine/breakdown"))
+                .andExpect(status().isForbidden());
+
+        verifyNoInteractions(getCollectorBreakdownQuery);
     }
 }

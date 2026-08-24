@@ -8,4 +8,5 @@ export interface ISubmissionQueuePort {
   countPending(): Promise<number>;
   countTodayLocal(): Promise<number>;
   getLastSyncedAt(): Promise<Date | null>;
+  listPending(): Promise<PendingSubmission[]>;
 }
