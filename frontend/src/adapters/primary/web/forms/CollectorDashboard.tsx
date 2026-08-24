@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CloudUpload, Hash, Landmark, RefreshCw } from 'lucide-react';
+import { ArrowRight, CloudUpload, Hash, History, Landmark, RefreshCw } from 'lucide-react';
 import { LGO_BUDGET_ALLOCATION_ROUTES } from '../../../../core/domain/lgo-budget-allocation.routes';
+import { COLLECTOR_SUBMISSIONS_ROUTES } from '../../../../core/domain/collector-submissions.routes';
 import { lgoBudgetAllocationClasses } from '../../../../core/domain/lgo-budget-allocation.theme';
 import { syncWhenConnectivityAllows } from '../../../../core/connectivity-sync';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
@@ -102,6 +103,23 @@ export function CollectorDashboard() {
       >
         {syncing ? 'Syncing…' : 'Refresh stats'}
       </button>
+
+      <Link
+        to={COLLECTOR_SUBMISSIONS_ROUTES.index}
+        data-testid="collector-submissions-history-entry"
+        className="flex min-h-12 flex-row items-center gap-4 rounded-2xl border border-border bg-surface p-4 shadow-sm transition hover:border-brand/40 hover:bg-brand-light/50 motion-safe:active:scale-[0.99]"
+      >
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-light text-brand">
+          <History className="h-5 w-5" aria-hidden="true" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-bold text-text">My submissions</p>
+          <p className="text-xs leading-relaxed text-text-muted">
+            See everything you have submitted, including interviews still waiting to sync.
+          </p>
+        </div>
+        <ArrowRight className="h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+      </Link>
 
       <FormSection title="PDM Survey" description="Start a new household survey submission">
         <PDMSurveyView />

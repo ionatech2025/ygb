@@ -45,6 +45,8 @@ public class SecurityConfig {
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/submissions/lgo-budget-allocation").hasRole("DATA_COLLECTOR")
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/my-count").hasRole("DATA_COLLECTOR")
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/my-sync-status").hasRole("DATA_COLLECTOR")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/mine/breakdown").hasRole("DATA_COLLECTOR")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/submissions/mine").hasRole("DATA_COLLECTOR")
                 .anyRequest().authenticated()
             )
             .headers(headers -> headers.addObjectPostProcessor(new ObjectPostProcessor<HeaderWriterFilter>() {

@@ -41,4 +41,22 @@ describe('ProtectedRoute', () => {
     expect(screen.queryByText('Admin only')).not.toBeInTheDocument();
     expect(screen.getByText('Collector home')).toBeInTheDocument();
   });
+
+  it('redirects ADMIN away from collector submissions history', () => {
+    mockAuth({ user: { id: '1', fullName: 'Admin', phoneNumber: '0771000000', role: 'ADMIN' } });
+
+    render(
+      <MemoryRouter initialEntries={['/collector/submissions']}>
+        <Routes>
+          <Route element={<ProtectedRoute allowedRoles={['DATA_COLLECTOR']} />}>
+            <Route path="/collector/submissions" element={<div>Collector history</div>} />
+          </Route>
+          <Route path="/admin/dashboard" element={<div>Admin home</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText('Collector history')).not.toBeInTheDocument();
+    expect(screen.getByText('Admin home')).toBeInTheDocument();
+  });
 });

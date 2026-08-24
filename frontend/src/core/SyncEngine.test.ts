@@ -27,6 +27,7 @@ function createQueue(pending: PendingSubmission[]): ISubmissionQueuePort {
     countPending: vi.fn(),
     countTodayLocal: vi.fn(),
     getLastSyncedAt: vi.fn(),
+    listPending: vi.fn().mockResolvedValue(pending),
   };
 }
 
