@@ -13,7 +13,7 @@ export const ManageUsersMobile: React.FC = () => {
   useEffect(() => {
     // Load existing data collectors for the admin to monitor
     userRepo.fetchActiveCollectors().then((data) => {
-      setCollectors(data);
+      setCollectors(data.items);
       setLoading(false);
     });
   }, []);

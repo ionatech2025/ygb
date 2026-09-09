@@ -187,6 +187,7 @@ class DownloadUsageAnalyticsRepositoryAdapterTest {
                 ageGroup,
                 FieldOfOperation.ACADEMIA_RESEARCH,
                 null,
+                null,
                 true,
                 createdAt
         ));

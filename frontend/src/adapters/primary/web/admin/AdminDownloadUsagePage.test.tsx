@@ -86,6 +86,7 @@ function createDownloaderPage(overrides: Partial<DownloaderPage> = {}): Download
         ageGroup: 'AGE_18_24',
         fieldOfOperation: 'ACADEMIA_RESEARCH',
         fieldOfOperationSpecify: null,
+        improvementFeedback: 'Please add parish-level Excel templates.',
         registeredAt: '2026-08-01T10:00:00',
         downloadCount: 3,
         lastDownloadedAt: '2026-08-04T12:00:00',
@@ -116,7 +117,7 @@ describe('AdminDownloadUsagePage', () => {
     mockAdminAuth();
   });
 
-  it('shows downloader rows with email and optional name', async () => {
+  it('shows downloader rows with email, optional name, and improvement feedback', async () => {
     const api = createApi();
     render(<AdminDownloadUsagePage analyticsApi={api} />);
 
@@ -124,9 +125,29 @@ describe('AdminDownloadUsagePage', () => {
       expect(screen.getByText('analyst@example.com')).toBeInTheDocument();
     });
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('downloader-feedback-aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa')
+    ).toHaveTextContent('Please add parish-level Excel templates.');
     expect(screen.getByTestId('stat-total-downloaders')).toHaveTextContent('2');
     expect(screen.getByTestId('visits-vs-downloads-panel')).toBeInTheDocument();
     expect(screen.getByTestId('visits-vs-downloads-chart')).toBeInTheDocument();
+  });
+
+  it('is ADMIN-only and keeps Downloads hub route separate from download usage', async () => {
+    mockAdminAuth();
+    render(
+      <MemoryRouter initialEntries={['/admin/download-usage']}>
+        <Routes>
+          <Route path="/admin/download-usage" element={<AdminDownloadUsagePage analyticsApi={createApi()} />} />
+          <Route path="/admin/downloads" element={<div data-testid="admin-downloads-hub-stub" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('admin-download-usage-page')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('admin-downloads-hub-stub')).not.toBeInTheDocument();
   });
 
   it('refreshes charts and table when age/gender filters change', async () => {

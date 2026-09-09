@@ -6,6 +6,8 @@ import com.ionatech.nac.ygb.application.services.*;
 import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
 import com.ionatech.nac.ygb.domain.service.FinancialYearPeriodCalculator;
 import com.ionatech.nac.ygb.domain.service.LgoFiscalYearRecordsPolicy;
+import com.ionatech.nac.ygb.domain.service.ToolDownloadCatalogue;
+import com.ionatech.nac.ygb.domain.service.ToolFieldDataProjector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,6 +146,12 @@ public class UseCaseConfig {
 
     @Bean
     @Transactional
+    public DeleteDataCollectorUseCase deleteDataCollectorUseCase(UserRepositoryPort userRepositoryPort) {
+        return new DeleteDataCollectorService(userRepositoryPort);
+    }
+
+    @Bean
+    @Transactional
     public ReactivateUserUseCase reactivateUserUseCase(UserRepositoryPort userRepositoryPort) {
         return new ReactivateUserService(userRepositoryPort);
     }
@@ -200,6 +208,44 @@ public class UseCaseConfig {
     }
 
     @Bean
+    public ToolDownloadCatalogue toolDownloadCatalogue() {
+        return new ToolDownloadCatalogue();
+    }
+
+    @Bean
+    public ToolFieldDataProjector toolFieldDataProjector(ToolDownloadCatalogue toolDownloadCatalogue) {
+        return new ToolFieldDataProjector(toolDownloadCatalogue);
+    }
+
+    @Bean
+    public QueryToolFieldDataExport queryToolFieldDataExport(
+            ToolDownloadCatalogue toolDownloadCatalogue,
+            ToolFieldDataExportRepositoryPort toolFieldDataExportRepositoryPort,
+            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
+            ToolFieldDataProjector toolFieldDataProjector
+    ) {
+        return new QueryToolFieldDataExportService(
+                toolDownloadCatalogue,
+                toolFieldDataExportRepositoryPort,
+                dashboardFilterHierarchyValidator,
+                toolFieldDataProjector
+        );
+    }
+
+    @Bean
+    public ExportToolFieldDataQuery exportToolFieldDataQuery(
+            QueryToolFieldDataExport queryToolFieldDataExport,
+            ToolFieldExportGeneratorPort toolFieldExportGeneratorPort,
+            ToolFieldDataProjector toolFieldDataProjector
+    ) {
+        return new ExportToolFieldDataService(
+                queryToolFieldDataExport,
+                toolFieldExportGeneratorPort,
+                toolFieldDataProjector
+        );
+    }
+
+    @Bean
     public GetPublicDashboardFilterOptionsQuery getPublicDashboardFilterOptionsQuery(
             DashboardFilterOptionsRepositoryPort dashboardFilterOptionsRepositoryPort
     ) {
@@ -238,21 +284,6 @@ public class UseCaseConfig {
             PublicDashboardService publicDashboardService
     ) {
         return publicDashboardService;
-    }
-
-    @Bean
-    public ExportPublicDatasetQuery exportPublicDatasetQuery(
-            PublicAnonymisedExportRepositoryPort publicAnonymisedExportRepositoryPort,
-            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
-            PublicExportGeneratorPort publicExportGeneratorPort,
-            AnonymisationProjector anonymisationProjector
-    ) {
-        return new ExportPublicDatasetService(
-                publicAnonymisedExportRepositoryPort,
-                dashboardFilterHierarchyValidator,
-                publicExportGeneratorPort,
-                anonymisationProjector
-        );
     }
 
     @Bean
@@ -316,21 +347,6 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public ExportBudgetPriorityDatasetQuery exportBudgetPriorityDatasetQuery(
-            BudgetPriorityDashboardReadPort budgetPriorityDashboardReadPort,
-            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
-            BudgetPriorityExportGeneratorPort budgetPriorityExportGeneratorPort,
-            AnonymisationProjector anonymisationProjector
-    ) {
-        return new ExportBudgetPriorityDatasetService(
-                budgetPriorityDashboardReadPort,
-                dashboardFilterHierarchyValidator,
-                budgetPriorityExportGeneratorPort,
-                anonymisationProjector
-        );
-    }
-
-    @Bean
     public SaveLgoBudgetAllocationService saveLgoBudgetAllocationService(
             LgoBudgetAllocationRepositoryPort lgoBudgetAllocationRepositoryPort
     ) {
@@ -388,21 +404,6 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public ExportLgoBudgetAllocationDatasetUseCase exportLgoBudgetAllocationDatasetUseCase(
-            LgoBudgetAllocationReadRepositoryPort lgoBudgetAllocationReadRepositoryPort,
-            DashboardFilterHierarchyValidator dashboardFilterHierarchyValidator,
-            LgoBudgetAllocationExportGeneratorPort lgoBudgetAllocationExportGeneratorPort,
-            AnonymisationProjector anonymisationProjector
-    ) {
-        return new ExportLgoBudgetAllocationDatasetService(
-                lgoBudgetAllocationReadRepositoryPort,
-                dashboardFilterHierarchyValidator,
-                lgoBudgetAllocationExportGeneratorPort,
-                anonymisationProjector
-        );
-    }
-
-    @Bean
     public GetActiveFiscalYearUseCase getActiveFiscalYearUseCase(
             ActiveFiscalYearSettingRepositoryPort activeFiscalYearSettingRepositoryPort
     ) {
@@ -457,15 +458,23 @@ public class UseCaseConfig {
 
     @Bean
     public DownloadUsageAnalyticsService downloadUsageAnalyticsService(
-            DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepositoryPort
+            DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepositoryPort,
+            ToolDownloadCatalogue toolDownloadCatalogue
     ) {
-        return new DownloadUsageAnalyticsService(downloadUsageAnalyticsRepositoryPort);
+        return new DownloadUsageAnalyticsService(
+                downloadUsageAnalyticsRepositoryPort,
+                toolDownloadCatalogue
+        );
     }
 
     @Bean
     public GetPublicDownloadUsageAggregatesQuery getPublicDownloadUsageAggregatesQuery(
-            DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepositoryPort
+            DownloadUsageAnalyticsRepositoryPort downloadUsageAnalyticsRepositoryPort,
+            ToolDownloadCatalogue toolDownloadCatalogue
     ) {
-        return new GetPublicDownloadUsageAggregatesService(downloadUsageAnalyticsRepositoryPort);
+        return new GetPublicDownloadUsageAggregatesService(
+                downloadUsageAnalyticsRepositoryPort,
+                toolDownloadCatalogue
+        );
     }
 }

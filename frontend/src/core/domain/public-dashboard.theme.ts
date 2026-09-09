@@ -3,11 +3,11 @@
  * Modern open-data / analytics layout — distinct from admin/collector chrome.
  */
 
-/** ECharts palette: brand green, NAC blue, NAC orange, slate, violet accent */
+/** ECharts palette: brand orange, NAC blue, accent green, slate, violet */
 export const PUBLIC_CHART_PALETTE = [
-  '#359966',
+  '#FF7A00',
   '#19376d',
-  '#f97316',
+  '#359966',
   '#64748b',
   '#8b5cf6',
 ] as const;
@@ -15,9 +15,11 @@ export const PUBLIC_CHART_PALETTE = [
 export const PUBLIC_CHART_COLORS = {
   brand: PUBLIC_CHART_PALETTE[0],
   nacBlue: PUBLIC_CHART_PALETTE[1],
-  nacOrange: PUBLIC_CHART_PALETTE[2],
+  accentGreen: PUBLIC_CHART_PALETTE[2],
   muted: PUBLIC_CHART_PALETTE[3],
   accent: PUBLIC_CHART_PALETTE[4],
+  /** Deeper amber for warm secondary accents (not series lead). */
+  nacOrange: '#C65A00',
 } as const;
 
 export const PUBLIC_CHART_AXIS = {

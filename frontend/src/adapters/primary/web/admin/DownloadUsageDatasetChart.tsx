@@ -1,9 +1,11 @@
 import type { EChartsOption } from 'echarts';
 import type { DatasetDownloadCountItem } from '../../../../core/domain/download-usage-analytics.model';
+import { formatDatasetLabel } from '../../../../core/domain/public-download-usage.model';
+import { PUBLIC_CHART_COLORS } from '../../../../core/domain/public-dashboard.theme';
 import { EChart } from '../components/EChart';
 
-const BAR_COLOR = '#359966';
-const AXIS_COLOR = '#64748b';
+const BAR_COLOR = PUBLIC_CHART_COLORS.brand;
+const AXIS_COLOR = PUBLIC_CHART_COLORS.muted;
 const GRID_COLOR = '#e2e8f0';
 
 export interface DownloadUsageDatasetChartProps {
@@ -17,7 +19,7 @@ function buildOption(data: DatasetDownloadCountItem[]): EChartsOption {
     tooltip: { trigger: 'axis' },
     xAxis: {
       type: 'category',
-      data: data.map((entry) => entry.dataset),
+      data: data.map((entry) => formatDatasetLabel(entry.dataset)),
       axisLabel: { color: AXIS_COLOR, rotate: data.length > 4 ? 30 : 0 },
       axisLine: { lineStyle: { color: GRID_COLOR } },
     },

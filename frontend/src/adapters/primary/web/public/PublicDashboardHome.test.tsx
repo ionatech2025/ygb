@@ -1,13 +1,10 @@
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import { PublicDashboardHome } from './PublicDashboardHome';
 
 vi.mock('./PublicDashboardFilterPanel', () => ({
   PublicDashboardFilterPanel: () => <div data-testid="public-dashboard-filter-panel" />,
-}));
-
-vi.mock('./PublicDashboardExportToolbar', () => ({
-  PublicDashboardExportToolbar: () => <div data-testid="public-dashboard-export-toolbar" />,
 }));
 
 vi.mock('./PublicDashboardSummaryCards', () => ({
@@ -23,16 +20,22 @@ vi.mock('./PublicDownloadUsageSection', () => ({
 }));
 
 describe('PublicDashboardHome', () => {
-  it('renders hero and section regions for filters, export, summary, charts, and public download usage', () => {
-    render(<PublicDashboardHome />);
+  it('renders hero, filters, download hub CTA, summary, charts, and public download usage', () => {
+    render(
+      <MemoryRouter>
+        <PublicDashboardHome />
+      </MemoryRouter>
+    );
 
     expect(screen.getByTestId('public-dashboard-home')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-hero')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-filters-section')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-export-section')).toBeInTheDocument();
+    expect(screen.getByTestId('public-download-hub-cta')).toBeInTheDocument();
+    expect(screen.getByTestId('public-download-hub-cta-link')).toHaveAttribute('href', '/download');
     expect(screen.getByTestId('public-dashboard-summary-section')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-filter-panel')).toBeInTheDocument();
-    expect(screen.getByTestId('public-dashboard-export-toolbar')).toBeInTheDocument();
+    expect(screen.queryByTestId('public-dashboard-export-toolbar')).not.toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-summary-cards')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-charts-section')).toBeInTheDocument();
     expect(screen.getByTestId('public-download-usage-section')).toBeInTheDocument();

@@ -1,6 +1,8 @@
 package com.ionatech.nac.ygb.adapters.out.persistence;
 
 import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetrics;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetricsPage;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -16,7 +18,13 @@ class AdminReceiptStatusQueryJpaRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    List<CollectorReceiptMetrics> findReceiptMetricsByCollector() {
+    CollectorReceiptMetricsPage findReceiptMetricsByCollector(PageRequest pageRequest) {
+        Number total = (Number) entityManager.createNativeQuery("""
+                SELECT COUNT(*)
+                FROM users u
+                WHERE u.role = 'DATA_COLLECTOR'
+                """).getSingleResult();
+
         String sql = """
                 SELECT u.id,
                        u.name,
@@ -29,10 +37,20 @@ class AdminReceiptStatusQueryJpaRepository {
                 WHERE u.role = 'DATA_COLLECTOR'
                 GROUP BY u.id, u.name
                 ORDER BY u.name ASC
+                LIMIT :pageSize OFFSET :pageOffset
                 """;
         @SuppressWarnings("unchecked")
-        List<Object[]> rows = entityManager.createNativeQuery(sql).getResultList();
-        return rows.stream().map(this::toMetrics).toList();
+        List<Object[]> rows = entityManager.createNativeQuery(sql)
+                .setParameter("pageSize", pageRequest.size())
+                .setParameter("pageOffset", pageRequest.offset())
+                .getResultList();
+
+        return new CollectorReceiptMetricsPage(
+                rows.stream().map(this::toMetrics).toList(),
+                total.longValue(),
+                pageRequest.page(),
+                pageRequest.size()
+        );
     }
 
     private CollectorReceiptMetrics toMetrics(Object[] row) {

@@ -1,10 +1,11 @@
 import type { EChartsOption } from 'echarts';
 import type { DistrictBarItem } from '../../../../core/domain/dashboard-charts.model';
 import type { DashboardChartDrillDownEvent } from '../../../../core/domain/dashboard-charts.model';
+import { PUBLIC_CHART_COLORS } from '../../../../core/domain/public-dashboard.theme';
 import { EChart } from '../components/EChart';
 
-const BAR_COLOR = '#359966';
-const AXIS_COLOR = '#64748b';
+const BAR_COLOR = PUBLIC_CHART_COLORS.brand;
+const AXIS_COLOR = PUBLIC_CHART_COLORS.muted;
 const GRID_COLOR = '#e2e8f0';
 
 export interface SubmissionsByDistrictChartProps {

@@ -2,10 +2,10 @@ package com.ionatech.nac.ygb.application.services;
 
 import com.ionatech.nac.ygb.application.ports.api.GetCollectorLeaderboardQuery;
 import com.ionatech.nac.ygb.application.ports.spi.CollectorTrackerRepositoryPort;
-import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardEntry;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardPage;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
-
-import java.util.List;
+import com.ionatech.nac.ygb.domain.valueobjects.LeaderboardSort;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 
 public class GetCollectorLeaderboardService implements GetCollectorLeaderboardQuery {
 
@@ -21,10 +21,16 @@ public class GetCollectorLeaderboardService implements GetCollectorLeaderboardQu
     }
 
     @Override
-    public List<CollectorLeaderboardEntry> getLeaderboard(DashboardFilter filter) {
+    public CollectorLeaderboardPage getLeaderboard(
+            DashboardFilter filter,
+            PageRequest pageRequest,
+            LeaderboardSort sort
+    ) {
         DashboardFilter effectiveFilter = withoutCollector(filter != null ? filter : DashboardFilter.empty());
         filterValidator.validate(effectiveFilter);
-        return collectorTrackerRepositoryPort.findLeaderboard(effectiveFilter);
+        PageRequest effectivePage = pageRequest != null ? pageRequest : PageRequest.of(0, 25);
+        LeaderboardSort effectiveSort = sort != null ? sort : LeaderboardSort.defaultSort();
+        return collectorTrackerRepositoryPort.findLeaderboard(effectiveFilter, effectivePage, effectiveSort);
     }
 
     private DashboardFilter withoutCollector(DashboardFilter filter) {

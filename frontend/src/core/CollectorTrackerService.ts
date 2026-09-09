@@ -1,11 +1,10 @@
 import type { DashboardFilter } from './domain/dashboard-filter.model';
 import type {
   CollectorBreakdown,
-  CollectorLeaderboardEntry,
+  CollectorLeaderboardPage,
   LeaderboardSortDirection,
   LeaderboardSortKey,
 } from './domain/collector-tracker.model';
-import { sortLeaderboardEntries } from './domain/collector-tracker.model';
 import type { ICollectorTrackerApiPort } from '../ports/collector-tracker-api.port';
 
 export class CollectorTrackerService {
@@ -14,10 +13,11 @@ export class CollectorTrackerService {
   async loadLeaderboard(
     filter: DashboardFilter,
     sortKey: LeaderboardSortKey = 'totalCount',
-    sortDirection: LeaderboardSortDirection = 'desc'
-  ): Promise<CollectorLeaderboardEntry[]> {
-    const entries = await this.api.fetchLeaderboard(filter);
-    return sortLeaderboardEntries(entries, sortKey, sortDirection);
+    sortDirection: LeaderboardSortDirection = 'desc',
+    page = 0,
+    size = 25
+  ): Promise<CollectorLeaderboardPage> {
+    return this.api.fetchLeaderboard(filter, page, size, sortKey, sortDirection);
   }
 
   async loadBreakdown(collectorId: string, filter: DashboardFilter): Promise<CollectorBreakdown> {

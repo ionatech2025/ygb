@@ -60,6 +60,7 @@ describe('CollectorLayout', () => {
       </MemoryRouter>
     );
 
+    expect(screen.getByRole('img', { name: 'Youth Go Budget' })).toHaveAttribute('src', '/ygb_logo.png');
     expect(screen.getByText('Default Collector')).toBeInTheDocument();
     expect(screen.queryByText('Field Collector')).not.toBeInTheDocument();
     expect(screen.getByText('0771111111')).toBeInTheDocument();

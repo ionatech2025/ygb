@@ -99,10 +99,10 @@ public class AdminSubmissionController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminSubmissionDetailDto> getSubmissionDetail(@PathVariable UUID id) {
         AdminSubmissionDetail detail = getSubmissionDetailQuery.getById(id);
-        User collector = userRepositoryPort.findById(detail.submission().getMetadata().collectorId())
-                .orElseThrow(() -> new IllegalStateException(
-                        "Collector not found for submission: " + detail.submission().getId()
-                ));
+        UUID collectorId = detail.submission().getMetadata().collectorId();
+        User collector = collectorId == null
+                ? null
+                : userRepositoryPort.findById(collectorId).orElse(null);
         return ResponseEntity.ok(restMapper.toDetailResponse(detail, collector));
     }
 

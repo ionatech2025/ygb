@@ -25,9 +25,10 @@ async function openFieldIfCollapsible(
 export async function chooseFormOptionByValue(
   user: ReturnType<typeof userEvent.setup>,
   fieldLabel: RegExp | string,
-  value: string
+  value: string,
+  scope: Pick<typeof screen, 'getByLabelText'> = screen
 ): Promise<void> {
-  const field = screen.getByLabelText(fieldLabel);
+  const field = scope.getByLabelText(fieldLabel);
   await openFieldIfCollapsible(user, field);
   await user.click(within(getOptionContainer(field)).getByDisplayValue(value));
 }

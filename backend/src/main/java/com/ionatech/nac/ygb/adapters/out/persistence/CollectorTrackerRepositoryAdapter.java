@@ -1,11 +1,11 @@
 package com.ionatech.nac.ygb.adapters.out.persistence;
 
 import com.ionatech.nac.ygb.application.ports.spi.CollectorTrackerRepositoryPort;
-import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardEntry;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardPage;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
+import com.ionatech.nac.ygb.domain.valueobjects.LeaderboardSort;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class CollectorTrackerRepositoryAdapter implements CollectorTrackerRepositoryPort {
@@ -17,7 +17,11 @@ public class CollectorTrackerRepositoryAdapter implements CollectorTrackerReposi
     }
 
     @Override
-    public List<CollectorLeaderboardEntry> findLeaderboard(DashboardFilter filter) {
-        return jpaRepository.findLeaderboard(filter);
+    public CollectorLeaderboardPage findLeaderboard(
+            DashboardFilter filter,
+            PageRequest pageRequest,
+            LeaderboardSort sort
+    ) {
+        return jpaRepository.findLeaderboard(filter, pageRequest, sort);
     }
 }

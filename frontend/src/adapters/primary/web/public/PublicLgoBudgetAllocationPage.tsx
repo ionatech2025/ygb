@@ -9,7 +9,7 @@ import { HttpLgoBudgetAllocationDashboardAdapter } from '../../../secondary/api/
 import { LgoBudgetAllocationDashboardFilterPanel } from './LgoBudgetAllocationDashboardFilterPanel';
 import { LgoBudgetAllocationSummaryCards } from './LgoBudgetAllocationSummaryCards';
 import { LgoBudgetAllocationCharts } from './LgoBudgetAllocationCharts';
-import { LgoBudgetAllocationExportToolbar } from './LgoBudgetAllocationExportToolbar';
+import { PublicDownloadHubCta } from './PublicDownloadHubCta';
 
 export function PublicLgoBudgetAllocationPage() {
   const dashboardApi = useMemo(() => new HttpLgoBudgetAllocationDashboardAdapter(), []);
@@ -62,7 +62,12 @@ export function PublicLgoBudgetAllocationPage() {
           </div>
 
           <div className="w-full shrink-0 xl:max-w-sm" data-testid="lgo-dashboard-export-section">
-            <LgoBudgetAllocationExportToolbar layout="inline" />
+            <PublicDownloadHubCta
+              layout="inline"
+              dataset="LGO_BUDGET_ALLOCATION"
+              title="Download Budget Allocations data"
+              description="Export anonymised LGO budget allocation responses as CSV or Excel from the Download hub."
+            />
           </div>
         </div>
       </header>

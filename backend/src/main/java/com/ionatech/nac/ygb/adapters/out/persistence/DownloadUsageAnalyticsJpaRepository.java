@@ -59,6 +59,7 @@ class DownloadUsageAnalyticsJpaRepository {
                        p.age_group,
                        p.field_of_operation,
                        p.field_of_operation_specify,
+                       p.improvement_feedback,
                        p.created_at,
                        COUNT(e.id) AS download_count,
                        MAX(e.downloaded_at) AS last_downloaded_at
@@ -66,7 +67,7 @@ class DownloadUsageAnalyticsJpaRepository {
                 LEFT JOIN download_events e ON e.profile_id = p.id%s
                 %s
                 GROUP BY p.id, p.email, p.optional_name, p.country_code, p.gender, p.age_group,
-                         p.field_of_operation, p.field_of_operation_specify, p.created_at
+                         p.field_of_operation, p.field_of_operation_specify, p.improvement_feedback, p.created_at
                 ORDER BY MAX(e.downloaded_at) DESC NULLS LAST, p.created_at DESC
                 LIMIT :pageSize OFFSET :pageOffset
                 """.formatted(eventJoinFilter, profileWhere);
@@ -85,9 +86,10 @@ class DownloadUsageAnalyticsJpaRepository {
                         (String) row[5],
                         (String) row[6],
                         (String) row[7],
-                        toLocalDateTime(row[8]),
-                        ((Number) row[9]).longValue(),
-                        toLocalDateTime(row[10])
+                        (String) row[8],
+                        toLocalDateTime(row[9]),
+                        ((Number) row[10]).longValue(),
+                        toLocalDateTime(row[11])
                 ))
                 .toList();
         return new DownloaderPage(items, totalElements, pageRequest.page(), pageRequest.size());

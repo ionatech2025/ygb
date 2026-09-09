@@ -17,12 +17,8 @@ vi.mock('./LgoBudgetAllocationCharts', () => ({
   LgoBudgetAllocationCharts: () => <div data-testid="lgo-budget-allocation-charts-section" />,
 }));
 
-vi.mock('./LgoBudgetAllocationExportToolbar', () => ({
-  LgoBudgetAllocationExportToolbar: () => <div data-testid="lgo-budget-allocation-export-toolbar" />,
-}));
-
 describe('PublicLgoBudgetAllocationPage', () => {
-  it('renders filter panel, summary, and charts region (TC-LGOB-02-01)', () => {
+  it('renders filter panel, summary, charts, and download hub CTA (TC-LGOB-02-01)', () => {
     render(
       <MemoryRouter>
         <PublicLgoBudgetAllocationPage />
@@ -37,6 +33,10 @@ describe('PublicLgoBudgetAllocationPage', () => {
     expect(screen.getByTestId('lgo-budget-allocation-summary-cards')).toBeInTheDocument();
     expect(screen.getByTestId('lgo-budget-allocation-charts-section')).toBeInTheDocument();
     expect(screen.getByTestId('lgo-dashboard-export-section')).toBeInTheDocument();
-    expect(screen.getByTestId('lgo-budget-allocation-export-toolbar')).toBeInTheDocument();
+    expect(screen.queryByTestId('lgo-budget-allocation-export-toolbar')).not.toBeInTheDocument();
+    expect(screen.getByTestId('public-download-hub-cta-link')).toHaveAttribute(
+      'href',
+      '/download?dataset=LGO_BUDGET_ALLOCATION'
+    );
   });
 });

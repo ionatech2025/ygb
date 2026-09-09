@@ -133,9 +133,16 @@ vi.mock('../../../secondary/api/budget-priority-dashboard-api.adapter', () => ({
 
 vi.mock('../../../secondary/api/http-user.adapter', () => ({
   HttpUserAdapter: vi.fn().mockImplementation(() => ({
-    fetchActiveCollectors: vi.fn().mockResolvedValue([]),
+    fetchActiveCollectors: vi.fn().mockResolvedValue({
+      items: [],
+      totalElements: 0,
+      page: 0,
+      size: 25,
+      totalPages: 0,
+    }),
     createDataCollector: vi.fn(),
     deactivateUser: vi.fn(),
+    deleteUser: vi.fn(),
     reactivateUser: vi.fn(),
     resetPassword: vi.fn(),
     getCollectorSubmissions: vi.fn().mockResolvedValue({
@@ -207,12 +214,13 @@ describe('AppRouter public dashboard routes', () => {
     expect(window.location.pathname).toBe('/dashboard');
   });
 
-  it('renders public nav with Dashboard, Budget Priorities, and Resources links', async () => {
+  it('renders public nav with Dashboard, Download, Budget Priorities, and Resources links', async () => {
     window.history.pushState({}, '', '/dashboard');
     render(<AppRouter />);
 
     await waitFor(() => {
       expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
+      expect(screen.getByRole('link', { name: 'Download' })).toHaveAttribute('href', '/download');
       expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveAttribute(
         'href',
         '/budget-priorities'
@@ -220,6 +228,16 @@ describe('AppRouter public dashboard routes', () => {
       expect(screen.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources');
       expect(screen.queryByRole('link', { name: 'LG Budget Allocation' })).not.toBeInTheDocument();
     });
+  });
+
+  it('loads /download without redirecting to login', async () => {
+    window.history.pushState({}, '', '/download');
+    render(<AppRouter />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('public-download-hub-page')).toBeInTheDocument();
+    });
+    expect(window.location.pathname).toBe('/download');
   });
 
   it('allows ADMIN sessions to access public dashboard pages', async () => {

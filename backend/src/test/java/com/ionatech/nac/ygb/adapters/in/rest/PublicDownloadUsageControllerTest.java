@@ -54,9 +54,9 @@ class PublicDownloadUsageControllerTest {
                 .thenReturn(new PublicDownloadUsageAggregates(
                         6L,
                         List.of(
-                                new DatasetDownloadCount("PDM", 3L),
-                                new DatasetDownloadCount("BUDGET_PRIORITIES", 2L),
-                                new DatasetDownloadCount("LGO_BUDGET_ALLOCATION", 1L)
+                                new DatasetDownloadCount("PDM (legacy)", 3L),
+                                new DatasetDownloadCount("Budget Priorities", 2L),
+                                new DatasetDownloadCount("Budget Allocations", 1L)
                         ),
                         List.of(new TimeSeriesPoint(LocalDate.of(2026, 8, 4), 6L))
                 ));
@@ -64,16 +64,17 @@ class PublicDownloadUsageControllerTest {
         mockMvc.perform(get("/api/v1/public/dashboard/download-usage"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalDownloads").value(6))
-                .andExpect(jsonPath("$.byDataset[0].dataset").value("PDM"))
+                .andExpect(jsonPath("$.byDataset[0].dataset").value("PDM (legacy)"))
                 .andExpect(jsonPath("$.byDataset[0].count").value(3))
-                .andExpect(jsonPath("$.byDataset[1].dataset").value("BUDGET_PRIORITIES"))
-                .andExpect(jsonPath("$.byDataset[2].dataset").value("LGO_BUDGET_ALLOCATION"))
+                .andExpect(jsonPath("$.byDataset[1].dataset").value("Budget Priorities"))
+                .andExpect(jsonPath("$.byDataset[2].dataset").value("Budget Allocations"))
                 .andExpect(jsonPath("$.downloadsOverTime[0].bucketStart").value("2026-08-04"))
                 .andExpect(jsonPath("$.downloadsOverTime[0].count").value(6))
                 .andExpect(jsonPath("$.email").doesNotExist())
                 .andExpect(jsonPath("$.optionalName").doesNotExist())
                 .andExpect(jsonPath("$.name").doesNotExist())
                 .andExpect(jsonPath("$.phone").doesNotExist())
+                .andExpect(jsonPath("$.improvementFeedback").doesNotExist())
                 .andExpect(jsonPath("$.byGender").doesNotExist())
                 .andExpect(jsonPath("$.byAgeGroup").doesNotExist());
 

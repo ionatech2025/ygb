@@ -1,10 +1,11 @@
 import type { EChartsOption } from 'echarts';
 import type { VisitsVsDownloadsPoint } from '../../../../core/domain/download-usage-analytics.model';
+import { PUBLIC_CHART_COLORS } from '../../../../core/domain/public-dashboard.theme';
 import { EChart } from '../components/EChart';
 
-const VISITOR_COLOR = '#19376d';
-const DOWNLOADER_COLOR = '#359966';
-const AXIS_COLOR = '#64748b';
+const VISITOR_COLOR = PUBLIC_CHART_COLORS.nacBlue;
+const DOWNLOADER_COLOR = PUBLIC_CHART_COLORS.brand;
+const AXIS_COLOR = PUBLIC_CHART_COLORS.muted;
 const GRID_COLOR = '#e2e8f0';
 
 export interface VisitsVsDownloadsChartProps {

@@ -20,6 +20,7 @@ function renderAdminLayout(initialPath = '/admin/dashboard') {
       <Routes>
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<div>Dashboard page</div>} />
+          <Route path="/admin/downloads" element={<div>Downloads hub page</div>} />
           <Route path="/admin/users" element={<div>Users page</div>} />
           <Route path="/admin/users/:id" element={<div>Collector profile page</div>} />
           <Route path="/admin/collectors" element={<div>Collectors page</div>} />
@@ -46,11 +47,19 @@ describe('AdminLayout', () => {
   it('renders all primary admin navigation sections', () => {
     renderAdminLayout();
 
+    expect(screen.getByRole('img', { name: 'Youth Go Budget' })).toHaveAttribute('src', '/ygb_logo.png');
+    expect(screen.queryByText('YGB Admin')).not.toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: 'Dashboard' }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('link', { name: 'Downloads' }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole('link', { name: 'Download usage' }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole('link', { name: 'Users' }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole('link', { name: 'Collector Tracker' }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole('link', { name: 'Sync Status' }).length).toBeGreaterThan(0);
+  });
+
+  it('loads the Downloads hub outlet separately from download usage', () => {
+    renderAdminLayout('/admin/downloads');
+    expect(screen.getByText('Downloads hub page')).toBeInTheDocument();
   });
 
   it('renders the active route outlet', () => {

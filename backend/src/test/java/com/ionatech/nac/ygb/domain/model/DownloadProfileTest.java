@@ -26,6 +26,7 @@ class DownloadProfileTest {
                 AgeGroup.AGE_25_29,
                 FieldOfOperation.ACADEMIA_RESEARCH,
                 null,
+                null,
                 true,
                 NOW
         );
@@ -34,8 +35,65 @@ class DownloadProfileTest {
         assertThat(profile.getEmail().getValue()).isEqualTo("analyst@example.com");
         assertThat(profile.getOptionalName()).isEqualTo("Ada Lovelace");
         assertThat(profile.getCountryCode().getValue()).isEqualTo("UG");
+        assertThat(profile.getImprovementFeedback()).isNull();
         assertThat(profile.isConsentGiven()).isTrue();
         assertThat(profile.getCreatedAt()).isEqualTo(NOW);
+    }
+
+    @Test
+    void shouldPersistOptionalImprovementFeedback() {
+        DownloadProfile profile = DownloadProfile.recordNew(
+                EmailAddress.of("analyst@example.com"),
+                null,
+                IsoCountryCode.of("UG"),
+                Gender.MALE,
+                AgeGroup.AGE_30_35,
+                FieldOfOperation.GOVERNMENT,
+                null,
+                "  Clearer district filters would help.  ",
+                true,
+                NOW
+        );
+
+        assertThat(profile.getImprovementFeedback()).isEqualTo("Clearer district filters would help.");
+    }
+
+    @Test
+    void shouldTreatBlankImprovementFeedbackAsAbsent() {
+        DownloadProfile profile = DownloadProfile.recordNew(
+                EmailAddress.of("analyst@example.com"),
+                null,
+                IsoCountryCode.of("UG"),
+                Gender.MALE,
+                AgeGroup.AGE_30_35,
+                FieldOfOperation.GOVERNMENT,
+                null,
+                "   ",
+                true,
+                NOW
+        );
+
+        assertThat(profile.getImprovementFeedback()).isNull();
+    }
+
+    @Test
+    void shouldRejectImprovementFeedbackAboveMaxLength() {
+        String tooLong = "x".repeat(DownloadProfile.MAX_IMPROVEMENT_FEEDBACK_LENGTH + 1);
+
+        assertThatThrownBy(() -> DownloadProfile.recordNew(
+                EmailAddress.of("analyst@example.com"),
+                null,
+                IsoCountryCode.of("UG"),
+                Gender.MALE,
+                AgeGroup.AGE_30_35,
+                FieldOfOperation.GOVERNMENT,
+                null,
+                tooLong,
+                true,
+                NOW
+        ))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Improvement feedback");
     }
 
     @Test
@@ -47,6 +105,7 @@ class DownloadProfileTest {
                 Gender.MALE,
                 AgeGroup.AGE_30_35,
                 FieldOfOperation.GOVERNMENT,
+                null,
                 null,
                 false,
                 NOW
@@ -65,6 +124,7 @@ class DownloadProfileTest {
                 AgeGroup.AGE_18_24,
                 FieldOfOperation.OTHER,
                 "  ",
+                null,
                 true,
                 NOW
         ))
@@ -82,6 +142,7 @@ class DownloadProfileTest {
                 AgeGroup.AGE_18_24,
                 FieldOfOperation.OTHER,
                 "Independent consultant",
+                null,
                 true,
                 NOW
         );

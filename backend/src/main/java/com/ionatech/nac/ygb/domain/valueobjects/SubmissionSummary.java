@@ -31,8 +31,8 @@ public record SubmissionSummary(
         if (districtId == null || districtName == null) {
             throw new IllegalArgumentException("SubmissionSummary district must not be null.");
         }
-        if (collectorId == null || collectorName == null) {
-            throw new IllegalArgumentException("SubmissionSummary collector must not be null.");
+        if (collectorName == null || collectorName.isBlank()) {
+            collectorName = DeletedCollectorLabel.DISPLAY_NAME;
         }
         if (formCompletedAt == null || status == null || financialYearPeriod == null) {
             throw new IllegalArgumentException("SubmissionSummary timestamps and status must not be null.");

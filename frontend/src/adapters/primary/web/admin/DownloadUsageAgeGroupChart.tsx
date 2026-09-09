@@ -1,7 +1,8 @@
 import type { EChartsOption } from 'echarts';
+import { PUBLIC_CHART_PALETTE } from '../../../../core/domain/public-dashboard.theme';
 import { EChart } from '../components/EChart';
 
-const PIE_COLORS = ['#359966', '#19376d', '#f97316', '#64748b', '#0ea5e9'];
+const PIE_COLORS = [...PUBLIC_CHART_PALETTE, '#0ea5e9'];
 
 export interface AgeGroupChartItem {
   ageGroup: string;

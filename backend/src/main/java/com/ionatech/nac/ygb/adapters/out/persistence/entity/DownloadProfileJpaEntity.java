@@ -36,6 +36,9 @@ public class DownloadProfileJpaEntity {
     @Column(name = "field_of_operation_specify", length = 255)
     private String fieldOfOperationSpecify;
 
+    @Column(name = "improvement_feedback", columnDefinition = "TEXT")
+    private String improvementFeedback;
+
     @Column(name = "consent_given", nullable = false)
     private boolean consentGiven;
 
@@ -106,6 +109,14 @@ public class DownloadProfileJpaEntity {
 
     public void setFieldOfOperationSpecify(String fieldOfOperationSpecify) {
         this.fieldOfOperationSpecify = fieldOfOperationSpecify;
+    }
+
+    public String getImprovementFeedback() {
+        return improvementFeedback;
+    }
+
+    public void setImprovementFeedback(String improvementFeedback) {
+        this.improvementFeedback = improvementFeedback;
     }
 
     public boolean isConsentGiven() {

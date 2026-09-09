@@ -96,6 +96,7 @@ class DownloadProfileUsageRepositoryAdapterTest {
                 AgeGroup.AGE_30_35,
                 FieldOfOperation.ACADEMIA_RESEARCH,
                 null,
+                "More parish-level open data please.",
                 true,
                 now
         ));
@@ -120,6 +121,8 @@ class DownloadProfileUsageRepositoryAdapterTest {
                     assertThat(loaded.getCountryCode().getValue()).isEqualTo("UG");
                     assertThat(loaded.getGender()).isEqualTo(Gender.FEMALE);
                     assertThat(loaded.getAgeGroup()).isEqualTo(AgeGroup.AGE_30_35);
+                    assertThat(loaded.getImprovementFeedback())
+                            .isEqualTo("More parish-level open data please.");
                 });
 
         assertThat(sessionRepository.findByToken("session-token-abc")).isPresent().get()
@@ -131,6 +134,16 @@ class DownloadProfileUsageRepositoryAdapterTest {
         assertThat(event.getDataset()).isEqualTo(PublicDownloadDataset.PDM);
         assertThat(event.getFormat()).isEqualTo(ExportFormat.CSV);
         assertThat(eventJpaRepository.findById(event.getId())).isPresent();
+
+        DownloadEvent bypEvent = eventRepository.save(DownloadEvent.recordNew(
+                profile.getId(),
+                session.getId(),
+                PublicDownloadDataset.BYP,
+                ExportFormat.XLSX,
+                now.plusMinutes(2),
+                null
+        ));
+        assertThat(eventJpaRepository.findById(bypEvent.getId())).isPresent();
     }
 
     @Test

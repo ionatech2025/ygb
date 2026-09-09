@@ -6,14 +6,21 @@ import { CollectorTrackerPage } from './CollectorTrackerPage';
 import { CollectorTrackerService } from '../../../../core/CollectorTrackerService';
 import { EMPTY_DASHBOARD_FILTER } from '../../../../core/domain/dashboard-filter.model';
 import { useDashboardFilterStore } from '../../../../core/store/useDashboardFilterStore';
+import type { CollectorLeaderboardPage } from '../../../../core/domain/collector-tracker.model';
 import type { ICollectorTrackerApiPort } from '../../../../ports/collector-tracker-api.port';
 import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
 
-const leaderboard = [
-  { collectorId: 'collector-2', fullName: 'Katongole', totalCount: 4 },
-  { collectorId: 'collector-1', fullName: 'Default Collector', totalCount: 6 },
-  { collectorId: 'collector-3', fullName: 'Samuel', totalCount: 2 },
-];
+const leaderboardPage: CollectorLeaderboardPage = {
+  items: [
+    { collectorId: 'collector-1', fullName: 'Default Collector', totalCount: 6 },
+    { collectorId: 'collector-2', fullName: 'Katongole', totalCount: 4 },
+    { collectorId: 'collector-3', fullName: 'Samuel', totalCount: 2 },
+  ],
+  totalElements: 3,
+  page: 0,
+  size: 25,
+  totalPages: 1,
+};
 
 const breakdown = {
   byFormType: [
@@ -30,7 +37,7 @@ function createTrackerApi(
   overrides: Partial<ICollectorTrackerApiPort> = {}
 ): ICollectorTrackerApiPort {
   return {
-    fetchLeaderboard: vi.fn().mockResolvedValue(leaderboard),
+    fetchLeaderboard: vi.fn().mockResolvedValue(leaderboardPage),
     fetchBreakdown: vi.fn().mockResolvedValue(breakdown),
     ...overrides,
   };
@@ -102,7 +109,7 @@ describe('CollectorTrackerPage', () => {
 
   it('refetches the leaderboard when the financial year filter changes (TC-DASH-07-02)', async () => {
     const user = userEvent.setup();
-    const fetchLeaderboard = vi.fn().mockResolvedValue(leaderboard);
+    const fetchLeaderboard = vi.fn().mockResolvedValue(leaderboardPage);
     const trackerApi = createTrackerApi({ fetchLeaderboard });
     const trackerService = new CollectorTrackerService(trackerApi);
 
@@ -119,8 +126,47 @@ describe('CollectorTrackerPage', () => {
 
     await waitFor(() => {
       expect(fetchLeaderboard).toHaveBeenCalledWith(
-        expect.objectContaining({ financialYearPeriod: 'JAN_JUN_2026' })
+        expect.objectContaining({ financialYearPeriod: 'JAN_JUN_2026' }),
+        0,
+        25,
+        'totalCount',
+        'desc'
       );
+    });
+  });
+
+  it('fetches the next page when next is clicked', async () => {
+    const user = userEvent.setup();
+    const fetchLeaderboard = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ...leaderboardPage,
+        totalElements: 30,
+        totalPages: 2,
+      })
+      .mockResolvedValueOnce({
+        items: [{ collectorId: 'collector-4', fullName: 'Next Page', totalCount: 1 }],
+        totalElements: 30,
+        page: 1,
+        size: 25,
+        totalPages: 2,
+      });
+    const trackerApi = createTrackerApi({ fetchLeaderboard });
+    const trackerService = new CollectorTrackerService(trackerApi);
+
+    render(
+      <CollectorTrackerPage trackerApi={trackerApi} dashboardApi={dashboardApi} trackerService={trackerService} />
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('collector-leaderboard-pager-next-page')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('collector-leaderboard-pager-next-page'));
+
+    await waitFor(() => {
+      expect(fetchLeaderboard).toHaveBeenLastCalledWith(EMPTY_DASHBOARD_FILTER, 1, 25, 'totalCount', 'desc');
+      expect(screen.getByTestId('leaderboard-row-collector-4')).toBeInTheDocument();
     });
   });
 });

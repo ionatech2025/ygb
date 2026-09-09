@@ -1,4 +1,4 @@
-export const PWA_THEME_COLOR = '#359661';
+export const PWA_THEME_COLOR = '#FF7A00';
 export const PWA_BACKGROUND_COLOR = '#f8faf9';
 
 export const pwaManifest = {

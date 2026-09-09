@@ -14,19 +14,6 @@ vi.mock('./PublicDashboardFilterPanel', () => ({
   ),
 }));
 
-vi.mock('./PublicDashboardExportToolbar', () => ({
-  PublicDashboardExportToolbar: () => (
-    <div data-testid="public-dashboard-export-toolbar">
-      <button type="button" className="min-h-11 min-w-36">
-        Download CSV
-      </button>
-      <button type="button" className="min-h-11 min-w-36">
-        Download Excel
-      </button>
-    </div>
-  ),
-}));
-
 vi.mock('./PublicDashboardSummaryCards', () => ({
   PublicDashboardSummaryCards: () => (
     <section aria-label="Summary statistics" data-testid="public-dashboard-summary-cards">
@@ -78,7 +65,11 @@ function accessibleName(element: HTMLElement): string {
 
 describe('PublicDashboardHome presentation (US-PUB-06)', () => {
   it('renders hero, section headings, and dashboard regions', () => {
-    render(<PublicDashboardHome />);
+    render(
+      <MemoryRouter>
+        <PublicDashboardHome />
+      </MemoryRouter>
+    );
 
     expect(screen.getByTestId('public-dashboard-hero')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: /Parish Development Model Insights/i })).toBeInTheDocument();
@@ -86,13 +77,18 @@ describe('PublicDashboardHome presentation (US-PUB-06)', () => {
     expect(screen.getByTestId('public-dashboard-export-section')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-summary-section')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-filter-panel')).toBeInTheDocument();
-    expect(screen.getByTestId('public-dashboard-export-toolbar')).toBeInTheDocument();
+    expect(screen.getByTestId('public-download-hub-cta')).toBeInTheDocument();
+    expect(screen.queryByTestId('public-dashboard-export-toolbar')).not.toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-summary-cards')).toBeInTheDocument();
     expect(screen.getByTestId('public-dashboard-charts-section')).toBeInTheDocument();
   });
 
   it('uses presentation section structure for stakeholder demo layout', () => {
-    render(<PublicDashboardHome />);
+    render(
+      <MemoryRouter>
+        <PublicDashboardHome />
+      </MemoryRouter>
+    );
 
     expect(screen.getByTestId('public-dashboard-hero')).toHaveClass('rounded-2xl');
     expect(screen.getByTestId('public-dashboard-filters-section').querySelector('h2')).toHaveTextContent(
@@ -105,7 +101,11 @@ describe('PublicDashboardHome presentation (US-PUB-06)', () => {
   });
 
   it('uses responsive layout classes at desktop and mobile widths (TC-PUB-06-02)', () => {
-    const { container } = render(<PublicDashboardHome />);
+    const { container } = render(
+      <MemoryRouter>
+        <PublicDashboardHome />
+      </MemoryRouter>
+    );
     const html = container.innerHTML;
 
     expect(html).toMatch(/max-w-5xl/);

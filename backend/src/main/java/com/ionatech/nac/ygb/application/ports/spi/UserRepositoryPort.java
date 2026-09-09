@@ -2,6 +2,8 @@ package com.ionatech.nac.ygb.application.ports.spi;
 
 import com.ionatech.nac.ygb.domain.model.Role;
 import com.ionatech.nac.ygb.domain.model.User;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
+import com.ionatech.nac.ygb.domain.valueobjects.UserPage;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +14,6 @@ public interface UserRepositoryPort {
     Optional<User> findById(UUID id);
     User save(User user);
     List<User> findActiveByRole(Role role);
+    UserPage findActiveByRole(Role role, PageRequest pageRequest);
+    void deleteById(UUID id);
 }

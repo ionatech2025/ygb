@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AdminSyncStatusPage } from './AdminSyncStatusPage';
 import type { IAdminSyncStatusApiPort } from '../../../../ports/admin-sync-status-api.port';
@@ -7,26 +8,32 @@ const receiptStatus = {
   totalSynced: 18,
   totalFlagged: 2,
   totalDuplicate: 1,
-  byCollector: [
-    {
-      collectorId: 'collector-active',
-      fullName: 'Default Collector',
-      syncedCount: 6,
-      flaggedCount: 1,
-      duplicateCount: 0,
-      lastReceivedAt: '2026-03-15T10:00:00',
-      stale: false,
-    },
-    {
-      collectorId: 'collector-stale',
-      fullName: 'Stale Collector',
-      syncedCount: 1,
-      flaggedCount: 0,
-      duplicateCount: 1,
-      lastReceivedAt: '2026-03-10T10:00:00',
-      stale: true,
-    },
-  ],
+  byCollector: {
+    items: [
+      {
+        collectorId: 'collector-active',
+        fullName: 'Default Collector',
+        syncedCount: 6,
+        flaggedCount: 1,
+        duplicateCount: 0,
+        lastReceivedAt: '2026-03-15T10:00:00',
+        stale: false,
+      },
+      {
+        collectorId: 'collector-stale',
+        fullName: 'Stale Collector',
+        syncedCount: 1,
+        flaggedCount: 0,
+        duplicateCount: 1,
+        lastReceivedAt: '2026-03-10T10:00:00',
+        stale: true,
+      },
+    ],
+    totalElements: 2,
+    page: 0,
+    size: 25,
+    totalPages: 1,
+  },
 };
 
 function createSyncStatusApi(
@@ -68,6 +75,49 @@ describe('AdminSyncStatusPage', () => {
       expect(screen.getByTestId('receipt-status-pending-info')).toHaveTextContent(/pending on a collector device/i);
       expect(screen.getByTestId('receipt-status-pending-info')).toHaveTextContent(/IndexedDB/i);
       expect(screen.getByTestId('receipt-status-pending-info')).toHaveTextContent(/not visible here/i);
+    });
+  });
+
+  it('fetches the next page of collectors when next is clicked', async () => {
+    const user = userEvent.setup();
+    const fetchReceiptStatus = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ...receiptStatus,
+        byCollector: { ...receiptStatus.byCollector, totalElements: 30, totalPages: 2 },
+      })
+      .mockResolvedValueOnce({
+        ...receiptStatus,
+        byCollector: {
+          items: [
+            {
+              collectorId: 'collector-page-2',
+              fullName: 'Page Two',
+              syncedCount: 0,
+              flaggedCount: 0,
+              duplicateCount: 0,
+              lastReceivedAt: null,
+              stale: true,
+            },
+          ],
+          totalElements: 30,
+          page: 1,
+          size: 25,
+          totalPages: 2,
+        },
+      });
+
+    render(<AdminSyncStatusPage syncStatusApi={createSyncStatusApi(fetchReceiptStatus)} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('collector-receipt-pager-next-page')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('collector-receipt-pager-next-page'));
+
+    await waitFor(() => {
+      expect(fetchReceiptStatus).toHaveBeenLastCalledWith(1, 25);
+      expect(screen.getByTestId('collector-receipt-row-collector-page-2')).toBeInTheDocument();
     });
   });
 });

@@ -1,6 +1,6 @@
 import type { CollectorProfileFilter } from '../core/domain/collector-profile-filter.model';
 import type { SubmissionPage } from '../core/domain/submission-admin.model';
-import type { ResetPasswordResult, UserProfile } from '../core/domain/user.model';
+import type { ResetPasswordResult, UserPage, UserProfile } from '../core/domain/user.model';
 
 export interface CreateCollectorPayload {
   fullName: string;
@@ -9,9 +9,10 @@ export interface CreateCollectorPayload {
 }
 
 export interface IUserRepositoryPort {
-  fetchActiveCollectors(): Promise<UserProfile[]>;
+  fetchActiveCollectors(page?: number, size?: number): Promise<UserPage>;
   createDataCollector(payload: CreateCollectorPayload, adminId: string): Promise<UserProfile>;
   deactivateUser(userId: string): Promise<UserProfile>;
+  deleteUser(userId: string): Promise<void>;
   reactivateUser(userId: string): Promise<UserProfile>;
   resetPassword(userId: string): Promise<ResetPasswordResult>;
   getCollectorSubmissions(

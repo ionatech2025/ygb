@@ -1,12 +1,10 @@
 package com.ionatech.nac.ygb.domain.valueobjects;
 
-import java.util.List;
-
 public record AdminReceiptStatus(
         long totalSynced,
         long totalFlagged,
         long totalDuplicate,
-        List<CollectorReceiptStatus> byCollector
+        CollectorReceiptPage byCollector
 ) {
     public AdminReceiptStatus {
         if (totalSynced < 0 || totalFlagged < 0 || totalDuplicate < 0) {

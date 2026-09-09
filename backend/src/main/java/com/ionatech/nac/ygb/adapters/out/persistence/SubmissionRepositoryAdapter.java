@@ -6,7 +6,7 @@ import com.ionatech.nac.ygb.adapters.out.persistence.repository.SubmissionJpaRep
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.Submission;
 import com.ionatech.nac.ygb.domain.valueobjects.AdminSubmissionDetail;
-import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetrics;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetricsPage;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
 import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import com.ionatech.nac.ygb.domain.valueobjects.SubmissionPage;
@@ -93,8 +93,8 @@ public class SubmissionRepositoryAdapter implements SubmissionRepositoryPort {
     }
 
     @Override
-    public java.util.List<CollectorReceiptMetrics> findReceiptMetricsByCollector() {
-        return adminReceiptStatusQueryJpaRepository.findReceiptMetricsByCollector();
+    public CollectorReceiptMetricsPage findReceiptMetricsByCollector(PageRequest pageRequest) {
+        return adminReceiptStatusQueryJpaRepository.findReceiptMetricsByCollector(pageRequest);
     }
 
     @Override

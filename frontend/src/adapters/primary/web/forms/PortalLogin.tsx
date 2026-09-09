@@ -11,6 +11,7 @@ import { PAGE_META } from '../../../../core/seo/site-meta';
 import { FormField, formControlClassName, PasswordInput } from '../components/forms';
 import { PwaInstallBanner } from '../components/PwaInstallBanner';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { YgbLogo } from '../components/YgbLogo';
 
 const FEATURES: { icon: LucideIcon; title: string; detail: string }[] = [
   {
@@ -99,9 +100,7 @@ export function PortalLogin() {
 
           <div className="relative z-10 flex items-center justify-between gap-3 pt-6 lg:pt-0">
             <div className="flex min-w-0 items-center gap-3">
-              <span className={loginPortalClasses.brandMonogram} aria-hidden="true">
-                YGB
-              </span>
+              <YgbLogo heightClassName="h-14" className="shrink-0" />
               <div className="min-w-0">
                 <p className={loginPortalClasses.brandEyebrow}>Staff portal</p>
                 <p className={loginPortalClasses.brandSubtitle}>Youth Go Budget App</p>

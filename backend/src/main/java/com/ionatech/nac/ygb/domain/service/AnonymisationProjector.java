@@ -22,6 +22,8 @@ public final class AnonymisationProjector {
             "devicesubmissionid",
             "demographicdata",
             "demographic_data",
+            "improvementfeedback",
+            "improvement_feedback",
             "rationale",
             "recommendations",
             "recommendation",

@@ -3,6 +3,7 @@ import { useEffect, useId, useState, type FormEvent } from 'react';
 import { ApiError } from '../../../../core/api/api-client';
 import {
   DOWNLOAD_AGE_GROUP_OPTIONS,
+  DOWNLOAD_IMPROVEMENT_FEEDBACK_MAX_LENGTH,
   DOWNLOAD_PROFILE_CONSENT_LABEL,
   DOWNLOAD_PROFILE_PRIVACY_NOTICE,
   emptyDownloadProfileFormValues,
@@ -226,6 +227,25 @@ export function DownloadProfileDialog({
                 />
               </FormField>
             )}
+
+            <FormField
+              label="How can we improve downloads?"
+              htmlFor="download-profile-improvement-feedback"
+              hint="Optional"
+              hintPosition="below"
+              error={errors.improvementFeedback}
+            >
+              <textarea
+                id="download-profile-improvement-feedback"
+                data-testid="download-profile-improvement-feedback"
+                value={values.improvementFeedback}
+                onChange={(event) => update('improvementFeedback', event.target.value)}
+                rows={3}
+                maxLength={DOWNLOAD_IMPROVEMENT_FEEDBACK_MAX_LENGTH}
+                className={`${formControlClassName} min-h-[5.5rem] resize-y`}
+                placeholder="Formats, filters, documentation, or anything else that would help…"
+              />
+            </FormField>
 
             <div className="rounded-xl border border-border bg-surface-muted/40 p-3">
               <p id="download-profile-privacy" className="text-xs leading-relaxed text-text-muted">

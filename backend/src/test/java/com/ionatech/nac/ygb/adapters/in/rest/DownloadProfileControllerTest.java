@@ -79,6 +79,7 @@ class DownloadProfileControllerTest {
                                         "AGE_25_29",
                                         "ACADEMIA_RESEARCH",
                                         null,
+                                        null,
                                         true
                                 )
                         )))
@@ -96,6 +97,7 @@ class DownloadProfileControllerTest {
                 "AGE_25_29",
                 "ACADEMIA_RESEARCH",
                 null,
+                "Optional platform feedback",
                 true
         );
     }

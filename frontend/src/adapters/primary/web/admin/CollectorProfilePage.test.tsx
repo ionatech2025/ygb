@@ -35,6 +35,7 @@ function createUserAdmin(
     fetchActiveCollectors: vi.fn(),
     createDataCollector: vi.fn(),
     deactivateUser: vi.fn(),
+    deleteUser: vi.fn(),
     reactivateUser: vi.fn(),
     resetPassword: vi.fn(),
     getCollectorSubmissions,

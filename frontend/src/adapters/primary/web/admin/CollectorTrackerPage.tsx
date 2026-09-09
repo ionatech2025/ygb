@@ -16,10 +16,13 @@ import { useAuthStore } from '../../../../core/store/useAuthStore';
 import type { ICollectorTrackerApiPort } from '../../../../ports/collector-tracker-api.port';
 import type { IDashboardApiPort } from '../../../../ports/dashboard-api.port';
 import { AdminPageHeader } from './AdminPageHeader';
+import { AdminTablePager } from './AdminTablePager';
 import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import { CollectorBreakdownPanel } from './CollectorBreakdownPanel';
 import { CollectorLeaderboardTable } from './CollectorLeaderboardTable';
 import { DashboardFilterPanel } from './DashboardFilterPanel';
+
+const PAGE_SIZE = 25;
 
 export interface CollectorTrackerPageProps {
   trackerApi?: ICollectorTrackerApiPort;
@@ -50,6 +53,9 @@ export function CollectorTrackerPage({
   const filterKey = buildDashboardFilterQueryString(filter);
 
   const [rows, setRows] = useState<CollectorLeaderboardEntry[]>([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [sortKey, setSortKey] = useState<LeaderboardSortKey>('totalCount');
@@ -60,19 +66,27 @@ export function CollectorTrackerPage({
   const [breakdownError, setBreakdownError] = useState('');
 
   useEffect(() => {
+    setPage(0);
+  }, [filterKey, sortKey, sortDirection]);
+
+  useEffect(() => {
     let cancelled = false;
 
     const load = async () => {
       setLoading(true);
       setError('');
       try {
-        const entries = await trackerService.loadLeaderboard(filter, sortKey, sortDirection);
+        const result = await trackerService.loadLeaderboard(filter, sortKey, sortDirection, page, PAGE_SIZE);
         if (!cancelled) {
-          setRows(entries);
+          setRows(result.items);
+          setTotalPages(result.totalPages);
+          setTotalElements(result.totalElements);
         }
       } catch (err) {
         if (!cancelled) {
           setRows([]);
+          setTotalPages(0);
+          setTotalElements(0);
           setError(err instanceof ApiError || err instanceof Error ? err.message : 'Failed to load leaderboard.');
         }
       } finally {
@@ -87,7 +101,7 @@ export function CollectorTrackerPage({
     return () => {
       cancelled = true;
     };
-  }, [trackerService, filterKey, filter, sortKey, sortDirection]);
+  }, [trackerService, filterKey, filter, sortKey, sortDirection, page]);
 
   useEffect(() => {
     if (!expandedCollectorId) {
@@ -161,20 +175,31 @@ export function CollectorTrackerPage({
         </div>
       )}
 
-      <CollectorLeaderboardTable
-        rows={rows}
-        sortKey={sortKey}
-        sortDirection={sortDirection}
-        expandedCollectorId={expandedCollectorId}
-        loading={loading}
-        onSort={handleSort}
-        onToggleExpand={handleToggleExpand}
-      />
+      <div className="space-y-4">
+        <CollectorLeaderboardTable
+          rows={rows}
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          expandedCollectorId={expandedCollectorId}
+          loading={loading}
+          onSort={handleSort}
+          onToggleExpand={handleToggleExpand}
+        />
+        <AdminTablePager
+          page={page}
+          totalPages={totalPages}
+          totalElements={totalElements}
+          loading={loading}
+          onPageChange={setPage}
+          itemLabel="collector"
+          testIdPrefix="collector-leaderboard-pager"
+        />
+      </div>
 
       {expandedCollectorId && expandedCollector && (
         <CollectorBreakdownPanel
           collectorName={expandedCollector.fullName}
-          rank={rows.findIndex((r) => r.collectorId === expandedCollectorId) + 1}
+          rank={page * PAGE_SIZE + rows.findIndex((r) => r.collectorId === expandedCollectorId) + 1}
           totalSubmissions={expandedCollector.totalCount}
           breakdown={breakdown}
           loading={breakdownLoading}
