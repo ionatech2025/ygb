@@ -13,6 +13,7 @@ import com.ionatech.nac.ygb.application.services.DashboardFilterHierarchyValidat
 import com.ionatech.nac.ygb.application.services.ExportSubmissionsService;
 import com.ionatech.nac.ygb.domain.model.BypSubmission;
 import com.ionatech.nac.ygb.domain.model.IypSubmission;
+import com.ionatech.nac.ygb.domain.service.ToolDownloadCatalogue;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 import com.ionatech.nac.ygb.testsupport.TestLocationFixtures;
 import org.apache.poi.ss.usermodel.CellType;
@@ -51,6 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         DashboardAggregationRepositoryAdapter.class,
         DownloadUsageAnalyticsJpaRepository.class,
         DownloadUsageAnalyticsRepositoryAdapter.class,
+        ToolDownloadCatalogue.class,
         AdminDashboardReportAssembler.class,
         PdfVectorChartRenderer.class,
         CsvExportWriter.class,
