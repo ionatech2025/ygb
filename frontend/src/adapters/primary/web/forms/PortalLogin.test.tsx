@@ -70,6 +70,7 @@ describe('PortalLogin', () => {
     );
 
     expect(screen.getByRole('region', { name: /about the youth go budget app/i })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Youth Go Budget' })).toHaveAttribute('src', '/ygb_logo.png');
     expect(screen.getByText(/staff portal/i)).toBeInTheDocument();
     expect(screen.getByText(/Collecting insights to drive active community action/i)).toBeInTheDocument();
     expect(screen.getByText(/Works Anywhere/i)).toBeInTheDocument();

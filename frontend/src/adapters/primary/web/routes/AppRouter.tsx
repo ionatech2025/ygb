@@ -17,6 +17,7 @@ import { AdminDashboardHome } from '../admin/AdminDashboardHome';
 import { AdminCollectorTrackerPage } from '../admin/AdminCollectorTrackerPage';
 import { AdminSyncStatusPage } from '../admin/AdminSyncStatusPage';
 import { AdminDownloadUsagePage } from '../admin/AdminDownloadUsagePage';
+import { AdminDownloadHubPage } from '../admin/AdminDownloadHubPage';
 import { SubmissionDetailPage } from '../admin/SubmissionDetailPage';
 import { SubmissionListPage } from '../admin/SubmissionListPage';
 import { AdminLayout } from '../layouts/AdminLayout';
@@ -26,6 +27,7 @@ import { BudgetPrioritySectionLayout } from '../budget-priorities/BudgetPriority
 import { BudgetPrioritySuccessPage } from '../budget-priorities/BudgetPrioritySuccessPage';
 import { PublicBudgetPrioritiesPage } from '../public/PublicBudgetPrioritiesPage';
 import { PublicLgoBudgetAllocationPage } from '../public/PublicLgoBudgetAllocationPage';
+import { PublicDownloadHubPage } from '../public/PublicDownloadHubPage';
 import { PublicLayout } from '../layouts/PublicLayout';
 import { LgoBudgetAllocationPage } from '../lgo-budget-allocation/LgoBudgetAllocationPage';
 import { GuestRoute, ProtectedRoute, RootRedirect } from './ProtectedRoute';
@@ -91,6 +93,7 @@ export function AppRouter() {
 
         <Route element={<PublicLayout />}>
           <Route path="/dashboard" element={<PublicDashboardHome />} />
+          <Route path="/download" element={<PublicDownloadHubPage />} />
           <Route path="/dashboard/budget-priorities" element={<PublicBudgetPrioritiesPage />} />
           <Route path="/dashboard/lgo-budget-allocation" element={<PublicLgoBudgetAllocationPage />} />
           <Route path="/budget-priorities" element={<BudgetPrioritiesIndexPage />} />
@@ -103,6 +106,7 @@ export function AppRouter() {
         <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboardHome />} />
+            <Route path="/admin/downloads" element={<AdminDownloadHubPage />} />
             <Route path="/admin/download-usage" element={<AdminDownloadUsagePage />} />
             <Route path="/admin/submissions" element={<SubmissionListPage />} />
             <Route path="/admin/submissions/:id" element={<SubmissionDetailPage />} />

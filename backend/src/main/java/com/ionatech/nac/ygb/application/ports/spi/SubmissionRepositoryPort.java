@@ -23,7 +23,9 @@ public interface SubmissionRepositoryPort {
 
     long countByStatus(com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus status);
 
-    java.util.List<com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetrics> findReceiptMetricsByCollector();
+    com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetricsPage findReceiptMetricsByCollector(
+            PageRequest pageRequest
+    );
 
     SubmissionPage findSummariesByFilter(DashboardFilter filter, PageRequest pageRequest);
 

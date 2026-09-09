@@ -3,22 +3,16 @@ package com.ionatech.nac.ygb.adapters.in.rest;
 import com.ionatech.nac.ygb.adapters.in.rest.dto.*;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.LgoBudgetAllocationDashboardFilterRequestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.LgoBudgetAllocationDashboardRestMapper;
-import com.ionatech.nac.ygb.application.ports.api.AuthorizePublicDownloadUseCase;
-import com.ionatech.nac.ygb.application.ports.api.ExportLgoBudgetAllocationDatasetUseCase;
 import com.ionatech.nac.ygb.application.ports.api.GetLgoBudgetAllocationChartDataQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetLgoBudgetAllocationDashboardSummaryQuery;
 import com.ionatech.nac.ygb.application.ports.api.GetLgoBudgetAllocationFilterOptionsQuery;
-import com.ionatech.nac.ygb.adapters.out.export.LgoBudgetAllocationExportFilenameBuilder;
 import com.ionatech.nac.ygb.domain.exceptions.InvalidDashboardFilterException;
 import com.ionatech.nac.ygb.domain.service.AnonymisationProjector;
 import com.ionatech.nac.ygb.domain.valueobjects.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -32,8 +26,6 @@ public class LgoBudgetAllocationDashboardController {
     private final GetLgoBudgetAllocationFilterOptionsQuery getFilterOptionsQuery;
     private final GetLgoBudgetAllocationDashboardSummaryQuery getSummaryQuery;
     private final GetLgoBudgetAllocationChartDataQuery getChartDataQuery;
-    private final ExportLgoBudgetAllocationDatasetUseCase exportLgoBudgetAllocationDatasetUseCase;
-    private final AuthorizePublicDownloadUseCase authorizePublicDownloadUseCase;
     private final LgoBudgetAllocationDashboardFilterRequestMapper filterRequestMapper;
     private final LgoBudgetAllocationDashboardRestMapper restMapper;
     private final AnonymisationProjector anonymisationProjector;
@@ -42,8 +34,6 @@ public class LgoBudgetAllocationDashboardController {
             GetLgoBudgetAllocationFilterOptionsQuery getLgoBudgetAllocationFilterOptionsQuery,
             GetLgoBudgetAllocationDashboardSummaryQuery getLgoBudgetAllocationDashboardSummaryQuery,
             GetLgoBudgetAllocationChartDataQuery getLgoBudgetAllocationChartDataQuery,
-            ExportLgoBudgetAllocationDatasetUseCase exportLgoBudgetAllocationDatasetUseCase,
-            AuthorizePublicDownloadUseCase authorizePublicDownloadUseCase,
             LgoBudgetAllocationDashboardFilterRequestMapper filterRequestMapper,
             LgoBudgetAllocationDashboardRestMapper restMapper,
             AnonymisationProjector anonymisationProjector
@@ -51,8 +41,6 @@ public class LgoBudgetAllocationDashboardController {
         this.getFilterOptionsQuery = getLgoBudgetAllocationFilterOptionsQuery;
         this.getSummaryQuery = getLgoBudgetAllocationDashboardSummaryQuery;
         this.getChartDataQuery = getLgoBudgetAllocationChartDataQuery;
-        this.exportLgoBudgetAllocationDatasetUseCase = exportLgoBudgetAllocationDatasetUseCase;
-        this.authorizePublicDownloadUseCase = authorizePublicDownloadUseCase;
         this.filterRequestMapper = filterRequestMapper;
         this.restMapper = restMapper;
         this.anonymisationProjector = anonymisationProjector;
@@ -114,36 +102,6 @@ public class LgoBudgetAllocationDashboardController {
         assertNoPii(LgoBudgetAllocationChartSeriesResponseDto.class);
         assertNoPii(BudgetPriorityChartDataPointDto.class);
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/download/csv")
-    public ResponseEntity<StreamingResponseBody> downloadCsv(
-            @RequestHeader(value = DownloadSessionHeaders.HEADER, required = false) String downloadSession,
-            @RequestParam(value = "districtId", required = false) UUID districtId,
-            @RequestParam(value = "subcountyId", required = false) UUID subcountyId,
-            @RequestParam(value = "parishId", required = false) UUID parishId,
-            @RequestParam(value = "dateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
-            @RequestParam(value = "dateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
-            @RequestParam(value = "gender", required = false) String gender,
-            @RequestParam(value = "ageGroup", required = false) String ageGroup,
-            @RequestParam(value = "financialYearPeriod", required = false) String financialYearPeriod
-    ) {
-        authorizePublicDownloadUseCase.authorizeAndRecord(
-                downloadSession,
-                PublicDownloadDataset.LGO_BUDGET_ALLOCATION,
-                ExportFormat.CSV,
-                null
-        );
-        LgoBudgetAllocationDashboardFilter filter = filterRequestMapper.toFilter(
-                districtId, subcountyId, parishId, dateFrom, dateTo, gender, ageGroup, financialYearPeriod
-        );
-        anonymisationProjector.assertLgoBudgetAllocationExportHeadersSafe();
-        StreamingResponseBody body = output -> exportLgoBudgetAllocationDatasetUseCase.export(filter, output);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
-                        + LgoBudgetAllocationExportFilenameBuilder.build() + "\"")
-                .contentType(MediaType.parseMediaType("text/csv"))
-                .body(body);
     }
 
     @ExceptionHandler(InvalidDashboardFilterException.class)

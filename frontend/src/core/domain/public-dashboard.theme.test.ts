@@ -8,10 +8,12 @@ import {
 } from './public-dashboard.theme';
 
 describe('public-dashboard.theme', () => {
-  it('defines NAC-aligned chart palette with brand, blue, and orange', () => {
+  it('defines orange-led chart palette with blue and accent green', () => {
+    expect(PUBLIC_CHART_COLORS.brand).toBe('#FF7A00');
     expect(PUBLIC_CHART_PALETTE).toContain(PUBLIC_CHART_COLORS.brand);
     expect(PUBLIC_CHART_PALETTE).toContain(PUBLIC_CHART_COLORS.nacBlue);
-    expect(PUBLIC_CHART_PALETTE).toContain(PUBLIC_CHART_COLORS.nacOrange);
+    expect(PUBLIC_CHART_PALETTE).toContain(PUBLIC_CHART_COLORS.accentGreen);
+    expect(PUBLIC_CHART_COLORS.nacOrange).toBe('#C65A00');
     expect(PUBLIC_CHART_PALETTE.length).toBeGreaterThanOrEqual(4);
   });
 

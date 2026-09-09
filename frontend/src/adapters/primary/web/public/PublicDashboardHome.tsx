@@ -5,7 +5,7 @@ import { PAGE_META } from '../../../../core/seo/site-meta';
 import { publicDashboardClasses } from '../../../../core/domain/public-dashboard.theme';
 import { HttpPublicDashboardAdapter } from '../../../secondary/api/public-dashboard-api.adapter';
 import { PublicDashboardFilterPanel } from './PublicDashboardFilterPanel';
-import { PublicDashboardExportToolbar } from './PublicDashboardExportToolbar';
+import { PublicDownloadHubCta } from './PublicDownloadHubCta';
 import { PublicDashboardSummaryCards } from './PublicDashboardSummaryCards';
 import { PublicDashboardCharts } from './PublicDashboardCharts';
 import { PublicDownloadUsageSection } from './PublicDownloadUsageSection';
@@ -53,7 +53,11 @@ export function PublicDashboardHome() {
             className="w-full shrink-0 xl:max-w-sm"
             data-testid="public-dashboard-export-section"
           >
-            <PublicDashboardExportToolbar layout="inline" />
+            <PublicDownloadHubCta
+              layout="inline"
+              title="Download questionnaire data"
+              description="PDM chart aggregates stay here. Full anonymised field-data files for BYP, IYP, PC, LGO, and budget tools live on the Download hub."
+            />
           </div>
         </div>
       </header>

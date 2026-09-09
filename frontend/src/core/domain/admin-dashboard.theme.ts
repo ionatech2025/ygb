@@ -88,8 +88,6 @@ export const loginPortalClasses = {
   brandAccent: 'pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-nac-blue via-brand to-nac-orange',
   brandEyebrow: 'text-[11px] font-bold uppercase tracking-widest text-nac-orange',
   brandSubtitle: 'text-[10px] font-semibold uppercase tracking-widest text-text-muted',
-  brandMonogram:
-    'flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-brand via-nac-orange to-nac-blue text-base font-black tracking-wider text-white shadow-lg shadow-brand/25 ring-1 ring-white/20 transition-transform duration-300 hover:scale-105',
   officialBadge:
     'inline-flex items-center gap-1.5 rounded-full border border-brand/25 bg-brand-light/60 px-3.5 py-1 text-[11px] font-bold uppercase tracking-widest text-brand backdrop-blur-md dark:bg-brand/15 dark:border-brand/30',
   headline: 'text-2xl font-black leading-tight tracking-tight text-text sm:text-3xl lg:text-4xl',

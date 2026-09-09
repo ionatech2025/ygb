@@ -1,8 +1,10 @@
 package com.ionatech.nac.ygb.adapters.in.rest.mapper;
 
 import com.ionatech.nac.ygb.adapters.in.rest.dto.AdminReceiptStatusResponseDto;
+import com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorReceiptPageResponseDto;
 import com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorReceiptStatusDto;
 import com.ionatech.nac.ygb.domain.valueobjects.AdminReceiptStatus;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptPage;
 import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptStatus;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +16,17 @@ public class AdminReceiptStatusRestMapper {
                 status.totalSynced(),
                 status.totalFlagged(),
                 status.totalDuplicate(),
-                status.byCollector().stream().map(this::toCollectorDto).toList()
+                toPageResponse(status.byCollector())
+        );
+    }
+
+    private CollectorReceiptPageResponseDto toPageResponse(CollectorReceiptPage page) {
+        return new CollectorReceiptPageResponseDto(
+                page.items().stream().map(this::toCollectorDto).toList(),
+                page.totalElements(),
+                page.page(),
+                page.size(),
+                page.totalPages()
         );
     }
 

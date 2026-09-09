@@ -8,6 +8,7 @@ public record RegisterDownloadProfileCommand(
         String ageGroup,
         String fieldOfOperation,
         String fieldOfOperationSpecify,
+        String improvementFeedback,
         boolean consentGiven
 ) {
 }

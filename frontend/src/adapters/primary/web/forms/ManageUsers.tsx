@@ -6,6 +6,7 @@ import {
   Copy,
   KeyRound,
   PlusCircle,
+  Trash2,
   UserCircle,
   UserMinus,
   UserPlus,
@@ -17,6 +18,7 @@ import { isValidUgandaPhoneLocal, normalizeUgandaPhoneLocal } from '../../../../
 import { UGANDA_PHONE_ERROR } from '../../../../core/form-validation';
 import { FormField, formControlClassName, PasswordInput } from '../components/forms';
 import { AdminPageHeader } from '../admin/AdminPageHeader';
+import { AdminTablePager } from '../admin/AdminTablePager';
 import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import type { UserProfile } from '../../../../core/domain/user.model';
 import type { IUserRepositoryPort } from '../../../../ports/user-repository.port';
@@ -122,6 +124,7 @@ interface CollectorRowActionsProps {
   onDeactivate: (collector: UserProfile) => void;
   onReactivate: (collector: UserProfile) => void;
   onResetPassword: (collector: UserProfile) => void;
+  onDelete: (collector: UserProfile) => void;
 }
 
 function CollectorRowActions({
@@ -129,6 +132,7 @@ function CollectorRowActions({
   onDeactivate,
   onReactivate,
   onResetPassword,
+  onDelete,
 }: CollectorRowActionsProps) {
   const isActive = collector.isActive !== false;
 
@@ -175,6 +179,15 @@ function CollectorRowActions({
           Reactivate
         </button>
       )}
+      <button
+        type="button"
+        onClick={() => onDelete(collector)}
+        className="inline-flex items-center gap-1 rounded-lg border border-rose-300 px-2.5 py-1 text-xs font-semibold text-rose-800 hover:bg-rose-50"
+        data-testid={`delete-${collector.id}`}
+      >
+        <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+        Delete
+      </button>
     </div>
   );
 }
@@ -188,6 +201,9 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
   );
 
   const [activeUsers, setActiveUsers] = useState<UserProfile[]>([]);
+  const [activeTotalElements, setActiveTotalElements] = useState(0);
+  const [activeTotalPages, setActiveTotalPages] = useState(0);
+  const [activePage, setActivePage] = useState(0);
   const [deactivatedUsers, setDeactivatedUsers] = useState<UserProfile[]>([]);
   const [fullName, setFullName] = useState('');
   const [phoneInput, setPhoneInput] = useState('');
@@ -201,19 +217,25 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
   const [saving, setSaving] = useState(false);
   const [actionBusy, setActionBusy] = useState(false);
   const [pendingDeactivate, setPendingDeactivate] = useState<UserProfile | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<UserProfile | null>(null);
   const [pendingReset, setPendingReset] = useState<UserProfile | null>(null);
   const [sharePasswordResult, setSharePasswordResult] = useState<SharePasswordResult | null>(null);
   const [copiedSharePassword, setCopiedSharePassword] = useState(false);
 
-  const loadCollectors = async () => {
+  const loadCollectors = async (page = activePage) => {
     setLoading(true);
     setLoadError('');
     try {
-      const collectors = await userRepo.fetchActiveCollectors();
-      setActiveUsers(collectors.map((user) => ({ ...user, isActive: true })));
+      const result = await userRepo.fetchActiveCollectors(page, 25);
+      setActiveUsers(result.items.map((user) => ({ ...user, isActive: true })));
+      setActiveTotalElements(result.totalElements);
+      setActiveTotalPages(result.totalPages);
+      setActivePage(result.page);
     } catch (err) {
       setLoadError(err instanceof Error ? err.message : 'Failed to load collector directory.');
       setActiveUsers([]);
+      setActiveTotalElements(0);
+      setActiveTotalPages(0);
     } finally {
       setLoading(false);
     }
@@ -221,8 +243,8 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
 
   useEffect(() => {
     if (!isAuthenticated) return;
-    void loadCollectors();
-  }, [userRepo, isAuthenticated]);
+    void loadCollectors(activePage);
+  }, [userRepo, isAuthenticated, activePage]);
 
   useEffect(() => {
     if (!successMessage) return;
@@ -274,7 +296,8 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
       setFullName('');
       setPhoneInput('');
       setPassword('');
-      await loadCollectors();
+      setActivePage(0);
+      await loadCollectors(0);
     } catch (err) {
       setServerError(err instanceof Error ? err.message : 'Unable to create account.');
     } finally {
@@ -289,11 +312,38 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
     try {
       const updated = await userRepo.deactivateUser(pendingDeactivate.id);
       setActiveUsers((current) => current.filter((user) => user.id !== updated.id));
+      setActiveTotalElements((current) => Math.max(0, current - 1));
       setDeactivatedUsers((current) => [{ ...updated, isActive: false }, ...current.filter((u) => u.id !== updated.id)]);
       setSuccessMessage(`${updated.fullName} has been deactivated.`);
       setPendingDeactivate(null);
+      if (activeUsers.length <= 1 && activePage > 0) {
+        setActivePage((current) => Math.max(0, current - 1));
+      }
     } catch (err) {
       setActionError(err instanceof Error ? err.message : 'Unable to deactivate account.');
+    } finally {
+      setActionBusy(false);
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (!pendingDelete) return;
+    setActionBusy(true);
+    setActionError('');
+    try {
+      const deletedId = pendingDelete.id;
+      const deletedName = pendingDelete.fullName;
+      await userRepo.deleteUser(deletedId);
+      setActiveUsers((current) => current.filter((user) => user.id !== deletedId));
+      setDeactivatedUsers((current) => current.filter((user) => user.id !== deletedId));
+      setActiveTotalElements((current) => Math.max(0, current - 1));
+      setSuccessMessage(`${deletedName} has been permanently deleted. Their submissions were kept.`);
+      setPendingDelete(null);
+      if (activeUsers.length <= 1 && activePage > 0) {
+        setActivePage((current) => Math.max(0, current - 1));
+      }
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Unable to delete account.');
     } finally {
       setActionBusy(false);
     }
@@ -366,6 +416,7 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
                 onDeactivate={setPendingDeactivate}
                 onReactivate={confirmReactivate}
                 onResetPassword={setPendingReset}
+                onDelete={setPendingDelete}
               />
             </div>
           </article>
@@ -396,6 +447,7 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
                     onDeactivate={setPendingDeactivate}
                     onReactivate={confirmReactivate}
                     onResetPassword={setPendingReset}
+                    onDelete={setPendingDelete}
                   />
                 </td>
               </tr>
@@ -426,6 +478,17 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
         busy={actionBusy}
         onConfirm={() => void confirmDeactivate()}
         onCancel={() => setPendingDeactivate(null)}
+      />
+
+      <ConfirmActionDialog
+        open={pendingDelete !== null}
+        title="Permanently delete collector?"
+        message={`${pendingDelete?.fullName ?? 'This collector'} will be removed forever. Their submissions stay in the system and will show as “Deleted collector”.`}
+        confirmLabel="Delete permanently"
+        destructive
+        busy={actionBusy}
+        onConfirm={() => void confirmDelete()}
+        onCancel={() => setPendingDelete(null)}
       />
 
       <ConfirmActionDialog
@@ -541,7 +604,7 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
             <div>
               <h3 className={adminDashboardClasses.contentCardTitle}>Active Data Collectors</h3>
               <p className={adminDashboardClasses.contentCardSubtitle}>
-                {activeUsers.length} active collector{activeUsers.length === 1 ? '' : 's'}
+                {activeTotalElements} active collector{activeTotalElements === 1 ? '' : 's'}
               </p>
             </div>
           </header>
@@ -560,7 +623,18 @@ export default function ManageUsers({ userAdmin: userAdminProp }: ManageUsersPro
               No active data collectors found. Register one using the form.
             </p>
           ) : (
-            renderCollectorTable(activeUsers, 'active')
+            <div className="space-y-4">
+              {renderCollectorTable(activeUsers, 'active')}
+              <AdminTablePager
+                page={activePage}
+                totalPages={activeTotalPages}
+                totalElements={activeTotalElements}
+                loading={loading}
+                onPageChange={setActivePage}
+                itemLabel="collector"
+                testIdPrefix="manage-users-pager"
+              />
+            </div>
           )}
         </section>
       </div>

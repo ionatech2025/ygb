@@ -63,15 +63,20 @@ class CollectorTrackerRepositoryAdapterTest {
 
     @Test
     void shouldReturnLeaderboardSortedByCountDescendingThenNameAscending() {
-        List<CollectorLeaderboardEntry> leaderboard = collectorTrackerRepository.findLeaderboard(DashboardFilter.empty());
+        CollectorLeaderboardPage leaderboard = collectorTrackerRepository.findLeaderboard(
+                DashboardFilter.empty(),
+                PageRequest.of(0, 25),
+                LeaderboardSort.defaultSort()
+        );
 
-        assertThat(leaderboard).hasSize(2);
-        assertThat(leaderboard.get(0).collectorId()).isEqualTo(primaryCollectorId);
-        assertThat(leaderboard.get(0).fullName()).isEqualTo("Default Collector");
-        assertThat(leaderboard.get(0).totalCount()).isEqualTo(3L);
-        assertThat(leaderboard.get(1).collectorId()).isEqualTo(secondaryCollectorId);
-        assertThat(leaderboard.get(1).fullName()).isEqualTo("Second Collector");
-        assertThat(leaderboard.get(1).totalCount()).isEqualTo(1L);
+        assertThat(leaderboard.items()).hasSize(2);
+        assertThat(leaderboard.totalElements()).isEqualTo(2L);
+        assertThat(leaderboard.items().get(0).collectorId()).isEqualTo(primaryCollectorId);
+        assertThat(leaderboard.items().get(0).fullName()).isEqualTo("Default Collector");
+        assertThat(leaderboard.items().get(0).totalCount()).isEqualTo(3L);
+        assertThat(leaderboard.items().get(1).collectorId()).isEqualTo(secondaryCollectorId);
+        assertThat(leaderboard.items().get(1).fullName()).isEqualTo("Second Collector");
+        assertThat(leaderboard.items().get(1).totalCount()).isEqualTo(1L);
     }
 
     @Test
@@ -89,18 +94,40 @@ class CollectorTrackerRepositoryAdapterTest {
                 null, null, null, null, null, null, null, null, null, "JAN_JUN_2026"
         );
 
-        List<CollectorLeaderboardEntry> filtered = collectorTrackerRepository.findLeaderboard(janJunFilter);
-        CollectorLeaderboardEntry primaryEntry = filtered.stream()
+        CollectorLeaderboardPage filtered = collectorTrackerRepository.findLeaderboard(
+                janJunFilter,
+                PageRequest.of(0, 25),
+                LeaderboardSort.defaultSort()
+        );
+        CollectorLeaderboardEntry primaryEntry = filtered.items().stream()
                 .filter(entry -> entry.collectorId().equals(primaryCollectorId))
                 .findFirst()
                 .orElseThrow();
 
         assertThat(primaryEntry.totalCount()).isEqualTo(3L);
-        assertThat(collectorTrackerRepository.findLeaderboard(DashboardFilter.empty()).stream()
+        assertThat(collectorTrackerRepository.findLeaderboard(
+                        DashboardFilter.empty(),
+                        PageRequest.of(0, 25),
+                        LeaderboardSort.defaultSort()
+                ).items().stream()
                 .filter(entry -> entry.collectorId().equals(primaryCollectorId))
                 .findFirst()
                 .orElseThrow()
                 .totalCount()).isEqualTo(4L);
+    }
+
+    @Test
+    void shouldPageLeaderboardResults() {
+        CollectorLeaderboardPage page = collectorTrackerRepository.findLeaderboard(
+                DashboardFilter.empty(),
+                PageRequest.of(0, 1),
+                LeaderboardSort.defaultSort()
+        );
+
+        assertThat(page.items()).hasSize(1);
+        assertThat(page.totalElements()).isEqualTo(2L);
+        assertThat(page.totalPages()).isEqualTo(2);
+        assertThat(page.items().get(0).collectorId()).isEqualTo(primaryCollectorId);
     }
 
     private void seedSecondaryCollector() {

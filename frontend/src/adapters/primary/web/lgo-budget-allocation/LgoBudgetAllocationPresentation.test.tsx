@@ -35,16 +35,6 @@ vi.mock('../public/LgoBudgetAllocationDashboardFilterPanel', () => ({
   ),
 }));
 
-vi.mock('../public/LgoBudgetAllocationExportToolbar', () => ({
-  LgoBudgetAllocationExportToolbar: () => (
-    <div data-testid="lgo-budget-allocation-export-toolbar">
-      <button type="button" className="min-h-11 min-w-36">
-        Download CSV
-      </button>
-    </div>
-  ),
-}));
-
 vi.mock('../public/LgoBudgetAllocationSummaryCards', () => ({
   LgoBudgetAllocationSummaryCards: () => (
     <section aria-label="LG budget allocation summary statistics" data-testid="lgo-budget-allocation-summary-cards">
@@ -118,6 +108,10 @@ describe('LG Budget Allocation presentation (US-LGOB-01 / US-LGOB-02)', () => {
     expect(screen.getByRole('heading', { level: 1, name: /LG Budget Allocation Insights/i })).toBeInTheDocument();
     expect(screen.getByTestId('lgo-dashboard-filters-section')).toBeInTheDocument();
     expect(screen.getByTestId('lgo-dashboard-export-section')).toBeInTheDocument();
+    expect(screen.getByTestId('public-download-hub-cta-link')).toHaveAttribute(
+      'href',
+      '/download?dataset=LGO_BUDGET_ALLOCATION'
+    );
     expect(screen.getByTestId('lgo-dashboard-summary-section')).toBeInTheDocument();
   });
 

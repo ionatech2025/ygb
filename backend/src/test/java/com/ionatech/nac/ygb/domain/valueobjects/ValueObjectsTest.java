@@ -194,13 +194,12 @@ class ValueObjectsTest {
     }
 
     @Test
-    void submissionMetadataShouldValidateFields() {
+    void submissionMetadataShouldAllowNullCollectorForDeletedAccounts() {
         UUID validId = UUID.randomUUID();
         LocalDateTime validTime = LocalDateTime.now();
 
-        assertThatThrownBy(() -> new SubmissionMetadata(null, validId, validTime))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Collector ID cannot be null");
+        SubmissionMetadata orphaned = new SubmissionMetadata(null, validId, validTime);
+        assertThat(orphaned.collectorId()).isNull();
 
         assertThatThrownBy(() -> new SubmissionMetadata(validId, null, validTime))
                 .isInstanceOf(IllegalArgumentException.class)

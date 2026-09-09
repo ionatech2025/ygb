@@ -25,10 +25,6 @@ vi.mock('../public/BudgetPriorityCharts', () => ({
   BudgetPriorityCharts: () => <div data-testid="budget-priority-charts-section" />,
 }));
 
-vi.mock('../public/BudgetPriorityExportToolbar', () => ({
-  BudgetPriorityExportToolbar: () => <div data-testid="budget-priority-export-toolbar" />,
-}));
-
 vi.mock('../public/LgoBudgetAllocationDashboardFilterPanel', () => ({
   LgoBudgetAllocationDashboardFilterPanel: () => <div data-testid="lgo-budget-allocation-dashboard-filter-panel" />,
 }));
@@ -41,10 +37,6 @@ vi.mock('../public/LgoBudgetAllocationCharts', () => ({
   LgoBudgetAllocationCharts: () => <div data-testid="lgo-budget-allocation-charts-section" />,
 }));
 
-vi.mock('../public/LgoBudgetAllocationExportToolbar', () => ({
-  LgoBudgetAllocationExportToolbar: () => <div data-testid="lgo-budget-allocation-export-toolbar" />,
-}));
-
 function renderPublicLayout(
   initialPath = '/dashboard',
   visitBeaconApi?: IPublicVisitBeaconApiPort
@@ -54,6 +46,7 @@ function renderPublicLayout(
       <Routes>
         <Route element={<PublicLayout visitBeaconApi={visitBeaconApi} />}>
           <Route path="/dashboard" element={<div>Dashboard page</div>} />
+          <Route path="/download" element={<div>Download hub page</div>} />
           <Route path="/dashboard/budget-priorities" element={<PublicBudgetPrioritiesPage />} />
           <Route path="/dashboard/lgo-budget-allocation" element={<PublicLgoBudgetAllocationPage />} />
           <Route path="/budget-priorities" element={<BudgetPrioritiesIndexPage />} />
@@ -87,12 +80,15 @@ describe('PublicLayout', () => {
     expect(screen.getByTestId('public-visit-privacy-notice')).toHaveTextContent(/anonymous page views/i);
   });
 
-  it('renders Dashboard, Budget Priorities, LG Budget, and Resources links without auth context', () => {
+  it('renders Dashboard, Download, Budget Priorities, LG Budget, and Resources links without auth context', () => {
     renderPublicLayout('/dashboard', { recordVisit: vi.fn().mockResolvedValue(undefined) });
 
+    expect(screen.getByRole('img', { name: 'Youth Go Budget' })).toHaveAttribute('src', '/ygb_logo.png');
+    expect(screen.queryByText('YGB Public')).not.toBeInTheDocument();
     expect(screen.getByTestId('public-seo-json-ld')).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Public sections' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
+    expect(screen.getByRole('link', { name: 'Download' })).toHaveAttribute('href', '/download');
     expect(screen.getByRole('link', { name: 'Budget Priorities' })).toHaveAttribute(
       'href',
       '/budget-priorities'

@@ -6,11 +6,11 @@ import { describe, expect, it } from 'vitest';
 const publicDir = join(dirname(fileURLToPath(import.meta.url)), '../public');
 
 describe('PWA icon assets', () => {
-  it('favicon.svg shows the YGB monogram on brand green', () => {
+  it('favicon.svg shows the YGB monogram on brand orange', () => {
     const svg = readFileSync(join(publicDir, 'favicon.svg'), 'utf8');
 
     expect(svg).toContain('aria-label="YGB"');
-    expect(svg).toContain('#359661');
+    expect(svg).toContain('#FF7A00');
     expect(svg).toContain('>YGB</text>');
     expect(svg).not.toContain('M8 22V10');
     expect(svg).not.toMatch(/<circle[^>]*cx="22\.5"/);

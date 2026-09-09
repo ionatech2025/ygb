@@ -65,11 +65,35 @@ class RegisterDownloadProfileServiceTest {
         verify(profileRepository).save(profileCaptor.capture());
         assertThat(profileCaptor.getValue().getEmail().getValue()).isEqualTo("analyst@example.com");
         assertThat(profileCaptor.getValue().getGender()).isEqualTo(Gender.FEMALE);
+        assertThat(profileCaptor.getValue().getImprovementFeedback()).isNull();
 
         ArgumentCaptor<DownloadSession> sessionCaptor = ArgumentCaptor.forClass(DownloadSession.class);
         verify(sessionRepository).save(sessionCaptor.capture());
         assertThat(sessionCaptor.getValue().getToken()).isEqualTo(view.token());
         assertThat(sessionCaptor.getValue().getProfileId()).isEqualTo(view.profileId());
+    }
+
+    @Test
+    void shouldPersistOptionalImprovementFeedbackOnProfile() {
+        when(profileRepository.save(any(DownloadProfile.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(sessionRepository.save(any(DownloadSession.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        service.register(new RegisterDownloadProfileCommand(
+                "analyst@example.com",
+                "Ada Lovelace",
+                "UG",
+                Gender.FEMALE.name(),
+                AgeGroup.AGE_25_29.name(),
+                FieldOfOperation.ACADEMIA_RESEARCH.name(),
+                null,
+                "Show parish on the download hub.",
+                true
+        ));
+
+        ArgumentCaptor<DownloadProfile> profileCaptor = ArgumentCaptor.forClass(DownloadProfile.class);
+        verify(profileRepository).save(profileCaptor.capture());
+        assertThat(profileCaptor.getValue().getImprovementFeedback())
+                .isEqualTo("Show parish on the download hub.");
     }
 
     @Test
@@ -92,6 +116,7 @@ class RegisterDownloadProfileServiceTest {
                 "AGE_25_29",
                 "ACADEMIA_RESEARCH",
                 null,
+                null,
                 true
         )))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -110,6 +135,7 @@ class RegisterDownloadProfileServiceTest {
                 "AGE_30_35",
                 "OTHER",
                 "  ",
+                null,
                 true
         )))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -130,6 +156,7 @@ class RegisterDownloadProfileServiceTest {
                 Gender.FEMALE.name(),
                 AgeGroup.AGE_25_29.name(),
                 FieldOfOperation.ACADEMIA_RESEARCH.name(),
+                null,
                 null,
                 consent
         );

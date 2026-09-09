@@ -1,8 +1,9 @@
 import type { EChartsOption } from 'echarts';
 import type { DashboardChartDrillDownEvent, GenderPieItem } from '../../../../core/domain/dashboard-charts.model';
+import { PUBLIC_CHART_PALETTE } from '../../../../core/domain/public-dashboard.theme';
 import { EChart } from '../components/EChart';
 
-const PIE_COLORS = ['#359966', '#19376d', '#f97316', '#64748b'];
+const PIE_COLORS = [...PUBLIC_CHART_PALETTE].slice(0, 4);
 
 export interface GenderSplitChartProps {
   data: GenderPieItem[];

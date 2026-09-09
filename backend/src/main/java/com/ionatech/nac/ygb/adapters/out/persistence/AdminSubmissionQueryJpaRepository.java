@@ -32,7 +32,7 @@ class AdminSubmissionQueryJpaRepository {
                        s.status, s.financial_year_period
                 FROM submissions s
                 JOIN locations d ON d.id = s.district_id
-                JOIN users u ON u.id = s.collector_id
+                LEFT JOIN users u ON u.id = s.collector_id
                 """ + whereClause + """
                  ORDER BY s.form_completed_at DESC, s.id DESC
                  LIMIT :pageSize OFFSET :pageOffset
@@ -61,7 +61,7 @@ class AdminSubmissionQueryJpaRepository {
                 (String) row[2],
                 toUuid(row[3]),
                 (String) row[4],
-                toUuid(row[5]),
+                toUuidOrNull(row[5]),
                 (String) row[6],
                 toLocalDateTime(row[7]),
                 toLocalDateTime(row[8]),
@@ -86,6 +86,13 @@ class AdminSubmissionQueryJpaRepository {
             return uuid;
         }
         return UUID.fromString(value.toString());
+    }
+
+    private static UUID toUuidOrNull(Object value) {
+        if (value == null) {
+            return null;
+        }
+        return toUuid(value);
     }
 
     private static LocalDateTime toLocalDateTime(Object value) {

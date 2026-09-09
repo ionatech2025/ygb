@@ -1,8 +1,15 @@
 package com.ionatech.nac.ygb.domain.valueobjects;
 
-/** Public open-data datasets that can be downloaded as CSV/Excel. */
+/**
+ * Datasets recorded on download-usage events.
+ * Hub downloads use the six tool values; {@link #PDM} remains for historical analytics only.
+ */
 public enum PublicDownloadDataset {
     PDM,
+    BYP,
+    IYP,
+    PC,
+    LGO,
     BUDGET_PRIORITIES,
     LGO_BUDGET_ALLOCATION
 }

@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
   DOWNLOAD_AGE_GROUP_OPTIONS,
+  DOWNLOAD_IMPROVEMENT_FEEDBACK_MAX_LENGTH,
   FIELD_OF_OPERATION_OPTIONS,
   isDownloadProfileFormSubmittable,
   isValidDownloadEmail,
+  toRegisterDownloadProfileRequest,
   validateDownloadProfileForm,
   type DownloadProfileFormValues,
 } from './download-profile.model';
@@ -17,6 +19,7 @@ function validForm(overrides: Partial<DownloadProfileFormValues> = {}): Download
     ageGroup: 'AGE_25_29',
     fieldOfOperation: 'ACADEMIA_RESEARCH',
     fieldOfOperationSpecify: '',
+    improvementFeedback: '',
     consentGiven: true,
     ...overrides,
   };
@@ -81,5 +84,28 @@ describe('download-profile.model', () => {
       ).fieldOfOperationSpecify
     ).toMatch(/specify/i);
     expect(validateDownloadProfileForm(validForm())).toEqual({});
+  });
+
+  it('treats improvement feedback as optional and caps length at 2000', () => {
+    expect(isDownloadProfileFormSubmittable(validForm({ improvementFeedback: '' }))).toBe(true);
+    expect(
+      isDownloadProfileFormSubmittable(
+        validForm({ improvementFeedback: 'Please add parish-level Excel templates.' })
+      )
+    ).toBe(true);
+    expect(
+      validateDownloadProfileForm(
+        validForm({
+          improvementFeedback: 'x'.repeat(DOWNLOAD_IMPROVEMENT_FEEDBACK_MAX_LENGTH + 1),
+        })
+      ).improvementFeedback
+    ).toMatch(/2000/i);
+
+    expect(toRegisterDownloadProfileRequest(validForm()).improvementFeedback).toBeNull();
+    expect(
+      toRegisterDownloadProfileRequest(
+        validForm({ improvementFeedback: '  More parish filters  ' })
+      ).improvementFeedback
+    ).toBe('More parish filters');
   });
 });

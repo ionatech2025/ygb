@@ -1,7 +1,7 @@
 package com.ionatech.nac.ygb.adapters.in.rest;
 
 import com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorBreakdownResponseDto;
-import com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorLeaderboardEntryDto;
+import com.ionatech.nac.ygb.adapters.in.rest.dto.CollectorLeaderboardPageResponseDto;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.CollectorTrackerRestMapper;
 import com.ionatech.nac.ygb.adapters.in.rest.mapper.DashboardFilterRequestMapper;
 import com.ionatech.nac.ygb.application.ports.api.GetCollectorBreakdownQuery;
@@ -9,7 +9,9 @@ import com.ionatech.nac.ygb.application.ports.api.GetCollectorLeaderboardQuery;
 import com.ionatech.nac.ygb.domain.exceptions.InvalidDashboardFilterException;
 import com.ionatech.nac.ygb.domain.model.FormType;
 import com.ionatech.nac.ygb.domain.valueobjects.CollectorBreakdown;
-import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardEntry;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardPage;
+import com.ionatech.nac.ygb.domain.valueobjects.LeaderboardSort;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -49,7 +50,11 @@ public class AdminCollectorController {
 
     @GetMapping("/leaderboard")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<CollectorLeaderboardEntryDto>> getLeaderboard(
+    public ResponseEntity<CollectorLeaderboardPageResponseDto> getLeaderboard(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "25") int size,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String direction,
             @RequestParam(required = false) UUID districtId,
             @RequestParam(required = false) UUID subcountyId,
             @RequestParam(required = false) UUID parishId,
@@ -73,7 +78,11 @@ public class AdminCollectorController {
                 collectorId,
                 financialYearPeriod
         );
-        List<CollectorLeaderboardEntry> entries = getCollectorLeaderboardQuery.getLeaderboard(filter);
+        CollectorLeaderboardPage entries = getCollectorLeaderboardQuery.getLeaderboard(
+                filter,
+                PageRequest.of(page, size),
+                LeaderboardSort.of(sort, direction)
+        );
         return ResponseEntity.ok(restMapper.toLeaderboardResponse(entries));
     }
 
@@ -109,6 +118,11 @@ public class AdminCollectorController {
 
     @ExceptionHandler(InvalidDashboardFilterException.class)
     public ResponseEntity<Map<String, String>> handleInvalidDashboardFilter(InvalidDashboardFilterException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
     }
 }

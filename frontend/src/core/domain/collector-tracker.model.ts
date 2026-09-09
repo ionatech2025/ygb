@@ -4,6 +4,14 @@ export interface CollectorLeaderboardEntry {
   totalCount: number;
 }
 
+export interface CollectorLeaderboardPage {
+  items: CollectorLeaderboardEntry[];
+  totalElements: number;
+  page: number;
+  size: number;
+  totalPages: number;
+}
+
 export interface CollectorFormTypeBreakdown {
   formType: string;
   count: number;

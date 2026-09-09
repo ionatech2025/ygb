@@ -5,6 +5,7 @@ import com.ionatech.nac.ygb.adapters.in.rest.dto.SubmissionPageResponseDto;
 import com.ionatech.nac.ygb.adapters.in.rest.dto.SubmissionSummaryDto;
 import com.ionatech.nac.ygb.domain.model.User;
 import com.ionatech.nac.ygb.domain.valueobjects.AdminSubmissionDetail;
+import com.ionatech.nac.ygb.domain.valueobjects.DeletedCollectorLabel;
 import com.ionatech.nac.ygb.domain.valueobjects.SubmissionPage;
 import com.ionatech.nac.ygb.domain.valueobjects.SubmissionSummary;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class AdminSubmissionRestMapper {
         return new AdminSubmissionDetailDto(
                 submission.getId(),
                 submission.getMetadata().collectorId(),
-                collector.getName(),
+                collector != null ? collector.getName() : DeletedCollectorLabel.DISPLAY_NAME,
                 submission.getStatus().name(),
                 submission.getMetadata().formCompletedAt(),
                 detail.syncedAt(),

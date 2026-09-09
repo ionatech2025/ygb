@@ -6,6 +6,10 @@ import com.ionatech.nac.ygb.adapters.out.persistence.mapper.UserMapper;
 import com.ionatech.nac.ygb.application.ports.spi.UserRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.Role;
 import com.ionatech.nac.ygb.domain.model.User;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
+import com.ionatech.nac.ygb.domain.valueobjects.UserPage;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -47,5 +51,28 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
         return jpaRepository.findByRoleAndIsActiveTrueOrderByNameAsc(role.name()).stream()
                 .map(mapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public UserPage findActiveByRole(Role role, PageRequest pageRequest) {
+        Page<UserEntity> page = jpaRepository.findByRoleAndIsActiveTrue(
+                role.name(),
+                org.springframework.data.domain.PageRequest.of(
+                        pageRequest.page(),
+                        pageRequest.size(),
+                        Sort.by(Sort.Direction.ASC, "name")
+                )
+        );
+        return new UserPage(
+                page.getContent().stream().map(mapper::toDomain).toList(),
+                page.getTotalElements(),
+                pageRequest.page(),
+                pageRequest.size()
+        );
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        jpaRepository.deleteById(id);
     }
 }

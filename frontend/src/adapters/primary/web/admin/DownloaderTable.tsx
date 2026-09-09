@@ -45,6 +45,7 @@ export function DownloaderTable({
               <th className="px-4 py-3 font-semibold">Gender</th>
               <th className="px-4 py-3 font-semibold">Age</th>
               <th className="px-4 py-3 font-semibold">Field of operation</th>
+              <th className="px-4 py-3 font-semibold">Improvement feedback</th>
               <th className="px-4 py-3 font-semibold tabular-nums">Downloads</th>
               <th className="px-4 py-3 font-semibold">Last download</th>
             </tr>
@@ -52,13 +53,13 @@ export function DownloaderTable({
           <tbody className="divide-y divide-border bg-surface">
             {loading ? (
               <tr>
-                <td colSpan={8} className="px-4 py-10 text-center text-text-muted">
+                <td colSpan={9} className="px-4 py-10 text-center text-text-muted">
                   Loading downloaders…
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-4 py-10 text-center text-text-muted">
+                <td colSpan={9} className="px-4 py-10 text-center text-text-muted">
                   No downloaders match the current filters.
                 </td>
               </tr>
@@ -75,6 +76,12 @@ export function DownloaderTable({
                       row.fieldOfOperation,
                       row.fieldOfOperationSpecify
                     )}
+                  </td>
+                  <td
+                    className="max-w-xs px-4 py-3 text-text-muted"
+                    data-testid={`downloader-feedback-${row.profileId}`}
+                  >
+                    {row.improvementFeedback?.trim() || '—'}
                   </td>
                   <td className="px-4 py-3 tabular-nums text-text">{row.downloadCount}</td>
                   <td className="px-4 py-3 text-text-muted">{formatTimestamp(row.lastDownloadedAt)}</td>

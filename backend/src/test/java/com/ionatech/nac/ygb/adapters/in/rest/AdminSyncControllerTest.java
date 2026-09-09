@@ -6,7 +6,9 @@ import com.ionatech.nac.ygb.adapters.in.rest.security.SecurityConfig;
 import com.ionatech.nac.ygb.application.ports.api.GetAdminReceiptStatusQuery;
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
 import com.ionatech.nac.ygb.domain.valueobjects.AdminReceiptStatus;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptPage;
 import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptStatus;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,33 +45,42 @@ class AdminSyncControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldReturnReceiptStatusForAdmin() throws Exception {
+    void shouldReturnPagedReceiptStatusForAdmin() throws Exception {
         UUID collectorId = UUID.randomUUID();
-        when(getAdminReceiptStatusQuery.getReceiptStatus()).thenReturn(new AdminReceiptStatus(
+        when(getAdminReceiptStatusQuery.getReceiptStatus(eq(PageRequest.of(0, 25)))).thenReturn(new AdminReceiptStatus(
                 4L,
                 1L,
                 1L,
-                List.of(new CollectorReceiptStatus(
-                        collectorId,
-                        "Collector One",
-                        4L,
-                        1L,
-                        1L,
-                        LocalDateTime.of(2026, 3, 15, 10, 0),
-                        false
-                ))
+                new CollectorReceiptPage(
+                        List.of(new CollectorReceiptStatus(
+                                collectorId,
+                                "Collector One",
+                                4L,
+                                1L,
+                                1L,
+                                LocalDateTime.of(2026, 3, 15, 10, 0),
+                                false
+                        )),
+                        30L,
+                        0,
+                        25
+                )
         ));
 
-        mockMvc.perform(get("/api/v1/admin/sync/receipt-status"))
+        mockMvc.perform(get("/api/v1/admin/sync/receipt-status")
+                        .param("page", "0")
+                        .param("size", "25"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalSynced").value(4))
                 .andExpect(jsonPath("$.totalFlagged").value(1))
                 .andExpect(jsonPath("$.totalDuplicate").value(1))
-                .andExpect(jsonPath("$.byCollector[0].collectorId").value(collectorId.toString()))
-                .andExpect(jsonPath("$.byCollector[0].fullName").value("Collector One"))
-                .andExpect(jsonPath("$.byCollector[0].stale").value(false));
+                .andExpect(jsonPath("$.byCollector.items[0].collectorId").value(collectorId.toString()))
+                .andExpect(jsonPath("$.byCollector.items[0].fullName").value("Collector One"))
+                .andExpect(jsonPath("$.byCollector.items[0].stale").value(false))
+                .andExpect(jsonPath("$.byCollector.totalElements").value(30))
+                .andExpect(jsonPath("$.byCollector.totalPages").value(2));
 
-        verify(getAdminReceiptStatusQuery).getReceiptStatus();
+        verify(getAdminReceiptStatusQuery).getReceiptStatus(PageRequest.of(0, 25));
     }
 
     @Test

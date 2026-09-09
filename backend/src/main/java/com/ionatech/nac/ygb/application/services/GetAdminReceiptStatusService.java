@@ -4,12 +4,14 @@ import com.ionatech.nac.ygb.application.ports.api.GetAdminReceiptStatusQuery;
 import com.ionatech.nac.ygb.application.ports.spi.SubmissionRepositoryPort;
 import com.ionatech.nac.ygb.domain.valueobjects.AdminReceiptStatus;
 import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetrics;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptMetricsPage;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptPage;
 import com.ionatech.nac.ygb.domain.valueobjects.CollectorReceiptStatus;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import com.ionatech.nac.ygb.domain.valueobjects.SubmissionStatus;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class GetAdminReceiptStatusService implements GetAdminReceiptStatusQuery {
 
@@ -22,14 +24,20 @@ public class GetAdminReceiptStatusService implements GetAdminReceiptStatusQuery 
     }
 
     @Override
-    public AdminReceiptStatus getReceiptStatus() {
+    public AdminReceiptStatus getReceiptStatus(PageRequest pageRequest) {
+        PageRequest effectivePage = pageRequest != null ? pageRequest : PageRequest.of(0, 25);
+
         long totalSynced = repositoryPort.countByStatus(SubmissionStatus.SYNCED);
         long totalFlagged = repositoryPort.countByStatus(SubmissionStatus.FLAGGED);
         long totalDuplicate = repositoryPort.countByStatus(SubmissionStatus.DUPLICATE);
 
-        List<CollectorReceiptStatus> byCollector = repositoryPort.findReceiptMetricsByCollector().stream()
-                .map(this::toCollectorReceiptStatus)
-                .toList();
+        CollectorReceiptMetricsPage metricsPage = repositoryPort.findReceiptMetricsByCollector(effectivePage);
+        CollectorReceiptPage byCollector = new CollectorReceiptPage(
+                metricsPage.items().stream().map(this::toCollectorReceiptStatus).toList(),
+                metricsPage.totalElements(),
+                metricsPage.page(),
+                metricsPage.size()
+        );
 
         return new AdminReceiptStatus(totalSynced, totalFlagged, totalDuplicate, byCollector);
     }

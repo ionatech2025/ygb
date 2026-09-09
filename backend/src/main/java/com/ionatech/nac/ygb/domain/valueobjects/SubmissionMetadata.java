@@ -9,9 +9,6 @@ public record SubmissionMetadata(
         LocalDateTime formCompletedAt
 ) {
     public SubmissionMetadata {
-        if (collectorId == null) {
-            throw new IllegalArgumentException("Collector ID cannot be null");
-        }
         if (deviceSubmissionId == null) {
             throw new IllegalArgumentException("Device submission ID cannot be null");
         }

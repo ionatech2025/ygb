@@ -13,6 +13,7 @@ import com.ionatech.nac.ygb.adapters.in.rest.security.SecurityConfig;
 import com.ionatech.nac.ygb.application.ports.api.CreateDataCollectorCommand;
 import com.ionatech.nac.ygb.application.ports.api.CreateDataCollectorUseCase;
 import com.ionatech.nac.ygb.application.ports.api.DeactivateUserUseCase;
+import com.ionatech.nac.ygb.application.ports.api.DeleteDataCollectorUseCase;
 import com.ionatech.nac.ygb.application.ports.api.GetCollectorSubmissionsQuery;
 import com.ionatech.nac.ygb.application.ports.api.ListActiveDataCollectorsUseCase;
 import com.ionatech.nac.ygb.application.ports.api.ReactivateUserUseCase;
@@ -20,13 +21,16 @@ import com.ionatech.nac.ygb.application.ports.api.ResetPasswordResult;
 import com.ionatech.nac.ygb.application.ports.api.ResetUserPasswordCommand;
 import com.ionatech.nac.ygb.application.ports.api.ResetUserPasswordUseCase;
 import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
+import com.ionatech.nac.ygb.domain.exceptions.InvalidUserOperationException;
 import com.ionatech.nac.ygb.domain.exceptions.UserAlreadyExistsException;
+import com.ionatech.nac.ygb.domain.exceptions.UserNotFoundException;
 import com.ionatech.nac.ygb.domain.model.FormType;
 import com.ionatech.nac.ygb.domain.model.Role;
 import com.ionatech.nac.ygb.domain.model.User;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
 import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import com.ionatech.nac.ygb.domain.valueobjects.SubmissionPage;
+import com.ionatech.nac.ygb.domain.valueobjects.UserPage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -43,9 +47,11 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -74,6 +80,9 @@ class UserControllerTest {
     private DeactivateUserUseCase deactivateUserUseCase;
 
     @MockBean
+    private DeleteDataCollectorUseCase deleteDataCollectorUseCase;
+
+    @MockBean
     private ReactivateUserUseCase reactivateUserUseCase;
 
     @MockBean
@@ -99,16 +108,23 @@ class UserControllerTest {
         com.ionatech.nac.ygb.adapters.in.rest.dto.UserResponse response =
                 new com.ionatech.nac.ygb.adapters.in.rest.dto.UserResponse(userId, "Jane Doe", "0771234567", "DATA_COLLECTOR", true);
 
-        when(listActiveDataCollectorsUseCase.listActiveDataCollectors()).thenReturn(List.of(collector));
+        when(listActiveDataCollectorsUseCase.listActiveDataCollectors(any()))
+                .thenReturn(new UserPage(List.of(collector), 1L, 0, 25));
         when(userRestMapper.toResponse(collector)).thenReturn(response);
 
-        mockMvc.perform(get("/api/v1/admin/users/data-collectors"))
+        mockMvc.perform(get("/api/v1/admin/users/data-collectors")
+                        .param("page", "0")
+                        .param("size", "25"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(userId.toString()))
-                .andExpect(jsonPath("$[0].name").value("Jane Doe"))
-                .andExpect(jsonPath("$[0].phoneNumber").value("0771234567"))
-                .andExpect(jsonPath("$[0].role").value("DATA_COLLECTOR"))
-                .andExpect(jsonPath("$[0].isActive").value(true));
+                .andExpect(jsonPath("$.items[0].id").value(userId.toString()))
+                .andExpect(jsonPath("$.items[0].name").value("Jane Doe"))
+                .andExpect(jsonPath("$.items[0].phoneNumber").value("0771234567"))
+                .andExpect(jsonPath("$.items[0].role").value("DATA_COLLECTOR"))
+                .andExpect(jsonPath("$.items[0].isActive").value(true))
+                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.page").value(0))
+                .andExpect(jsonPath("$.size").value(25))
+                .andExpect(jsonPath("$.totalPages").value(1));
     }
 
     @Test
@@ -222,6 +238,40 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldDeleteDataCollectorWhenUserIsAdmin() throws Exception {
+        UUID userId = UUID.randomUUID();
+
+        mockMvc.perform(delete("/api/v1/admin/users/{id}", userId).with(csrf()))
+                .andExpect(status().isNoContent());
+
+        verify(deleteDataCollectorUseCase).delete(userId);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnNotFoundWhenDeletingMissingCollector() throws Exception {
+        UUID userId = UUID.randomUUID();
+        doThrow(new UserNotFoundException(userId)).when(deleteDataCollectorUseCase).delete(userId);
+
+        mockMvc.perform(delete("/api/v1/admin/users/{id}", userId).with(csrf()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").exists());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnBadRequestWhenDeletingAdminAccount() throws Exception {
+        UUID userId = UUID.randomUUID();
+        doThrow(new InvalidUserOperationException("Only data collector accounts can be deleted."))
+                .when(deleteDataCollectorUseCase).delete(userId);
+
+        mockMvc.perform(delete("/api/v1/admin/users/{id}", userId).with(csrf()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("data collector")));
+    }
+
+    @Test
     @WithMockUser(roles = "DATA_COLLECTOR")
     void shouldReturnForbiddenForLifecycleEndpointsAsNonAdmin() throws Exception {
         UUID userId = UUID.randomUUID();
@@ -229,6 +279,8 @@ class UserControllerTest {
         mockMvc.perform(patch("/api/v1/admin/users/{id}/deactivate", userId))
                 .andExpect(status().isForbidden());
         mockMvc.perform(patch("/api/v1/admin/users/{id}/reactivate", userId))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(delete("/api/v1/admin/users/{id}", userId).with(csrf()))
                 .andExpect(status().isForbidden());
         mockMvc.perform(post("/api/v1/admin/users/{id}/reset-password", userId).with(csrf()))
                 .andExpect(status().isForbidden());

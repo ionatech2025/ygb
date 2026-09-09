@@ -18,9 +18,16 @@ const collector: UserProfile = {
 
 function createUserAdmin(overrides: Partial<IUserRepositoryPort> = {}): IUserRepositoryPort {
   return {
-    fetchActiveCollectors: vi.fn().mockResolvedValue([collector]),
+    fetchActiveCollectors: vi.fn().mockResolvedValue({
+      items: [collector],
+      totalElements: 1,
+      page: 0,
+      size: 25,
+      totalPages: 1,
+    }),
     createDataCollector: vi.fn(),
     deactivateUser: vi.fn().mockResolvedValue({ ...collector, isActive: false }),
+    deleteUser: vi.fn().mockResolvedValue(undefined),
     reactivateUser: vi.fn(),
     resetPassword: vi.fn().mockResolvedValue({ temporaryPassword: 'TempPass1234' }),
     getCollectorSubmissions: vi.fn(),
@@ -64,6 +71,29 @@ describe('ManageUsers lifecycle actions', () => {
       expect(screen.getByTestId('deactivated-collectors-section')).toBeInTheDocument();
       expect(screen.getByTestId('collector-table-deactivated')).toBeInTheDocument();
       expect(screen.getByText('No active data collectors found. Register one using the form.')).toBeInTheDocument();
+    });
+  });
+
+  it('delete button permanently removes the collector after confirm', async () => {
+    const user = userEvent.setup();
+    const userAdmin = createUserAdmin();
+    render(
+      <MemoryRouter>
+        <ManageUsers userAdmin={userAdmin} />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('collector-card-collector-1')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getAllByTestId('delete-collector-1')[0]!);
+    await user.click(screen.getByTestId('confirm-action-confirm'));
+
+    await waitFor(() => {
+      expect(userAdmin.deleteUser).toHaveBeenCalledWith('collector-1');
+      expect(screen.getByText('No active data collectors found. Register one using the form.')).toBeInTheDocument();
+      expect(screen.getByText(/permanently deleted/i)).toBeInTheDocument();
     });
   });
 

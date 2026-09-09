@@ -6,9 +6,12 @@ import { HttpAdminSyncStatusAdapter } from '../../../secondary/api/admin-sync-st
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import type { IAdminSyncStatusApiPort } from '../../../../ports/admin-sync-status-api.port';
 import { AdminPageHeader } from './AdminPageHeader';
+import { AdminTablePager } from './AdminTablePager';
 import { adminDashboardClasses } from '../../../../core/domain/admin-dashboard.theme';
 import { CollectorReceiptTable } from './CollectorReceiptTable';
 import { ReceiptStatusSummary } from './ReceiptStatusSummary';
+
+const PAGE_SIZE = 25;
 
 export interface AdminSyncStatusPageProps {
   syncStatusApi?: IAdminSyncStatusApiPort;
@@ -22,6 +25,7 @@ export function AdminSyncStatusPage({ syncStatusApi: syncStatusApiProp }: AdminS
   );
 
   const [status, setStatus] = useState<AdminReceiptStatus | null>(null);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -32,7 +36,7 @@ export function AdminSyncStatusPage({ syncStatusApi: syncStatusApiProp }: AdminS
       setLoading(true);
       setError('');
       try {
-        const result = await syncStatusApi.fetchReceiptStatus();
+        const result = await syncStatusApi.fetchReceiptStatus(page, PAGE_SIZE);
         if (!cancelled) {
           setStatus(result);
         }
@@ -55,7 +59,7 @@ export function AdminSyncStatusPage({ syncStatusApi: syncStatusApiProp }: AdminS
     return () => {
       cancelled = true;
     };
-  }, [syncStatusApi]);
+  }, [syncStatusApi, page]);
 
   return (
     <div className={adminDashboardClasses.page} data-testid="admin-sync-status-page">
@@ -76,7 +80,18 @@ export function AdminSyncStatusPage({ syncStatusApi: syncStatusApiProp }: AdminS
       )}
 
       <ReceiptStatusSummary status={status} loading={loading} />
-      <CollectorReceiptTable rows={status?.byCollector ?? []} loading={loading} />
+      <div className="space-y-4">
+        <CollectorReceiptTable rows={status?.byCollector.items ?? []} loading={loading} />
+        <AdminTablePager
+          page={status?.byCollector.page ?? page}
+          totalPages={status?.byCollector.totalPages ?? 0}
+          totalElements={status?.byCollector.totalElements ?? 0}
+          loading={loading}
+          onPageChange={setPage}
+          itemLabel="collector"
+          testIdPrefix="collector-receipt-pager"
+        />
+      </div>
     </div>
   );
 }

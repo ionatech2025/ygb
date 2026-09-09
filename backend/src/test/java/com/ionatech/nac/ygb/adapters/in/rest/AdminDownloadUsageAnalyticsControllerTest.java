@@ -76,6 +76,7 @@ class AdminDownloadUsageAnalyticsControllerTest {
                                 "AGE_18_24",
                                 "ACADEMIA_RESEARCH",
                                 null,
+                                "Add parish filters.",
                                 LocalDateTime.parse("2026-08-01T10:00:00"),
                                 3L,
                                 LocalDateTime.parse("2026-08-04T12:00:00")
@@ -97,6 +98,7 @@ class AdminDownloadUsageAnalyticsControllerTest {
                 .andExpect(jsonPath("$.items[0].gender").value("FEMALE"))
                 .andExpect(jsonPath("$.items[0].ageGroup").value("AGE_18_24"))
                 .andExpect(jsonPath("$.items[0].fieldOfOperation").value("ACADEMIA_RESEARCH"))
+                .andExpect(jsonPath("$.items[0].improvementFeedback").value("Add parish filters."))
                 .andExpect(jsonPath("$.items[0].downloadCount").value(3))
                 .andExpect(jsonPath("$.totalElements").value(1));
 
@@ -115,7 +117,7 @@ class AdminDownloadUsageAnalyticsControllerTest {
                         4L,
                         List.of(new GenderCount("FEMALE", 2L)),
                         List.of(new AgeGroupCount("AGE_18_24", 2L)),
-                        List.of(new DatasetDownloadCount("PDM", 3L)),
+                        List.of(new DatasetDownloadCount("PDM (legacy)", 3L)),
                         List.of(new TimeSeriesPoint(LocalDate.of(2026, 8, 4), 2L))
                 ));
 
@@ -127,7 +129,7 @@ class AdminDownloadUsageAnalyticsControllerTest {
                 .andExpect(jsonPath("$.totalDownloads").value(4))
                 .andExpect(jsonPath("$.byGender[0].gender").value("FEMALE"))
                 .andExpect(jsonPath("$.byAgeGroup[0].ageGroup").value("AGE_18_24"))
-                .andExpect(jsonPath("$.byDataset[0].dataset").value("PDM"))
+                .andExpect(jsonPath("$.byDataset[0].dataset").value("PDM (legacy)"))
                 .andExpect(jsonPath("$.downloadsOverTime[0].count").value(2));
     }
 

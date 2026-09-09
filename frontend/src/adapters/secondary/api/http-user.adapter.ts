@@ -3,10 +3,11 @@ import { buildCollectorProfileFilterQueryString } from '../../../core/domain/col
 import type { CollectorProfileFilter } from '../../../core/domain/collector-profile-filter.model';
 import type { SubmissionPage } from '../../../core/domain/submission-admin.model';
 import { IUserRepositoryPort, CreateCollectorPayload } from '../../../ports/user-repository.port';
-import { ResetPasswordResult, UserProfile } from '../../../core/domain/user.model';
+import { ResetPasswordResult, UserPage, UserProfile } from '../../../core/domain/user.model';
 import { normalizeUgandaPhoneLocal } from '../../../core/utils/phone-utils';
 
 const DEFAULT_PAGE_SIZE = 10;
+const COLLECTORS_PAGE_SIZE = 25;
 
 interface BackendUserResponse {
   id: string;
@@ -14,6 +15,14 @@ interface BackendUserResponse {
   phoneNumber: string;
   role: string;
   isActive: boolean;
+}
+
+interface BackendUserPageResponse {
+  items: BackendUserResponse[];
+  totalElements: number;
+  page: number;
+  size: number;
+  totalPages: number;
 }
 
 function mapCollector(user: BackendUserResponse): UserProfile {
@@ -38,16 +47,26 @@ export class HttpUserAdapter implements IUserRepositoryPort {
     return token;
   }
 
-  async fetchActiveCollectors(): Promise<UserProfile[]> {
+  async fetchActiveCollectors(page = 0, size = COLLECTORS_PAGE_SIZE): Promise<UserPage> {
     const token = this.requireToken();
+    const params = new URLSearchParams({
+      page: String(page),
+      size: String(size),
+    });
 
-    const collectors = await apiFetch<BackendUserResponse[]>(
-      '/api/v1/admin/users/data-collectors',
+    const response = await apiFetch<BackendUserPageResponse>(
+      `/api/v1/admin/users/data-collectors?${params.toString()}`,
       { method: 'GET' },
       token
     );
 
-    return collectors.map(mapCollector);
+    return {
+      items: response.items.map(mapCollector),
+      totalElements: response.totalElements,
+      page: response.page,
+      size: response.size,
+      totalPages: response.totalPages,
+    };
   }
 
   async createDataCollector(payload: CreateCollectorPayload, adminId: string): Promise<UserProfile> {
@@ -79,6 +98,15 @@ export class HttpUserAdapter implements IUserRepositoryPort {
       token
     );
     return mapCollector(updated);
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const token = this.requireToken();
+    await apiFetch<void>(
+      `/api/v1/admin/users/${userId}`,
+      { method: 'DELETE' },
+      token
+    );
   }
 
   async reactivateUser(userId: string): Promise<UserProfile> {

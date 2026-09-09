@@ -12,6 +12,7 @@ public record DownloaderSummary(
         String ageGroup,
         String fieldOfOperation,
         String fieldOfOperationSpecify,
+        String improvementFeedback,
         LocalDateTime registeredAt,
         long downloadCount,
         LocalDateTime lastDownloadedAt
