@@ -8,11 +8,19 @@ export interface CollectorReceiptStatus {
   stale: boolean;
 }
 
+export interface CollectorReceiptPage {
+  items: CollectorReceiptStatus[];
+  totalElements: number;
+  page: number;
+  size: number;
+  totalPages: number;
+}
+
 export interface AdminReceiptStatus {
   totalSynced: number;
   totalFlagged: number;
   totalDuplicate: number;
-  byCollector: CollectorReceiptStatus[];
+  byCollector: CollectorReceiptPage;
 }
 
 export const DEVICE_PENDING_INFO_MESSAGE =

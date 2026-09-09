@@ -10,14 +10,20 @@ describe('admin-sync-status-api.adapter', () => {
     vi.unstubAllGlobals();
   });
 
-  it('includes the Authorization header when fetching receipt status', async () => {
+  it('includes Authorization and page params when fetching receipt status', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
         JSON.stringify({
           totalSynced: 4,
           totalFlagged: 1,
           totalDuplicate: 1,
-          byCollector: [],
+          byCollector: {
+            items: [],
+            totalElements: 0,
+            page: 0,
+            size: 25,
+            totalPages: 0,
+          },
         }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       )
@@ -25,9 +31,11 @@ describe('admin-sync-status-api.adapter', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const adapter = new HttpAdminSyncStatusAdapter(() => 'admin-token');
-    await adapter.fetchReceiptStatus();
+    await adapter.fetchReceiptStatus(0, 25);
 
-    expect(fetchMock.mock.calls[0]?.[0]).toContain('/api/v1/admin/sync/receipt-status');
+    expect(fetchMock.mock.calls[0]?.[0]).toContain('/api/v1/admin/sync/receipt-status?');
+    expect(fetchMock.mock.calls[0]?.[0]).toContain('page=0');
+    expect(fetchMock.mock.calls[0]?.[0]).toContain('size=25');
     const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
     const headers = init.headers as Headers;
     expect(headers.get('Authorization')).toBe('Bearer admin-token');

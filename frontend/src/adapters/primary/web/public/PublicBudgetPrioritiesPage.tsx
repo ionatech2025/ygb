@@ -9,7 +9,7 @@ import { HttpBudgetPriorityDashboardAdapter } from '../../../secondary/api/budge
 import { BudgetPriorityDashboardFilterPanel } from './BudgetPriorityDashboardFilterPanel';
 import { BudgetPrioritySummaryCards } from './BudgetPrioritySummaryCards';
 import { BudgetPriorityCharts } from './BudgetPriorityCharts';
-import { BudgetPriorityExportToolbar } from './BudgetPriorityExportToolbar';
+import { PublicDownloadHubCta } from './PublicDownloadHubCta';
 
 export function PublicBudgetPrioritiesPage() {
   const dashboardApi = useMemo(() => new HttpBudgetPriorityDashboardAdapter(), []);
@@ -62,7 +62,12 @@ export function PublicBudgetPrioritiesPage() {
           </div>
 
           <div className="w-full shrink-0 xl:max-w-sm" data-testid="bp-dashboard-export-section">
-            <BudgetPriorityExportToolbar layout="inline" />
+            <PublicDownloadHubCta
+              layout="inline"
+              dataset="BUDGET_PRIORITIES"
+              title="Download Budget Priorities data"
+              description="Export anonymised budget priority submissions as CSV or Excel from the Download hub."
+            />
           </div>
         </div>
       </header>

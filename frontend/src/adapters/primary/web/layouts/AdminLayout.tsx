@@ -3,6 +3,7 @@ import { LogOut, Shield } from 'lucide-react';
 import { useDashboardFilterUrlSync } from '../../../../core/hooks/useDashboardFilterUrlSync';
 import { useAuthStore } from '../../../../core/store/useAuthStore';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { YgbLogo } from '../components/YgbLogo';
 import { AdminNav } from './AdminNav';
 
 export function AdminLayout() {
@@ -20,8 +21,8 @@ export function AdminLayout() {
     <div className="admin-layout-bg flex min-h-dvh flex-col">
       <header className="sticky top-0 z-50 border-b border-border/80 bg-surface/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-nac-orange">YGB Admin</p>
+          <div className="flex min-w-0 items-center gap-3">
+            <YgbLogo className="shrink-0" />
             <h1 className="truncate text-base font-semibold tracking-tight text-text sm:text-lg">
               Survey Tool Dashboard
             </h1>

@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.header.HeaderWriterFilter;
 
 @Configuration
@@ -33,10 +34,14 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> {})
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // Request-attribute repo so ASYNC StreamingResponseBody redispatches keep JWT auth.
+            .securityContext(securityContext -> securityContext
+                    .securityContextRepository(new RequestAttributeSecurityContextRepository()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/locations/dataset").permitAll()
                 .requestMatchers("/api/v1/public/dashboard/**").permitAll()
+                .requestMatchers("/api/v1/public/downloads/**").permitAll()
                 .requestMatchers("/api/v1/public/budget-priorities/**").permitAll()
                 .requestMatchers("/api/v1/public/settings/**").permitAll()
                 .requestMatchers("/api/v1/public/download-profile/**").permitAll()

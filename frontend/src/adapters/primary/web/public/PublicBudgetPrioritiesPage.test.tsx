@@ -15,12 +15,8 @@ vi.mock('./BudgetPriorityCharts', () => ({
   BudgetPriorityCharts: () => <div data-testid="budget-priority-charts-section" />,
 }));
 
-vi.mock('./BudgetPriorityExportToolbar', () => ({
-  BudgetPriorityExportToolbar: () => <div data-testid="budget-priority-export-toolbar" />,
-}));
-
 describe('PublicBudgetPrioritiesPage', () => {
-  it('renders sector selector region and summary section (TC-BP-02-01)', () => {
+  it('renders sector selector region, summary section, and download hub CTA (TC-BP-02-01)', () => {
     render(
       <MemoryRouter>
         <PublicBudgetPrioritiesPage />
@@ -35,6 +31,10 @@ describe('PublicBudgetPrioritiesPage', () => {
     expect(screen.getByTestId('budget-priority-summary-cards')).toBeInTheDocument();
     expect(screen.getByTestId('budget-priority-charts-section')).toBeInTheDocument();
     expect(screen.getByTestId('bp-dashboard-export-section')).toBeInTheDocument();
-    expect(screen.getByTestId('budget-priority-export-toolbar')).toBeInTheDocument();
+    expect(screen.queryByTestId('budget-priority-export-toolbar')).not.toBeInTheDocument();
+    expect(screen.getByTestId('public-download-hub-cta-link')).toHaveAttribute(
+      'href',
+      '/download?dataset=BUDGET_PRIORITIES'
+    );
   });
 });

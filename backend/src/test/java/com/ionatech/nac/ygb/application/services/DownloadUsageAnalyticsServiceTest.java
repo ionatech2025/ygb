@@ -1,6 +1,7 @@
 package com.ionatech.nac.ygb.application.services;
 
 import com.ionatech.nac.ygb.application.ports.spi.DownloadUsageAnalyticsRepositoryPort;
+import com.ionatech.nac.ygb.domain.service.ToolDownloadCatalogue;
 import com.ionatech.nac.ygb.domain.valueobjects.AgeGroupCount;
 import com.ionatech.nac.ygb.domain.valueobjects.DatasetDownloadCount;
 import com.ionatech.nac.ygb.domain.valueobjects.DownloadUsageAggregates;
@@ -40,11 +41,11 @@ class DownloadUsageAnalyticsServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new DownloadUsageAnalyticsService(repository);
+        service = new DownloadUsageAnalyticsService(repository, new ToolDownloadCatalogue());
     }
 
     @Test
-    void shouldListDownloadersWithAgeAndGenderFilter() {
+    void shouldListDownloadersWithAgeAndGenderFilterIncludingFeedback() {
         DownloadUsageFilter filter = DownloadUsageFilter.of("FEMALE", "AGE_18_24");
         PageRequest page = PageRequest.of(0, 25);
         DownloaderSummary row = new DownloaderSummary(
@@ -56,6 +57,7 @@ class DownloadUsageAnalyticsServiceTest {
                 "AGE_18_24",
                 "ACADEMIA_RESEARCH",
                 null,
+                "Parish filters would help.",
                 LocalDateTime.parse("2026-08-01T10:00:00"),
                 2L,
                 LocalDateTime.parse("2026-08-04T12:00:00")
@@ -68,18 +70,19 @@ class DownloadUsageAnalyticsServiceTest {
         assertThat(result.items()).hasSize(1);
         assertThat(result.items().getFirst().email()).isEqualTo("analyst@example.com");
         assertThat(result.items().getFirst().optionalName()).isEqualTo("Ada");
+        assertThat(result.items().getFirst().improvementFeedback()).isEqualTo("Parish filters would help.");
         verify(repository).findDownloaders(eq(filter), eq(page));
     }
 
     @Test
-    void shouldReturnDownloadUsageAggregatesFilteredByDemographics() {
+    void shouldReturnDownloadUsageAggregatesWithDisplayLabels() {
         DownloadUsageFilter filter = DownloadUsageFilter.of("MALE", "AGE_25_29");
         DownloadUsageAggregates aggregates = new DownloadUsageAggregates(
                 3L,
                 5L,
                 List.of(new GenderCount("MALE", 3L)),
                 List.of(new AgeGroupCount("AGE_25_29", 3L)),
-                List.of(new DatasetDownloadCount("PDM", 4L)),
+                List.of(new DatasetDownloadCount("PDM", 4L), new DatasetDownloadCount("IYP", 1L)),
                 List.of(new TimeSeriesPoint(LocalDate.of(2026, 8, 1), 2L))
         );
         when(repository.getDownloadUsageAggregates(filter, TimeSeriesGranularity.DAY)).thenReturn(aggregates);
@@ -89,7 +92,8 @@ class DownloadUsageAnalyticsServiceTest {
         assertThat(result.totalDownloaders()).isEqualTo(3L);
         assertThat(result.byGender().getFirst().gender()).isEqualTo("MALE");
         assertThat(result.byAgeGroup().getFirst().ageGroup()).isEqualTo("AGE_25_29");
-        assertThat(result.byDataset().getFirst().dataset()).isEqualTo("PDM");
+        assertThat(result.byDataset()).extracting(DatasetDownloadCount::dataset)
+                .containsExactly("PDM (legacy)", "IYP");
     }
 
     @Test

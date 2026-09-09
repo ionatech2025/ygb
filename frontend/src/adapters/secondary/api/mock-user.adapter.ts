@@ -1,23 +1,29 @@
 import { IUserRepositoryPort, CreateCollectorPayload } from '../../../ports/user-repository.port';
-import { ResetPasswordResult, UserProfile } from '../../../core/domain/user.model';
+import { ResetPasswordResult, UserPage, UserProfile } from '../../../core/domain/user.model';
 import type { CollectorProfileFilter } from '../../../core/domain/collector-profile-filter.model';
 import type { SubmissionPage } from '../../../core/domain/submission-admin.model';
 
-// In-memory collection simulation to let newly created collectors persist during testing
 let mockDatabase: UserProfile[] = [
   { id: 'dc-01', fullName: 'Jane Nakato', phoneNumber: '+256772123456', role: 'DATA_COLLECTOR', createdAt: Date.now() }
 ];
 
 export class MockUserAdapter implements IUserRepositoryPort {
-  
-  async fetchActiveCollectors(): Promise<UserProfile[]> {
-    return [...mockDatabase];
+
+  async fetchActiveCollectors(page = 0, size = 25): Promise<UserPage> {
+    const start = page * size;
+    const items = mockDatabase.slice(start, start + size);
+    return {
+      items: [...items],
+      totalElements: mockDatabase.length,
+      page,
+      size,
+      totalPages: Math.ceil(mockDatabase.length / size) || 0,
+    };
   }
 
   async createDataCollector(payload: CreateCollectorPayload, adminId: string): Promise<UserProfile> {
     void adminId;
     void payload.password;
-    // TC-AUTH-01-02 Simulation: Reject duplicate phone configurations
     const exists = mockDatabase.some(u => u.phoneNumber === payload.phoneNumber);
     if (exists) {
       throw new Error('Phone number already registered');
@@ -42,6 +48,14 @@ export class MockUserAdapter implements IUserRepositoryPort {
     }
     mockDatabase = mockDatabase.filter((entry) => entry.id !== userId);
     return { ...user, isActive: false };
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const exists = mockDatabase.some((entry) => entry.id === userId);
+    if (!exists) {
+      throw new Error('User not found');
+    }
+    mockDatabase = mockDatabase.filter((entry) => entry.id !== userId);
   }
 
   async reactivateUser(userId: string): Promise<UserProfile> {

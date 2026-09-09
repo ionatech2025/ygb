@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom';
-import { Activity, BarChart3, LayoutDashboard, Radio, Users } from 'lucide-react';
+import { Activity, BarChart3, Download, LayoutDashboard, Radio, Users } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/downloads', label: 'Downloads', icon: Download, end: true },
   { to: '/admin/download-usage', label: 'Download usage', icon: BarChart3, end: false },
   { to: '/admin/users', label: 'Users', icon: Users, end: false },
   { to: '/admin/collectors', label: 'Collector Tracker', icon: Activity, end: false },

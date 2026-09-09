@@ -12,6 +12,25 @@ describe('http-user.adapter', () => {
     vi.unstubAllGlobals();
   });
 
+  it('includes the Authorization header when deleting a user', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const adapter = new HttpUserAdapter(() => 'admin-token');
+    await adapter.deleteUser('user-1');
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining('/api/v1/admin/users/user-1'),
+      expect.objectContaining({
+        method: 'DELETE',
+        headers: expect.any(Headers),
+      })
+    );
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const headers = init.headers as Headers;
+    expect(headers.get('Authorization')).toBe('Bearer admin-token');
+  });
+
   it('includes the Authorization header when deactivating a user', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
@@ -87,5 +106,28 @@ describe('http-user.adapter', () => {
     expect(fetchMock.mock.calls[0]?.[0]).toContain(`/api/v1/admin/users/user-1/submissions?`);
     expect(fetchMock.mock.calls[0]?.[0]).toContain(`districtId=${KAMPALA_DISTRICT_ID}`);
     expect(fetchMock.mock.calls[0]?.[0]).toContain('formType=BYP');
+  });
+
+  it('includes page params when loading active collectors', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          items: [],
+          totalElements: 0,
+          page: 0,
+          size: 25,
+          totalPages: 0,
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      )
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const adapter = new HttpUserAdapter(() => 'admin-token');
+    await adapter.fetchActiveCollectors(0, 25);
+
+    expect(fetchMock.mock.calls[0]?.[0]).toContain('/api/v1/admin/users/data-collectors?');
+    expect(fetchMock.mock.calls[0]?.[0]).toContain('page=0');
+    expect(fetchMock.mock.calls[0]?.[0]).toContain('size=25');
   });
 });

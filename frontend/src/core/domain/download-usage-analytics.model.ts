@@ -23,6 +23,7 @@ export interface DownloaderSummary {
   ageGroup: string;
   fieldOfOperation: string;
   fieldOfOperationSpecify: string | null;
+  improvementFeedback: string | null;
   registeredAt: string;
   downloadCount: number;
   lastDownloadedAt: string | null;

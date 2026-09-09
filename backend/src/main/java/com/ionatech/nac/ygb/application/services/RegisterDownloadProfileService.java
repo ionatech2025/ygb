@@ -49,6 +49,7 @@ public class RegisterDownloadProfileService implements RegisterDownloadProfileUs
                 AgeGroup.valueOf(command.ageGroup().trim().toUpperCase()),
                 FieldOfOperation.valueOf(command.fieldOfOperation().trim().toUpperCase()),
                 command.fieldOfOperationSpecify(),
+                command.improvementFeedback(),
                 command.consentGiven(),
                 now
         ));

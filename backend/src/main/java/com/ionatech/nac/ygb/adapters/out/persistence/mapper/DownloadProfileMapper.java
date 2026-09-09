@@ -33,6 +33,7 @@ public interface DownloadProfileMapper {
                 AgeGroup.valueOf(entity.getAgeGroup()),
                 FieldOfOperation.valueOf(entity.getFieldOfOperation()),
                 entity.getFieldOfOperationSpecify(),
+                entity.getImprovementFeedback(),
                 entity.isConsentGiven(),
                 entity.getCreatedAt()
         );

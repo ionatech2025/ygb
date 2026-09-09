@@ -97,5 +97,7 @@ describe('PublicDownloadUsageSection', () => {
     expect(html).not.toContain('email');
     expect(html).not.toContain('phoneNumber');
     expect(html).not.toContain('optionalName');
+    expect(html).not.toContain('improvementFeedback');
+    expect(html).not.toMatch(/improvement feedback/i);
   });
 });

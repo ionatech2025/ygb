@@ -9,6 +9,14 @@ export interface UserProfile {
   isActive?: boolean;
 }
 
+export interface UserPage {
+  items: UserProfile[];
+  totalElements: number;
+  page: number;
+  size: number;
+  totalPages: number;
+}
+
 export interface ResetPasswordResult {
   temporaryPassword: string;
 }

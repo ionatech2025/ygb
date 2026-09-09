@@ -1,10 +1,14 @@
 package com.ionatech.nac.ygb.application.ports.spi;
 
-import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardEntry;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardPage;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
-
-import java.util.List;
+import com.ionatech.nac.ygb.domain.valueobjects.LeaderboardSort;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 
 public interface CollectorTrackerRepositoryPort {
-    List<CollectorLeaderboardEntry> findLeaderboard(DashboardFilter filter);
+    CollectorLeaderboardPage findLeaderboard(
+            DashboardFilter filter,
+            PageRequest pageRequest,
+            LeaderboardSort sort
+    );
 }

@@ -19,7 +19,7 @@ public abstract class SubmissionJpaEntity {
     @Id
     private UUID id;
 
-    @Column(name = "collector_id", nullable = false)
+    @Column(name = "collector_id")
     private UUID collectorId;
 
     @Column(name = "device_submission_id", nullable = false, unique = true)

@@ -1,6 +1,7 @@
 package com.ionatech.nac.ygb.adapters.out.export;
 
 import com.ionatech.nac.ygb.domain.model.FormType;
+import com.ionatech.nac.ygb.domain.service.ToolDownloadCatalogue;
 import com.ionatech.nac.ygb.domain.valueobjects.AgeGroupCount;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardAggregates;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
@@ -25,7 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AdminDashboardReportAssemblerTest {
 
-    private final AdminDashboardReportAssembler assembler = new AdminDashboardReportAssembler();
+    private final AdminDashboardReportAssembler assembler =
+            new AdminDashboardReportAssembler(new ToolDownloadCatalogue());
 
     @Test
     void assembleMapsAggregatesIntoReportSections() {
@@ -89,7 +91,7 @@ class AdminDashboardReportAssemblerTest {
         assertEquals(15, usage.totalUniqueVisitors());
         assertEquals(3, usage.totalUniqueDownloaders());
         assertEquals(7, usage.totalDownloads());
-        assertEquals("PDM", usage.byDataset().getFirst().label());
+        assertEquals("PDM (legacy)", usage.byDataset().getFirst().label());
         assertEquals("Budget Priorities", usage.byDataset().get(1).label());
         assertEquals("Female", usage.byGender().getFirst().label());
         assertEquals("18-24", usage.byAgeGroup().getFirst().label());

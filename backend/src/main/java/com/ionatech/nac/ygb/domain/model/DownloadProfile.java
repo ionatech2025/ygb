@@ -11,6 +11,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class DownloadProfile {
+
+    public static final int MAX_IMPROVEMENT_FEEDBACK_LENGTH = 2000;
+
     private final UUID id;
     private final EmailAddress email;
     private final String optionalName;
@@ -19,6 +22,7 @@ public class DownloadProfile {
     private final AgeGroup ageGroup;
     private final FieldOfOperation fieldOfOperation;
     private final String fieldOfOperationSpecify;
+    private final String improvementFeedback;
     private final boolean consentGiven;
     private final LocalDateTime createdAt;
 
@@ -31,6 +35,7 @@ public class DownloadProfile {
             AgeGroup ageGroup,
             FieldOfOperation fieldOfOperation,
             String fieldOfOperationSpecify,
+            String improvementFeedback,
             boolean consentGiven,
             LocalDateTime createdAt
     ) {
@@ -42,6 +47,7 @@ public class DownloadProfile {
         this.ageGroup = ageGroup;
         this.fieldOfOperation = fieldOfOperation;
         this.fieldOfOperationSpecify = fieldOfOperationSpecify;
+        this.improvementFeedback = improvementFeedback;
         this.consentGiven = consentGiven;
         this.createdAt = createdAt;
     }
@@ -54,6 +60,7 @@ public class DownloadProfile {
             AgeGroup ageGroup,
             FieldOfOperation fieldOfOperation,
             String fieldOfOperationSpecify,
+            String improvementFeedback,
             boolean consentGiven,
             LocalDateTime createdAt
     ) {
@@ -68,18 +75,16 @@ public class DownloadProfile {
             throw new IllegalArgumentException("Consent is required to register a download profile");
         }
 
-        String normalizedName = normalizeOptionalName(optionalName);
-        String normalizedSpecify = normalizeSpecify(fieldOfOperation, fieldOfOperationSpecify);
-
         return new DownloadProfile(
                 UUID.randomUUID(),
                 email,
-                normalizedName,
+                normalizeOptionalName(optionalName),
                 countryCode,
                 gender,
                 ageGroup,
                 fieldOfOperation,
-                normalizedSpecify,
+                normalizeSpecify(fieldOfOperation, fieldOfOperationSpecify),
+                normalizeImprovementFeedback(improvementFeedback),
                 true,
                 createdAt
         );
@@ -94,6 +99,7 @@ public class DownloadProfile {
             AgeGroup ageGroup,
             FieldOfOperation fieldOfOperation,
             String fieldOfOperationSpecify,
+            String improvementFeedback,
             boolean consentGiven,
             LocalDateTime createdAt
     ) {
@@ -106,6 +112,7 @@ public class DownloadProfile {
                 ageGroup,
                 fieldOfOperation,
                 fieldOfOperationSpecify,
+                improvementFeedback,
                 consentGiven,
                 createdAt
         );
@@ -126,6 +133,19 @@ public class DownloadProfile {
             return specify.trim();
         }
         return null;
+    }
+
+    private static String normalizeImprovementFeedback(String improvementFeedback) {
+        if (improvementFeedback == null || improvementFeedback.isBlank()) {
+            return null;
+        }
+        String trimmed = improvementFeedback.trim();
+        if (trimmed.length() > MAX_IMPROVEMENT_FEEDBACK_LENGTH) {
+            throw new IllegalArgumentException(
+                    "Improvement feedback must be at most " + MAX_IMPROVEMENT_FEEDBACK_LENGTH + " characters"
+            );
+        }
+        return trimmed;
     }
 
     public UUID getId() {
@@ -158,6 +178,10 @@ public class DownloadProfile {
 
     public String getFieldOfOperationSpecify() {
         return fieldOfOperationSpecify;
+    }
+
+    public String getImprovementFeedback() {
+        return improvementFeedback;
     }
 
     public boolean isConsentGiven() {

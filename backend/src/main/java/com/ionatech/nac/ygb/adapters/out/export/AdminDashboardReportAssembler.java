@@ -1,5 +1,6 @@
 package com.ionatech.nac.ygb.adapters.out.export;
 
+import com.ionatech.nac.ygb.domain.service.ToolDownloadCatalogue;
 import com.ionatech.nac.ygb.domain.valueobjects.AgeGroupCount;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardAggregates;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
@@ -10,6 +11,7 @@ import com.ionatech.nac.ygb.domain.valueobjects.DownloadUsageFilter;
 import com.ionatech.nac.ygb.domain.valueobjects.FinancialYearPeriodCount;
 import com.ionatech.nac.ygb.domain.valueobjects.FormTypeCount;
 import com.ionatech.nac.ygb.domain.valueobjects.GenderCount;
+import com.ionatech.nac.ygb.domain.valueobjects.PublicDownloadDataset;
 import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesPoint;
 import com.ionatech.nac.ygb.domain.valueobjects.VisitsVsDownloadsComparison;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,12 @@ public class AdminDashboardReportAssembler {
 
     private static final DateTimeFormatter GENERATED_AT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final int TOP_DISTRICT_LIMIT = 10;
+
+    private final ToolDownloadCatalogue catalogue;
+
+    public AdminDashboardReportAssembler(ToolDownloadCatalogue catalogue) {
+        this.catalogue = catalogue;
+    }
 
     public AdminDashboardReportModel assemble(
             DashboardFilter filter,
@@ -162,11 +170,10 @@ public class AdminDashboardReportAssembler {
     }
 
     private String formatDataset(String dataset) {
-        return switch (dataset) {
-            case "PDM" -> "PDM";
-            case "BUDGET_PRIORITIES" -> "Budget Priorities";
-            case "LGO_BUDGET_ALLOCATION" -> "LGO Budget Allocation";
-            default -> dataset;
-        };
+        try {
+            return catalogue.analyticsDisplayLabel(PublicDownloadDataset.valueOf(dataset));
+        } catch (IllegalArgumentException | NullPointerException ex) {
+            return dataset;
+        }
     }
 }

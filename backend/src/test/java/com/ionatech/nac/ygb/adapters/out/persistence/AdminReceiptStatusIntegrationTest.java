@@ -69,13 +69,13 @@ class AdminReceiptStatusIntegrationTest {
 
     @Test
     void shouldReturnStatusCountsMatchingSeededDatabaseState() {
-        AdminReceiptStatus status = receiptStatusService.getReceiptStatus();
+        AdminReceiptStatus status = receiptStatusService.getReceiptStatus(PageRequest.of(0, 25));
 
         assertThat(status.totalSynced()).isEqualTo(3L);
         assertThat(status.totalFlagged()).isEqualTo(1L);
         assertThat(status.totalDuplicate()).isEqualTo(1L);
 
-        CollectorReceiptStatus primary = findCollector(status.byCollector(), primaryCollectorId);
+        CollectorReceiptStatus primary = findCollector(status.byCollector().items(), primaryCollectorId);
         assertThat(primary.syncedCount()).isEqualTo(2L);
         assertThat(primary.flaggedCount()).isEqualTo(1L);
         assertThat(primary.duplicateCount()).isEqualTo(1L);
@@ -84,9 +84,9 @@ class AdminReceiptStatusIntegrationTest {
 
     @Test
     void shouldFlagCollectorWithOldLastReceivedAtAsStale() {
-        AdminReceiptStatus status = receiptStatusService.getReceiptStatus();
+        AdminReceiptStatus status = receiptStatusService.getReceiptStatus(PageRequest.of(0, 25));
 
-        CollectorReceiptStatus staleCollector = findCollector(status.byCollector(), staleCollectorId);
+        CollectorReceiptStatus staleCollector = findCollector(status.byCollector().items(), staleCollectorId);
         assertThat(staleCollector.syncedCount()).isEqualTo(1L);
         assertThat(staleCollector.lastReceivedAt()).isNotNull();
         assertThat(staleCollector.stale()).isTrue();

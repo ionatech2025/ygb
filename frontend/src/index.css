@@ -3,13 +3,17 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand: hsl(152 45% 38%);
-  --color-brand-hover: hsl(152 45% 32%);
-  --color-brand-light: hsl(152 45% 95%);
+  /* Logo orange (#FF7A00) — primary brand */
+  --color-brand: hsl(29 100% 50%);
+  --color-brand-hover: hsl(29 100% 42%);
+  --color-brand-light: hsl(29 100% 96%);
+  /* Former brand green — charts / secondary accents only */
+  --color-accent-green: hsl(152 45% 38%);
   --color-nac-blue: hsl(222 65% 28%);
   --color-nac-blue-dark: hsl(222 65% 20%);
-  --color-nac-orange: hsl(24 95% 53%);
-  --color-nac-orange-hover: hsl(24 95% 46%);
+  /* Deeper amber so accents contrast with bright brand CTAs */
+  --color-nac-orange: hsl(24 100% 39%);
+  --color-nac-orange-hover: hsl(24 100% 32%);
   --color-surface: #ffffff;
   --color-surface-muted: #f8fafc;
   --color-text: #0f172a;
@@ -26,7 +30,7 @@
 }
 
 .dark {
-  --color-brand-light: hsl(152 35% 14%);
+  --color-brand-light: hsl(29 55% 14%);
   --color-surface: #0f172a;
   --color-surface-muted: #020617;
   --color-text: #f1f5f9;
@@ -57,28 +61,28 @@ body {
 .public-layout-bg {
   background:
     radial-gradient(ellipse 120% 80% at 100% -20%, hsl(222 65% 28% / 0.05), transparent),
-    radial-gradient(ellipse 90% 60% at 0% 0%, hsl(152 45% 38% / 0.07), transparent),
+    radial-gradient(ellipse 90% 60% at 0% 0%, hsl(29 100% 50% / 0.07), transparent),
     linear-gradient(to bottom, hsl(210 40% 98%), var(--color-surface-muted));
 }
 
 .dark .public-layout-bg {
   background:
     radial-gradient(ellipse 120% 80% at 100% -20%, hsl(222 65% 28% / 0.18), transparent),
-    radial-gradient(ellipse 90% 60% at 0% 0%, hsl(152 45% 38% / 0.08), transparent),
+    radial-gradient(ellipse 90% 60% at 0% 0%, hsl(29 100% 50% / 0.08), transparent),
     var(--color-surface-muted);
 }
 
 .admin-layout-bg {
   background:
     radial-gradient(ellipse 100% 70% at 100% 0%, hsl(222 65% 28% / 0.04), transparent),
-    radial-gradient(ellipse 80% 50% at 0% 100%, hsl(24 95% 53% / 0.04), transparent),
+    radial-gradient(ellipse 80% 50% at 0% 100%, hsl(24 100% 39% / 0.05), transparent),
     linear-gradient(to bottom, hsl(210 40% 98%), var(--color-surface-muted));
 }
 
 .dark .admin-layout-bg {
   background:
     radial-gradient(ellipse 100% 70% at 100% 0%, hsl(222 65% 28% / 0.15), transparent),
-    radial-gradient(ellipse 80% 50% at 0% 100%, hsl(24 95% 53% / 0.06), transparent),
+    radial-gradient(ellipse 80% 50% at 0% 100%, hsl(24 100% 39% / 0.08), transparent),
     var(--color-surface-muted);
 }
 

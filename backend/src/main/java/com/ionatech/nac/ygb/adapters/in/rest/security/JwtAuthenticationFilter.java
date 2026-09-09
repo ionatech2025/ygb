@@ -9,8 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,6 +26,7 @@ import java.util.Optional;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProviderPort tokenProviderPort;
+    private final SecurityContextRepository securityContextRepository = new RequestAttributeSecurityContextRepository();
 
     public JwtAuthenticationFilter(TokenProviderPort tokenProviderPort) {
         this.tokenProviderPort = tokenProviderPort;
@@ -51,7 +55,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userId, null, Collections.singletonList(authority));
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    // Persist for ASYNC redispatches (StreamingResponseBody); thread-local alone is lost.
+                    SecurityContext context = SecurityContextHolder.createEmptyContext();
+                    context.setAuthentication(authentication);
+                    SecurityContextHolder.setContext(context);
+                    securityContextRepository.saveContext(context, request, response);
                 }
             }
         } catch (Exception ex) {

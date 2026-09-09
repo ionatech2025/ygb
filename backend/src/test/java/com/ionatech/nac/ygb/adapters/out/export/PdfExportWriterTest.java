@@ -2,6 +2,7 @@ package com.ionatech.nac.ygb.adapters.out.export;
 
 import com.ionatech.nac.ygb.application.ports.spi.DownloadUsageAnalyticsRepositoryPort;
 import com.ionatech.nac.ygb.domain.model.FormType;
+import com.ionatech.nac.ygb.domain.service.ToolDownloadCatalogue;
 import com.ionatech.nac.ygb.domain.valueobjects.AgeGroupCount;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardAggregates;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
@@ -46,7 +47,7 @@ class PdfExportWriterTest {
     @BeforeEach
     void setUp() {
         writer = new PdfExportWriter(
-                new AdminDashboardReportAssembler(),
+                new AdminDashboardReportAssembler(new ToolDownloadCatalogue()),
                 new PdfVectorChartRenderer(),
                 downloadUsageAnalyticsRepository
         );
@@ -82,7 +83,8 @@ class PdfExportWriterTest {
             assertTrue(text.contains("Unique downloaders"));
             assertTrue(text.contains("Downloads by Dataset"));
             assertTrue(text.contains("Budget Priorities"));
-            assertTrue(text.contains("LGO Budget Allocation"));
+            assertTrue(text.contains("Budget Allocations"));
+            assertTrue(text.contains("PDM (legacy)"));
             assertTrue(text.contains("Downloaders by Age Group"));
             assertFalse(text.contains("analyst@example.com"));
             assertFalse(text.contains("@fixture.test"));

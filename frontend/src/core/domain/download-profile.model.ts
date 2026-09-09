@@ -24,6 +24,8 @@ export type FieldOfOperation = (typeof FIELD_OF_OPERATION_OPTIONS)[number]['valu
 
 export type DownloadGender = (typeof GENDER_OPTIONS)[number]['value'];
 
+export const DOWNLOAD_IMPROVEMENT_FEEDBACK_MAX_LENGTH = 2000;
+
 export interface DownloadProfileFormValues {
   email: string;
   optionalName: string;
@@ -32,6 +34,7 @@ export interface DownloadProfileFormValues {
   ageGroup: string;
   fieldOfOperation: string;
   fieldOfOperationSpecify: string;
+  improvementFeedback: string;
   consentGiven: boolean;
 }
 
@@ -47,6 +50,7 @@ export interface RegisterDownloadProfileRequest {
   ageGroup: string;
   fieldOfOperation: string;
   fieldOfOperationSpecify?: string | null;
+  improvementFeedback?: string | null;
   consentGiven: boolean;
 }
 
@@ -104,6 +108,10 @@ export function validateDownloadProfileForm(
     errors.fieldOfOperationSpecify = 'Please specify your field of operation.';
   }
 
+  if (values.improvementFeedback.trim().length > DOWNLOAD_IMPROVEMENT_FEEDBACK_MAX_LENGTH) {
+    errors.improvementFeedback = `Keep feedback to ${DOWNLOAD_IMPROVEMENT_FEEDBACK_MAX_LENGTH} characters or fewer.`;
+  }
+
   if (!values.consentGiven) {
     errors.consentGiven = 'Consent is required to continue.';
   }
@@ -120,6 +128,7 @@ export function toRegisterDownloadProfileRequest(
 ): RegisterDownloadProfileRequest {
   const optionalName = values.optionalName.trim();
   const specify = values.fieldOfOperationSpecify.trim();
+  const improvementFeedback = values.improvementFeedback.trim();
   return {
     email: values.email.trim().toLowerCase(),
     optionalName: optionalName.length > 0 ? optionalName : null,
@@ -131,6 +140,7 @@ export function toRegisterDownloadProfileRequest(
       requiresFieldOfOperationSpecify(values.fieldOfOperation) && specify.length > 0
         ? specify
         : null,
+    improvementFeedback: improvementFeedback.length > 0 ? improvementFeedback : null,
     consentGiven: values.consentGiven,
   };
 }
@@ -144,6 +154,7 @@ export function emptyDownloadProfileFormValues(): DownloadProfileFormValues {
     ageGroup: '',
     fieldOfOperation: '',
     fieldOfOperationSpecify: '',
+    improvementFeedback: '',
     consentGiven: false,
   };
 }

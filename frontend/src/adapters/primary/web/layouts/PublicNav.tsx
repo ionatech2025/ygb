@@ -1,10 +1,11 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { BookOpen, ClipboardList, Landmark, LayoutDashboard } from 'lucide-react';
+import { BookOpen, ClipboardList, Download, Landmark, LayoutDashboard } from 'lucide-react';
 import { BUDGET_PRIORITY_ROUTES } from '../../../../core/domain/budget-priority.routes';
 import { LGO_BUDGET_ALLOCATION_ROUTES } from '../../../../core/domain/lgo-budget-allocation.routes';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/download', label: 'Download', icon: Download, end: true },
   { to: BUDGET_PRIORITY_ROUTES.index, label: 'Budget Priorities', icon: ClipboardList, end: false },
   { to: LGO_BUDGET_ALLOCATION_ROUTES.dashboard, label: 'LG Budget', icon: Landmark, end: true },
   { to: '/resources', label: 'Resources', icon: BookOpen, end: true },

@@ -10,9 +10,12 @@ import com.ionatech.nac.ygb.application.ports.spi.TokenProviderPort;
 import com.ionatech.nac.ygb.domain.model.FormType;
 import com.ionatech.nac.ygb.domain.valueobjects.CollectorBreakdown;
 import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardEntry;
+import com.ionatech.nac.ygb.domain.valueobjects.CollectorLeaderboardPage;
 import com.ionatech.nac.ygb.domain.valueobjects.DashboardFilter;
 import com.ionatech.nac.ygb.domain.valueobjects.DistrictCount;
 import com.ionatech.nac.ygb.domain.valueobjects.FormTypeCount;
+import com.ionatech.nac.ygb.domain.valueobjects.LeaderboardSort;
+import com.ionatech.nac.ygb.domain.valueobjects.PageRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -52,20 +55,37 @@ class AdminCollectorControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void shouldReturnLeaderboardForAdmin() throws Exception {
+    void shouldReturnPagedLeaderboardForAdmin() throws Exception {
         UUID collectorId = UUID.randomUUID();
-        when(getCollectorLeaderboardQuery.getLeaderboard(any(DashboardFilter.class)))
-                .thenReturn(List.of(new CollectorLeaderboardEntry(collectorId, "Collector One", 5L)));
+        when(getCollectorLeaderboardQuery.getLeaderboard(any(DashboardFilter.class), any(PageRequest.class), any(LeaderboardSort.class)))
+                .thenReturn(new CollectorLeaderboardPage(
+                        List.of(new CollectorLeaderboardEntry(collectorId, "Collector One", 5L)),
+                        26L,
+                        0,
+                        25
+                ));
 
         mockMvc.perform(get("/api/v1/admin/collectors/leaderboard")
                         .param("formType", "BYP")
-                        .param("financialYearPeriod", "JAN_JUN_2026"))
+                        .param("financialYearPeriod", "JAN_JUN_2026")
+                        .param("page", "0")
+                        .param("size", "25")
+                        .param("sort", "totalCount")
+                        .param("direction", "desc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].collectorId").value(collectorId.toString()))
-                .andExpect(jsonPath("$[0].fullName").value("Collector One"))
-                .andExpect(jsonPath("$[0].totalCount").value(5));
+                .andExpect(jsonPath("$.items[0].collectorId").value(collectorId.toString()))
+                .andExpect(jsonPath("$.items[0].fullName").value("Collector One"))
+                .andExpect(jsonPath("$.items[0].totalCount").value(5))
+                .andExpect(jsonPath("$.totalElements").value(26))
+                .andExpect(jsonPath("$.page").value(0))
+                .andExpect(jsonPath("$.size").value(25))
+                .andExpect(jsonPath("$.totalPages").value(2));
 
-        verify(getCollectorLeaderboardQuery).getLeaderboard(any(DashboardFilter.class));
+        verify(getCollectorLeaderboardQuery).getLeaderboard(
+                any(DashboardFilter.class),
+                eq(PageRequest.of(0, 25)),
+                eq(LeaderboardSort.of("totalCount", "desc"))
+        );
     }
 
     @Test

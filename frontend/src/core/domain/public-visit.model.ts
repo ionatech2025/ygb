@@ -1,5 +1,6 @@
 export const PUBLIC_VISIT_ROUTE_GROUPS = [
   'public-dashboard',
+  'downloads',
   'budget-priorities',
   'lgo-budget-allocation',
   'resources',
@@ -32,6 +33,10 @@ export function resolvePublicVisitRouteGroup(pathname: string): PublicVisitRoute
 
   if (normalized === '/dashboard') {
     return 'public-dashboard';
+  }
+
+  if (normalized === '/download') {
+    return 'downloads';
   }
 
   if (

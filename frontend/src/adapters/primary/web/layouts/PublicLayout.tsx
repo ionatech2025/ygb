@@ -7,6 +7,7 @@ import { useLgoBudgetAllocationDashboardFilterUrlSync } from '../../../../core/h
 import { usePublicVisitBeacon } from '../public/usePublicVisitBeacon';
 import { PUBLIC_VISIT_PRIVACY_NOTICE } from '../../../../core/domain/public-visit.model';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { YgbLogo } from '../components/YgbLogo';
 import { publicLayoutClasses } from '../../../../core/domain/public-dashboard.theme';
 import { PublicNav } from './PublicNav';
 import { PublicSeoJsonLd } from '../components/PublicSeoJsonLd';
@@ -46,8 +47,12 @@ export function PublicLayout({ visitBeaconApi }: PublicLayoutProps = {}) {
         <div className="h-1 bg-gradient-to-r from-nac-blue via-brand to-nac-orange" aria-hidden="true" />
 
         <div className={publicLayoutClasses.shell}>
-          <Link to="/dashboard" className="min-w-0 group" onClick={closeMobileMenu}>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-nac-orange">YGB Public</p>
+          <Link
+            to="/dashboard"
+            className="flex min-w-0 items-center gap-3 group"
+            onClick={closeMobileMenu}
+          >
+            <YgbLogo className="shrink-0" />
             <h1 className="truncate text-base font-semibold tracking-tight text-nac-blue transition group-hover:text-brand sm:text-lg dark:text-text">
               Parish Development Model
             </h1>

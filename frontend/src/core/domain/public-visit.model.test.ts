@@ -7,6 +7,7 @@ import {
 describe('public-visit.model', () => {
   it('maps public dashboard and related routes to route groups', () => {
     expect(resolvePublicVisitRouteGroup('/dashboard')).toBe('public-dashboard');
+    expect(resolvePublicVisitRouteGroup('/download')).toBe('downloads');
     expect(resolvePublicVisitRouteGroup('/dashboard/budget-priorities')).toBe('budget-priorities');
     expect(resolvePublicVisitRouteGroup('/budget-priorities')).toBe('budget-priorities');
     expect(resolvePublicVisitRouteGroup('/budget-priorities/health')).toBe('budget-priorities');

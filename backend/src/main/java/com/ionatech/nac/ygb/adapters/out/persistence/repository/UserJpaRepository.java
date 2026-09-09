@@ -1,6 +1,8 @@
 package com.ionatech.nac.ygb.adapters.out.persistence.repository;
 
 import com.ionatech.nac.ygb.adapters.out.persistence.entity.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +15,6 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByPhoneNumber(String phoneNumber);
 
     List<UserEntity> findByRoleAndIsActiveTrueOrderByNameAsc(String role);
+
+    Page<UserEntity> findByRoleAndIsActiveTrue(String role, Pageable pageable);
 }

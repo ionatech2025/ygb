@@ -36,19 +36,6 @@ vi.mock('./BudgetPriorityDashboardFilterPanel', () => ({
   ),
 }));
 
-vi.mock('./BudgetPriorityExportToolbar', () => ({
-  BudgetPriorityExportToolbar: () => (
-    <div data-testid="budget-priority-export-toolbar">
-      <button type="button" className="min-h-11 min-w-36">
-        Download CSV
-      </button>
-      <button type="button" className="min-h-11 min-w-36">
-        Download Excel
-      </button>
-    </div>
-  ),
-}));
-
 vi.mock('./BudgetPrioritySummaryCards', () => ({
   BudgetPrioritySummaryCards: () => (
     <section aria-label="Summary statistics" data-testid="budget-priority-summary-cards">
@@ -156,6 +143,10 @@ describe('Budget Priorities presentation (US-BP-01 / US-BP-02)', () => {
     expect(screen.getByRole('heading', { level: 1, name: /Budget Priorities Insights/i })).toBeInTheDocument();
     expect(screen.getByTestId('bp-dashboard-filters-section')).toBeInTheDocument();
     expect(screen.getByTestId('bp-dashboard-export-section')).toBeInTheDocument();
+    expect(screen.getByTestId('public-download-hub-cta-link')).toHaveAttribute(
+      'href',
+      '/download?dataset=BUDGET_PRIORITIES'
+    );
     expect(screen.getByTestId('bp-dashboard-summary-section')).toBeInTheDocument();
   });
 

@@ -1,6 +1,7 @@
 package com.ionatech.nac.ygb.application.services;
 
 import com.ionatech.nac.ygb.application.ports.spi.DownloadUsageAnalyticsRepositoryPort;
+import com.ionatech.nac.ygb.domain.service.ToolDownloadCatalogue;
 import com.ionatech.nac.ygb.domain.valueobjects.DatasetDownloadCount;
 import com.ionatech.nac.ygb.domain.valueobjects.PublicDownloadUsageAggregates;
 import com.ionatech.nac.ygb.domain.valueobjects.TimeSeriesGranularity;
@@ -31,17 +32,18 @@ class GetPublicDownloadUsageAggregatesServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new GetPublicDownloadUsageAggregatesService(repository);
+        service = new GetPublicDownloadUsageAggregatesService(repository, new ToolDownloadCatalogue());
     }
 
     @Test
-    void shouldReturnAnonymisedOverTimeAndByDatasetSeries() {
+    void shouldReturnAnonymisedOverTimeAndByDatasetSeriesWithDisplayLabels() {
         PublicDownloadUsageAggregates aggregates = new PublicDownloadUsageAggregates(
                 7L,
                 List.of(
                         new DatasetDownloadCount("PDM", 4L),
                         new DatasetDownloadCount("BUDGET_PRIORITIES", 2L),
-                        new DatasetDownloadCount("LGO_BUDGET_ALLOCATION", 1L)
+                        new DatasetDownloadCount("LGO_BUDGET_ALLOCATION", 1L),
+                        new DatasetDownloadCount("BYP", 3L)
                 ),
                 List.of(new TimeSeriesPoint(LocalDate.of(2026, 8, 4), 7L))
         );
@@ -52,7 +54,7 @@ class GetPublicDownloadUsageAggregatesServiceTest {
 
         assertThat(result.totalDownloads()).isEqualTo(7L);
         assertThat(result.byDataset()).extracting(DatasetDownloadCount::dataset)
-                .containsExactly("PDM", "BUDGET_PRIORITIES", "LGO_BUDGET_ALLOCATION");
+                .containsExactly("PDM (legacy)", "Budget Priorities", "Budget Allocations", "BYP");
         assertThat(result.downloadsOverTime()).hasSize(1);
         verify(repository).getPublicDownloadUsageAggregates(null, null, TimeSeriesGranularity.DAY);
     }

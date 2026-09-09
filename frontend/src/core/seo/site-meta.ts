@@ -24,6 +24,12 @@ export const PAGE_META = {
       'Explore anonymised Parish Development Model survey data across districts, parishes, and programme filters.',
     canonicalPath: '/dashboard',
   },
+  publicDownloadHub: {
+    title: 'Download Field Data',
+    description:
+      'Download anonymised Youth Go Budget App questionnaire data as CSV or Excel. Choose one tool, apply optional filters, and export.',
+    canonicalPath: '/download',
+  },
   budgetPrioritiesHub: {
     title: 'Community Budget Priorities',
     description: 'Share your priority areas for sector budget allocation through the Youth Go Budget App.',
@@ -48,6 +54,7 @@ export const PAGE_META = {
 
 export const PUBLIC_SITEMAP_PATHS = [
   '/dashboard',
+  '/download',
   '/dashboard/budget-priorities',
   '/dashboard/lgo-budget-allocation',
   '/budget-priorities',
